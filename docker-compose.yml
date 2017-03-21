@@ -1,0 +1,34 @@
+version: '2'
+services:
+  db:
+    restart: always
+    image: postgres:9
+  redis:
+    restart: always
+    image: redis:3.2-alpine 
+  web:
+    restart: always
+    image: tbackman/debian-cheminformatics:latest
+    volumes:
+      - .:/retrosyn
+      - /www/static
+    expose:
+      - "8000"
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+      - redis
+    working_dir: /retrosyn
+    command: ["./wait-for-it.sh", "db:5432", "--", "./entrypoint.sh"]
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - /www/static
+    volumes_from:
+      - web
+    links:
+      - web:web

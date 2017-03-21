@@ -1,0 +1,263 @@
+ID   DQ855474; SV 1; ; DNA; ; PRO; 4288 BP.
+XX
+AC   DQ855474;
+XX
+DE   Streptomyces toxytricini strain NRRL 15443 type II polyketide synthase gene
+DE   cluster, complete sequence.
+XX
+KW   
+XX
+OS   Streptomyces toxytricini
+OC   Bacteria; Actinobacteria; Streptomycetales; Streptomycetaceae;
+OC   Streptomyces.
+XX
+RN   [1]
+RP   1-4288
+RX   PUBMED; 17205043.
+RA   Yoo,A., Demirev,A.V., Lee,J.S., Kim,S.D. and Nam,D.H.;
+RT   "Cloning and analysis of a type II polyketide synthase gene cluster from
+RT   Streptomyces toxytricini NRRL 15,443";
+RL   J. Microbiol. 44 (6), 649-654 (2006)
+XX
+RN   [2]
+RP   1-4288
+RA   Yoo,A., Lee,J.S., Demirev,A.V. and Nam,D.H.;
+RT   "Direct Submission";
+RL   Submitted (17-JUL-2006) Faculty of Pharmacy, Yeungnam University, 214-1
+RL   Dae-dong, Kyongsan, Kyoungbuk 712-747, Korea
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..4288
+FT                   /strain="NRRL 15443"
+FT                   /mol_type="genomic DNA"
+FT                   /organism="Streptomyces toxytricini"
+FT                   /db_xref="taxon:67369"
+FT   misc_feature    1..4288
+FT                   /note="type II polyketide synthase gene cluster"
+FT   cluster         1..4288
+FT                   /note="Cluster number: 120"
+FT                   /note="Detection rule(s) for this cluster type: t2pks:
+FT                   (t2ks or t2clf);"
+FT                   /note="Monomers prediction: "
+FT                   /note="Structure image: structures/genecluster120.png"
+FT                   /product="t2pks"
+FT   CDS             264..983
+FT                   /aSProdPred
+FT                   /product="putative thioesterase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="TE; orf1"
+FT                   /sec_met="NRPS/PKS subtype: PKS/NRPS-like protein"
+FT                   /sec_met="NRPS/PKS Domain: Thioesterase (3-214). E-value:
+FT                   1e-33. Score: 109.3;"
+FT                   /translation="MAVRLHCFAHAGAGDSAFRRWSRSTGSGVDTIAWPLPGRDRRRRE
+FT                   PRVTTREALLADLGPLFEPGVPYVLYGHSLGATIAYTVARALRQTGLPQPALLAVGACP
+FT                   PPGTPAVLAAAAELPDAELLAVLDRYGAAPPDTRPGDVWHRHVMPVLRDDLRLALSLRA
+FT                   AADGPVDVPLLAVGGADDRLADADALAAWGDWTTGRFVQRTLPGGHFFVRDRELPRLLG
+FT                   RAARVVRRARTQQQQQQ"
+FT                   /protein_id="ABH85407.1"
+FT   aSDomain        273..905
+FT                   /domain="Thioesterase"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="1.00E-33"
+FT                   /locus_tag="ABH85407.1"
+FT                   /asDomain_id="nrpspksdomains_ABH85407_Xdom01"
+FT                   /detection="hmmscan"
+FT                   /score="109.3"
+FT                   /translation="RLHCFAHAGAGDSAFRRWSRSTGSGVDTIAWPLPGRDRRRREPRV
+FT                   TTREALLADLGPLFEPGVPYVLYGHSLGATIAYTVARALRQTGLPQPALLAVGACPPPG
+FT                   TPAVLAAAAELPDAELLAVLDRYGAAPPDTRPGDVWHRHVMPVLRDDLRLALSLRAAAD
+FT                   GPVDVPLLAVGGADDRLADADALAAWGDWTTGRFVQRTLPGGHFFVRD"
+FT   CDS_motif       462..524
+FT                   /note="NRPS/PKS Motif: NRPS-te1 (e-value: 3.1e-09,
+FT                   bit-score: 29.2)"
+FT                   /locus_tag="ABH85407.1"
+FT                   /motif="NRPS-te1"
+FT                   /database="abmotifs"
+FT                   /evalue="3.10E-09"
+FT                   /asDomain_id="nrpspksmotif_ABH85407.1_0001"
+FT                   /detection="hmmscan"
+FT                   /score="29.2"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="PYVLYGHSLGATIAYTVARAL"
+FT                   /label="NRPS-te1"
+FT   CDS             1016..2281
+FT                   /aSProdPred
+FT                   /product="putative beta-ketoacyl synthase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="KS; orf2"
+FT                   /sec_met="Type: t2pks"
+FT                   /sec_met="Domains detected: t2ks (E-value: 5.4e-227,
+FT                   bitscore: 741.7, seeds: 25)"
+FT                   /sec_met="Kind: biosynthetic"
+FT                   /sec_met="NRPS/PKS subtype: PKS/NRPS-like protein"
+FT                   /sec_met="NRPS/PKS Domain: PKS_KS (3-392). E-value:
+FT                   2.2e-56. Score: 183.1;"
+FT                   /translation="MRRVVITGIGVVAPGRPGTREFWSLLTEGRTATRAVSLFDASSFR
+FT                   SRVAAEADFDPLAHGFTAEESARLDRAALFALTAAREAVADAGAALDPVRTGVTLGSAL
+FT                   GCTTGLDAEYGVVSERGTRRLVDHTKAVAHLHDYLVPSSMAAEVARAAGAQGPVALVST
+FT                   GCTSGLDAIGHAVDLVREGSADVMLAGATEAPITPITAACFDAIRATSTRNDDPATASR
+FT                   PFDATRNGFVLGEGCAVLVLEEYGHARRRGAHIYAEIAGFASRSNAYHMTGLRPDGVEM
+FT                   AAAITAALDEARLAPDRIDYVNAHGSGTKQNDKHETEAFKRALGQHAYEVPVSSIKSMI
+FT                   GHSLGAIGALEVAACALAIEHDTVPPTANLHEPDPACDLDYTPLTARSRRTDAVLTVGS
+FT                   GFGGFQSAMILTDPGLTPKAED"
+FT                   /protein_id="ABH85408.1"
+FT   aSDomain        1025..2191
+FT                   /domain="PKS_KS"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="2.20E-56"
+FT                   /locus_tag="ABH85408.1"
+FT                   /asDomain_id="nrpspksdomains_ABH85408_Xdom01"
+FT                   /detection="hmmscan"
+FT                   /score="183.1"
+FT                   /translation="VVITGIGVVAPGRPGTREFWSLLTEGRTATRAVSLFDASSFRSRV
+FT                   AAEADFDPLAHGFTAEESARLDRAALFALTAAREAVADAGAALDPVRTGVTLGSALGCT
+FT                   TGLDAEYGVVSERGTRRLVDHTKAVAHLHDYLVPSSMAAEVARAAGAQGPVALVSTGCT
+FT                   SGLDAIGHAVDLVREGSADVMLAGATEAPITPITAACFDAIRATSTRNDDPATASRPFD
+FT                   ATRNGFVLGEGCAVLVLEEYGHARRRGAHIYAEIAGFASRSNAYHMTGLRPDGVEMAAA
+FT                   ITAALDEARLAPDRIDYVNAHGSGTKQNDKHETEAFKRALGQHAYEVPVSSIKSMIGHS
+FT                   LGAIGALEVAACALAIEHDTVPPTANLHEPDPACDLDYTPLTARSRRTD"
+FT   CDS             2360..3556
+FT                   /aSProdPred
+FT                   /product="putative chain length factor"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="CLF; orf3"
+FT                   /sec_met="Type: t2pks"
+FT                   /sec_met="Domains detected: t2clf (E-value: 1.1e-98,
+FT                   bitscore: 318.7, seeds: 26)"
+FT                   /sec_met="Kind: biosynthetic"
+FT                   /sec_met="NRPS/PKS subtype: PKS/NRPS-like protein"
+FT                   /sec_met="NRPS/PKS Domain: PKS_KS (171-394). E-value:
+FT                   3.6e-21. Score: 67.1;"
+FT                   /translation="MRRPQRARPEGLVGRRPARRERHPPADPLRRLPLPGAARGRGARV
+FT                   RRRGPRPEPAPPADRPGHPPVARRRQGSPRRRRRRPRRPARLRGRRRHRQLRRRVLVPA
+FT                   ARAGGAVEPRRPARQRVPVLRLVLRSQQQARSPSGTGCAAPAASSSPSRPAGWTTTAHA
+FT                   RRQIIKGAHLVVTGGIDSSLCPWGWAAHLAGGGLSTEPDPARAYLPFDPDASGYVVGEG
+FT                   GAHLVLEDAARARERGARIYGVVAGHGAAFDGPAGGAGGGCRLGAAAGAALADAGIGPG
+FT                   DVDVVFADAAGERTADRLEAEALAELFGPRAVPVTAPKSMTGRLAAGGSALDLAAALMA
+FT                   LHEQVVPPTTGTSAPADDCPVDLVTGTPRTGLRLRTALVLARGRGGFNSAVVVRAPAA"
+FT                   /protein_id="ABH85409.1"
+FT   aSDomain        2873..3541
+FT                   /domain="PKS_KS"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="3.60E-21"
+FT                   /locus_tag="ABH85409.1"
+FT                   /asDomain_id="nrpspksdomains_ABH85409_Xdom01"
+FT                   /detection="hmmscan"
+FT                   /score="67.1"
+FT                   /translation="HLVVTGGIDSSLCPWGWAAHLAGGGLSTEPDPARAYLPFDPDASG
+FT                   YVVGEGGAHLVLEDAARARERGARIYGVVAGHGAAFDGPAGGAGGGCRLGAAAGAALAD
+FT                   AGIGPGDVDVVFADAAGERTADRLEAEALAELFGPRAVPVTAPKSMTGRLAAGGSALDL
+FT                   AAALMALHEQVVPPTTGTSAPADDCPVDLVTGTPRTGLRLRTALVLARGRGGFNSAVVV
+FT                   R"
+FT   CDS_motif       2987..3025
+FT                   /note="NRPS/PKS Motif: PKSI-KS_m4 (e-value: 0.0019,
+FT                   bit-score: 11.5)"
+FT                   /locus_tag="ABH85409.1"
+FT                   /motif="PKSI-KS_m4"
+FT                   /database="abmotifs"
+FT                   /evalue="1.90E-03"
+FT                   /asDomain_id="nrpspksmotif_ABH85409.1_0001"
+FT                   /detection="hmmscan"
+FT                   /score="11.5"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="FDPDASGYVVGEG"
+FT                   /label="PKSI-KS_m4"
+FT   CDS             3631..3894
+FT                   /aSProdPred
+FT                   /product="putative acyl carrier protein"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="ACP; orf4"
+FT                   /sec_met="NRPS/PKS subtype: PKS/NRPS-like protein"
+FT                   /sec_met="NRPS/PKS Domain: ACP (10-77). E-value: 1.8e-12.
+FT                   Score: 39.0;"
+FT                   /translation="MNRLELSSLTRILRECAGEEEGVDLDGDVLDQYWFELGYDSLAVL
+FT                   QTTGYIEREFGIVLDGEDFDEADTPRRYLDMVNRVLSERAPV"
+FT                   /protein_id="ABH85410.1"
+FT   aSDomain        3661..3861
+FT                   /domain="ACP"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="1.80E-12"
+FT                   /locus_tag="ABH85410.1"
+FT                   /asDomain_id="nrpspksdomains_ABH85410_Xdom01"
+FT                   /detection="hmmscan"
+FT                   /score="39.0"
+FT                   /translation="RILRECAGEEEGVDLDGDVLDQYWFELGYDSLAVLQTTGYIEREF
+FT                   GIVLDGEDFDEADTPRRYLDMV"
+SQ   Sequence 4288 BP; 539 A; 1811 C; 1431 G; 507 T; 0 other;
+     ctgcagcggc tgcaccaggc gatgctgacc gtcgacccgg ccctcgacgt ggtcgccgga        60
+     ccgcgccggg tgtccacctt cgacctgtac gccgcctagg ggcccgacgc ccgcagccgc       120
+     tgccttcccc ctgcgcctgc ccctgccgtg ccgccgtacc gggccgcgcg gtgccggtcc       180
+     agcaggcgcg cagcggggtt cgagcaggtc tccagcggct tccgcgaggg tcgggacgac       240
+     atcgcggaac ggggagggtg gagatggcgg tacgactgca ctgcttcgcg cacgcagggg       300
+     ccggggactc cgcgttccgg cgctggagcc ggagcacggg cagcggcgtc gacaccatcg       360
+     cctggccgct gcccggccgt gacaggcgtc gccgcgagcc gcgcgtcacc acccgagagg       420
+     cgctcctcgc cgacctgggg ccgctgttcg agcccggtgt cccgtacgtc ctgtacgggc       480
+     acagcctcgg cgcgaccatc gcctacaccg tcgcccgcgc cctccggcag accgggcttc       540
+     cgcagcccgc gctgctcgcc gtcggggcct gcccgccgcc cggcacgccc gccgtgctcg       600
+     cggccgccgc cgaactgccg gacgccgaac tcctcgccgt cctcgaccgg tacggcgccg       660
+     caccgcccga cacccgcccc ggcgacgtgt ggcaccggca cgtcatgccc gtcctccgcg       720
+     acgacctgcg cctcgccctg tcgctgcgcg ccgccgccga cgggcccgtc gacgtaccgc       780
+     tgctcgccgt gggcggcgcc gacgaccgcc tcgccgatgc ggacgcgctc gccgcgtggg       840
+     gggactggac caccggccgg ttcgtgcagc ggaccctgcc cggcggccac ttcttcgtcc       900
+     gcgaccgcga gctgccgcgc ctcctcggcc gggccgcccg cgtcgtccgg cgcgcccgca       960
+     cacaacagca acaacagcaa tagcagcagc aggatcggga acagggaggg acgcgatgag      1020
+     acgcgtcgtc atcaccggca tcggagtcgt cgcccccggc cggcccggca cccgggagtt      1080
+     ctggtcgctg ctgaccgagg ggcgtaccgc cacccgcgcg gtcagcctct tcgacgcctc      1140
+     ctccttccgc tcccgcgtcg ccgccgaggc cgacttcgac cccctcgccc acggcttcac      1200
+     cgccgaggag tccgcgcgcc tcgaccgggc cgccctgttc gccctcaccg ccgcccgcga      1260
+     ggccgtcgcc gacgcgggcg ccgccctcga ccccgtccgc accggcgtca ccctcggcag      1320
+     cgccctcggc tgcaccaccg ggctcgacgc cgagtacggc gtcgtcagcg agcgcggcac      1380
+     gcgccgcctc gtcgaccaca ccaaggccgt cgcccacctg cacgactacc tcgttcccag      1440
+     ctccatggcc gccgaagtgg cccgcgccgc cggagcccag gggccagtcg cgctcgtctc      1500
+     caccggctgc acctccggcc tcgacgcgat cgggcacgcc gtcgacctcg tccgcgaggg      1560
+     cagcgccgac gtcatgctcg ccggcgcgac cgaagcgccc atcaccccga tcaccgcggc      1620
+     ctgcttcgac gcgatccgcg ccacttccac ccgcaacgac gacccggcga ccgcctcccg      1680
+     ccccttcgac gccacccgca acggcttcgt cctcggcgag ggctgcgccg tcctcgtcct      1740
+     ggaggagtac gggcacgccc gccgccgcgg cgcgcacatc tacgccgaga tcgccggttt      1800
+     cgcctcgcgc agcaacgcgt accacatgac aggactgcgc cccgacggcg tcgagatggc      1860
+     cgccgccatc accgccgccc tcgacgaggc gcgcctcgca cccgaccgca tcgactacgt      1920
+     caacgcgcac ggctccggca ccaagcagaa cgacaagcac gagaccgagg ccttcaaacg      1980
+     ggccctcggg cagcacgcgt acgaggtgcc cgtcagctcc atcaagtcga tgatcggcca      2040
+     ctccctcggt gcgatcggcg cactggaggt cgccgcctgc gccctcgcca tcgagcacga      2100
+     caccgtcccg ccgaccgcga acctgcacga gccggacccc gcctgcgacc tcgactacac      2160
+     cccgctcacc gcccgctccc ggcgcaccga cgccgtcctg accgtcggca gcggcttcgg      2220
+     cggcttccag agcgcgatga tcctgaccga ccccggactc accccgaagg ccgaggactg      2280
+     accgatgagc accaccgcag ccaccgcccc cgccgtcacc gggatcggca cgcctcgcag      2340
+     gcggtcatca ccggcatcgg tgcgccgccc ccaacgggct cggcctgaag gcctggtggg      2400
+     ccgccgtcct gcgcggcgag agcggcatcc gcccgctgac ccgcttcgac gcctccccct      2460
+     acccggtgcg gctcgcgggc gaggtgcccg ggttcgtcga cgaggaccac gtcccgagcc      2520
+     ggctcctcca gcagaccgac cgggtcaccc gcctgtcgct cgccgccgcc aaggaagccc      2580
+     tcgacgacgc cggcgccgac cccgccgacc tgcccgacta cgcgggcggc gtcgtcaccg      2640
+     ccaactccgc cggcgggttc tagttccggc agcgcgagct ggaggcgctg tggagccgcg      2700
+     gcggccggca cgtcagcgcg taccagtcct tcgtctggtt ctacgcagtc aacagcaggc      2760
+     cagatctcca tccggcacgg gctgcgcggc gccagcggcg tcatcgtcac cgagcaggcc      2820
+     ggcgggctgg acgacgaccg ctcacgcccg ccgccagatc atcaagggcg cccacctcgt      2880
+     cgtcaccggc ggcatcgact cctccctgtg cccctggggg tgggccgcgc acctcgcggg      2940
+     cggcgggctg agcaccgagc ccgacccggc gcgcgcctac ctgcccttcg acccggacgc      3000
+     gagcgggtac gtggtcggcg aaggcggggc gcacctggtc ctggaggacg ccgcccgggc      3060
+     gcgggagcgc ggagcgcgca tctacggggt ggtcgccggg cacggggccg cgttcgacgg      3120
+     acccgcgggc ggggccgggg gcggctgccg gctgggcgcc gcggccgggg ccgcgctcgc      3180
+     cgacgccggc atcgggcccg gcgacgtgga cgtcgtcttc gccgacgccg ccggagaacg      3240
+     caccgccgac cgcctggaag ccgaggccct cgcggagctg ttcgggccgc gggccgtgcc      3300
+     cgtcaccgcc ccgaagtcga tgaccgggcg gctcgccgcc ggcggctccg ccctcgacct      3360
+     cgccgccgcg ctgatggccc tgcacgagca ggtcgtcccg ccgaccaccg gaacctccgc      3420
+     ccccgccgac gactgccccg tcgacctcgt cacgggcacc ccccgcaccg ggctgcggct      3480
+     gcgcaccgcg ctggtcctgg cccgcgggcg cggcggcttc aactcggccg tcgtcgtccg      3540
+     cgccccggcg gcctgaccct ccccggccgc cccttcgtac gtcgtcaccc ccttccccac      3600
+     accccctcga ccaccgaaca gaggtgttgc atgaaccgcc tggagctcag cagtctgacc      3660
+     cgcatcctgc gggagtgcgc cggagaggag gagggcgtcg acctggacgg cgacgtcctc      3720
+     gaccagtact ggttcgagct cggctacgac tccctcgccg tgctccagac caccggctac      3780
+     atcgagcggg agttcggcat cgtcctcgac ggcgaggact tcgacgaggc cgacacgccc      3840
+     cgccgctacc tcgacatggt caaccgggtc ctctcggaac gggcccccgt ctgaccggcc      3900
+     ggcgccgcct ccggcgcccc ccgtaccaag acgacgacgg gcgcgagagc caccgccaga      3960
+     ccgccgggtg cccacccggt ccggtccggc ggtggctctt cgccgtatga cggccacccg      4020
+     ccggggcccc ccggggcggt cagcgcaggt cgtcgcgggt gaccaggcgg cgggccacct      4080
+     gccagcccga ctccgcgcgg accagcgtgt cctccatcac gcacatccgg tacagccgcg      4140
+     gctccccgcc ccgcggcgtc aggtggacct gcgcgtaggc gcgggtgcgg agcgtgccgt      4200
+     ccggggcggg acggacgtcc agcatgccga tccagtgccg cagccggtcc ccggtcgcct      4260
+     cctccgcctg ccggttgcgg cgtacgtt                                         4288
+//

@@ -1,0 +1,33 @@
+# step4 = react(retroSteps[2], 'ER')
+# [Chem.MolToSmiles(retroSteps[2]), Chem.MolToSmiles(step4)]
+# plotM([step4], ['test'])
+# retroSteps[0].HasSubstructMatch(Chem.MolFromSmarts('[C:1]([O:6])[C:2][C:3](=[O:4])[S:5]'))
+# step4 = react(retroSteps[0], 'KR')
+# [Chem.MolToSmiles(retroSteps[0]), Chem.MolToSmiles(step4)]
+# step4.UpdatePropertyCache()
+# plotM([retroSteps[0]], ["step 4"])
+# Chem.MolFromSmiles('CC[CH]C(C)(O)C=CC(=O)C(C)CC(C)[C](=O)C(C)C(=O)S')
+# Chem.MolToSmiles(retroSteps[2])
+# step4 = react(retroSteps[2], 'KR')
+
+# testmolecule = retroSteps[12]
+# plotM([testmolecule])
+# rxnObject = AllChem.ReactionFromSmarts("[C:1][O:2][C:3][O:4]>>([C:1][O:2].[C:3]=[O:4])")
+# result = rxnObject.RunReactants((testmolecule,))[0][0]
+# plotM([testmolecule, result], ["test", "result"])
+# mol = Chem.MolToSmarts(retroSteps[4])
+# mol = retroSteps[4]
+mol = Chem.MolFromSmiles("CCC(=O)SCCNC(=O)CCNC(=O)C(O)C(C)(C)COP(O)(=O)OP(O)(=O)OCC3OC(n2cnc1c(N)ncnc12)[C@H](O)[C@@H]3OP(O)(O)=O")
+print(Chem.MolToSmiles(retroSteps[24]))
+for starter in starters.values():
+    starterMol = Chem.MolFromSmarts(starter)
+    if mol.HasSubstructMatch(starterMol):
+        if mol.GetNumAtoms() == starterMol.GetNumAtoms():
+            print(starter)
+
+mol = Chem.MolFromSmiles("OC[C@H]1OC(O)[C@H](O)[C@@H](O)[C@@H]1O")
+Chem.MolToSmarts(mol)
+
+mol = Chem.MolFromSmarts('[O:1]1-[C:2](-[O:7]-[C:8])-[C:3]([O:10])-[C:13]([*:14])-[C:4]([*:11])-[C:5]([O:12])-[C:6](-[C:9])-1')
+mol2 = react(nystatin, "5Csugar", False)
+plotM([mol], ['test'])

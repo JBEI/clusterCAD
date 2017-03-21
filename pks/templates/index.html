@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block subtitle %}
+Browse Clusters
+{% endblock %}
+
+{% block content %}
+<h1>PKS Clusters</h1>
+{{ clusters.count }} clusters total<br/>
+
+<div class="list-group">
+{% for cluster in clusters %}
+    <a class="list-group-item" href="{{ cluster.id }}/">{{ cluster.genbankAccession }} {{ cluster.description }}</a>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,294 @@
+ID   U25130; SV 2; ; DNA; ; PRO; 4852 BP.
+XX
+AC   U25130;
+XX
+DE   Pseudomonas syringae pv. syringae syringomycin biosynthesis enzyme 1
+DE   (syrB1), syringomycin biosynthesis enzyme 2 (syrB2), and thioesterase
+DE   (syrC) genes, complete cds.
+XX
+KW   
+XX
+OS   Pseudomonas syringae pv. syringae
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas; Pseudomonas syringae.
+XX
+RN   [1]
+RP   1-4852
+RX   PUBMED; 7608074.
+RA   Zhang,J.H., Quigley,N.B. and Gross,D.C.;
+RT   "Analysis of the syrB and syrC genes of Pseudomonas syringae pv. syringae
+RT   indicates that syringomycin is synthesized by a thiotemplate mechanism";
+RL   J. Bacteriol. 177 (14), 4009-4020 (1995)
+XX
+RN   [2]
+RP   1-4852
+RX   PUBMED; 9830033.
+RA   Guenzi,E., Galli,G., Grgurina,I., Gross,D.C. and Grandi,G.;
+RT   "Characterization of the syringomycin synthetase gene cluster. A link
+RT   between prokaryotic and eukaryotic peptide synthetases";
+RL   J. Biol. Chem. 273 (49), 32857-32863 (1998)
+XX
+RN   [3]
+RP   1-4852
+RA   Zhang,J.-H.;
+RT   "Direct Submission";
+RL   Submitted (17-APR-1995) Jianhua Zhang, Plant Pathology, Washington State
+RL   University, 348 Johnson Hall, Pullman, WA 99164-6430, USA
+XX
+RN   [4]
+RP   1-4852
+RA   Gross,D.;
+RT   "Direct Submission";
+RL   Submitted (20-AUG-1999) Plant Pathology, Washington State University, P.O.
+RL   Box 646430, Pullman, WA 99164-6430, USA
+XX
+CC   On Aug 20, 1999 this sequence version replaced gi:837255.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..4852
+FT                   /mol_type="genomic DNA"
+FT                   /db_xref="taxon:321"
+FT                   /clone="p601"
+FT                   /note="pathovar: syringae"
+FT                   /strain="B301D"
+FT                   /organism="Pseudomonas syringae pv. syringae"
+FT   cluster         1..4852
+FT                   /note="Cluster number: 27"
+FT                   /note="Detection rule(s) for this cluster type: other:
+FT                   ((PP-binding & AMP-binding) or (PP-binding & A-OX) or
+FT                   (NAD_binding_4 & A-OX) or (NAD_binding_4 & AMP-binding) or
+FT                   LmbU or Neocarzinostat or cycdipepsynth or fom1 or bcpB or
+FT                   frbD or mitE or vlmB or prnB or CaiA or bacilysin or
+FT                   orf2_PTase);"
+FT                   /product="other"
+FT   gene            373..2217
+FT                   /gene="syrB1"
+FT   CDS             373..2217
+FT                   /function="amino acid activation in syringomycin synthesis"
+FT                   /product="syringomycin biosynthesis enzyme 1"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /sec_met="Type: other"
+FT                   /sec_met="Domains detected: AMP-binding (E-value: 5.2e-112,
+FT                   bitscore: 362.0, seeds: 400); PP-binding (E-value: 3.4e-11,
+FT                   bitscore: 31.4, seeds: 164)"
+FT                   /sec_met="Kind: biosynthetic"
+FT                   /sec_met="NRPS/PKS subtype: NRPS-like protein"
+FT                   /sec_met="NRPS/PKS Domain: AMP-binding (47-450). E-value:
+FT                   7.9e-111. Score: 362.0; NRPS/PKS Domain: syrB1_A1;
+FT                   Substrate specificity predictions: thr (NRPSPredictor2
+FT                   SVM), thr (Stachelhaus code), thr-4-cl (Minowa), thr
+FT                   (consensus);"
+FT                   /sec_met="NRPS/PKS Domain: PCP (542-608). E-value: 3.9e-14.
+FT                   Score: 44.2;"
+FT                   /translation="MPITNTDESLSAASAPLKPGAFLHEIFSDRARQFPERTAVSDAAR
+FT                   TLSYAQLDALSTKLAARLRDEGVTYGTRVGMYLPRSVDLVTSLLGILKAGGTYVPVDPQ
+FT                   YPGKRVEHIVRDSELSLIIGDAANLPKISSLRVLALDELLSAPALQPAAQDTRIDPNNS
+FT                   TAYIIYTSGSTGEPKGVQVSHGNVSRLLESTQRAYGFNAQDVWSMFHSIGFDFSVWEIW
+FT                   GALAHGGQVAVVPYDISRSPAALRQWLADQRITVLSQTPSAFRGLDEADRGNTAPLALR
+FT                   YVVLGGEALPASVLRPWVERHGDQKPALINMYGITEATVHTTFKRVLAQDLETAAMVSL
+FT                   GKPLDGWRLHLLDANQAPVAAGTTGELYIEGAGVAQGYLNREALNVERFVELPGAVRAY
+FT                   RTGDLMTLESNGEYRYAGRCDEQLKISGFRIEPGEIEASLQTSPSVAAAHVGVHDYGDG
+FT                   DLRLVAYVVPGQGVDAWTEQARSEVAALMAENLPGYMRPSVYVPLAELPVTHHGKIDKQ
+FT                   QLPSPAAGTALSGAADVKGLSEQEHFVLKVWSEDLGLKNIGVNDDFFDSGGTSLALIRS
+FT                   LSKLKTHYKINLDPGILADGATAKVLADHITRSLVQAH"
+FT                   /gene="syrB1"
+FT                   /protein_id="AAA85160.2"
+FT   aSDomain        514..1722
+FT                   /domain="AMP-binding"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="7.90E-111"
+FT                   /locus_tag="syrB1"
+FT                   /label="syrB1_A1"
+FT                   /detection="hmmscan"
+FT                   /score="362.0"
+FT                   /specificity="NRPSpredictor2 SVM: thr"
+FT                   /specificity="Stachelhaus code: thr"
+FT                   /specificity="Minowa: thr-4-cl"
+FT                   /specificity="consensus: thr"
+FT                   /translation="SYAQLDALSTKLAARLRDEGVTYGTRVGMYLPRSVDLVTSLLGIL
+FT                   KAGGTYVPVDPQYPGKRVEHIVRDSELSLIIGDAANLPKISSLRVLALDELLSAPALQP
+FT                   AAQDTRIDPNNSTAYIIYTSGSTGEPKGVQVSHGNVSRLLESTQRAYGFNAQDVWSMFH
+FT                   SIGFDFSVWEIWGALAHGGQVAVVPYDISRSPAALRQWLADQRITVLSQTPSAFRGLDE
+FT                   ADRGNTAPLALRYVVLGGEALPASVLRPWVERHGDQKPALINMYGITEATVHTTFKRVL
+FT                   AQDLETAAMVSLGKPLDGWRLHLLDANQAPVAAGTTGELYIEGAGVAQGYLNREALNVE
+FT                   RFVELPGAVRAYRTGDLMTLESNGEYRYAGRCDEQLKISGFRIEPGEIEASLQTSPSVA
+FT                   AAHV"
+FT                   /asDomain_id="nrpspksdomains_syrB1_A1"
+FT   CDS_motif       637..678
+FT                   /note="NRPS/PKS Motif: NRPS-A_a2 (e-value: 1.7e-05,
+FT                   bit-score: 17.9)"
+FT                   /locus_tag="syrB1"
+FT                   /motif="NRPS-A_a2"
+FT                   /database="abmotifs"
+FT                   /evalue="1.70E-05"
+FT                   /asDomain_id="nrpspksmotif_syrB1_0001"
+FT                   /detection="hmmscan"
+FT                   /score="17.9"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="LGILKAGGTYVPVD"
+FT                   /label="NRPS-A_a2"
+FT   CDS_motif       865..924
+FT                   /note="NRPS/PKS Motif: NRPS-A_a3 (e-value: 6.1e-11,
+FT                   bit-score: 34.0)"
+FT                   /locus_tag="syrB1"
+FT                   /motif="NRPS-A_a3"
+FT                   /database="abmotifs"
+FT                   /evalue="6.10E-11"
+FT                   /asDomain_id="nrpspksmotif_syrB1_0002"
+FT                   /detection="hmmscan"
+FT                   /score="34.0"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="AYIIYTSGSTGEPKGVQVSH"
+FT                   /label="NRPS-A_a3"
+FT   CDS_motif       1453..1539
+FT                   /note="NRPS/PKS Motif: NRPS-A_a6 (e-value: 4.2e-14,
+FT                   bit-score: 44.7)"
+FT                   /locus_tag="syrB1"
+FT                   /motif="NRPS-A_a6"
+FT                   /database="abmotifs"
+FT                   /evalue="4.20E-14"
+FT                   /asDomain_id="nrpspksmotif_syrB1_0003"
+FT                   /detection="hmmscan"
+FT                   /score="44.7"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="AGTTGELYIEGAGVAQGYLNREALNVERF"
+FT                   /label="NRPS-A_a6"
+FT   CDS_motif       1615..1680
+FT                   /note="NRPS/PKS Motif: NRPS-A_a8 (e-value: 4.3e-10,
+FT                   bit-score: 31.7)"
+FT                   /locus_tag="syrB1"
+FT                   /motif="NRPS-A_a8"
+FT                   /database="abmotifs"
+FT                   /evalue="4.30E-10"
+FT                   /asDomain_id="nrpspksmotif_syrB1_0004"
+FT                   /detection="hmmscan"
+FT                   /score="31.7"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="YAGRCDEQLKISGFRIEPGEIE"
+FT                   /label="NRPS-A_a8"
+FT   aSDomain        1999..2196
+FT                   /domain="PCP"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="3.90E-14"
+FT                   /locus_tag="syrB1"
+FT                   /asDomain_id="nrpspksdomains_syrB1_Xdom01"
+FT                   /detection="hmmscan"
+FT                   /score="44.2"
+FT                   /translation="FVLKVWSEDLGLKNIGVNDDFFDSGGTSLALIRSLSKLKTHYKIN
+FT                   LDPGILADGATAKVLADHITR"
+FT   gene            2235..3167
+FT                   /gene="syrB2"
+FT   CDS             2235..3167
+FT                   /product="syringomycin biosynthesis enzyme 2"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /translation="MSKKFALTAEQRASFEKNGFIGPFDAYSPEEMKETWKRTRLRLLD
+FT                   RSAAAYQDLDAISGGTNIANYDRHLDDDFLASHICRPEICDRVESILGPNVLCWRTEFF
+FT                   PKYPGDEGTDWHQADTFANASGKPQIIWPENEEFGGTITVWTAFTDANIANGCLQFIPG
+FT                   TQNSMNYDETKRMTYEPDANNSVVKDGVRRGFFGYDYRQLQIDENWKPDEASAVPMQMK
+FT                   AGQFIIFWSTLMHASYPHSGESQEMRMGFASRYVPSFVHVYPDSDHIEEYGGRISLEKY
+FT                   GAVQVIGDETPEYNRLVTHTTRGKKFEAV"
+FT                   /gene="syrB2"
+FT                   /protein_id="AAD50521.1"
+FT   gene            3408..4709
+FT                   /gene="syrC"
+FT   CDS             3408..4709
+FT                   /function="required for syringomycin synthesis"
+FT                   /product="thioesterase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="SyrC; putative"
+FT                   /translation="MRVCGIGVRTLQYLHGGETQLSSFEYFISRKICEALDYSYEHFDD
+FT                   AGDVTAFNRLLKHFEFSGAVPHIETLHLTTRDHAPLLVHASANRERPPVVLALPCGIPF
+FT                   DLCRDWFDALSERFFVVTWETRGLFGACEAFDQIAVDTDAQVADMISVMNHFGLSTAHL
+FT                   MGICAGAVIALSAAAAHAERVNSLSLWHGDYNLGDNDLRAAHQQNFEWLMESAAQDRDE
+FT                   AADLQAMFLDQATLATTPESIAHVVLYPYVNARVVLSLCRLNDALNKTELAPRLTRITA
+FT                   PTLVVAGDADSTTHIGGSAHIAASIKDATLHVERNGSHLAFFASSQQSKQTAFSFLEEV
+FT                   LQPVSPDRHSIPRRMERRLRPPALLCSATLSAAATDSPSKRHTGAAITNLPFSAPLHGQ
+FT                   SNRSRPLYRRRGAVPRITDQPTRKTTARSCPSFP"
+FT                   /gene="syrC"
+FT                   /protein_id="AAA85161.1"
+SQ   Sequence 4852 BP; 1005 A; 1538 C; 1357 G; 952 T; 0 other;
+     tcatcagcga aaacgggcgc agtgttagct tgaagactca tgaacaaact cctggacctc        60
+     agcccttcac atccactttt gtagggcgcc agaccagcac gctccggcac cgcgcaagaa       120
+     taaaaacact gatggcctaa ggcgtctgtc accgcaatcc gggacatcgg tcgcgaagag       180
+     tgtcgatgcg tactgatctg aatcggcagg ctttgtcccc atttccctcg acagacgcag       240
+     cccgttagtc ggtgctgaaa tgcgccaact gcggatcatg ccggcccatt gacggattcg       300
+     tcaggccgca gggatgtctc gattgcagcg gatttgagcg ctgcatctgg ttattacaca       360
+     ggagctttgg tcatgccgat tacgaacact gacgaatcgc ttagcgccgc gtcagcccct       420
+     ctcaagcccg gtgctttcct gcacgagata ttcagtgaca gggcgcgtca atttcctgag       480
+     cgcaccgcgg tgagcgatgc agcccggacg ttgagctacg cacagctcga cgcgctgtcg       540
+     acaaagctgg ctgcacgttt acgcgatgaa ggcgtgacct acggcacgcg tgtgggcatg       600
+     tacctgccgc gcagcgtcga tctggtcacc agcctgctgg gtattctcaa agccggcggc       660
+     acctatgtgc cggtcgaccc gcaataccct ggcaaacgcg tcgagcacat cgtgcgcgac       720
+     agcgagctga gcctgatcat cggcgatgcc gccaacctgc cgaaaatatc gtctctgcgc       780
+     gtattggcac tcgacgagtt actgtccgcg ccggcgctgc aaccggccgc tcaagacacc       840
+     cgtatcgacc cgaataattc cactgcctac atcatctaca cctctggctc caccggtgag       900
+     cccaagggcg tacaggtttc ccatggcaac gtcagtcgcc tgctggaaag tacccaacgc       960
+     gcctatggct tcaacgccca ggatgtctgg tcgatgttcc actccatcgg tttcgacttc      1020
+     tcggtctggg aaatctgggg tgccctcgcc cacggcggcc aggtggccgt tgtcccgtat      1080
+     gacatctcgc gctctcctgc cgccctgcgt caatggctcg ccgatcagcg catcaccgtg      1140
+     ctcagccaga cgccatcggc tttccgtggt cttgatgagg ccgatcgtgg caacaccgcg      1200
+     ccgctggcgc tgcgctacgt ggtgctcggt ggcgaagcgt tgcccgccag cgtgctgcgt      1260
+     ccctgggtcg agcgccacgg tgaccagaag cccgcgctga tcaacatgta cggcatcact      1320
+     gaggccaccg ttcacaccac cttcaagcga gtgttggcgc aggacctgga aacagcagcc      1380
+     atggtgtcgc tgggcaagcc gctggacggc tggcgcctgc acctgcttga cgccaaccag      1440
+     gcgccggtcg cggcaggcac taccggcgag ctgtacatcg aaggcgcggg cgtggctcag      1500
+     ggctacctga accgtgaggc gctcaacgtc gagcgcttcg tcgagttacc cggtgctgtg      1560
+     cgcgcctatc gtactggcga cctgatgacc ctggagagta atggcgaata ccgttatgcc      1620
+     ggtcgctgcg acgagcaatt gaaaatcagc ggtttccgca tcgagcccgg cgagatcgaa      1680
+     gcctctctgc aaaccagccc gagcgtggcc gcggcccatg tcggcgtaca tgattacggc      1740
+     gatggtgacc tgcgcctggt agcttacgtg gtgccaggcc agggcgtcga cgcctggacc      1800
+     gaacaggctc gcagcgaagt tgccgcattg atggccgaaa atttgccggg gtacatgcgt      1860
+     ccctcggtgt atgtgccgct ggcagagctg ccggtgactc atcacggcaa aatcgacaag      1920
+     caacaactgc cctcgcctgc cgctggcacg gcgctttcag gcgcggcaga cgtcaagggc      1980
+     ctcagtgaac aggagcactt cgtgctcaag gtctggagcg aagacctggg tctgaaaaac      2040
+     atcggcgtca atgatgattt cttcgattcc ggcggcactt cactggcact gatccgctcg      2100
+     ctgagcaagc tcaagacaca ttacaaaatc aacctcgacc ccgggatcct ggcggatggc      2160
+     gcaacggcca aagtcctggc cgaccacatc acccgtagcc ttgttcaagc ccattgaccg      2220
+     aaaaggaaaa gctcatgagc aaaaaattcg ccttaactgc ggaacagcgt gcctcgttcg      2280
+     agaaaaacgg ttttatcggg ccgtttgacg cttactcgcc agaagaaatg aaagaaacct      2340
+     ggaagcgcac ccgtctgcgc ctgctcgacc gtagcgctgc cgcctaccag gatctggacg      2400
+     ccatttccgg tggcaccaac atcgccaact atgatcgcca tctggacgat gatttcctgg      2460
+     ccagccacat ctgtcgcccg gaaatctgcg atcgcgtcga aagcatcctc ggcccgaacg      2520
+     tgctctgctg gcgtaccgag ttctttccca aatatccggg cgatgaaggc accgactggc      2580
+     accaggccga caccttcgcc aatgcctccg gcaagccaca gatcatctgg ccggaaaacg      2640
+     aagagttcgg cggcaccatt actgtctgga ccgcatttac cgacgcgaac attgccaatg      2700
+     gttgcctgca gttcattccc ggcacccaga acagcatgaa ttacgacgaa accaagcgca      2760
+     tgacctatga gcccgatgcc aacaactcgg tggtcaagga tggcgtgcgt cgcggtttct      2820
+     tcggctatga ctatcgccag ttgcagatcg atgagaactg gaaacccgac gaggcctctg      2880
+     ctgtgcccat gcagatgaag gccgggcagt tcattatttt ctggtcgacg ctgatgcacg      2940
+     cgtcctatcc gcacagtggc gaatcacagg aaatgcgcat gggcttcgcg tcacgctatg      3000
+     taccctcgtt cgtccatgtc tacccggatt cggatcatat cgaagaatac ggcggtcgca      3060
+     tcagtctgga gaaatacggc gcggtgcaag tgatcggtga cgaaacaccg gaatacaacc      3120
+     ggcttgtgac ccacaccacc cgcggcaaga aattcgaagc ggtctgaccc gcacacgtca      3180
+     tacgacaata gcctcgcgca atgtgcctga aaaagcgccc gacaaagagt gaagatccat      3240
+     gactatttcc tccgatgcag cgatgcgtct gtgcgagacg gtgaggatgc tcaggcacct      3300
+     tgccctcaat ttgcccgatc cggtgtgcct gagctttctc gcccgggacg acaggcctct      3360
+     gccagagccg gcgtgctcca gcgtgcgagc cacggagcgg gcgatcaatg cgcgtttgcg      3420
+     gcattggtgt gcgcaccctg cagtacttgc acggtggcga gacgcaactg tcgtcgttcg      3480
+     aatactttat aagccgcaaa atctgcgaag cgctcgacta tagctacgag cacttcgacg      3540
+     atgctggaga cgtcaccgcc ttcaatcgac tgctcaagca tttcgaattc agcggtgcag      3600
+     tgccgcacat cgagacattg cacctgacca cccgtgacca tgctccgttg ctggtgcatg      3660
+     ccagtgccaa ccgcgaacgg cctcctgtgg ttctggcatt gccctgcggc attccgttcg      3720
+     atctctgccg cgactggttc gacgccttga gcgagcgctt ttttgtcgtg acctgggaaa      3780
+     cccgagggct gttcggtgcc tgcgaggcgt tcgaccagat cgcggtggac accgatgccc      3840
+     aggttgccga catgatcagc gtaatgaatc acttcgggtt atcgaccgca catctgatgg      3900
+     gcatctgcgc gggcgcggtc atcgccctga gcgccgctgc tgcccacgcc gagcgggtca      3960
+     actccctgag cctgtggcat ggggattaca acctgggcga caatgacctg cgcgccgctc      4020
+     atcagcaaaa cttcgagtgg ctgatggaaa gcgctgctca ggatcgagac gaggctgccg      4080
+     acctgcaagc gatgttcctc gatcaggcaa cgctggccac cacccctgag tccattgccc      4140
+     acgtagtgct ttacccctac gtcaatgccc gagttgttct atcgctatgc cgtttgaatg      4200
+     acgcgctgaa caagaccgag ctggcaccac gactgacgcg catcaccgcg ccaaccctgg      4260
+     tagtggctgg cgatgccgac tcgactacgc acatcggcgg ctcagcgcat atcgccgcgt      4320
+     cgatcaagga cgccacgctg cacgtagagc gcaatggcag ccacctggcg ttctttgcct      4380
+     ccagccagca atcgaaacaa accgccttca gcttcctcga agaagttctt cagcccgtgt      4440
+     cgcctgacag gcattcgata cctcgccgaa tggaaaggcg gcttaggccc ccagctttac      4500
+     tctgctctgc gaccttgagc gcggcggcga ccgactcacc ttcaaagcgg cacactggcg      4560
+     cagcaatcac caaccttccc ttcagcgccc cgctccatgg tcaatcgaat cggtccaggc      4620
+     ctctataccg gcggcgcggc gccgtccccc gaatcactga tcaaccaacc cggaagacca      4680
+     ccgcgcgcag ttgtcccagc ttcccatgac agacatcccc aggtggatgc tctatttttt      4740
+     tttcaatgtt tttaatcctc cccgactggc agtcgtccag cgccatgccg cgccgtccat      4800
+     cgaccggaga cgagccaatt gatttcgcaa acaggtgctt tgagatgaat tc              4852
+//

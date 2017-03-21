@@ -1,0 +1,624 @@
+ID   U52150; SV 2; ; DNA; ; PRO; 12200 BP.
+XX
+AC   U52150;
+XX
+DE   Vibrio cholerae vibriobactin gene cluster, complete sequence.
+XX
+KW   
+XX
+OS   Vibrio cholerae
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Vibrionales; Vibrionaceae;
+OC   Vibrio.
+XX
+RN   [1]
+RP   1-12200
+RX   PUBMED; 9371453.
+RA   Wyckoff,E.E., Stoebner,J.A., Reed,K.E. and Payne,S.M.;
+RT   "Cloning of a Vibrio cholerae vibriobactin gene cluster: identification of
+RT   genes required for early steps in siderophore biosynthesis";
+RL   J. Bacteriol. 179 (22), 7055-7062 (1997)
+XX
+RN   [2]
+RP   1-12200
+RX   PUBMED; 10601218.
+RA   Wyckoff,E.E., Valle,A.M., Smith,S.L. and Payne,S.M.;
+RT   "A multifunctional ATP-binding cassette transporter system from Vibrio
+RT   cholerae transports vibriobactin and enterobactin";
+RL   J. Bacteriol. 181 (24), 7588-7596 (1999)
+XX
+RN   [3]
+RP   1-12200
+RA   Wyckoff,E.E.;
+RT   "Direct Submission";
+RL   Submitted (22-MAR-1996) Microbiology, University of Texas, Austin, TX
+RL   78712, USA
+XX
+RN   [4]
+RP   1-12200
+RA   Wyckoff,E.E.;
+RT   "Direct Submission";
+RL   Submitted (09-JUN-1997) Microbiology, University of Texas, Austin, TX
+RL   78712, USA
+XX
+RN   [5]
+RP   1-12200
+RA   Wyckoff,E.E.;
+RT   "Direct Submission";
+RL   Submitted (12-AUG-1999) Microbiology, University of Texas, Austin, TX
+RL   78712, USA
+XX
+CC   On Aug 12, 1999 this sequence version replaced gi:2182762.
+XX
+FH   Key             Location/Qualifiers
+FT   source          1..12200
+FT                   /strain="Lou15 (El Tor)"
+FT                   /mol_type="genomic DNA"
+FT                   /organism="Vibrio cholerae"
+FT                   /db_xref="taxon:666"
+FT   cluster         1..12200
+FT                   /note="Cluster number: 26"
+FT                   /note="Detection rule(s) for this cluster type: nrps:
+FT                   ((Condensation & AMP-binding) or (Condensation & A-OX) or
+FT                   cluster(Condensation,AMP-binding));"
+FT                   /note="Monomers prediction: (dhb)"
+FT                   /note="Structure image: structures/genecluster26.png"
+FT                   /product="nrps"
+FT   protein_bind    111..129
+FT                   /note="putative"
+FT                   /bound_moiety="fur"
+FT                   /gene="vibB"
+FT   gene            111..1155
+FT                   /gene="vibB"
+FT   CDS             274..1155
+FT                   /aSProdPred
+FT                   /product="isochorismatase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="VibB"
+FT                   /sec_met="NRPS/PKS subtype: PKS/NRPS-like protein"
+FT                   /sec_met="NRPS/PKS Domain: ACP (221-282). E-value: 6e-08.
+FT                   Score: 24.5;"
+FT                   /translation="MAIPKIASYPLPVSLPTNKVDWRIDASRAVLLIHDMQEYFVHYFD
+FT                   SQAEPIPSLIKHIQQLKAHAKQAGIPVVYTAQPANQDPAERALLSDFWGPGLSEETAII
+FT                   APLAPESGDVQLTKWRYSAFKKSPLLDWLRETGRDQLIITGVYAHIGILSTALDAFMFD
+FT                   IQPFVIGDGVADFSLSDHEFSLRYISGRTGAVKSTQQACLEIAAQHSKLTGLSLRTMQH
+FT                   DVAAALNLSVDEVDVQENLLFLGLDSIRAIQLLEKWKAQGADISFAQLMEHVTLQQWWQ
+FT                   TIQANLHQPCSA"
+FT                   /gene="vibB"
+FT                   /protein_id="AAC45926.1"
+FT   aSDomain        937..1119
+FT                   /domain="ACP"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="6.00E-08"
+FT                   /locus_tag="vibB"
+FT                   /asDomain_id="nrpspksdomains_vibB_Xdom01"
+FT                   /detection="hmmscan"
+FT                   /score="24.5"
+FT                   /translation="HDVAAALNLSVDEVDVQENLLFLGLDSIRAIQLLEKWKAQGADIS
+FT                   FAQLMEHVTLQQWWQT"
+FT   regulatory      1164..1207
+FT                   /note="putative rho-independent terminator"
+FT                   /regulatory_class="terminator"
+FT   gene            complement(1256..2887)
+FT                   /gene="vibE"
+FT   CDS             complement(1256..2887)
+FT                   /aSProdPred="dhb"
+FT                   /product="2,3-dihydroxybenzoate-AMP ligase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="VibE"
+FT                   /sec_met="Type: nrps"
+FT                   /sec_met="Domains detected: AMP-binding (E-value: 2.2e-89,
+FT                   bitscore: 289.4, seeds: 400)"
+FT                   /sec_met="Kind: biosynthetic"
+FT                   /sec_met="NRPS/PKS subtype: NRPS-like protein"
+FT                   /sec_met="NRPS/PKS Domain: AMP-binding (52-463). E-value:
+FT                   9e-89. Score: 289.4; NRPS/PKS Domain: vibE_A1; Substrate
+FT                   specificity predictions: dhb (NRPSPredictor2 SVM), dhb
+FT                   (Stachelhaus code), dhb (Minowa), dhb (consensus);"
+FT                   /translation="MTTDFTPWPEALAAQYRQLGYWQDKTLLDYLQQSAERTPNALALV
+FT                   GDNQQWRYQAMLERIEQLAAGFTELGLGCGDNVVLQLGNVAEFYLCFFALLRQGIRPIL
+FT                   ALPAHRLAEIRYFCQHSQAKAYLIDGAQRPFDYQALAQELLACCPTLQTVIVRGQTRVT
+FT                   DPKFIELASCYSASSCQANADPNQIAFFQLSGGTTGTPKLIPRTHNDYAYSVTASVEIC
+FT                   RFDQHTRYLCVLPAAHNFPLSSPGALGVFWAGGCVVLSQDASPQHAFKLIEQHKITVTA
+FT                   LVPPLALLWMDHAEKSTYDLSSLHFVQVGGAKFSEAAARRLPKALGCQLQQVFGMAEGL
+FT                   VNYTRLDDSAELIATTQGRPISAHDQLLVVDEQGQPVASGEEGYLLTQGPYTIRGYYRA
+FT                   DQHNQRAFNAQGFYITGDKVKLSSEGYVIVTGRAKDQINRGGEKIAAEEVENQLLHHPA
+FT                   VHDAALIAISDEYLGERSCAVIVLKPEQSVNTIQLKRFLHQAGLADYKIPDQIQFIDQL
+FT                   PKTSVGKIDKNALRRRFDTLGLALMS"
+FT                   /gene="vibE"
+FT                   /protein_id="AAC45927.1"
+FT   aSDomain        complement(1499..2731)
+FT                   /domain="AMP-binding"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="9.00E-89"
+FT                   /locus_tag="vibE"
+FT                   /label="vibE_A1"
+FT                   /detection="hmmscan"
+FT                   /score="289.4"
+FT                   /specificity="NRPSpredictor2 SVM: dhb"
+FT                   /specificity="Stachelhaus code: dhb"
+FT                   /specificity="Minowa: dhb"
+FT                   /specificity="consensus: dhb"
+FT                   /translation="YQAMLERIEQLAAGFTELGLGCGDNVVLQLGNVAEFYLCFFALLR
+FT                   QGIRPILALPAHRLAEIRYFCQHSQAKAYLIDGAQRPFDYQALAQELLACCPTLQTVIV
+FT                   RGQTRVTDPKFIELASCYSASSCQANADPNQIAFFQLSGGTTGTPKLIPRTHNDYAYSV
+FT                   TASVEICRFDQHTRYLCVLPAAHNFPLSSPGALGVFWAGGCVVLSQDASPQHAFKLIEQ
+FT                   HKITVTALVPPLALLWMDHAEKSTYDLSSLHFVQVGGAKFSEAAARRLPKALGCQLQQV
+FT                   FGMAEGLVNYTRLDDSAELIATTQGRPISAHDQLLVVDEQGQPVASGEEGYLLTQGPYT
+FT                   IRGYYRADQHNQRAFNAQGFYITGDKVKLSSEGYVIVTGRAKDQINRGGEKIAAEEVEN
+FT                   QLLHHPAVHDAA"
+FT                   /asDomain_id="nrpspksdomains_vibE_A1"
+FT   CDS             complement(2898..4085)
+FT                   /product="isochorismate synthase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="VibC"
+FT                   /translation="MVMKREVVGYTTMSEHLIDTQLTRSPFFFASANQSMLGCGVAHAF
+FT                   QQAIPFAELANQAKQLLQQAKRDECDNPLLFGIVPFDPKTPTRFMIPRTLYVSSSPRLN
+FT                   RPAHLTRQVAKLISSPSGEQYKQGVSHLLNMFHHSGLSKVVLSRAIEIATEQEIALPTL
+FT                   LRSLLAINHHGYTFAASLDEQRKLIGASPELLVAKRGNYLISNPLAGSRPRSQDAQENA
+FT                   QRRASLLNTAKDLHEHGLVVEEVERIMSRYCRNLYTPMVPSVIETETMLHLSTLLEGQV
+FT                   SDPEVCALQVAADLHPTPAVCGFPRESAYQAIRELEEFDRGYFTGMVGWCDARGNGEWV
+FT                   VTIRCAEVGSHQMKLFAGAGIVDESLPQSELEETGAKMKTILAAAGIELNDVLTA"
+FT                   /gene="vibC"
+FT                   /protein_id="AAC45925.1"
+FT   gene            complement(2898..4147)
+FT                   /gene="vibC"
+FT   protein_bind    complement(4129..4146)
+FT                   /note="putative"
+FT                   /bound_moiety="fur"
+FT                   /gene="vibC"
+FT   protein_bind    4177..4195
+FT                   /note="putative"
+FT                   /bound_moiety="fur"
+FT                   /gene="vibA"
+FT   gene            4177..5041
+FT                   /gene="vibA"
+FT   CDS             4253..5041
+FT                   /function="vibriobactin biosynthesis"
+FT                   /product="2,3-dihydro-2,3-dihydroxybenzoate dehydrogenase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="VibA; required for the synthesis of catechols"
+FT                   /translation="MKDMSLVNSKVLLVGSARGIGFSVLEHLLQAGAQVMAADCEWQLL
+FT                   LEQSESLLGRYPDQLTLKKLDLAEPEAVREQVNQWAEQVAGFDHLVCCAGILHVAPLHE
+FT                   MPMEQVSSIFTVNAFGVLACMQGVASSMKARQQGSMVIIGSNAANTPRMSIGAYGASKA
+FT                   ALHMLVKCIGMELAPYGIRCNLVSPGSTRTAMQQQLWTEQYGEAQVIAGDAAQFRLGIP
+FT                   LNKIAEPADIAQAVLFLLSDNAGHITLHDLRVDGGATLDH"
+FT                   /gene="vibA"
+FT                   /protein_id="AAC45924.1"
+FT   misc_feature    4315..4316
+FT                   /note="site of Tn5 insertion which inactivates vibA"
+FT   CDS             complement(5053..6363)
+FT                   /aSProdPred
+FT                   /product="VibH"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="similar to amino terminal region of EntF; required
+FT                   for vibriobactin biosynthesis"
+FT                   /sec_met="Type: nrps"
+FT                   /sec_met="Domains detected: Condensation (E-value: 2.5e-33,
+FT                   bitscore: 104.9, seeds: 42)"
+FT                   /sec_met="Kind: biosynthetic"
+FT                   /sec_met="NRPS/PKS subtype: Hybrid PKS-NRPS"
+FT                   /sec_met="NRPS/PKS Domain: Condensation_Starter (3-281).
+FT                   E-value: 4.8e-59. Score: 191.7;"
+FT                   /translation="MLLAQKPFWQRHLAYPHINLDTVAHSLRLTGPLDTTLLLRALHLT
+FT                   VSEIDLFRARFSAQGELYWHPFSPPIDYQDLSIHLEAEPLAWRQIEQDLQRSSTLIDAP
+FT                   ITSHQVYRLSHSEHLIYTRAHHIVLDGYGMMLFEQRLSQHYQSLLSGQTPTAAFKPYQS
+FT                   YLEEEAAYLTSHRYWQDKQFWQGYLREAPDLTLTSATYDPQLSHAVSLSYTLNSQLNHL
+FT                   LLKLANANQIGWPDALVALCALYLESAEPDAPWLWLPFMNRWGSVAANVPGLMVNSLPL
+FT                   LRLFAQQTSLGNYLKQSGQAIRSLYLHGRYRIEQIEQDQGLNAEQSYFMSPFINILPFE
+FT                   SPHFADCQTELKVLASGSAEGINFTFRGSPQHELCLDITADLASYPQSHWQSHCERFPR
+FT                   FFEQLLARFQQVEQDVARLLAEPAALAATTSTRAIAS"
+FT                   /gene="vibH"
+FT                   /protein_id="AAD48879.1"
+FT   gene            complement(5053..6407)
+FT                   /gene="vibH"
+FT   CDS_motif       complement(5395..5466)
+FT                   /note="NRPS/PKS Motif: C67_starter_14fromHMM (e-value:
+FT                   1e-05, bit-score: 18.1)"
+FT                   /locus_tag="vibH"
+FT                   /motif="C67_starter_14fromHMM"
+FT                   /database="abmotifs"
+FT                   /evalue="1.00E-05"
+FT                   /asDomain_id="nrpspksmotif_vibH_0005"
+FT                   /detection="hmmscan"
+FT                   /score="18.1"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="QAIRSLYLHGRYRIEQIEQDQGLN"
+FT                   /label="C67_starter_14fromHMM"
+FT   CDS_motif       complement(5521..5592)
+FT                   /note="NRPS/PKS Motif: C5_starter_265-294 (e-value:
+FT                   5.9e-07, bit-score: 22.0)"
+FT                   /locus_tag="vibH"
+FT                   /motif="C5_starter_265-294"
+FT                   /database="abmotifs"
+FT                   /evalue="5.90E-07"
+FT                   /asDomain_id="nrpspksmotif_vibH_0004"
+FT                   /detection="hmmscan"
+FT                   /score="22.0"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="LPFMNRWGSVAANVPGLMVNSLPL"
+FT                   /label="C5_starter_265-294"
+FT   aSDomain        complement(5521..6354)
+FT                   /domain="Condensation"
+FT                   /domain_subtype="Condensation_Starter"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="4.80E-59"
+FT                   /locus_tag="vibH"
+FT                   /asDomain_id="nrpspksdomains_vibH_Xdom01"
+FT                   /detection="hmmscan"
+FT                   /score="191.7"
+FT                   /translation="AQKPFWQRHLAYPHINLDTVAHSLRLTGPLDTTLLLRALHLTVSE
+FT                   IDLFRARFSAQGELYWHPFSPPIDYQDLSIHLEAEPLAWRQIEQDLQRSSTLIDAPITS
+FT                   HQVYRLSHSEHLIYTRAHHIVLDGYGMMLFEQRLSQHYQSLLSGQTPTAAFKPYQSYLE
+FT                   EEAAYLTSHRYWQDKQFWQGYLREAPDLTLTSATYDPQLSHAVSLSYTLNSQLNHLLLK
+FT                   LANANQIGWPDALVALCALYLESAEPDAPWLWLPFMNRWGSVAANVPGLMVNSLPL"
+FT   CDS_motif       complement(5929..5994)
+FT                   /note="NRPS/PKS Motif: C3_starter_134-155 (e-value:
+FT                   1.3e-09, bit-score: 30.8)"
+FT                   /locus_tag="vibH"
+FT                   /motif="C3_starter_134-155"
+FT                   /database="abmotifs"
+FT                   /evalue="1.30E-09"
+FT                   /asDomain_id="nrpspksmotif_vibH_0003"
+FT                   /detection="hmmscan"
+FT                   /score="30.8"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="AHHIVLDGYGMMLFEQRLSQHY"
+FT                   /label="C3_starter_134-155"
+FT   CDS_motif       complement(6193..6300)
+FT                   /note="NRPS/PKS Motif: C2_starter_024-063 (e-value:
+FT                   3.5e-07, bit-score: 22.9)"
+FT                   /locus_tag="vibH"
+FT                   /motif="C2_starter_024-063"
+FT                   /database="abmotifs"
+FT                   /evalue="3.50E-07"
+FT                   /asDomain_id="nrpspksmotif_vibH_0002"
+FT                   /detection="hmmscan"
+FT                   /score="22.9"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="TVAHSLRLTGPLDTTLLLRALHLTVSEIDLFRARFS"
+FT                   /label="C2_starter_024-063"
+FT   CDS_motif       complement(6277..6330)
+FT                   /note="NRPS/PKS Motif: C3_dual_135-156 (e-value: 3.3,
+FT                   bit-score: 1.1)"
+FT                   /locus_tag="vibH"
+FT                   /motif="C3_dual_135-156"
+FT                   /database="abmotifs"
+FT                   /evalue="3.30E+00"
+FT                   /asDomain_id="nrpspksmotif_vibH_0001"
+FT                   /detection="hmmscan"
+FT                   /score="1.1"
+FT                   /aSTool="pksnrpsmotif"
+FT                   /translation="HLAYPHINLDTVAHSLRL"
+FT                   /label="C3_dual_135-156"
+FT   protein_bind    complement(6389..6407)
+FT                   /note="putative"
+FT                   /bound_moiety="fur"
+FT                   /gene="vibH"
+FT   protein_bind    6514..6532
+FT                   /note="putative"
+FT                   /bound_moiety="fur"
+FT                   /gene="viuP"
+FT   gene            6514..7524
+FT                   /gene="viuP"
+FT   CDS             6547..7524
+FT                   /product="periplasmic binding protein"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="component of vibriobactin transport system"
+FT                   /translation="MRINITMKNIFILLSVILGCLFSGFVSAQQNVWPRTFQNADGSIT
+FT                   TIPSQPKRILSTAVTVTGTLLAIDAPVIASAATTQSTFFEQWRKLAELRQVKKLWPAGS
+FT                   VDLESVYVEQPDLIVVSMIGADSARDQIPLLQAIAPTILVDYSDQTWQSLAQQLGLATG
+FT                   LEEQAERTIHNFEQWTKQVRDVLDLPKGRANIVSYHGPGVVNAVAKAQSAHAQLLQSVG
+FT                   VVLEEPDPAWQAGSIVHRDFLRIHYEHLTQLQAETTFLITMTDQQAQAFLHDPILKNLP
+FT                   SIQRKQVYGLGENSFRIDLFSAREIINSLLRRFAGEQAQSLVMP"
+FT                   /gene="viuP"
+FT                   /protein_id="AAD48880.1"
+FT   gene            7521..8573
+FT                   /gene="viuD"
+FT   CDS             7521..8573
+FT                   /product="cytoplasmic membrane permease"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="component of vibriobactin transport system"
+FT                   /translation="MNELMGIRVASSKRENPTLAGRDYWLMGLMLVALMGLTISSVFVG
+FT                   SRDIPYAVTFDALFHFDEQNTQHLLVHYLRVPRTGLAILVGAALGAAGVIMQAMTRNPL
+FT                   ADPGILGVNAGAILMVVIGIAGFGLTDMLHYLWFGLFGAAATSVGVYLLAGINQSPNPV
+FT                   RVVLAGAAMTVVLLSMTHLIMLNSAQEVFNQFRHWSIGSLQGRGYEVLLPTSVFVLLGL
+FT                   IAAILLARGLDTVVLGHDAGKALGVNPLWIWIASAAVVTLLAGTATAAAGPISFLGLTA
+FT                   PHLARLWVGAEHRRLLPYSMLLGALLLLGADLAGRLIGSNDEISAGIMVALIGGPVFVL
+FT                   LVRRWKLSHL"
+FT                   /gene="viuD"
+FT                   /protein_id="AAD48881.1"
+FT   CDS             8552..9628
+FT                   /product="cytoplasmic membrane permease"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="component of vibriobactin transport system"
+FT                   /translation="METITSVAPEGRSNQTRFWLWRKGAYTLRVERRNIAVALVLSLIV
+FT                   LALMILATCVGKLPISISDVTAILLGEVTSGFKRQVLLDIRLPRIFTALFAGAALGLSG
+FT                   AIFQSISRNPLGSPDIIGFTSGAATGALLQIILFSGSGVAVVFSAIAGGVMTAIAVYLL
+FT                   SVKSGTVGRYRLVLTGIGVGSVLTALNGLLLVKGSLDSAITANLWLSGSLHAREWSHVF
+FT                   PVMCGVLVLLPLIKSLARSLQMLEMGDEIARQLGVVVEPIRLFMILAAVTLAALATGAA
+FT                   GPIAFIALAAPQLAARLRQTANIPLVSAGLMGACLLLGADLLTQWMPLALTLPIGRITG
+FT                   LVGGMYLLILLMRSKNTV"
+FT                   /gene="viuG"
+FT                   /protein_id="AAD48882.1"
+FT   gene            8552..9686
+FT                   /gene="viuG"
+FT   regulatory      9668..9686
+FT                   /note="putative rho-independent terminator"
+FT                   /gene="viuG"
+FT                   /regulatory_class="terminator"
+FT   protein_bind    9708..9726
+FT                   /note="putative"
+FT                   /bound_moiety="fur"
+FT                   /gene="viuC"
+FT   gene            9708..10584
+FT                   /gene="viuC"
+FT   CDS             9745..10584
+FT                   /product="ATPase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="component of vibriobactin transport system"
+FT                   /translation="MDTIWDADLQSAALKAEHHRLKTERLSLGYEGKSVCDALDLAIPH
+FT                   GKFSVIVGPNGCGKSTLLKSLCRLLKPLAGQVLLDGQNIHQLPTKVVAKQLGLLPQSAL
+FT                   TPEGIKVVDLVSRGRYPHQGLFRQWSRVDERAVEEAMRATHVHELAQHSVDQLSGGQRQ
+FT                   RVWVAMGLAQQTPYLLLDEPTTYLDIAHQIELLDLFWRLNRQQGHTLVAVLHDLNQACR
+FT                   YADHLIVLQEGKIVAQGDPHSLVTPALVKQVFGIDCVVMPDPISCTPLIIPYSLKRG"
+FT                   /gene="viuC"
+FT                   /protein_id="AAD48883.1"
+FT   gene            10587..11300
+FT                   /gene="vibD"
+FT   CDS             10587..11300
+FT                   /product="phosphopantetheinyl transferase"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /aSProdPred
+FT                   /sec_met="NRPS/PKS subtype: PKS/NRPS-like protein"
+FT                   /sec_met="NRPS/PKS Domain: ACPS (112-175). E-value:
+FT                   1.1e-16. Score: 52.5;"
+FT                   /translation="MAFMISMPAIELAGLTIQVCQFDPQQFDEDQQHYLAPPTYHSLHK
+FT                   AVVKRQAEFVAGRKLAQQALKQIGQGYDRPIAIGTHREPLWPAGITGSIAHCDGWAVCT
+FT                   VLKAEHLSLGIDIEHRLAHQTASEVQAIIGTAQEWALLAQQFDLASAVTLLFSAKESLF
+FT                   KALFPQVHLYLDFCDAQLSSLEPNKMSFTLTRVPNAAQQSCEVYFRWFEQQRVLTVSVL
+FT                   PMLGKIEYHVPTLPT"
+FT                   /gene="vibD"
+FT                   /protein_id="AAD48884.1"
+FT   misc_feature    10918..10919
+FT                   /note="site of miniTn10kan insertion in vibD"
+FT                   /gene="vibD"
+FT   aSDomain        10923..11111
+FT                   /domain="ACPS"
+FT                   /database="nrpspksdomains.hmm"
+FT                   /evalue="1.10E-16"
+FT                   /locus_tag="vibD"
+FT                   /asDomain_id="nrpspksdomains_vibD_Xdom01"
+FT                   /detection="hmmscan"
+FT                   /score="52.5"
+FT                   /translation="LGIDIEHRLAHQTASEVQAIIGTAQEWALLAQQFDLASAVTLLFS
+FT                   AKESLFKALFPQVHLYLD"
+FT   CDS             11316..12179
+FT                   /product="unknown"
+FT                   /inference="non-experimental evidence, no additional
+FT                   details recorded"
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /note="similar to lysR family of transcription regulators"
+FT                   /translation="MLRDYDLNLLTVFDSVMKLGSVSKAADKLGMTSAAVSQNLSRLRE
+FT                   QVGDPLFIRQGRGLQPTQYALNMHKHVAEGLSAIRFGLETDAGFDPATSKREFIIGGQG
+FT                   YFDLVVLPPLLQKISDIAPHITVNLKSYEDDHFTPSQVLSEREADLFLAALPISHPSIV
+FT                   TTQVAEEALVVVYAKNHPRLGSTLSFEQFFAEKHTALTSRRFGNYLFSSLVDQVLPARR
+FT                   VHYQSESMLNLMATASVTDLLCFTPKRLAICGRRNWVYRSNLCRLKSARFRLLCAGIKP
+FT                   NSKIKG"
+FT                   /protein_id="AAD48885.1"
+SQ   Sequence 12200 BP; 2857 A; 2809 C; 3294 G; 3240 T; 0 other;
+     ctagcccttt tttatgggcg attttcaacg gagtgaggag agggaagctc acaacgtttg        60
+     gtgcttatga gcaatgagaa gcgccgccat gaagtgaaat tggattaaat gataattgtt       120
+     attatttaca tccatgagtg atgttgttag catcgttgca ttattgatcg gcagaagatt       180
+     cggccgaatg gctgcttctg ctgcgtcgtg cgatgacata acaacactaa caacgctcag       240
+     ttggctgagt atcaataagg atgatgtact ttcatggcta ttcctaaaat cgcttcttac       300
+     cctttacccg tatcattacc gactaataaa gtcgattggc gcattgatgc atcgcgggcg       360
+     gtactgctta tccatgatat gcaggagtac tttgtacact attttgactc gcaggcagaa       420
+     cccatcccaa gtttaatcaa gcatatacaa cagcttaaag ctcatgccaa gcaagcgggg       480
+     atccctgtgg tctatacggc tcaacccgcg aatcaagatc ctgccgagcg agcactattg       540
+     agcgattttt gggggcccgg tttgagtgaa gagacggcga tcattgcgcc tcttgctcca       600
+     gaatcaggtg atgttcagct caccaaatgg cgttatagcg cgtttaaaaa gtcgccgtta       660
+     ttggattggc tgcgtgaaac agggcgggat cagttaatca ttacgggtgt ctatgcgcac       720
+     attggcattc tctcgactgc gttggatgcc tttatgttcg atattcagcc ttttgtgatt       780
+     ggggatggcg tggcagattt ctcgctcagt gatcacgaat tcagtctgcg ttatatcagt       840
+     ggtcgtactg gtgcggtcaa atccactcaa caagcgtgtt tagagattgc cgcccaacac       900
+     tcaaagctta ctggcttaag cttgcgaacc atgcaacacg atgtggccgc tgcgctcaat       960
+     ctgagtgtgg atgaagtgga tgtgcaggag aacctcctgt ttctcggttt agattcgatt      1020
+     cgtgcgattc agttgttgga aaaatggaaa gcccaaggtg ctgatattag ctttgctcaa      1080
+     ctgatggagc atgtcacttt gcagcagtgg tggcagacca ttcaagccaa tttacatcaa      1140
+     ccttgctctg cgtgattgaa cgagttccct tcctgcttaa cacacggatt ctaagtagga      1200
+     agggaaccgc ttattcaagg attccctcta ctcactcatt gtctttacat tgatttcacg      1260
+     acattaacgc taagccgagc gtgtcaaatc gacgacgaag cgcgttctta tcgatttttc      1320
+     caaccgatgt tttgggcagt tgatcgataa attggatttg atctgggatt ttgtaatcgg      1380
+     cgagccccgc ttggtgtaaa aaacgtttga gctggatggt attcaccgac tgctcgggtt      1440
+     tgagtacgat caccgcgcaa ctgcgctctc ctaggtattc gtcactgatg gcaattaaag      1500
+     cggcatcatg cactgctgga tgatgtaaaa gctgattttc cacctcttcg gcggcaatct      1560
+     tttcccctcc acgattgatc tgatctttgg cccttccggt gacaatcacg taaccttcgc      1620
+     tactgagttt gactttatcg ccggtgatgt aaaaaccttg tgcattgaac gctcgttgat      1680
+     tgtgctgatc agctcgatag taaccgcgaa tcgtataggg accttgggtt aacagatacc      1740
+     cttcttctcc gctggcgaca ggttgaccct gctcatcaac caccagtaat tgatcgtgag      1800
+     cggagatagg ccgaccttga gttgtagcaa tcagttccgc actgtcatcc aaacgagtgt      1860
+     aattgaccaa gccttctgcc attccaaaca cttgttgcaa ttggcagcct agcgctttcg      1920
+     gcagacgcct tgcggccgct tcactaaatt ttgccccgcc tacttgcaca aagtgcaatg      1980
+     aggagagatc gtaggtgctt ttttctgcgt gatccatcca gagtagtgct aaaggcggca      2040
+     ccaacgcggt aacagtaatt ttatgctgtt ctatcaattt aaacgcgtgt tggggtgacg      2100
+     catcttgact gaggacaacg cagccacccg cccagaaaac accgagtgcg ccgggggagc      2160
+     tgagagggaa gttatgtgcc gcgggcagta cgcacagata gcgagtatgc tgatcaaaac      2220
+     ggcaaatttc gacactggcg gttacgctgt aggcgtaatc attgtgggta cgcgggatga      2280
+     gcttgggcgt gcccgttgtg ccaccggaaa gttggaaaaa ggcgatttga ttcgggtcgg      2340
+     cattcgcttg acaagatgat gccgagtagc aactcgccag ttcaataaat tttggatctg      2400
+     tcactcgagt ttggccgcgt acaatcacag tctgcagtgt tgggcagcaa gcaagcagct      2460
+     cttgcgccaa agcttgatag tcaaatggtc gctgagcgcc atcaatgagg taagctttgg      2520
+     cttggctgtg ctgacaaaaa tagcgaattt ccgctaaacg gtgagcgggg agcgccagaa      2580
+     tcggtcgtat gccttggcgc agcaaagcga aaaagcataa atagaattcc gcaacattgc      2640
+     ctaattgcag cactacgtta tcgccacagc ctagcccaag ttcggtaaat ccggcagcaa      2700
+     gctgctcaat acgttcgagc atggcttggt aacgccactg ctgattatca ccgaccagcg      2760
+     caagcgcatt gggggtacgc tcagcacttt gctgtaagta atcgagcaag gttttatctt      2820
+     gccagtagcc taactgacgg tattgagcgg caagtgcctc tggccaaggg gtaaaatcgg      2880
+     ttgtcattct tatctcctta agcggtgagc acatcgttga gctcaatacc tgccgcagcc      2940
+     aagatggttt tcatcttcgc gcccgtctct tccagttcac tttgtggtaa cgactcatcg      3000
+     acaatccctg cgccagcaaa aagcttcatt tggtgagatc ccacttcagc acagcgaatg      3060
+     gtgactaccc actcaccatt gccacgtgca tcacaccaac cgaccatgcc agtgaagtag      3120
+     ccacgatcaa attcttccag ctctcttatt gcttgataag ccgattcgcg cggaaaaccg      3180
+     catacggctg gagtggggtg taaatcggcg gcgacttgca aagcacaaac ctcaggatcg      3240
+     ctgacttgtc cttcaagtag ggttgagagg tgcagcatgg tttcggtttc aatcacagaa      3300
+     ggcaccatgg gggtgtacaa gttacgacag tagcggctca tgatccgctc gacttcttcg      3360
+     acgactaaac cgtgctcatg caaatctttg gcggtattga gcagtgaggc acggcgctgc      3420
+     gcattttctt gggcatcttg acttctcggg cgcgagccag ccagtgggtt tgagatgaga      3480
+     tagtttccgc gtttggcgac caagagttca gggcttgcac caatcagctt tctctgctcg      3540
+     tccaagctgg ccgcaaaagt atagccgtga tgattaatgg cgagcagact acgcagcaag      3600
+     gtcggtagtg ctatctcttg ctcggtggca atttcaatgg cgcgcgacag caccacttta      3660
+     gacagcccag agtgatgaaa catgttgagc agatggctta caccttgctt gtattgctct      3720
+     cctgatggcg aggagatgag tttagccact tggcgggtga ggtgagctgg acggtttaag      3780
+     cgcgggctac tcgacacgta taaggtgcgc ggaatcataa atcgagtcgg tgttttaggg      3840
+     tcaaacggca ctatgccaaa cagtaatgga ttgtcgcact catcacgttt ggcctgctgc      3900
+     aaaagctgtt tggcttggtt agccagttca gcaaaaggaa tggcttgctg aaaagcatga      3960
+     gcgaccccac aaccgagcat tgactggttt gctgaggcaa agaaaaacgg tgagcgagtg      4020
+     agttgggtgt cgatcagatg ttcagacata gtggtgtatc cgaccacttc acgcttcatg      4080
+     accatgttgt ttatccatat ttgcgagtga atgggttgcg ttgccaagcg caacagatta      4140
+     catttgctta cattcaaatg agaatagttt ttattaataa atgcaagcaa tttccatttg      4200
+     gtctgataat caaagtgatg attgtgaagg ttgatctcgt ttgtgatagg ggatgaaaga      4260
+     tatgtcgttg gttaacagca aggttcttct agtggggtca gcgcgtggga tagggttctc      4320
+     cgtgcttgaa catttattgc aagcgggagc gcaagtgatg gcggcagatt gtgagtggca      4380
+     gttgttgcta gagcagagtg agtcgttatt ggggcgttat ccggaccagc tcactttaaa      4440
+     aaaactcgac ttagcagagc ctgaagcggt gcgcgagcaa gtcaatcaat gggctgagca      4500
+     agtggcggga tttgatcatc tggtctgctg tgcaggaatc ctacatgttg cgccattgca      4560
+     tgaaatgcca atggaacaag tgagttctat ttttaccgtg aatgcttttg gtgtgttggc      4620
+     ctgtatgcaa ggtgtcgctt caagtatgaa agcgcgtcag cagggaagta tggtgattat      4680
+     tgggtctaat gctgccaata cgccgcgcat gtcgattggg gcttatggcg cttcgaaagc      4740
+     cgcattacac atgctggtta agtgcattgg tatggagcta gccccttacg gaattcgttg      4800
+     taatttggtc agtcccggct ccactcgcac cgctatgcag caacagcttt ggactgagca      4860
+     gtatggtgag gcacaagtca ttgccggaga tgctgcgcaa tttcggttgg ggatcccgct      4920
+     caataaaatt gccgagccag cggatattgc tcaagcggtc ctgtttttgt tatccgataa      4980
+     cgcaggtcac atcacgctgc atgatttacg agtggatggt ggagccacgc tcgatcattg      5040
+     atcgttcatc tttcaactgg cgatagcccg tgtggaggtg gtggctgcca atgccgcagg      5100
+     ctctgcgagt aggcgtgcaa catcttgctc cacctgttgg aaacgggcga gtaactgctc      5160
+     gaaaaaacgt ggaaaccgct cgcaatgact ttgccagtgg gattgcgggt agctggctaa      5220
+     atctgcggtg atgtctagac agagttcatg ctggggtgag ccacgaaagg taaaattaat      5280
+     cccttctgca gagcctgaag ccagcacctt gagctcagtc tggcaatcag caaagtgtgg      5340
+     ggattcaaaa ggcaaaatat tgataaatgg gctcataaaa taactttgct cagcatttag      5400
+     cccttgatct tgttcgattt gttcaattcg atagcggcca tgcaaataga gtgagcgtat      5460
+     cgcttgccct gactgtttaa ggtagttgcc gagcgaggtt tgctgcgcaa aaagacgcag      5520
+     caagggcagc gagttaacca ttaaaccggg cacattagcg gccacgctgc cccatcggtt      5580
+     cataaagggc agccacagcc aaggcgcatc aggttcagcc gattccaaat agagcgcgca      5640
+     cagcgcgact aaggcatcag gccagccaat ctgattcgcg ttagcgagct tgagtaacaa      5700
+     atggttgagt tggctattga gtgtgtaaga gaggctcacg gcatgactaa gttgaggatc      5760
+     ataggttgca gaggtgagcg ttaagtcggg agcttcgcgt aaatagcctt gccaaaactg      5820
+     cttatcttgc cagtagcgat ggctggtaag ataagccgcc tcttcttcca gataggattg      5880
+     ataaggttta aacgcggcag ttggcgtctg cccactgagc aaggattggt aatgttggct      5940
+     gaggcgctgc tcaaacagca tcatgccata accgtccagc acaatgtggt gcgcacgggt      6000
+     atagataagg tgctcactgt gtgacaaacg atacacttga tggctcgtta ttggcgcgtc      6060
+     aatcagtgtg cttgagcgct gtaaatcctg ctctatttgc cgccaagcta aaggttctgc      6120
+     ttcaaggtgg atgctgaggt cttgatagtc gataggcgga gaaaatgggt gccaatacag      6180
+     ctcaccttgc gcagaaaagc gagcacggaa cagatctatc tcactgacgg ttaaatgcaa      6240
+     tgcgcgcagc aaaagtgtgg tatctaaagg ccctgtcagg cgtagcgaat gggcaacggt      6300
+     gtcgagatta atgtgaggat aagccagatg gcgctgccaa aaaggctttt gagccaataa      6360
+     catagacacg atattaagcc ttatccagtt ggagaatcat aattactctt tcgcgtgagg      6420
+     cggtgttcgg tggcttggtt gcgagcctga gggggcatgg ctatactgag ttcacttttt      6480
+     actcacccct ctgtctctag agtccaccct aagatgattg atgagcgata ttaaactttt      6540
+     aacgaaatga gaatcaatat tacaatgaaa aacattttta ttttattgtc tgtgatattg      6600
+     ggttgcctgt tcagtggttt tgtcagcgcg cagcagaatg tttggccaag aacctttcag      6660
+     aatgcggacg gttcaatcac gacgattccc tctcagccaa agcgaatttt gtcgacggcc      6720
+     gtcacggtaa ccggaacact gctggcgata gatgcgccag ttattgctag tgctgcgacc      6780
+     acgcaaagca ccttttttga gcagtggcga aagctggcag agctgcgcca agtgaaaaaa      6840
+     ctttggcctg cgggaagtgt cgatctcgaa tcggtgtatg tcgaacaacc tgatttgatc      6900
+     gtggtttcca tgataggcgc ggattccgct cgcgatcaaa ttcccctttt acaagcgatt      6960
+     gctcccacca tcttggtcga ttacagcgat caaacttggc aatctttggc gcagcagttg      7020
+     gggcttgcta ccggacttga agagcaagcg gagcgcacaa tacacaattt tgagcagtgg      7080
+     acaaagcaag tgcgagatgt gctggatctg cccaaagggc gcgccaatat tgtgagctac      7140
+     cacggccccg gtgtggtcaa tgcggtggcg aaagcgcaaa gtgctcatgc tcaactgttg      7200
+     caatcggtcg gggttgtgtt ggaggagcca gatccagcat ggcaagcggg ttccatcgtc      7260
+     catcgagatt ttctgcgcat ccattatgag catttaactc agttgcaggc tgaaaccacg      7320
+     tttcttatca cgatgaccga tcagcaagct caagcttttc tccacgatcc gattttgaaa      7380
+     aacttgcctt cgatccagcg caaacaagtt tatggattgg gtgaaaactc atttcgcatt      7440
+     gacctgttca gtgcccgaga aatcattaac tcactgctgc gacgctttgc tggcgagcaa      7500
+     gcacaatctt tagtcatgcc atgaatgagc tgatgggaat aagagttgcg tcctcaaagc      7560
+     gagaaaatcc gacgttggca gggcgtgatt actggctaat ggggttgatg ctggtggcat      7620
+     tgatgggatt gacgataagc agtgtgtttg tcggatctcg cgacattcct tatgccgtga      7680
+     ctttcgatgc gctgtttcat tttgatgagc agaatactca gcatcttcta gtgcattacc      7740
+     tacgtgtgcc gcgcacgggg ttagcgatat tggtgggcgc agcgctcggg gctgcaggcg      7800
+     ttatcatgca agcgatgacg cgtaacccat tggcggatcc gggcattttg ggtgtcaatg      7860
+     cgggcgcaat cttgatggtg gtgattggca ttgctgggtt tggtctaacc gatatgctgc      7920
+     actatttgtg gtttggctta tttggcgcgg cagcaaccag tgtgggcgtt tatctgctgg      7980
+     caggtatcaa tcaatcaccc aatcccgttc gagtggtgct ggctggtgcg gcgatgacgg      8040
+     tggtgctctt gtctatgact catttgatta tgctcaatag cgcccaagag gtgtttaacc      8100
+     agtttcgaca ttggtcgatt ggctctttgc aaggcagagg atatgaagtt ttgctgccga      8160
+     caagtgtatt cgtactactc gggttgatcg cggctatctt actcgcccgc ggattggata      8220
+     ctgtggtgct cgggcatgac gcgggcaaag cattaggcgt caatccgtta tggatctgga      8280
+     tagcttctgc cgccgtggtc acgctgttgg ctggcaccgc aaccgcagcg gcagggccaa      8340
+     tcagttttct tggcttaacc gcgcctcatt tagcgcggct ttgggtgggc gctgaacatc      8400
+     gtcgtttact gccttactct atgttgcttg gggcgctgtt attgttaggt gccgatctgg      8460
+     ccgggcggct aatcggttca aacgatgaaa tcagcgcagg gatcatggtc gccttaatcg      8520
+     gagggccagt ctttgtgcta ttggtgagac gatggaaact atcacatctg tagccccaga      8580
+     aggtcggtcg aatcaaactc gcttttggct atggcgaaaa ggggcataca cgctgcgtgt      8640
+     tgagcggcgc aacattgcgg ttgcgttggt gctaagcctt attgttttgg ctttgatgat      8700
+     acttgcgacc tgtgtcggca aattgccgat ttcaatctct gacgtcactg ccattttatt      8760
+     gggggaagtt acctcagggt tcaaacggca agtcttactc gatatccgtt taccacggat      8820
+     ttttacggcg ctgtttgctg gtgcggcctt aggcctttcc ggcgcgattt ttcagtcgat      8880
+     ctctcgtaat ccgcttggtt ctccggacat cattggtttc acctctggcg cggccaccgg      8940
+     ggctttgctg caaattattt tattttccgg cagtggggtt gccgtggttt tttcggcgat      9000
+     tgctggcgga gtcatgacgg ccatcgcagt ctatctgttg tcggtaaagt caggcacggt      9060
+     cgggcgctat cggctagtgc taaccggaat tggcgtgggt tcagtgttga cggcgctcaa      9120
+     tggcttgctg ctagtcaaag gcagtttaga cagcgccatc accgccaatt tatggttatc      9180
+     gggctcactg catgcccgag aatggagcca cgtatttcct gtcatgtgtg gcgtgttggt      9240
+     gctgctgccg cttatcaaaa gtcttgcccg ctcattacag atgcttgaga tgggggatga      9300
+     gattgcccgt caacttgggg tcgtagtcga gccgatacgc ttattcatga ttctcgccgc      9360
+     ggtgactttg gcggcattag cgacaggagc cgcaggaccg atcgccttta tcgctttggc      9420
+     cgctcctcaa cttgcagctc gcttgcgtca aaccgccaat attccgctgg tgagtgcagg      9480
+     tttaatggga gcttgcttac tgttgggggc tgatttgctc actcagtgga tgccgctcgc      9540
+     cttaaccctt cccatcgggc gaattacggg attggttggg ggcatgtatt tattaatctt      9600
+     attgatgcgt tcaaaaaata cggtttaagc cgcatcacat gccgacaggt tttttaggct      9660
+     atttgcgcgc agtcgtcagc ctgtgctttg agccattcaa cgctttgcgg aataaagaga      9720
+     attttgattg agtgaaatgc cgttatggac acaatttggg atgctgactt acagagcgct      9780
+     gcattaaagg ctgaacatca caggcttaag actgagcgac tgagtttagg ttatgaagga      9840
+     aaatcggtgt gtgatgcgct ggatttggcg attccgcacg ggaaattttc ggtgatagtt      9900
+     gggcctaatg gctgtggtaa atcgaccttg ctaaaaagct tgtgccgttt actcaagccg      9960
+     ctggctgggc aagtattact ggatggtcag aatattcacc aattgccgac caaggtggta     10020
+     gccaagcagc taggattact gcctcaaagc gcgttgacac ccgaagggat aaaggtggtc     10080
+     gatttggtct ctcgtggccg ttatcctcac caagggctat ttcgccaatg gagcagggtg     10140
+     gatgaacgag cggtagaaga ggcgatgcga gccactcacg tccatgagct tgcgcagcat     10200
+     agtgtggatc agctttccgg cggtcagcgt cagcgggttt gggtcgccat gggcctggcg     10260
+     cagcaaacgc cgtatttact gcttgatgaa ccaaccactt atcttgatat tgctcaccaa     10320
+     atcgaactgc tcgatctctt ttggcggctt aatcgtcagc aagggcatac tctagtcgcc     10380
+     gtgctgcacg atctgaatca ggcgtgtcgt tacgccgacc atctgattgt gttgcaagaa     10440
+     ggcaaaatcg tcgcgcaggg cgatccacac tctttggtga ctccagcatt ggttaagcaa     10500
+     gtctttggga ttgattgtgt cgttatgccc gatcctatct cctgcacgcc tttgattata     10560
+     ccttattcgt taaagcgcgg ttaaacatgg cttttatgat ttcaatgcca gcgattgagc     10620
+     tggcagggct gacaattcag gtttgccaat tcgatcctca gcaatttgat gaggatcagc     10680
+     agcactattt agcccctccc acctaccata gcctgcacaa ggccgtggtt aagcgccaag     10740
+     cggaatttgt cgcaggacgt aagttagcgc agcaagcgct caaacagatc gggcagggtt     10800
+     atgataggcc aattgctatc ggaacccatc gtgagccact atggcctgcg gggatcacgg     10860
+     gctcgatcgc ccattgtgac ggctgggcag tatgcactgt gcttaaggca gaacacctct     10920
+     cgcttggtat tgatattgaa catcggctcg cacatcaaac cgctagtgag gtgcaagcta     10980
+     taatcggcac cgcccaagag tgggcactgt tggcgcaaca gttcgatctc gcttcagcgg     11040
+     tgactttgct gttttctgca aaagagagtc tatttaaagc actattccca caagtacacc     11100
+     tctaccttga tttctgcgat gcccagctca gttcactgga gccaaacaaa atgagtttca     11160
+     cattgacgcg cgtacctaat gccgcacaac agagttgtga ggtttacttt cgttggtttg     11220
+     aacaacagcg agtattgacc gtcagcgtgt taccaatgct aggcaaaatc gagtatcatg     11280
+     tccccacctt acctacttga gttaacttat tgattatgct gcgtgattat gatctaaacc     11340
+     tgctgacggt atttgattct gtcatgaaat taggctcagt cagtaaagca gcggataagc     11400
+     taggtatgac ttccgcagcg gtgagtcaaa atttatcacg cttacgagaa caagttggcg     11460
+     atccgttgtt tatccgtcag ggacgtgggt tacagccgac gcagtatgcg ctcaatatgc     11520
+     acaaacatgt ggcggaaggc ttgagtgcca ttcgttttgg tttagaaacc gatgccggtt     11580
+     ttgatcctgc aaccagtaag cgtgagttta ttattggcgg tcagggctat ttcgatttgg     11640
+     tggtattacc gccacttttg caaaaaatca gcgacatcgc cccgcatatc acggtgaatt     11700
+     taaagtctta tgaggacgat catttcacac caagccaagt attaagtgag cgagaggcgg     11760
+     atctgttttt ggctgcatta cccatcagcc atccctctat cgtcaccaca caggtggcgg     11820
+     aggaggcctt ggttgtggtg tatgccaaaa atcatccgcg tcttggaagt accctcagtt     11880
+     ttgagcagtt ttttgcagaa aaacacactg cattaaccag tcgtcgcttt ggtaattatc     11940
+     tcttttctag cctagtcgat caggtgctgc ccgcacgtcg agtgcattat caaagtgagt     12000
+     cgatgctcaa tttgatggcg accgcatccg tcaccgatct gctctgtttt actccaaagc     12060
+     gtttagcgat atgtgggcgg agaaattggg tttacagatc caacctttgc cgtttgaaat     12120
+     ccgctcggtt ccgactttta tgtgctggca taaagccaaa cagcaagata aagggctgat     12180
+     ttggctgcgc gagcaaattg                                                 12200
+//

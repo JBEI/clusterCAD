@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load domainFilters %}
+
+{% block subtitle %}
+{{ cluster.description }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>{{ cluster.description }}</h1>
+        GenBank: <a href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a><br/>
+        MIBiG: <a href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a><br/>
+    </div>
+</div>
+
+{% for subunit in architecture %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{ subunit.0 }}
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            {% for module in subunit.1 %}
+            {% if module.1|length > 4 %}
+            <div class="col-md-4 col-sm-6">
+                {% else %}
+                <div class="col-md-3 col-sm-4">
+                {% endif %}
+                module {{ forloop.counter }}
+                <br/>
+                <div class="btn-group" role="group">
+                    {% for domain in module.1 %}
+                    {% with domain|classname as domainclass %}
+                    {% if domain|classname != 'ACP' %}
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="{{ domain }}">{{ domainclass }}</button>
+                    {% endif %}
+                    {% endwith %}
+                    {% endfor %}
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="ACP domain">ACP</button>
+                </div>
+                <br/>
+                {% with module.2|smiles as smiles %}
+                {% if smiles %}
+                <img style="width: 100% \9;" id="img_{{ subunit.0.order }}_{{ module.0.order }}" src="/compounddb/renderer/{{ smiles }}/{{ module.1|acpDisplace }}"/>
+                <script type="text/javascript">
+                $(document).ready(function(){
+                 $("#img_{{ subunit.0.order }}_{{ module.0.order }}").click(function(){
+                    $('#structureImg').attr("src", "/compounddb/renderer/{{ smiles }}/0");
+                    $('#structureTitle').text("{{ subunit.0 }} module {{ forloop.counter }} predicted product");
+                    $('#structureSMILES').text("{{ module.2|unquotedSmiles }}");
+                    $('#structureView').modal('show');
+                 });
+                });
+                </script>
+                {% endif %}
+                {% endwith %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+$(document).ready(function(){
+// code to enable bootstrap tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
+// code to allow clipboard button
+    var clipboard = new Clipboard('#copy');
+    clipboard.on('success', function(e) {
+      setTooltip(e.trigger, 'Copied!');
+      hideTooltip(e.trigger);
+    });
+
+    $('#copy').tooltip({
+      trigger: 'click',
+      placement: 'bottom'
+    });
+});
+
+    function setTooltip(btn, message) {
+      $(btn).tooltip('hide')
+        .attr('data-original-title', message)
+        .tooltip('show');
+    }
+
+    function hideTooltip(btn) {
+      setTimeout(function() {
+        $(btn).tooltip('hide');
+      }, 1000);
+    }
+</script>
+<script src="/static/js/clipboard.min.js"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="structureView" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 id="structureTitle" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+
+SMILES
+<textarea id="structureSMILES" class="form-control" rows="2"></textarea>
+<button id="copy" class="btn" data-clipboard-target="#structureSMILES">
+Copy to clipboard
+</button>
+
+                <img id="structureImg" class="img-responsive" style="width: 50%;" src=""/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

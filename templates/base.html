@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ClusterCAD {% block subtitle %}{% endblock %}</title>
+    {# Load the tag library #}
+    {% load bootstrap3 %}
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery=1 %}
+</head>
+
+<body>
+<!-- Static navbar -->
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/" style="color:#26b9d6">ClusterCAD</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/pks/">Browse Clusters</a></li>
+        <li><a href="/admin/">Admin</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<div class="container">
+      {% block content %}{% endblock %}
+</div>
+
+<hr>
+
+<footer class="container">
+    <div class="col-md-9">
+        <img src="/static/footer/footer_1_doe_research.gif">
+        <img src="/static/footer/footer_2_lbl.gif">
+        <img src="/static/footer/footer_3_sandia.gif">
+        <img src="/static/footer/footer_4_doe.gif">
+        <img src="/static/footer/footer_5_ucdavis.gif">
+        <img src="/static/footer/footer_6_carnegie.gif">
+        <img src="/static/footer/footer_7_llnl.gif">
+        <img src="/static/footer/footer_8_pnw.gif">
+    </div>
+    <div class="col-md-3">
+        <h4 class="text-right"><small>&copy; {% now "Y" %} Joint BioEnergy Institute</small></h4>
+    </div>
+</footer>
+
+  </body>
+</html>
+
