@@ -38,6 +38,28 @@ class Cluster(models.Model):
 
         return myarchitecture
 
+    def reorderSubunits(self, newOrder):
+        # takes a list of subunit names in order, and reorders
+        # them within the gene cluster accordingly
+
+        # confirm that new order is the right length
+        # and contains all unique elements
+        assert len(newOrder) == len(self.subunits()), 'newOrder has wrong number of subunits for this cluster'
+        assert len(newOrder) == len(set(newOrder)), 'newOrder names are not unique'
+
+        subunits = [Subunit.objects.get(name__exact=x, cluster__exact=self) for x in newOrder] 
+        for subunit in subunits:
+            oldOrder = subunit.order
+            modules = subunit.modules()
+            subunit.order = None
+            subunit.save()
+            for module in modules:
+                module.subunit = subunit
+                module.save()
+            subunit.order = oldOrder
+            subunit.delete()
+        return self.subunits()
+
     def computeProduct(self):
         chain = []        
         for subunit in self.subunits():
