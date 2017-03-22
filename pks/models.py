@@ -102,7 +102,7 @@ class Module(models.Model):
     terminal = models.BooleanField() # Whether or not module is a terminal module
 
     def domains(self):
-        return Domain.objects.filter(module=self).select_subclasses()
+        return Domain.objects.filter(module=self).select_subclasses().order_by('start')
 
     def buildDomains(self, domainDict, cyclic=False):
         if 'KS' in domainDict.keys():
