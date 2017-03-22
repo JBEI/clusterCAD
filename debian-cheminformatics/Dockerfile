@@ -14,6 +14,7 @@ RUN apt-get update \
         python3-pip \
         python3-all \
         python3-all-dev \
+        postgresql \
         postgresql-client \
         libpq-dev \
         vim \
@@ -35,6 +36,7 @@ RUN apt-get update \
         libeigen3-dev \
         openjdk-7-jdk \
         openjdk-7-jre \
+        sudo \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
@@ -63,3 +65,14 @@ RUN wget https://github.com/rdkit/rdkit/archive/$RDKIT_VERSION.tar.gz && \
         .. && \
     make -j `grep -c ^processor /proc/cpuinfo` && \
     make install 
+
+# create postgresql user and database
+# and install RDKit cartridge
+RUN cd /root/rdkit-$RDKIT_VERSION/Code/PgSQL/rdkit/pgsql_install.sh
+RUN /etc/init.d/postgresql start
+USER postgres
+RUN createuser -U postgres clustercad -w -S -R -d
+RUN psql -U postgres -d postgres -c "alter user clustercad with password 'clustercad';"
+RUN createdb -E utf8 -O clustercad clustercad -T template0 --locale=C.UTF-8
+
+USER root
