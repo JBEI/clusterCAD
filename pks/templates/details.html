@@ -32,12 +32,9 @@
                 <div class="btn-group" role="group">
                     {% for domain in module.1 %}
                     {% with domain|classname as domainclass %}
-                    {% if domain|classname != 'ACP' %}
                     <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="{{ domain }}">{{ domainclass }}</button>
-                    {% endif %}
                     {% endwith %}
                     {% endfor %}
-                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="ACP domain">ACP</button>
                 </div>
                 <br/>
                 {% with module.2|smiles as smiles %}
