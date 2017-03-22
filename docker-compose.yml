@@ -10,7 +10,7 @@ services:
     restart: always
     image: tbackman/debian-cheminformatics:latest
     volumes:
-      - .:/retrosyn
+      - .:/clusterCAD
       - /www/static
     expose:
       - "8000"
@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
       - redis
-    working_dir: /retrosyn
+    working_dir: /clusterCAD
     command: ["./wait-for-it.sh", "db:5432", "--", "./entrypoint.sh"]
   nginx:
     restart: always

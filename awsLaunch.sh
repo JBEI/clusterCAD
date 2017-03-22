@@ -11,8 +11,8 @@ sudo pip install docker-compose
 sudo service docker start
 
 # create ssh key and add to bitbucket before running this
-git clone ssh://git@repo.jbei.org:7999/pks/pksretrosyn.git
-cd pksretrosyn
+git clone https://github.com/JBEI/clusterCAD
+cd clusterCAD
 sudo /usr/local/bin/docker-compose build
 sudo /usr/local/bin/docker-compose up -d
 
