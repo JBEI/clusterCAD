@@ -14,7 +14,10 @@ RUN apt-get update \
         python3-pip \
         python3-all \
         python3-all-dev \
+        postgresql \
         postgresql-client \
+	postgresql-server-dev-all \
+	postgresql-server-dev-9.4 \
         libpq-dev \
         vim \
         wget \
@@ -35,6 +38,7 @@ RUN apt-get update \
         libeigen3-dev \
         openjdk-7-jdk \
         openjdk-7-jre \
+        sudo \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
@@ -60,6 +64,29 @@ RUN wget https://github.com/rdkit/rdkit/archive/$RDKIT_VERSION.tar.gz && \
         -D PYTHON_LIBRARY=/usr/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.a \
         -D PYTHON_INCLUDE_DIR=/usr/include/python3.4/ \
         -D PYTHON_EXECUTABLE=/usr/bin/python3 \
+	-D RDK_BUILD_PGSQL=ON \
+	-D PostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql/9.4/server \
+	-D PostgreSQL_ROOT=/usr \
         .. && \
     make -j `grep -c ^processor /proc/cpuinfo` && \
     make install 
+RUN chmod u+x /root/rdkit-$RDKIT_VERSION/build/Code/PgSQL/rdkit/pgsql_install.sh && \
+    /root/rdkit-$RDKIT_VERSION/build/Code/PgSQL/rdkit/pgsql_install.sh
+
+# create postgresql user and database
+# and install RDKit cartridge
+RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.4/main/pg_hba.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.4/main/postgresql.conf
+RUN echo "shared_buffers = 1024MB" >> /etc/postgresql/9.4/main/postgresql.conf
+RUN echo "work_mem = 128MB" >> /etc/postgresql/9.4/main/postgresql.conf
+RUN echo "synchronous_commit = off" >> /etc/postgresql/9.4/main/postgresql.conf
+USER postgres
+WORKDIR /
+RUN /etc/init.d/postgresql start &&\
+    psql -c "CREATE USER clustercad WITH SUPERUSER PASSWORD 'clustercad';" &&\
+    createdb -O clustercad clustercad && \
+    psql -d clustercad -c "create extension if not exists rdkit; create schema rdk;"
+VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+EXPOSE 5432
+
+USER root
