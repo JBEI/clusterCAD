@@ -68,7 +68,6 @@ RUN wget https://github.com/rdkit/rdkit/archive/$RDKIT_VERSION.tar.gz && \
 
 # create postgresql user and database
 # and install RDKit cartridge
-RUN cd /root/rdkit-$RDKIT_VERSION/Code/PgSQL/rdkit/pgsql_install.sh
 RUN /etc/init.d/postgresql start
 USER postgres
 RUN createuser -U postgres clustercad -w -S -R -d
