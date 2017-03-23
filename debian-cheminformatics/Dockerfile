@@ -16,6 +16,8 @@ RUN apt-get update \
         python3-all-dev \
         postgresql \
         postgresql-client \
+	postgresql-server-dev-all \
+	postgresql-server-dev-9.4 \
         libpq-dev \
         vim \
         wget \
@@ -62,12 +64,21 @@ RUN wget https://github.com/rdkit/rdkit/archive/$RDKIT_VERSION.tar.gz && \
         -D PYTHON_LIBRARY=/usr/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.a \
         -D PYTHON_INCLUDE_DIR=/usr/include/python3.4/ \
         -D PYTHON_EXECUTABLE=/usr/bin/python3 \
+	-D RDK_BUILD_PGSQL=ON \
+	-D PostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql \
+	-D PostgreSQL_ROOT=/usr \
         .. && \
     make -j `grep -c ^processor /proc/cpuinfo` && \
     make install 
+RUN /root/rdkit-$RDKIT_VERSION/build/Code/PgSQL/rdkit/pgsql_install.sh
 
 # create postgresql user and database
 # and install RDKit cartridge
+RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.4/main/pg_hba.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.4/main/postgresql.conf
+RUN echo "shared_buffers = 1024MB" >> /etc/postgresql/9.4/main/postgresql.conf
+RUN echo "work_mem = 128MB" >> /etc/postgresql/9.4/main/postgresql.conf
+RUN echo "synchronous_commit = off" >> /etc/postgresql/9.4/main/postgresql.conf
 USER postgres
 WORKDIR /
 RUN /etc/init.d/postgresql start &&\
