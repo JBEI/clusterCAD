@@ -4,24 +4,46 @@ from rdkit import Chem as chem
 from rdkit.Chem import AllChem
 
 class Cluster(models.Model):
-    # a PKS gene cluster
+    '''Cluster is defined by GenBank and MIBiG accession numbers. 
+    
+    # Properties
+        genbankAccession: str. GenBank accession number.
+        mibigAccession: str. MIBiG accession number.
+        description: str. known natural product of cluster.
+        sequence: str. nucleotide sequence of cluster.
 
-    genbankAccession = models.CharField(max_length=2000, unique=True) # NCBI accession number
-    mibigAccession = models.CharField(max_length=2000, unique=True) # descriptive name
-    description = models.TextField() # description of cluster including name of known natural products
-    sequence = models.TextField() # nucleotide sequence of cluster 
+    # Methods
+        subunits: Returns subunits in cluster.
+        modules: Returns modules in cluster.
+        domains: Returns domains in cluster.
+        architecture: Returns structure of cluster as list of lists.
+        reorderSubunits: Reorders subunits in cluster.
+        deleteSubunit: Delete subunit from cluster.
+        computeProduct: Compute list of intermediates for each module in cluster. 
+    '''
+    genbankAccession = models.CharField(max_length=2000, unique=True)
+    mibigAccession = models.CharField(max_length=2000, unique=True)
+    description = models.TextField()
+    sequence = models.TextField()
 
     def subunits(self):
-        # returns a list of all subunits
-
         return Subunit.objects.filter(cluster=self).order_by('order')
 
+    def modules(self):
+        m = []
+        for subunit in self.subunits():
+            m.append(subunit.modules())
+        return m
+
+    def domains(self):
+        d = []
+        for module in self.modules():
+            d.append(module.domains())
+        return d
+
     def architecture(self, products=False):
-        # returns the entire structure of the cluster
-        # down to individual domains, as a list of lists
-
+        # Returns the entire structure of the cluster
         myarchitecture = [[x, x.architecture()] for x in self.subunits()]
-
         if products:
             try:
                 chain = self.computeProduct()
@@ -35,18 +57,20 @@ class Cluster(models.Model):
                         i += 1
                     else:
                         module = module.append(False)
-
         return myarchitecture
 
     def reorderSubunits(self, newOrder):
-        # takes a list of subunit names in order, and reorders
-        # them within the gene cluster accordingly
-
-        # confirm that new order is the right length
-        # and contains all unique elements
-        assert len(newOrder) == len(self.subunits()), 'newOrder has wrong number of subunits for this cluster'
-        assert len(newOrder) == len(set(newOrder)), 'newOrder names are not unique'
-
+        '''Takes as input a list of subunit names and reordereds subunits within
+           the gene cluster.
+        '''
+        for subunit in self.subunits():
+            assert subunit.name in newOrder, 'Missing subunit %s.' %(subunit)
+        # Reset loading bool of first module in oldOrder
+        oldLoading = self.subunits()[0].modules()[0]
+        oldLoading.loading = False
+        oldLoading.setLoading()
+        oldLoading.save()
+        # Update subunit ordering
         subunits = [Subunit.objects.get(name__exact=x, cluster__exact=self) for x in newOrder] 
         for subunit in subunits:
             oldOrder = subunit.order
@@ -58,8 +82,18 @@ class Cluster(models.Model):
                 module.save()
             subunit.order = oldOrder
             subunit.delete()
+        # Reset loading bool of first module in newOrder
+        newLoading = self.subunits()[0].modules()[0]
+        newLoading.loading = True
+        newLoading.setLoading()
+        newLoading.save()
         return self.subunits()
 
+    def deleteSubunit(self, sub):
+        subunits = self.subunits()
+        subunit = [x for x in subunits if x.name == sub][0]
+        subunit.delete()
+        
     def computeProduct(self):
         chain = []        
         for subunit in self.subunits():
@@ -69,23 +103,42 @@ class Cluster(models.Model):
                 else:
                     chain.append(module.computeProduct(chain[-1]))    
         return chain
-
+    
     def __str__(self):
         return "%s pks gene cluster" % self.description
 
 class Subunit(models.Model):
-    # a PKS subunit
+    ''' Class representing a PKS subunit.
 
+    # Properties
+        cluster: class<Cluster>. cluster containing subunit.
+        order: class<AutoField>. order of subunit within cluster.
+        genbankAccession: str. GenBank accession number.
+        name: str. name of subunit.
+        start: int. start of subunit in cluster nucleotide sequence.
+        stop: int. end of subunit in cluster nucleotide sequence.
+        sequence: str. amino acid sequence corresponding to subunit.
+
+    # Methods
+        modules: Returns modules in subunit.
+        domains: Returns domains in subunit.
+    '''
     cluster = models.ForeignKey(Cluster)
     order = models.AutoField(primary_key=True)
-    genbankAccession = models.CharField(max_length=2000, unique=False) # NCBI accession number
-    name = models.CharField(max_length=2000) # name of subunit
+    genbankAccession = models.CharField(max_length=2000, unique=False)
+    name = models.CharField(max_length=2000)
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
 
     def modules(self):
         return Module.objects.filter(subunit=self).order_by('order')
+    
+    def domains(self):
+        d = []
+        for module in self.modules():
+            d.append(module.domains())
+        return d
 
     def architecture(self):
         return [[x, x.domains()] for x in self.modules()]
@@ -94,8 +147,20 @@ class Subunit(models.Model):
         return "%s pks subunit" % self.name
 
 class Module(models.Model):
-    # A PKS module within a subunit
+    '''Class representing a PKS module.
 
+    # Properties
+        subunit: class<Subunit>. subunit containing module.
+        order: class<AutoField>. order of module within subunit.
+        loading: bool. Whether or not module is a loading module.
+        terminal: bool. Whether or not module is a terminal module.
+
+    # Methods
+        domains: Returns domains in subunit.
+        setLoading: Resets activity of reductive casette based on whether module is loading.
+        buildDomains: Build class<Domain> objects using dict as input
+        computeProduct: Compute product of module given chain.
+    '''
     subunit = models.ForeignKey(Subunit)
     order = models.AutoField(primary_key=True)
     loading = models.BooleanField() # Whether or not module is a loading module
@@ -103,6 +168,18 @@ class Module(models.Model):
 
     def domains(self):
         return Domain.objects.filter(module=self).select_subclasses().order_by('start')
+
+    def setLoading(self):
+        domains = self.domains().select_subclasses(KR, DH, ER)
+        toggle = [x for x in domains if type(x) != Domain]
+        if self.loading == True:
+            for d in toggle:
+                d.active = False
+                d.save()
+        else:
+            for d in toggle:
+                d.active=True
+                d.save()
 
     def buildDomains(self, domainDict, cyclic=False):
         if 'KS' in domainDict.keys():
@@ -165,32 +242,28 @@ class Module(models.Model):
             stop = domainDict['Thioesterase'][0]['stop']
             newDomain = TE(module=self, start=start, stop=stop, cyclic=cyclic)
             newDomain.save()
+        
+        self.setLoading()
 
     def computeProduct(self, chain=False):
         domains = {type(domain): domain for domain in self.domains()}
         reactionOrder = [AT, KR, cMT, oMT, DH, ER, TE]
-        
         for reaction in reactionOrder:
             if reaction in domains.keys():
-                # print("operating with " + str(reaction))
-                # if chain:
-                #    print(chem.MolToSmiles(chain))
                 chain = domains[reaction].operation(chain)
-
         return chain
 
     def __str__(self):
         return "pks module %s" % self.order
 
 class Domain(models.Model):
-    # this is the parent class for all domains
-    # Do not use directly
-
+    ''' Abstract base class used to build PKS catalytic domains.
+    '''
     module = models.ForeignKey(Module)
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
 
-    # using InheritanceManager allows us to directly
+    # Using InheritanceManager allows us to directly
     # query all Domain subclasses
     objects = InheritanceManager()
 
@@ -217,9 +290,9 @@ extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
 class AT(Domain):
     SUBSTRATE_CHOICES = (
         ('mal', 'mal'),
-        ('emal', 'emal'),
         ('mmal', 'mmal'),
         ('mxmal', 'mxmal'),
+        ('emal', 'emal'),
         ('cemal', 'cemal'),
         ('Acetyl-CoA', 'Acetyl-CoA'),
         ('prop', 'prop'),
@@ -237,11 +310,6 @@ class AT(Domain):
     )
 
     def operation(self, chain):
-        # if self.module.loading:
-        #    if chain:
-        #        return chain
-        #    else:
-        #        return starters[self.substrate]
         if not chain:
             return starters[self.substrate]
         else:
@@ -249,14 +317,11 @@ class AT(Domain):
                                               '[O:4][C:5](=[O:6])[C@@:7][C:8](=[O:9])[S:10]>>'
                                               '[C:1][C:2](=[O:3])[C@:7][C:8](=[O:9])[S:10]'
                                               '.[C:5](=[O:4])(=[O:6])'))
-
             assert KS in [type(domain) for domain in self.module.domains()]
             assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
                        useChirality=True)) == 1, chem.MolToSmiles(chain)
-
             prod = rxn.RunReactants((chain, extenders[self.substrate]))[0][0]
             chem.SanitizeMol(prod)
-
             return prod
 
     def __str__(self):
@@ -312,11 +377,6 @@ class KR(Domain):
                                                    '[C:5](=[O:6])[S:7]>>'
                                                    '[C:1][C:2](=[O:3])[C@@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
-        elif self.type == 'C2':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
-                                                   '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C:2](=[O:3])[C@@:4]'
-                                                   '[C:5](=[O:6])[S:7]'))
         else:
             # By first specifying some stereochemistry in the reactants
             # and then explicitly "losing" the stereochemistry in the products
@@ -325,8 +385,6 @@ class KR(Domain):
                                                    '[C:5](=[O:6])[S:7]>>'
                                                    '[C:1][C:2]([O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]'))
-
-        # if (self.active == True) and (self.module.loading == False):
         if self.active == True:
             assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C(=O)CC(=O)S'),
                        useChirality=True)) == 1, chem.MolToSmiles(chain)
@@ -334,7 +392,6 @@ class KR(Domain):
             chem.SanitizeMol(prod)
         else:
             prod = chain
-
         return prod
 
     def __str__(self):
@@ -346,7 +403,6 @@ class DH(Domain):
     def operation(self, chain):
         rxn = AllChem.ReactionFromSmarts(('[C:1][C:2]([O:3])[C:4][C:6](=[O:7])[S:8]>>'
                                           '[C:1][CH1:2]=[CH0:4][C:6](=[O:7])[S:8].[O:3]'))
-
         # Changed assertion to if/else statement so that DH and ER do not
         # do anything if the KR is inactive
         if len(chain.GetSubstructMatches(chem.MolFromSmiles('C(O)CC(=O)S'), useChirality=True)) == 1 and self.active == True:
@@ -365,7 +421,6 @@ class ER(Domain):
     def operation(self, chain):
         rxn = AllChem.ReactionFromSmarts(('[C:1][C:2]=[C:3][C:4](=[O:5])[S:6]>>'
                                           '[C:1][C:2][C@@H1:3][C:4](=[O:5])[S:6]'))
-
         if len(chain.GetSubstructMatches(chem.MolFromSmiles('C=CC(=O)S'), useChirality=True)) == 1 and self.active == True:
             prod = rxn.RunReactants((chain,))[0][0]
             chem.SanitizeMol(prod)
@@ -382,10 +437,8 @@ class cMT(Domain):
     def operation(self, chain):
         rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[S:4]>>'
                                           '[C:1](C)[C:2](=[O:3])[S:4]'))
-
         assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
                    )) == 1, chem.MolToSmiles(chain)
-
         if self.active == True:
             prod = rxn.RunReactants((chain,))[0][0]
             chem.SanitizeMol(prod)
@@ -425,7 +478,6 @@ class TE(Domain):
     def operation(self, chain):
         assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C(=O)S'),
                    useChirality=True)) == 1, chem.MolToSmiles(chain)
-
         if self.cyclic:
             rxn = AllChem.ReactionFromSmarts('([C:1](=[O:2])[S:3].[O:4][C:5][C:6])>>'
                                                   '[C:1](=[O:2])[O:4][C:5][C:6].[S:3]')
@@ -455,6 +507,48 @@ class PCP(Domain):
 
     def __str__(self):
         return "domain"
+
+str_to_obj = {'AT': AT,
+              'KR': KR,
+              'DH': DH,
+              'ER': ER,
+              'TE': TE}
+
+def setActivation(cluster, sub, mod, dom, active):
+    assert dom in ['AT', 'KR', 'DH', 'ER']
+    assert isinstance(dom, bool)
+    domains = cluster.getDomains(sub, mod)
+    domain = [x for x in domains if type(X) == str_to_obj[dom]]
+    domain.active = active
+
+def setSpecificity(cluster, sub, mod, dom, update):
+    assert dom in ['AT', 'KR']
+    # Would probably be easier to implement this in the domain object
+    if dom == 'AT':
+        assert update in ['mal', 'mmal', 'mxmal', 'emal', 'cemal',
+                          'prop', 'isobut', '2metbut', 'trans-1,2-CPDA', 'CHC-CoA']
+    else:
+        assert update in ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'U']
+    domains = cluster.getDomains(sub, mod)
+    domain = [x for x in domains if type(X) == str_to_obj[dom]]
+    if dom == 'AT':
+        domain.substrate = update
+    else:
+        domain.type = update
+    domain.save()
+
+def setCyclization(cluster, cyclic):
+    # This funciton doesn't do any thing if the cluster 
+    # does not contain a TE
+    subunits = cluster.subunits()
+    subunit = subunits[len(subunits)-1]
+    modules = subunit.modules()
+    module = modules[len(modules)-1]
+    domains = module.domains()
+    d = [x for x in domains if type(x) == TE]
+    if len(d) == 1:
+        d = d[0]
+        d.cyclic = cyclic
 
 class Standalone(models.Model):
     # a standalone PKS enzyme within a gene cluster
