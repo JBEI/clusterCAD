@@ -68,10 +68,12 @@ RUN wget https://github.com/rdkit/rdkit/archive/$RDKIT_VERSION.tar.gz && \
 
 # create postgresql user and database
 # and install RDKit cartridge
-RUN /etc/init.d/postgresql start
 USER postgres
-RUN createuser -U postgres clustercad -w -S -R -d
-RUN psql -U postgres -d postgres -c "alter user clustercad with password 'clustercad';"
-RUN createdb -E utf8 -O clustercad clustercad -T template0 --locale=C.UTF-8
+WORKDIR /
+RUN /etc/init.d/postgresql start &&\
+    psql --command "CREATE USER clustercad WITH SUPERUSER PASSWORD 'clustercad';" &&\
+    createdb -O clustercad clustercad
+VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+EXPOSE 5432
 
 USER root
