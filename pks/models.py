@@ -5,6 +5,7 @@ from rdkit.Chem import AllChem
 import os
 import json
 from collections import OrderedDict
+from compounddb.models import Compound
 
 class Cluster(models.Model):
     '''Cluster is defined by GenBank and MIBiG accession numbers. 
@@ -172,6 +173,7 @@ class Module(models.Model):
         order: class<AutoField>. order of module within subunit.
         loading: bool. Whether or not module is a loading module.
         terminal: bool. Whether or not module is a terminal module.
+        product: class<Compound>. Product small molecule structure.
 
     # Methods
         domains: Returns domains in subunit.
@@ -183,6 +185,7 @@ class Module(models.Model):
     order = models.AutoField(primary_key=True)
     loading = models.BooleanField() # Whether or not module is a loading module
     terminal = models.BooleanField() # Whether or not module is a terminal module
+    product = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True) # small molecule product structure
 
     def domains(self):
         return Domain.objects.filter(module=self).select_subclasses().order_by('start')
@@ -264,11 +267,20 @@ class Module(models.Model):
         self.setLoading()
 
     def computeProduct(self, chain=False):
+        if self.product:
+            return self.product.mol()
         domains = {type(domain): domain for domain in self.domains()}
         reactionOrder = [AT, KR, cMT, oMT, DH, ER, TE]
         for reaction in reactionOrder:
             if reaction in domains.keys():
                 chain = domains[reaction].operation(chain)
+
+        # save this modules product in the database
+        thisProduct = Compound(smiles = chem.MolToSmiles(chain))
+        thisProduct.save()
+        self.product = thisProduct
+        self.save()
+
         return chain
 
     def __str__(self):

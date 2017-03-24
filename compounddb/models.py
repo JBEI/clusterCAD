@@ -1,6 +1,8 @@
 from django.db import models
 from rdkit import Chem as chem
 from django.db import connection
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 class Compound(models.Model):
     # this class stores a small molecule structure
@@ -50,6 +52,12 @@ class Compound(models.Model):
         for result in results:
             objectResult.append((result[0], cls.objects.get(inchiKey = result[1])))
         return objectResult
+
+@receiver(pre_delete, sender=Compound)
+def delete_fp(sender, instance, **kwargs):
+    # drop compound from fingerprint table if deleted
+    with connection.cursor() as c:
+        c.execute('DELETE FROM rdk.fps WHERE "inchiKey" = \'%s\';' % instance.inchiKey)
 
 def addMolsCol():
     # add RDKit mol column to database table
