@@ -44,6 +44,13 @@ class Compound(models.Model):
         # result is a list of tuples where each tuple is of the form
         # (tanimito similarity as integer, Compound object)
 
+        # validate query
+        try:
+            query = chem.MolFromSmiles(querySmiles)
+            chem.SanitizeMol(query)
+        except:
+            raise ValueError('Invalid input smiles') 
+
         with connection.cursor() as c:
             c.execute('SET rdkit.tanimoto_threshold=%s;' % str(minSim))
             c.execute('SELECT similarity, "inchiKey" FROM get_ap_neighbors(\'%s\') limit %s;' % (querySmiles, str(maxHits)))
