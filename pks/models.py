@@ -122,6 +122,9 @@ class Subunit(models.Model):
     # Methods
         modules: Returns modules in subunit.
         domains: Returns domains in subunit.
+        architecture: Returns architecture of subunit.
+        getNucleotideSequence: Returns nucleotide sequence of subunit.
+        getAminoAcidSequence: Returns amino acid sequence of subunit.
     '''
     cluster = models.ForeignKey(Cluster)
     order = models.AutoField(primary_key=True)
@@ -142,6 +145,12 @@ class Subunit(models.Model):
 
     def architecture(self):
         return [[x, x.domains()] for x in self.modules()]
+
+    def getNucleotideSequence(self):
+        return self.cluster.sequence[self.start:self.stop]
+
+    def getAminoAcidSequence(self):
+        return self.sequence
 
     def __str__(self):
         return "%s pks subunit" % self.name
@@ -258,6 +267,15 @@ class Module(models.Model):
 
 class Domain(models.Model):
     ''' Abstract base class used to build PKS catalytic domains.
+
+    # Properties
+        module: class<Module>. module containing domain.
+        start: int. start of domain in subunit amino acid sequence.
+        stop: int. end of domain in subunit amino acid sequence.
+
+    # Methods
+        getNucleotideSequence: Returns nucleotide sequence of domain.
+        getAminoAcidSequence: Returns amino acid sequence of domain.
     '''
     module = models.ForeignKey(Module)
     start = models.PositiveIntegerField()
@@ -266,6 +284,14 @@ class Domain(models.Model):
     # Using InheritanceManager allows us to directly
     # query all Domain subclasses
     objects = InheritanceManager()
+
+    def getNucleotideSequence(self):
+        sequence = self.module.subunit.getNucleotideSequence()
+        return sequence[self.start*3:self.stop*3]
+
+    def getAminoAcidSequence(self):
+        sequence = self.module.subunit.getAminoAcidSequence()
+        return sequence[self.start:self.stop]
 
 # dict of supported starter units
 starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
