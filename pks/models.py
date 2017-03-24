@@ -2,6 +2,9 @@ from django.db import models
 from model_utils.managers import InheritanceManager
 from rdkit import Chem as chem
 from rdkit.Chem import AllChem
+import os
+import json
+from collections import OrderedDict
 
 class Cluster(models.Model):
     '''Cluster is defined by GenBank and MIBiG accession numbers. 
@@ -58,6 +61,12 @@ class Cluster(models.Model):
                     else:
                         module = module.append(False)
         return myarchitecture
+
+    def getSubunitModuleDomains(self, sub, mod):
+        subunits = self.subunits()
+        subunit = [x for x in subunits if x.name == sub][0]
+        module = subunit.modules()[mod]
+        return module.domains()
 
     def reorderSubunits(self, newOrder):
         '''Takes as input a list of subunit names and reordereds subunits within
@@ -179,7 +188,7 @@ class Module(models.Model):
         return Domain.objects.filter(module=self).select_subclasses().order_by('start')
 
     def setLoading(self):
-        domains = self.domains().select_subclasses(KR, DH, ER)
+        domains = self.domains().select_subclasses(KR, DH, ER, cMT, oMT)
         toggle = [x for x in domains if type(x) != Domain]
         if self.loading == True:
             for d in toggle:
@@ -538,14 +547,19 @@ str_to_obj = {'AT': AT,
               'KR': KR,
               'DH': DH,
               'ER': ER,
-              'TE': TE}
+              'cMT': cMT,
+              'oMT': oMT,
+              'TE': TE,
+              'ACP': ACP,
+              'PCP': PCP}
 
-def setActivation(cluster, sub, mod, dom, active):
-    assert dom in ['AT', 'KR', 'DH', 'ER']
-    assert isinstance(dom, bool)
-    domains = cluster.getDomains(sub, mod)
-    domain = [x for x in domains if type(X) == str_to_obj[dom]]
+def setActive(cluster, sub, mod, dom, active):
+    assert dom in ['KR', 'DH', 'ER']
+    assert isinstance(active, bool)
+    domains = cluster.getSubunitModuleDomains(sub, mod)
+    domain = [x for x in domains if type(x) == str_to_obj[dom]][0]
     domain.active = active
+    domain.save()
 
 def setSpecificity(cluster, sub, mod, dom, update):
     assert dom in ['AT', 'KR']
@@ -555,8 +569,8 @@ def setSpecificity(cluster, sub, mod, dom, update):
                           'prop', 'isobut', '2metbut', 'trans-1,2-CPDA', 'CHC-CoA']
     else:
         assert update in ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'U']
-    domains = cluster.getDomains(sub, mod)
-    domain = [x for x in domains if type(X) == str_to_obj[dom]]
+    domains = cluster.getSubunitModuleDomains(sub, mod)
+    domain = [x for x in domains if type(x) == str_to_obj[dom]][0]
     if dom == 'AT':
         domain.substrate = update
     else:
@@ -575,6 +589,92 @@ def setCyclization(cluster, cyclic):
     if len(d) == 1:
         d = d[0]
         d.cyclic = cyclic
+        d.save()
+
+obj_to_str = {KS: 'KS',
+              AT: 'AT',
+              KR: 'KR',
+              DH: 'DH',
+              ER: 'ER',
+              cMT: 'cMT',
+              oMT: 'oMT',
+              TE: 'TE',
+              ACP: 'ACP',
+              PCP: 'PCP'}
+
+def clusterDict(cluster):
+    '''Function that generates OrderedDict representation of changeable parameters
+       describing a PKS cluster.
+    '''
+    ret = OrderedDict()
+    ret.update({'description': cluster.description})
+    ret.update({'genbankAccession': cluster.genbankAccession})
+    ret.update({'mibigAccession': cluster.mibigAccession})
+    adict = OrderedDict()
+    for subunit in cluster.subunits():
+        sname = subunit.name
+        sdict = OrderedDict()
+        for imodule,module in enumerate(subunit.modules()):
+            mdict = OrderedDict()
+            for domain in module.domains():
+                dname = obj_to_str[type(domain)]
+                ddict = OrderedDict()
+                if dname == 'AT':
+                    ddict.update({'substrate': domain.substrate})
+                elif dname == 'KR':
+                    ddict.update({'active': domain.active,
+                                  'type': domain.type})
+                elif dname == 'DH':
+                    ddict.update({'active': domain.active})
+                elif dname == 'ER':
+                    ddict.update({'active': domain.active})
+                elif dname == 'cMT':
+                    ddict.update({'active': domain.active})
+                elif dname == 'oMT':
+                    ddict.update({'active': domain.active})
+                elif dname == 'TE':
+                    ddict.update({'cyclic': domain.cyclic})
+                if dname in ['AT', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE']:
+                    mdict.update({dname: ddict})
+            sdict.update({imodule: mdict})
+        adict.update({sname: sdict})
+    ret.update({'architecture': adict})
+    return ret
+
+def clusterJSON(path, cluster):
+    '''Function that writes a JSON file containing the changeable parameters
+        describing a PKS cluster.
+    '''
+    with open(os.path.join(path, cluster.mibigAccession + '.json'), 'w') as f:
+        f.write(json.dumps(clusterDict(cluster), indent=4))
+
+def correctCluster(filepath):
+    '''Function that takes as input a JSON file representing the changeable parameters
+       describing a PKS cluster and updates the database entry to reflect the information
+       contained in the JSON file.
+    '''
+    corr = json.loads(open(filepath).read(), object_pairs_hook=OrderedDict)
+    cluster = Cluster.objects.get(mibigAccession=corr['mibigAccession'])
+    # Reorder subunits if necessary
+    newOrder = [str(x) for x in corr['architecture'].keys()]
+    cluster.reorderSubunits(newOrder)
+    # Change domain properties if necessary
+    for s,sdict in corr['architecture'].items():
+        for m,mdict in sdict.items():
+            m = int(m) # Key is expected to be integer
+            for d,ddict in mdict.items():
+                if d == 'AT':
+                    setSpecificity(cluster, s, m, d, ddict['substrate'])
+                elif d == 'KR':
+                    setSpecificity(cluster, s, m, d, ddict['type'])
+                    setActive(cluster, s, m, d, ddict['active'])
+                elif d in ['DH', 'ER']:
+                    setActive(cluster, s, m, d, ddict['active'])
+                else:
+                    assert d == 'TE'
+                    cyclic = ddict['cyclic']
+    if cyclic:
+        setCyclization(cluster, cyclic)
 
 class Standalone(models.Model):
     # a standalone PKS enzyme within a gene cluster
