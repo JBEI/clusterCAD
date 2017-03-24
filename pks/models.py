@@ -283,8 +283,11 @@ class Module(models.Model):
 
         return chain
 
+    def getIndexOnSubunit(self):
+        return list(self.subunit.modules()).index(self)
+
     def __str__(self):
-        return "pks module %s" % self.order
+        return "%s" % str(self.getIndexOnSubunit() + 1)
 
 class Domain(models.Model):
     ''' Abstract base class used to build PKS catalytic domains.
