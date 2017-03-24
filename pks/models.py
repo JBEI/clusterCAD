@@ -100,6 +100,9 @@ class Cluster(models.Model):
         return self.subunits()
 
     def deleteSubunit(self, sub):
+        # Tyler's note: this can be replaced with a built-in django query:
+        # Subunit.objects.get(cluster=mycluster, name=sub).delete()
+
         subunits = self.subunits()
         subunit = [x for x in subunits if x.name == sub][0]
         subunit.delete()
@@ -191,6 +194,12 @@ class Module(models.Model):
         return Domain.objects.filter(module=self).select_subclasses().order_by('start')
 
     def setLoading(self):
+        # Tyler's note:
+        # this can be replaced with a Django query like this:
+        # for d in Domain.objects.filter(module=self).select_subclasses():
+        #   d.active = True
+        #   d.save()
+
         domains = self.domains().select_subclasses(KR, DH, ER, cMT, oMT)
         toggle = [x for x in domains if type(x) != Domain]
         if self.loading == True:
