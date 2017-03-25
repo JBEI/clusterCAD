@@ -27,7 +27,7 @@
                 {% else %}
                 <div class="col-md-3 col-sm-4">
                 {% endif %}
-                module {{ forloop.counter }}
+                module {{ module.0|moduleNumber }}
                 <br/>
                 <div class="btn-group" role="group">
                     {% for domain in module.1 %}

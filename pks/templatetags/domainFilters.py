@@ -1,7 +1,7 @@
 from django import template
 from django.utils.http import urlquote
 from rdkit import Chem
-from pks.models import ACP, cMT, PCP
+from pks.models import ACP, cMT, PCP, Module
 import re
 
 register = template.Library()
@@ -37,3 +37,8 @@ def acpDisplace(module):
     if PCP in typeList:
         displace += 10 
     return displace
+
+@register.filter
+def moduleNumber(module):
+    pos = list(Module.objects.filter(subunit__cluster = module.subunit.cluster).order_by('subunit__order', 'order')).index(module)
+    return str(pos + 1)
