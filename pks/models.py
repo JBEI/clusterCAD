@@ -36,8 +36,8 @@ class Cluster(models.Model):
     mibigAccession = models.CharField(max_length=2000, unique=True)
     description = models.TextField()
     sequence = models.TextField()
-#    knownProduct = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True)
-#    knownProductSource = models.TextField()
+    knownProduct = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True)
+    knownProductSource = models.TextField()
 
     def subunits(self):
         return Subunit.objects.filter(cluster=self).order_by('order')
