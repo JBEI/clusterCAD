@@ -19,6 +19,14 @@ class Compound(models.Model):
         # returns and RDKit mol object for this compound
         return chem.MolFromSmiles(self.smiles)
 
+    def aMW(self):
+        # returns the Average Molecular Weight
+        with connection.cursor() as c:
+            c.execute('SELECT mol_amw(m) FROM compounddb_compound '\
+                      'WHERE "inchiKey" = \'%s\';' \
+                      % self.inchiKey)
+            return c.fetchone()[0]
+
     def save(self, *args, **kwargs):
         # if this is the first save, add mols column to database
         addMolsCol()
