@@ -15,15 +15,38 @@ Browse Clusters
 {% endblock %}
 
 {% block content %}
-<h1>Top Predicted Module Intermediate Structure Hits</h1>
+<h1>Predicted Intermediate Structure Similarity Hits</h1>
 
+<div class="row-fluid">
+<div class="col-xs-8 col-sm-7 col-md-6 col-lg-5">
+<table class="table table-bordered table-condensed">
+<tbody>
+<tr>
+    <th>Query structure</th>
+    <td><img src="/compounddb/renderer/{{ querySmiles }}/0?align=False"/></td>
+</tr>
+<tr>
+    <th>Minimum similarity cutoff</th>
+    <td>{{ minSim }}</td>
+</tr>
+<tr>
+    <th>Max compounds returned</th>
+    <td>{{ maxHits }}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><!--/row-->
+
+<div class="row-fluid">
+<div class="col-md=12">
 <table class="table table-hover table-condensed">
 <tr>
     <th>
         Hit #
     </th>
     <th>
-        Tanimoto Similarity
+        Tanimoto similarity
     </th>
     <th>
         Cluster
@@ -54,4 +77,6 @@ Browse Clusters
         {% endfor %} 
 {% endfor %}
 </table>
+</div>
+</div>
 {% endblock %}
