@@ -21,13 +21,12 @@ def search(request):
             return render(request, 'search.html')
     elif 'sdf' in request.POST:
         try:
-            mol = chem.MolFromMolBlock(request.POST['sdf'])
+            mol = chem.MolFromMolBlock(request.POST['sdf'], strictParsing=False)
             # assert mol != None
             if not mol:
                 raise ValueError
         except ValueError:
             messages.error(request, 'Error: Invalid structure!')
-            messages.error(request, request.POST['sdf'])
             return render(request, 'search.html')
 
     querySmiles = chem.MolToSmiles(mol)
