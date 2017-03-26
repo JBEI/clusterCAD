@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^pks/', include('pks.urls')),
     url(r'^compounddb/', include('compounddb.urls')),
+    url(r'^structureSearch/', include('structureSearch.urls')),
     url(r'^$', TemplateView.as_view(template_name='home.html')),
 ]
