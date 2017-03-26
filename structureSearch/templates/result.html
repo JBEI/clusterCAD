@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block js_content %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+{% endblock %}
+
+{% block subtitle %}
+Browse Clusters
+{% endblock %}
+
+{% block content %}
+<h1>Predicted Intermediate Structure Similarity Hits</h1>
+
+<div class="row-fluid">
+<div class="col-xs-8 col-sm-7 col-md-6 col-lg-5">
+<table class="table table-bordered table-condensed">
+<tbody>
+<tr>
+    <th>Query structure</th>
+    <td><img src="/compounddb/renderer/{{ querySmiles }}/0?align=False"/></td>
+</tr>
+<tr>
+    <th>Minimum similarity cutoff</th>
+    <td>{{ minSim }}</td>
+</tr>
+<tr>
+    <th>Max compounds returned</th>
+    <td>{{ maxHits }}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><!--/row-->
+
+<div class="row-fluid">
+<div class="col-md=12">
+<table class="table table-hover table-condensed">
+<tr>
+    <th>
+        Hit #
+    </th>
+    <th>
+        Tanimoto similarity
+    </th>
+    <th>
+        Cluster
+    </th>
+    <th>
+        Subunit
+    </th>
+    <th>
+        Module
+    </th>
+</tr>
+{% for compound in moduleHits %}
+    <tr class="clickable-row" data-href="/pks/{{ compound.modules.0.subunit.cluster.id }}/">
+        <td rowspan="{{ compound.modules|length }}">
+            {{ forloop.counter }}
+        </td>
+        <td rowspan="{{ compound.modules|length }}">
+            {{ compound.similarity|floatformat:-3 }}
+        </td>
+        {% for module in compound.modules %}
+            {% if forloop.counter != 1 %} 
+                <tr class="clickable-row" data-href="/pks/{{ module.subunit.cluster.id }}/">
+            {% endif %}
+            <td>{{ module.subunit.cluster }}</td>
+            <td>{{ module.subunit.name }}</td>
+            <td>{{ module }}</td>
+            </tr>
+        {% endfor %} 
+{% endfor %}
+</table>
+</div>
+</div>
+{% endblock %}
