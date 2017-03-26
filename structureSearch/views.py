@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.utils.http import urlunquote
+from django.utils.http import urlunquote, urlquote
 from django.contrib import messages
 from compounddb.models import Compound
 from pks.models import Module
@@ -30,7 +30,17 @@ def search(request):
             messages.error(request, request.POST['sdf'])
             return render(request, 'search.html')
 
-    compoundHits = Compound.atomPairSearch(chem.MolToSmiles(mol), minSim=0.0)
+    querySmiles = chem.MolToSmiles(mol)
+
+    assert 'cutoff' in request.POST
+    minSim = float(request.POST['cutoff'])
+    assert 0.0 <= minSim <= 1.0
+
+    assert 'maxCompounds' in request.POST
+    maxHits = int(request.POST['maxCompounds'])
+    assert 0 < maxHits <= 1000 
+
+    compoundHits = Compound.atomPairSearch(querySmiles, minSim=minSim, maxHits=maxHits)
 
     moduleHits = [] 
     for similarity, compound in compoundHits:
@@ -44,7 +54,16 @@ def search(request):
         }
         moduleHits.append(hitDict)
 
-    context = {'moduleHits': moduleHits}
+    if len(moduleHits) == 0:
+        messages.error(request, 'No hits - please refine query!')
+        return render(request, 'search.html')
+
+    context = {
+        'querySmiles': urlquote(querySmiles),
+        'moduleHits': moduleHits,
+        'minSim': minSim,
+        'maxHits': maxHits
+    }
     
     return render(request, 'result.html', context)    
     

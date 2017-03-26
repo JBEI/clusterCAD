@@ -8,7 +8,7 @@ import re
 import xml.etree.ElementTree as ET
 from io import BytesIO
 
-@cache_page(60 * 120)
+# @cache_page(60 * 120)
 def renderer(request, smiles, acpDisplace=0):
     try:
         # parse smiles input
@@ -26,16 +26,25 @@ def renderer(request, smiles, acpDisplace=0):
     height = 30 + mol.GetNumAtoms() * 7 
 
     onACP = False
-    try:
-        AllChem.GenerateDepictionMatching2DStructure(mol, template, acceptFailure=False)
-        onACP = True
-    except ValueError:
-        template = Chem.MolFromSmiles('C(=O)O')
-        AllChem.Compute2DCoords(template)
+    
+    align = True 
+    if 'align' in request.GET:
+        if request.GET['align'] == 'False':
+            align = False
+
+    if align:
         try:
             AllChem.GenerateDepictionMatching2DStructure(mol, template, acceptFailure=False)
+            onACP = True
         except ValueError:
-            height = 213
+            template = Chem.MolFromSmiles('C(=O)O')
+            AllChem.Compute2DCoords(template)
+            try:
+                AllChem.GenerateDepictionMatching2DStructure(mol, template, acceptFailure=False)
+            except ValueError:
+                height = 213
+    else:
+        height = 213
 
     # draw SVG
     width = 213 
