@@ -8,6 +8,7 @@
     {# Load CSS and JavaScript #}
     {% bootstrap_css %}
     {% bootstrap_javascript jquery=1 %}
+    {% block extra_headers %}{% endblock %}
 </head>
 
 <body>
@@ -27,6 +28,7 @@
       <ul class="nav navbar-nav">
         <li><a href="/">Home</a></li>
         <li><a href="/pks/">Browse Clusters</a></li>
+        <li><a href="/structureSearch/">Structure Search</a></li>
         <li><a href="/admin/">Admin</a></li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -58,6 +60,7 @@
     </div>
 </footer>
 
-  </body>
+{% block js_content %}{% endblock %}
+</body>
 </html>
 

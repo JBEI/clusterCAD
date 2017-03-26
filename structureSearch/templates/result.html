@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block js_content %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+{% endblock %}
+
+{% block subtitle %}
+Browse Clusters
+{% endblock %}
+
+{% block content %}
+<h1>Top Predicted Module Intermediate Structure Hits</h1>
+
+<table class="table table-hover table-condensed">
+<tr>
+    <th>
+        Hit #
+    </th>
+    <th>
+        Tanimoto Similarity
+    </th>
+    <th>
+        Cluster
+    </th>
+    <th>
+        Subunit
+    </th>
+    <th>
+        Module
+    </th>
+</tr>
+{% for compound in moduleHits %}
+    <tr class="clickable-row" data-href="/pks/{{ compound.modules.0.subunit.cluster.id }}/">
+        <td rowspan="{{ compound.modules|length }}">
+            {{ forloop.counter }}
+        </td>
+        <td rowspan="{{ compound.modules|length }}">
+            {{ compound.similarity|floatformat:-3 }}
+        </td>
+        {% for module in compound.modules %}
+            {% if forloop.counter != 1 %} 
+                <tr class="clickable-row" data-href="/pks/{{ module.subunit.cluster.id }}/">
+            {% endif %}
+            <td>{{ module.subunit.cluster }}</td>
+            <td>{{ module.subunit.name }}</td>
+            <td>{{ module }}</td>
+            </tr>
+        {% endfor %} 
+{% endfor %}
+</table>
+{% endblock %}
