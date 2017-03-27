@@ -24,20 +24,21 @@ class Cluster(models.Model):
         architecture: Returns structure of cluster as list of lists.
         reorderSubunits: Reorders subunits in cluster.
         computeProduct: Compute list of intermediates for each module in cluster. 
-        setActive
-        setSubstrate
-        setStereochemistry
-        setCyclization
-        clusterDict
-        clusterJSON
-        correctCluster
+        setActive: Sets module KR, DH, ER, oMT, or cMT domain active boolean.
+        setSubstrate: Sets AT substrate specificity of module.
+        setStereochemistry: Sets KR stereochemistry of module.
+        setCyclization: Sets cyclization of cluster TE.
+        clusterDict: Generates OrderedDict representation of cluster.
+        clusterJSON: Generates JSON file representation of cluster and save to file path.
+        correctCluster: Corrects errors in cluster using JSON file. 
+                        Template JSON file should be generated using clusterJSON.
     '''
     genbankAccession = models.CharField(max_length=2000, unique=True)
     mibigAccession = models.CharField(max_length=2000, unique=True)
     description = models.TextField()
     sequence = models.TextField()
     knownProduct = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True)
-    knownProductSource = models.TextField()
+    knownProductSource = models.TextField(default='unknown')
 
     def subunits(self):
         return Subunit.objects.filter(cluster=self).order_by('order')
