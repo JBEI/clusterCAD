@@ -354,7 +354,7 @@ class Module(models.Model):
             if reaction in domains.keys():
                 chain = domains[reaction].operation(chain)
         # Save this modules product in the database
-        thisProduct = Compound(smiles = chem.MolToSmiles(chain))
+        thisProduct = Compound(smiles = chem.MolToSmiles(chain, isomericSmiles=True))
         thisProduct.save()
         self.product = thisProduct
         self.save()
