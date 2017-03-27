@@ -9,13 +9,12 @@ import xml.etree.ElementTree as ET
 from io import BytesIO
 
 # @cache_page(60 * 120)
-def renderer(request, smiles, acpDisplace=0):
+def renderer(request, smiles):
     try:
         # parse smiles input
         smiles = urlunquote(smiles)
         smiles = re.match(r'^(\S{1,10000})', str(smiles)).group(1)
         mol = Chem.MolFromSmiles(smiles)
-        acpDisplace = float(acpDisplace)
 
     except:
         raise Http404
@@ -25,8 +24,6 @@ def renderer(request, smiles, acpDisplace=0):
     AllChem.Compute2DCoords(template)
     height = 30 + mol.GetNumAtoms() * 7 
 
-    onACP = False
-    
     align = True 
     if 'align' in request.GET:
         if request.GET['align'] == 'False':
@@ -56,23 +53,6 @@ def renderer(request, smiles, acpDisplace=0):
     xmlTree = ET.fromstring(svg) 
     xmlTree.attrib['xmlns'] = 'http://www.w3.org/2000/svg'
     xmlTree.attrib['xmlns:svg'] = 'http://www.w3.org/2000/svg'
-
-    # center sulfur atom 
-    # by making S predictable, it can be lined up with the ACP
-    onACP = False # disable this feature for now
-    rect = [child for child in xmlTree[0] if child.tag == 'rect'][0]
-    rect.attrib['style'] = 'opacity:0.0;stroke:none'
-    if onACP:
-        s = [child for child in xmlTree[0] if child.tag == 'text' and child[0].text == 'S'][0]
-        sX = float(s.attrib['x'])
-        sY = float(s.attrib['y'])
-        newX = acpDisplace - sX
-        newY = 10 - sY
-        if newX < 0:
-            newX = 0
-        xmlTree[0].attrib['transform'] = 'translate(%s,%s)' % (newX, newY,)
-        rect.attrib['width'] = str(width + newX) 
-        xmlTree.attrib['width'] = '%spx' % rect.attrib['width']
 
     # convert XML to string
     fixedSVG = BytesIO()

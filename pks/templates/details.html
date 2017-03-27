@@ -39,11 +39,11 @@
                 <br/>
                 {% with module.2|smiles as smiles %}
                 {% if smiles %}
-                <img style="width: 100% \9;" id="img_{{ subunit.0.order }}_{{ module.0.order }}" src="/compounddb/renderer/{{ smiles }}/{{ module.1|acpDisplace }}"/>
+                <img style="width: 100% \9;" id="img_{{ subunit.0.order }}_{{ module.0.order }}" src="/compounddb/renderer/{{ smiles }}"/>
                 <script type="text/javascript">
                 $(document).ready(function(){
                  $("#img_{{ subunit.0.order }}_{{ module.0.order }}").click(function(){
-                    $('#structureImg').attr("src", "/compounddb/renderer/{{ smiles }}/0");
+                    $('#structureImg').attr("src", "/compounddb/renderer/{{ smiles }}");
                     $('#structureTitle').text("{{ subunit.0 }} module {{ forloop.counter }} predicted product");
                     $('#structureSMILES').text("{{ module.2|unquotedSmiles }}");
                     $('#structureView').modal('show');
