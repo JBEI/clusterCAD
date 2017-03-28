@@ -48,5 +48,5 @@ mkdir -p ./data/antismash/raw
 
 mkdir -p ./data/antismash/split
 
-awk 'BEGIN{ RS="//\n"; ORS="//"; } {split($2, array, ";"); fname=array[1]; print > "./data/antismash/split/" fname ".embl" }' ./data/antismash/raw/BGC0000001.1.final.gbk
+awk 'BEGIN{ RS="//\n"; ORS="//"; } {split($2, array, ";"); fname=array[1]; print > "./data/antismash/split/" fname ".embl" }' ./data/antismash/raw/BGC0000001.1.final.embl
 
