@@ -17,7 +17,7 @@ def mibigSubtypes(filepath):
             subtypes.extend(jsondata['general_params']['Polyketide']['pks_subclass'])
         except KeyError:
             pass
-    return set(labels)
+    return set(subtypes)
 
 def filterModularTypeI(filepath, validset):
     '''Takes as input a file path and a set of str indicating what
@@ -32,10 +32,10 @@ def filterModularTypeI(filepath, validset):
         with open(filename) as json_file:
             json_data = json.load(json_file)
         try:
-            if len(validset).intersection( \
-              set(json_data['general_params']['Polyketide']['pks_subclass'])) > 0:
-                accession = json_data['general_params']['loci']['nucl_acc'][0]['Accession']
-                accessions.append((file_name.split('/')[-1].split('.')[0], accession))
+            if len(validset.intersection( \
+              set(json_data['general_params']['Polyketide']['pks_subclass']))) > 0:
+                accession = os.path.basename(filename).strip('.json')
+                accessions.append(accession)
         except KeyError:
             pass
     return accessions

@@ -2,6 +2,9 @@
 
 import os, sys
 import json
+import pickle
+
+from Bio import SeqIO
 
 from antismash_to_database_functions import mibigSubtypes, filterModularTypeI, enterCluster
 sys.path.insert(0, '/clusterCAD')
@@ -17,7 +20,14 @@ import compounddb.models
 
 print('Analyzing contents of MIBiG database.')
 mibigpath = './data/mibig/raw' 
-antismashpath = './data/antismash/split'
+
+antismashpath = '../notebooks/mibig/antismash/split_files'
+
+
+
+
+
+#antismashpath = './data/antismash/split'
 print('Set of PKS subtypes found in MIBiG: %s' %(mibigSubtypes(mibigpath)))
 mibigsubtypes = set(['Modular type I', 'Modular Type I', 'Type I'])
 print('Set of PKS subtypes recognized for inclusion in ClusterCAD: %s' %(mibigsubtypes))
@@ -50,8 +60,6 @@ for accession in mibigaccessions:
     except KeyError:
         continue
     knownproductsmiles = compound[0][0]
-    knownproduct = compounddb.models.Compound(smiles=chem.MolToSmiles(knownproductsmiles))
-    knownproduct.save()
     knownproductsource = compound[1]
 
     # Enter information in ClusterCAD database
@@ -61,7 +69,7 @@ for accession in mibigaccessions:
             mibigAccession=record.id, \
             description=record.description.replace(' biosynthetic gene cluster', ''), \
             sequence=record.seq,
-            knownProduct=knownproduct,
+            knownProductSmiles=knownproductsmiles,
             knownProductSource=knownproductsource
             )
         cluster.save()

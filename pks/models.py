@@ -188,8 +188,8 @@ class Cluster(models.Model):
         assert corr['mibigAccession'] == self.mibigAccession
         assert corr['genbankAccession'] == self.genbankAccession
         # Delete subunits if necessary
-        for s in Subunit.objects.filter(cluster.self)
-            if s not in in corr['architecture'].keys():
+        for s in Subunit.objects.filter(cluster.self):
+            if s not in corr['architecture'].keys():
                 Subunit.objects.get(cluster.self, name=s).delete()
         # Reorder subunits if necessary
         newOrder = [str(x) for x in corr['architecture'].keys()]
