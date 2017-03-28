@@ -70,7 +70,6 @@
                     {% endfor %}
                 </div>
                 <br/>
-                {% if module.0.product %}
                 <img style="width: 100% \9;" id="img_{{ subunit.0.order }}_{{ module.0.order }}" src="/compounddb/renderer/{{ module.0.product.smiles|urlq }}"/>
                 <script type="text/javascript">
                 $(document).ready(function(){
@@ -82,7 +81,6 @@
                  });
                 });
                 </script>
-                {% endif %}
             </div>
             {% endfor %}
         </div>
