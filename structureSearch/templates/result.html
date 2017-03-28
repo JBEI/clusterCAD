@@ -62,7 +62,7 @@ Browse Clusters
     </th>
 </tr>
 {% for compound in moduleHits %}
-    <tr class="clickable-row" data-container="body" data-href="/pks/{{ compound.modules.0.subunit.cluster.id }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
+    <tr class="clickable-row" data-container="body" data-href="/pks/{{ compound.modules.0.subunit.cluster.mibigAccession }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
         <td rowspan="{{ compound.modules|length }}">
             {{ forloop.counter }}
         </td>
@@ -71,7 +71,7 @@ Browse Clusters
         </td>
         {% for module in compound.modules %}
             {% if forloop.counter != 1 %} 
-                <tr class="clickable-row" data-container="body" data-href="/pks/{{ module.subunit.cluster.id }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
+                <tr class="clickable-row" data-container="body" data-href="/pks/{{ module.subunit.cluster.mibigAccession }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
             {% endif %}
             <td>{{ module.subunit.cluster }}</td>
             <td>{{ module.subunit.name }}</td>

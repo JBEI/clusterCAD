@@ -20,7 +20,7 @@
         <h5>Known final product</h5>
         {% with architecture|last as lastsubunit %}
             {% with lastsubunit.1|last as lastmodule %}
-                <img style="width: 100% \9;" src="/compounddb/renderer/{{ cluster.knownProduct.smiles|urlq }}/{{ lastmodule.2|smiles }}?align=False"/>
+                <img style="width: 100% \9;" src="/compounddb/renderer/{{ cluster.knownProductSmiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/>
             {% endwith %}
         {% endwith %}
     </div>
@@ -28,7 +28,7 @@
         <h5>Predicted final product</h5>
         {% with architecture|last as lastsubunit %}
             {% with lastsubunit.1|last as lastmodule %}
-                <img style="width: 100% \9;" src="/compounddb/renderer/{{ lastmodule.2|smiles }}/{{ cluster.knownProduct.smiles|urlq }}?align=False"/>
+                <img style="width: 100% \9;" src="/compounddb/renderer/{{ lastmodule.0.product.smiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/>
             {% endwith %}
         {% endwith %}
     </div>
@@ -47,7 +47,7 @@
                 {% else %}
                 <div class="col-md-3 col-sm-4">
                 {% endif %}
-                module {{ module.0|moduleNumber }}
+                module {{ module.0.order }}
                 <br/>
                 <div class="btn-group" role="group">
                     {% for domain in module.1 %}
@@ -57,21 +57,19 @@
                     {% endfor %}
                 </div>
                 <br/>
-                {% with module.2|smiles as smiles %}
-                {% if smiles %}
-                <img style="width: 100% \9;" id="img_{{ subunit.0.order }}_{{ module.0.order }}" src="/compounddb/renderer/{{ smiles }}"/>
+                {% if module.0.product %}
+                <img style="width: 100% \9;" id="img_{{ subunit.0.order }}_{{ module.0.order }}" src="/compounddb/renderer/{{ module.0.product.smiles|urlq }}"/>
                 <script type="text/javascript">
                 $(document).ready(function(){
                  $("#img_{{ subunit.0.order }}_{{ module.0.order }}").click(function(){
-                    $('#structureImg').attr("src", "/compounddb/renderer/{{ smiles }}");
+                    $('#structureImg').attr("src", "/compounddb/renderer/{{ module.0.product.smiles|urlq }}");
                     $('#structureTitle').text("{{ subunit.0 }} module {{ forloop.counter }} predicted product");
-                    $('#structureSMILES').text("{{ module.2|unquotedSmiles }}");
+                    $('#structureSMILES').text("{{ module.0.product.smiles }}");
                     $('#structureView').modal('show');
                  });
                 });
                 </script>
                 {% endif %}
-                {% endwith %}
             </div>
             {% endfor %}
         </div>

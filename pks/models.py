@@ -2,21 +2,24 @@ import sys
 from django.db import models
 from model_utils.managers import InheritanceManager
 from rdkit import Chem as chem
-from rdkit.Chem import AllChem
+from rdkit.Chem import AllChem, rdFMCS
 import os
 import json
 from collections import OrderedDict
 from compounddb.models import Compound
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 class Cluster(models.Model):
     '''Cluster is defined by GenBank and MIBiG accession numbers. 
     
     # Properties
-        genbankAccession: str. GenBank accession number.
         mibigAccession: str. MIBiG accession number.
+        genbankAccession: str. GenBank accession number.
         description: str. known natural product of cluster.
         sequence: str. nucleotide sequence of cluster.
-        knownProduct: class<Compound>. Known final product from literature or external databases.
+        knownProductSmiles: str. Known final product from literature or external databases, in smiles format.
+        knownProductMCS: str. SMARTS string of MCS comparing knownProductSmiles to the predicted final product. Auto-generated when running self.computeProduct().
         knownProductSource: str. Where the knownProduct structure was obtained from.
 
     # Methods
@@ -33,33 +36,20 @@ class Cluster(models.Model):
         correctCluster: Corrects errors in cluster using JSON file. 
                         Template JSON file should be generated using clusterJSON.
     '''
-    genbankAccession = models.CharField(max_length=2000, unique=True)
-    mibigAccession = models.CharField(max_length=2000, unique=True)
+    mibigAccession = models.CharField(max_length=100, primary_key=True)
+    genbankAccession = models.CharField(max_length=100)
     description = models.TextField()
     sequence = models.TextField()
-    knownProduct = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True)
+    knownProductSmiles = models.TextField()
+    knownProductMCS = models.TextField()
     knownProductSource = models.TextField(default='unknown')
 
     def subunits(self):
         return Subunit.objects.filter(cluster=self).order_by('order')
 
-    def architecture(self, products=False):
+    def architecture(self):
         # Returns the entire structure of the cluster
-        myarchitecture = [[x, x.architecture()] for x in self.subunits()]
-        if products:
-            try:
-                chain = self.computeProduct()
-            except:
-                chain = False
-            i = 0
-            for subunit in myarchitecture:
-                for module in subunit[1]:
-                    if chain:
-                        module = module.append(chain[i])
-                        i += 1
-                    else:
-                        module = module.append(False)
-        return myarchitecture
+        return [[x, x.architecture()] for x in self.subunits()]
 
     def reorderSubunits(self, newOrder):
         '''Takes as input a list of subunit names and reordereds subunits within
@@ -69,22 +59,29 @@ class Cluster(models.Model):
             assert subunit.name in newOrder, 'Missing subunit %s.' %(subunit)
         subunits = [Subunit.objects.get(name__exact=x, cluster__exact=self) for x in newOrder] 
         assert len(newOrder) == len(subunits), 'Non-existant subunits provided in new order.'
+
         # Reset loading bool of first module in oldOrder
         oldLoading = self.subunits()[0].modules()[0]
         oldLoading.loading = False
         oldLoading.setLoading()
         oldLoading.save()
+
         # Update subunit ordering
+        subunitCounter = 1
+        moduleCounter = 1
         for subunit in subunits:
-            oldOrder = subunit.order
-            modules = subunit.modules()
-            subunit.order = None
+            subunit.order = subunitCounter
+            print(subunit.order)
             subunit.save()
+            subunitCounter += 1
+
+            # update module ordering
+            modules = subunit.modules()
             for module in modules:
-                module.subunit = subunit
+                module.order = moduleCounter
                 module.save()
-            subunit.order = oldOrder
-            subunit.delete()
+                moduleCounter += 1
+
         # Reset loading bool of first module in newOrder
         newLoading = self.subunits()[0].modules()[0]
         newLoading.loading = True
@@ -92,7 +89,7 @@ class Cluster(models.Model):
         newLoading.save()
         return self.subunits()
 
-    def computeProduct(self):
+    def computeProduct(self, computeMCS=True):
         chain = []        
         for subunit in self.subunits():
             for module in subunit.modules():
@@ -100,6 +97,11 @@ class Cluster(models.Model):
                     chain.append(module.computeProduct())
                 else:
                     chain.append(module.computeProduct(chain[-1]))    
+
+        if computeMCS:
+                mcs = rdFMCS.FindMCS([chem.MolFromSmiles(self.knownProductSmiles), chain[-1]])
+                self.knownProductMCS = mcs.smartsString
+                self.save()
         return chain
 
     def setActive(self, sub, mod, dom, active):
@@ -208,7 +210,7 @@ class Subunit(models.Model):
 
     # Properties
         cluster: class<Cluster>. cluster containing subunit.
-        order: class<AutoField>. order of subunit within cluster.
+        order: int. order of subunit within cluster starting with 1. Auto-set on self.save()
         genbankAccession: str. GenBank accession number.
         name: str. name of subunit.
         start: int. start of subunit in cluster nucleotide sequence.
@@ -223,7 +225,7 @@ class Subunit(models.Model):
         getAminoAcidSequence: Returns amino acid sequence of subunit.
     '''
     cluster = models.ForeignKey(Cluster)
-    order = models.AutoField(primary_key=True)
+    order = models.IntegerField()
     genbankAccession = models.CharField(max_length=2000, unique=False)
     name = models.CharField(max_length=2000)
     start = models.PositiveIntegerField()
@@ -245,12 +247,19 @@ class Subunit(models.Model):
     def __str__(self):
         return "%s" % self.name
 
+@receiver(pre_save, sender=Subunit)
+def setSubunitOrder(sender, instance, **kwargs):
+    # sets the subunit order
+    if not instance.order:
+        subunitCount = sender.objects.filter(cluster=instance.cluster).count()
+        instance.order = subunitCount + 1 
+
 class Module(models.Model):
     '''Class representing a PKS module.
 
     # Properties
         subunit: class<Subunit>. subunit containing module.
-        order: class<AutoField>. order of module within subunit.
+        order: int. order of module within cluster starting with 1. Auto-set on self.save()
         loading: bool. Whether or not module is a loading module.
         terminal: bool. Whether or not module is a terminal module.
         product: class<Compound>. Product small molecule structure.
@@ -262,7 +271,7 @@ class Module(models.Model):
         computeProduct: Compute product of module given chain.
     '''
     subunit = models.ForeignKey(Subunit)
-    order = models.AutoField(primary_key=True)
+    order = models.IntegerField()
     loading = models.BooleanField() # Whether or not module is a loading module
     terminal = models.BooleanField() # Whether or not module is a terminal module
     product = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True) # small molecule product structure
@@ -360,11 +369,15 @@ class Module(models.Model):
         self.save()
         return chain
 
-    def getIndexOnSubunit(self):
-        return list(self.subunit.modules()).index(self)
-
     def __str__(self):
-        return "%s" % str(self.getIndexOnSubunit() + 1)
+        return "%s" % str(self.order)
+
+@receiver(pre_save, sender=Module)
+def setModuleOrder(sender, instance, **kwargs):
+    # sets the module order based on current count
+    if not instance.order:
+        moduleCount = sender.objects.filter(subunit__cluster=instance.subunit.cluster).count()
+        instance.order = moduleCount + 1 
 
 class Domain(models.Model):
     ''' Abstract base class used to build PKS catalytic domains.
