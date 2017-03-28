@@ -13,24 +13,37 @@
 <div>
 <div class="row">
     <div class="col-md-3 col-sm-4">
-        MIBiG accession: <a href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a><br/>
-        GenBank accession: <a href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a><br/>
+        <dl>
+            <dt>MIBiG accession</dt>
+            <dd><a href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a></dd>
+
+            <dt>GenBank accession</dt>
+            <dd><a href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a></dd>
+        </dl>
     </div>
     <div class="col-md-3 col-sm-4">
-        <h5>Known final product</h5>
+        <dl>
+            <dt>Known final product</dt>
+        <dd>
         {% with architecture|last as lastsubunit %}
             {% with lastsubunit.1|last as lastmodule %}
                 <img style="width: 100% \9;" src="/compounddb/renderer/{{ cluster.knownProductSmiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/>
             {% endwith %}
         {% endwith %}
+        </dd>
+        </dl>
     </div>
     <div class="col-md-3 col-sm-4">
-        <h5>Predicted final product</h5>
+        <dl>
+            <dt>Predicted final product</dt>
+        <dd>
         {% with architecture|last as lastsubunit %}
             {% with lastsubunit.1|last as lastmodule %}
                 <img style="width: 100% \9;" src="/compounddb/renderer/{{ lastmodule.0.product.smiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/>
             {% endwith %}
         {% endwith %}
+        </dd>
+        </dl>
     </div>
 </div>
 
