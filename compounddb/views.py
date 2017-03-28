@@ -7,7 +7,7 @@ import re
 import xml.etree.ElementTree as ET
 from io import BytesIO
 
-# @cache_page(60 * 120)
+@cache_page(60 * 120)
 def renderer(request, smiles, smiles2=None):
     try:
         # parse smiles input
@@ -24,22 +24,18 @@ def renderer(request, smiles, smiles2=None):
     if smiles2:
         mcs = rdFMCS.FindMCS([mol, mol2])
         template = Chem.MolFromSmarts(mcs.smartsString)
-        mols = [mol, mol2]
-        highlightAtomLists = [x.GetSubstructMatch(template) for x in mols] 
-        molsPerRow = 2
-        labels = ['', '']
-        width = 213 
+        highlightAtomLists = mol.GetSubstructMatch(template)
+        resultFraction = 100.0 * float(mcs.numAtoms) / float(mol.GetNumAtoms())
+        legend = "{:.2f}% of atoms".format(resultFraction) 
     else:
         template = Chem.MolFromSmiles('C(=O)[S]')
-        mols = [mol]
         highlightAtomLists = None
-        molsPerRow = 1
-        labels = ['']
-        width = 213 
+        legend = ''
 
     # lock molecule to template
     AllChem.Compute2DCoords(template)
     height = 30 + mol.GetNumAtoms() * 7 
+    width = 213 
 
     align = True 
     if 'align' in request.GET:
@@ -48,20 +44,20 @@ def renderer(request, smiles, smiles2=None):
 
     if align:
         try:
-            [AllChem.GenerateDepictionMatching2DStructure(x, template, acceptFailure=False) for x in mols]
+            AllChem.GenerateDepictionMatching2DStructure(mol, template, acceptFailure=False)
         except ValueError:
             template = Chem.MolFromSmiles('C(=O)O')
             AllChem.Compute2DCoords(template)
             try:
-                [AllChem.GenerateDepictionMatching2DStructure(x, template, acceptFailure=False) for x in mols]
+                AllChem.GenerateDepictionMatching2DStructure(mol, template, acceptFailure=False)
             except ValueError:
                 height = 213
     else:
         height = 213
 
     # draw SVG
-    svg = Draw.MolsToGridImage(mols, highlightAtomLists=highlightAtomLists,
-                 legends = labels, molsPerRow=molsPerRow,
+    svg = Draw.MolsToGridImage([mol], highlightAtomLists=[highlightAtomLists],
+                 legends = [legend], molsPerRow=1,
                  subImgSize=(width, height), useSVG=True)
 
     # fix XML namespace in RDKit export

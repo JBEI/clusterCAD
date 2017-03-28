@@ -9,8 +9,28 @@
 <div class="row">
     <div class="col-md-12">
         <h1>{{ cluster.description }}</h1>
+    </div>
+<div>
+<div class="row">
+    <div class="col-md-3 col-sm-4">
         GenBank: <a href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a><br/>
         MIBiG: <a href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a><br/>
+    </div>
+    <div class="col-md-3 col-sm-4">
+        <h5>Known final product</h5>
+        {% with architecture|last as lastsubunit %}
+            {% with lastsubunit.1|last as lastmodule %}
+                <img style="width: 100% \9;" src="/compounddb/renderer/{{ cluster.knownProduct.smiles|urlq }}/{{ lastmodule.2|smiles }}?align=False"/>
+            {% endwith %}
+        {% endwith %}
+    </div>
+    <div class="col-md-3 col-sm-4">
+        <h5>Predicted final product</h5>
+        {% with architecture|last as lastsubunit %}
+            {% with lastsubunit.1|last as lastmodule %}
+                <img style="width: 100% \9;" src="/compounddb/renderer/{{ lastmodule.2|smiles }}/{{ cluster.knownProduct.smiles|urlq }}?align=False"/>
+            {% endwith %}
+        {% endwith %}
     </div>
 </div>
 
