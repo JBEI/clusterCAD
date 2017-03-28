@@ -39,6 +39,7 @@ RUN apt-get update \
         openjdk-7-jdk \
         openjdk-7-jre \
         sudo \
+        ncbi-blast+ \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
