@@ -44,6 +44,7 @@ Similarity hits
 <div class="row-fluid">
 <div class="col-md-12">
 <table class="table table-hover table-condensed">
+<thead>
 <tr>
     <th>
         Hit #
@@ -64,6 +65,8 @@ Similarity hits
         Module
     </th>
 </tr>
+</thead>
+<tbody>
 {% for compound in moduleHits %}
     <tr class="clickable-row" data-container="body" data-href="/pks/{{ compound.modules.0.subunit.cluster.mibigAccession }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
         <td rowspan="{{ compound.modules|length }}">
@@ -83,6 +86,7 @@ Similarity hits
             </tr>
         {% endfor %} 
 {% endfor %}
+</tbody>
 </table>
 </div>
 </div>
