@@ -7,7 +7,7 @@ import os
 import json
 from collections import OrderedDict
 from compounddb.models import Compound
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 
 class Cluster(models.Model):
@@ -79,6 +79,7 @@ class Cluster(models.Model):
             modules = subunit.modules()
             for module in modules:
                 module.order = moduleCounter
+                module.deleteProduct()
                 module.save()
                 moduleCounter += 1
 
@@ -87,6 +88,10 @@ class Cluster(models.Model):
         newLoading.loading = True
         newLoading.setLoading()
         newLoading.save()
+
+        # compute new final products after reordering
+        self.computeProduct()
+
         return self.subunits()
 
     def computeProduct(self, computeMCS=True):
@@ -269,6 +274,7 @@ class Module(models.Model):
         setLoading: Resets activity of reductive casette based on whether module is loading.
         buildDomains: Build class<Domain> objects using dict as input
         computeProduct: Compute product of module given chain.
+        deleteProduct: Reset product to Null, and properly delete it from database.
     '''
     subunit = models.ForeignKey(Subunit)
     order = models.IntegerField()
@@ -369,8 +375,19 @@ class Module(models.Model):
         self.save()
         return chain
 
+    def deleteProduct(self):
+        # set self.product to none, and delete the compound itself
+        # if this is the only module
+        if Module.objects.filter(product=self.product).exclude(id=self.id).count() == 0:
+            self.product.delete()
+        self.product = None
+
     def __str__(self):
         return "%s" % str(self.order)
+
+@receiver(pre_delete, sender=Module)
+def deleteModuleProduct(sender, instance, **kwargs):
+    instance.deleteProduct()
 
 @receiver(pre_save, sender=Module)
 def setModuleOrder(sender, instance, **kwargs):
