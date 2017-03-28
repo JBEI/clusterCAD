@@ -10,7 +10,6 @@
 <script type="text/javascript">
 function do_example(){
    $("#smiles").val('CCC1OC(=O)C(C)C(O)C(C)C(O)C(C)C(O)C(C)C(=O)C(C)C(O)C1C');
-  $(".examplehelp").fadeIn(1000);
 }
 
 $(document).ready(function() {
@@ -18,14 +17,6 @@ $("#loadexample").click(function() {
 do_example();
 return false;
 });
-$("#smiles").after("<span class=\"red examplehelp\" style=\"position:relative;left:100px;display:none\" ><br/>&uarr;<br/>example SMILES string inserted<br/><span>");
-
-var here = document.location.toString();
-if (here.match('#')) {
-  var anchor = here.split('#')[1];
-  if (anchor == 'example')
-    $("#loadexample").hide().click();
-}
 });
 </script>
 
@@ -96,52 +87,60 @@ Selecting a starting point for engineering<br/>
 <form action="." method="post" accept-charset="utf-8">
 {% csrf_token %}
 
-    <textarea id="smiles" name="smiles" class="form-control" rows="2">{{ smiles }}</textarea>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+          <label for="smiles">SMILES string</label>
+          <textarea class="form-control" rows="2" name="smiles" id="smiles"></textarea>
+        </div>
+    </div>
+</div>
 
 <div class="row">
-<div class="col-md-6">
-    <table>
-    <tr><td>
-        Minimum Tanimoto Similarity Cutoff:
-    </td><td>
-        <select name="cutoff" id="cutoff">
-        <option value="0.0">0.0 (return all hits)</option>
-        <option value="0.1">0.1</option>
-        <option value="0.2">0.2</option>
-        <option value="0.3">0.3</option>
-        <option value="0.4">0.4</option>
-        <option value="0.5">0.5</option>
-        <option value="0.6">0.6</option>
-        <option value="0.7">0.7</option>
-        <option value="0.8">0.8</option>
-        <option value="0.9">0.9</option>
-        <option value="1.0">1.0 (perfect match only)</option>
-    </td></tr>
-    <tr><td>
-        Max Compounds Returned:
-    </td><td>
-        <select name="maxCompounds" id="maxCompounds">
-        <option value="10">10</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-        <option value="200">200</option>
-        <option value="300">300</option>
-        <option value="500">500</option>
-        <option value="1000">1000</option>
-    </td></tr>
-    </table>
-    
-    <table>
-        <tr><th>
-        </th><td>
-                <div class="btn-group">
-                    <button class="btn btn-primary" type="submit">Search</button>
-                    <button class="btn" id="loadexample">Load an example query</button>
-                    <button class="btn" type="reset">Clear entry field</button>
-                </div>
-        </td></tr>
-    </table>
-</div></div>
+    <div class="col-md-4 col-sm-5">
+        <div class="form-group">
+          <label for="cutoff">Minimum Tanimoto similarity cutoff</label>
+                <select class="form-control" name="cutoff" id="cutoff">
+                    <option value="0.0">0.0 (return all hits)</option>
+                    <option value="0.1">0.1</option>
+                    <option value="0.2">0.2</option>
+                    <option value="0.3">0.3</option>
+                    <option value="0.4">0.4</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.6">0.6</option>
+                    <option value="0.7">0.7</option>
+                    <option value="0.8">0.8</option>
+                    <option value="0.9">0.9</option>
+                    <option value="1.0">1.0 (perfect match only)</option>
+                </select>
+        </div>
+
+        <div class="form-group">
+          <label for="maxCompounds">Max compounds returned</label>
+                <select class="form-control" name="maxCompounds" id="maxCompounds">
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="btn-group">
+                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn" id="loadexample">Load an example query</button>
+                <button class="btn" type="reset">Clear entry field</button>
+            </div>
+        </div>
+    </div>
+</div>
 	
 </form>
 </div>
@@ -156,43 +155,49 @@ Selecting a starting point for engineering<br/>
         <input type="hidden" name="sdf" value="{{post_data.sdf}}"/><br/>
         <input type="hidden" name="draw" value="1"/>
 
-    <table>
-    <tr><td>
-        Minimum Tanimoto Similarity Cutoff:
-    </td><td>
-        <select name="cutoff" id="cutoff">
-        <option value="0.0">0.0 (return all hits)</option>
-        <option value="0.1">0.1</option>
-        <option value="0.2">0.2</option>
-        <option value="0.3">0.3</option>
-        <option value="0.4">0.4</option>
-        <option value="0.5">0.5</option>
-        <option value="0.6">0.6</option>
-        <option value="0.7">0.7</option>
-        <option value="0.8">0.8</option>
-        <option value="0.9">0.9</option>
-        <option value="1.0">1.0 (perfect match only)</option>
-    </td></tr>
-    <tr><td>
-        Max Compounds Returned:
-    </td><td>
-        <select name="maxCompounds" id="maxCompounds">
-        <option value="10">10</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-        <option value="200">200</option>
-        <option value="300">300</option>
-        <option value="500">500</option>
-        <option value="1000">1000</option>
-    </td></tr>
-    </table>
-    <table>
-        <tr><th>
-        </th><td>
-                    <button class="btn btn-primary" type="submit">Search</button>
-        </td></tr>
-    </table>
+<div class="row">
+    <div class="col-md-4 col-sm-5">
+        <div class="form-group">
+          <label for="cutoff">Minimum Tanimoto similarity cutoff</label>
+                <select class="form-control" name="cutoff" id="cutoff">
+                    <option value="0.0">0.0 (return all hits)</option>
+                    <option value="0.1">0.1</option>
+                    <option value="0.2">0.2</option>
+                    <option value="0.3">0.3</option>
+                    <option value="0.4">0.4</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.6">0.6</option>
+                    <option value="0.7">0.7</option>
+                    <option value="0.8">0.8</option>
+                    <option value="0.9">0.9</option>
+                    <option value="1.0">1.0 (perfect match only)</option>
+                </select>
+        </div>
 
+        <div class="form-group">
+          <label for="maxCompounds">Max compounds returned</label>
+                <select class="form-control" name="maxCompounds" id="maxCompounds">
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="btn-group">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
 </form>
 </div>
 </div>
