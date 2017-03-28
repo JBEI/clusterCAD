@@ -29,7 +29,7 @@ Browse Clusters
 <div class="row-fluid">
 <div class="col-md-12">
 <table class="table table-hover table-condensed">
-<tbody>
+<thead>
 <tr>
     <th>
         MIBiG accession
@@ -44,6 +44,8 @@ Browse Clusters
         Modules
     </th>
 </tr>
+</thead>
+<tbody>
 {% for cluster in clusters %}
 <tr class="clickable-row" data-href="/pks/{{ cluster.clusterObject.mibigAccession }}">
     <td>
