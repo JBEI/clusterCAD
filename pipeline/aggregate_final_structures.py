@@ -46,9 +46,9 @@ for jsonfile in mibigjson:
     except KeyError:
         continue
 
-###############################
+################################
 # Get structures from ChemAxon #
-###############################
+################################
 
 chemaxonsmi = './data/compounds/chemaxon.smi'
 
