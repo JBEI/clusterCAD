@@ -10,7 +10,7 @@ Browse Clusters
 
 <div class="list-group">
 {% for cluster in clusters %}
-    <a class="list-group-item" href="{{ cluster.id }}/">{{ cluster.genbankAccession }} {{ cluster.description }}</a>
+    <a class="list-group-item" href="{{ cluster.mibigAccession }}/">{{ cluster.genbankAccession }} {{ cluster.description }}</a>
 {% endfor %}
 </div>
 {% endblock %}
