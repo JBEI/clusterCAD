@@ -35,7 +35,7 @@ def renderer(request, smiles, smiles2=None):
             template = Chem.MolFromSmarts(mcs.smartsString)
         highlightAtomLists = mol.GetSubstructMatch(template)
         resultFraction = 100.0 * float(template.GetNumAtoms()) / float(mol.GetNumAtoms())
-        legend = "{:.2f}% of atoms".format(resultFraction) 
+        legend = "MCS: {:.1f}% of atoms".format(resultFraction) 
     else:
         template = Chem.MolFromSmiles('C(=O)[S]')
         highlightAtomLists = None
