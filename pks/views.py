@@ -13,12 +13,12 @@ def index(request):
 
     return render(request, 'index.html', context)
 
-def details(request, pksId):
+def details(request, mibigAccession):
     try:
-        cluster=Cluster.objects.get(id__iexact=pksId)
+        cluster=Cluster.objects.get(mibigAccession=mibigAccession)
     except Cluster.DoesNotExist:
         raise Http404
 
-    context={'cluster': cluster, 'architecture': cluster.architecture(products=True)}
+    context={'cluster': cluster, 'architecture': cluster.architecture()}
 
     return render(request, 'details.html', context)

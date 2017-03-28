@@ -17,15 +17,24 @@ def renderer(request, smiles, smiles2=None):
         if smiles2:
             smiles2 = urlunquote(smiles2)
             smiles2 = re.match(r'^(\S{1,10000})', str(smiles2)).group(1)
-            mol2 = Chem.MolFromSmiles(smiles2)
     except:
         raise Http404
 
     if smiles2:
-        mcs = rdFMCS.FindMCS([mol, mol2])
-        template = Chem.MolFromSmarts(mcs.smartsString)
+        if ('smarts' in request.GET) and (request.GET['smarts'] == 'True'):
+            try:
+                template = Chem.MolFromSmarts(smiles2)
+            except:
+                raise Http404
+        else:
+            try:
+                mol2 = Chem.MolFromSmiles(smiles2)
+            except:
+                raise Http404
+            mcs = rdFMCS.FindMCS([mol, mol2])
+            template = Chem.MolFromSmarts(mcs.smartsString)
         highlightAtomLists = mol.GetSubstructMatch(template)
-        resultFraction = 100.0 * float(mcs.numAtoms) / float(mol.GetNumAtoms())
+        resultFraction = 100.0 * float(template.GetNumAtoms()) / float(mol.GetNumAtoms())
         legend = "{:.2f}% of atoms".format(resultFraction) 
     else:
         template = Chem.MolFromSmiles('C(=O)[S]')

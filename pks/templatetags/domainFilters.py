@@ -27,10 +27,5 @@ def stripTrailingVersion(accession):
     return re.sub("\.\d+$", "", accession)
 
 @register.filter
-def moduleNumber(module):
-    pos = list(Module.objects.filter(subunit__cluster = module.subunit.cluster).order_by('subunit__order', 'order')).index(module)
-    return str(pos + 1)
-
-@register.filter
 def urlq(str):
     return urlquote(str)
