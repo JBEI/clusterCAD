@@ -144,6 +144,8 @@ class Cluster(models.Model):
         domain.save()
 
     def setCyclization(self, cyclic, ring=0):
+        assert isinstance(cyclic, bool)
+        assert isinstance(ring, int)
         domain = TE.objects.get(module__subunit__cluster=self)
         domain.cyclic = cyclic
         if cyclic:
@@ -204,9 +206,6 @@ class Cluster(models.Model):
         for s in Subunit.objects.filter(cluster=self):
             if s.name not in corr['architecture'].keys():
                 Subunit.objects.get(cluster=self, name=s).delete()
-        # Reorder subunits if necessary
-        newOrder = [str(x) for x in corr['architecture'].keys()]
-        self.reorderSubunits(newOrder)
         # Change domain properties if necessary
         for s,sdict in corr['architecture'].items():
             for m,mdict_iters in sdict.items():
@@ -225,8 +224,12 @@ class Cluster(models.Model):
                     else:
                         assert d == 'TE'
                         cyclic = ddict['cyclic']
-                        ring = ddict['ring']
+                        ring = int(ddict['ring'])
                         self.setCyclization(cyclic, ring)
+        # Reorder subunits if necessary
+        # Must be done last since this is when products are recomputed
+        newOrder = [str(x) for x in corr['architecture'].keys()]
+        self.reorderSubunits(newOrder)
 
     def __str__(self):
         return "%s gene cluster" % self.description

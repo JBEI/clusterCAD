@@ -15,4 +15,5 @@ correctionlist = glob.glob(os.path.join(correctionpath, '*.json'))
 for corrfile in correctionlist:
     acc = os.path.basename(corrfile).strip('.json')
     cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
+    print('Correcting cluster %s: %s.' %(acc, cluster.description))
     cluster.correctCluster(corrfile)
