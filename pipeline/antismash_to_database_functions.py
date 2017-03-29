@@ -116,19 +116,21 @@ def processSubunitModules(sec_met):
         
         # Here, we add each domain to a list, which will be converted to an OrderedDict
         if domaintype in ['KS', 'DH', 'ER', 'ACP', 'cMT', 'oMT', 'CAL', 'PCP',
-                          'Heterocylization', 'AMP-binding', 
+                          'Heterocyclization', 'AMP-binding', 
                           'Condensation_DCL', 'Condensation_LCL',
                           'PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}]))
         # Include substrate and stereospecificity annotations for AT and KR domains respectively
-        if domaintype in ['AT', 'KR']:
+        elif domaintype in ['AT', 'KR']:
             notesdict = {}
             for note in entrysplit[1:]:
                 item = note.split(': ')
                 notesdict[item[0]] = item[1]
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}, notesdict]))
+        elif domaintype not in ['Thioesterase']:
+            print('\tIgnoring domain type: %s' %(domaintype))
                 
         # End of the module has been reached of the domain is 'ACP' or 'PCP
         if domaintype in ['ACP', 'PCP']:
@@ -423,7 +425,7 @@ def enterCluster(cluster, clusterrecord, mibigfile):
                 # The check for errors here is to compare against the known product
                 domains_present = moduledict.keys()
                 if 'ACP' in domains_present or 'PCP' in domains_present:
-                    if 'AT' in domains_present or 'ATL' in domains_present:
+                    if 'AT' in domains_present:
                         module = pks.models.Module(subunit=subunit, 
                                                    loading=loading, terminal=terminal)
                         module.save()

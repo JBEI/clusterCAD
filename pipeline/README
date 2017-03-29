@@ -38,7 +38,8 @@ aggregate_final_structures.py
 # Populate ClusterCAD database #
 ################################
 
-!!! NOTE: Not yet tested !!! 
+The script antismash_to_databse.py will populate the ClusterCAD database.
+It depends on the functions in antismash_to_database_functions.py.
 
 antismash_to_database_functions.py
 antismash_to_database.py
@@ -48,28 +49,10 @@ antismash_to_database.py
 #######################################
 
 These need to be done manually. Write JSON templates to the folder ./data/corrections
-once the clusters have been added to ClusterCAD as follows:
-
-'''
-import os, sys
-sys.path.insert(0, '/clusterCAD')
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
-import django
-django.setup()
-import pks.models
-
-#accessions = ['BGC0000001.1']
-accessions = ['BGC0000029.1', 'BGC0000042.1', 'BGC0000093.1', 'BGC0000097.1', 'BGC0000115.1', 'BGC0000165.1', 'BGC0001072.1', 'BGC0001381.1']
-for acc in accessions:
-    cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
-    cluster.clusterJSON('./data/corrections')
-'''
-
-Then the template JSON files can be manually updated.
-
-The changes to the database should be implemented using the script
-clustercad_corrections.py, which will update the database to reflect
-the current contents of the JSON files.
+using the script clustercad_templates.py. Then the template JSON files can be 
+manually updated. The changes to the database should be implemented using the script
+clustercad_corrections.py, which will update the database to reflect the contents of 
+the JSON files.
 
 ###############################
 # Clean up ClusterCAD entries #

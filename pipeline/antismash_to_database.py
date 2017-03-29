@@ -5,8 +5,8 @@ import json
 import pickle
 
 from Bio import SeqIO
-
 from antismash_to_database_functions import mibigSubtypes, filterModularTypeI, enterCluster
+
 sys.path.insert(0, '/clusterCAD')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
 import django
@@ -37,7 +37,6 @@ print('ClusterCAD database reset.')
 # Assumes that chemical structures have already been aggregated
 allknowncompounds = pickle.load(open('./data/compounds/all_known_products.p', 'rb'))
 
-#for accession in ['BGC0000031']:
 for accession in mibigaccessions:
     # Use accession number to get paths to MIBiG and antiSMASH files
     mibigfile = os.path.join(mibigpath, accession + '.json')
@@ -70,6 +69,8 @@ for accession in mibigaccessions:
         # Processes subunits and modules belonging to cluster
         enterCluster(cluster, record, mibigfile)
         print('Processed cluster %s: %s.' %(record.id, record.description))
+        cluster.computeProduct()
+        print('Pregenerated cluster products.')
     except Exception as e:
         print(e)
         pass

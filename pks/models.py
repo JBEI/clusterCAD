@@ -27,6 +27,7 @@ class Cluster(models.Model):
         architecture: Returns structure of cluster as list of lists.
         reorderSubunits: Reorders subunits in cluster.
         computeProduct: Compute list of intermediates for each module in cluster. 
+        setIterations: Sets module iterations parameter specificying number of iterations.
         setActive: Sets module KR, DH, ER, oMT, or cMT domain active boolean.
         setSubstrate: Sets AT substrate specificity of module.
         setStereochemistry: Sets KR stereochemistry of module.
@@ -50,6 +51,21 @@ class Cluster(models.Model):
     def architecture(self):
         # Returns the entire structure of the cluster
         return [[x, x.architecture()] for x in self.subunits()]
+
+    def computeProduct(self, computeMCS=True):
+        chain = []        
+        for subunit in self.subunits():
+            for module in subunit.modules():
+                if len(chain) == 0:
+                    chain.append(module.computeProduct())
+                else:
+                    chain.append(module.computeProduct(chain[-1]))    
+
+        if computeMCS:
+                mcs = rdFMCS.FindMCS([chem.MolFromSmiles(self.knownProductSmiles), chain[-1]])
+                self.knownProductMCS = mcs.smartsString
+                self.save()
+        return chain
 
     def reorderSubunits(self, newOrder):
         '''Takes as input a list of subunit names and reordereds subunits within
@@ -94,21 +110,12 @@ class Cluster(models.Model):
 
         return self.subunits()
 
-    def computeProduct(self, computeMCS=True):
-        chain = []        
-        for subunit in self.subunits():
-            for module in subunit.modules():
-                if len(chain) == 0:
-                    chain.append(module.computeProduct())
-                else:
-                    chain.append(module.computeProduct(chain[-1]))    
-
-        if computeMCS:
-                mcs = rdFMCS.FindMCS([chem.MolFromSmiles(self.knownProductSmiles), chain[-1]])
-                self.knownProductMCS = mcs.smartsString
-                self.save()
-        return chain
-
+    def setIterations(self, sub, mod, iterations):
+        module = Module.objects.filter(subunit_cluster=self,
+                                       subunit_name=sub).order_by('start')[mod]
+        module.iterations = iterations
+        module.save()
+        
     def setActive(self, sub, mod, dom, active):
         assert dom in ['KR', 'DH', 'ER']
         assert isinstance(active, bool)
@@ -134,9 +141,11 @@ class Cluster(models.Model):
         d.type = update
         d.save()
 
-    def setCyclization(self, cyclic):
+    def setCyclization(self, cyclic, ring=0):
         d = TE.objects.get(module__subunit__cluster=self)
         d.cyclic = cyclic
+        if cyclic:
+            d.ring = ring
         d.save()
 
     def clusterDict(self):
@@ -164,10 +173,12 @@ class Cluster(models.Model):
                     elif dname in ['DH', 'ER', 'cMT', 'oMT']:
                         ddict.update({'active': domain.active})
                     elif dname == 'TE':
-                        ddict.update({'cyclic': domain.cyclic})
+                        ddict.update({'cyclic': domain.cyclic,
+                                      'ring': domain.ring})
                     if dname in ['AT', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE']:
                         mdict.update({dname: ddict})
-                sdict.update({imodule: mdict})
+                sdict.update({imodule: {'domains': mdict, 
+                                        'iterations': module.iterations}})
             adict.update({sname: sdict})
         ret.update({'architecture': adict})
         return ret
@@ -198,7 +209,9 @@ class Cluster(models.Model):
         for s,sdict in corr['architecture'].items():
             for m,mdict in sdict.items():
                 m = int(m) # Key is expected to be integer
-                for d,ddict in mdict.items():
+                for d,mdictv in mdict.items():
+                    ddict = mdictv['domains']
+                    self.setIterations(s, m, mdictv['iterations'])
                     if d == 'AT':
                         self.setSubstrate(s, m, ddict['substrate'])
                     elif d == 'KR':
@@ -209,8 +222,9 @@ class Cluster(models.Model):
                     else:
                         assert d == 'TE'
                         cyclic = ddict['cyclic']
-                        self.setCyclization(cyclic)
-    
+                        ring = ddict['ring']
+                        self.setCyclization(cyclic, ring)
+
     def __str__(self):
         return "%s gene cluster" % self.description
 
@@ -285,6 +299,7 @@ class Module(models.Model):
     loading = models.BooleanField() # Whether or not module is a loading module
     terminal = models.BooleanField() # Whether or not module is a terminal module
     product = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True) # small molecule product structure
+    iterations = models.PositiveIntegerField(default=1)
 
     def domains(self):
         return Domain.objects.filter(module=self).select_subclasses().order_by('start')
@@ -301,12 +316,6 @@ class Module(models.Model):
                 d.save()
 
     def buildDomains(self, domainDict, cyclic=False):
-        if 'KS' in domainDict.keys():
-            start = domainDict['KS'][0]['start']
-            stop = domainDict['KS'][0]['stop']
-            newDomain = KS(module=self, start=start, stop=stop)
-            newDomain.save()
-
         if 'AT' in domainDict.keys():
             start = domainDict['AT'][0]['start']
             stop = domainDict['AT'][0]['stop']
@@ -332,34 +341,20 @@ class Module(models.Model):
             newDomain = KR(module=self, start=start, stop=stop, active=active, type=type)
             newDomain.save()
 
-        if 'cMT' in domainDict.keys():
-            start = domainDict['cMT'][0]['start']
-            stop = domainDict['cMT'][0]['stop']
-            newDomain = cMT(module=self, start=start, stop=stop)
-            newDomain.save()
-
-        if 'oMT' in domainDict.keys():
-            start = domainDict['oMT'][0]['start']
-            stop = domainDict['oMT'][0]['stop']
-            newDomain = oMT(module=self, start=start, stop=stop)
-            newDomain.save()
-
-        if 'ACP' in domainDict.keys():
-            start = domainDict['ACP'][0]['start']
-            stop = domainDict['ACP'][0]['stop']
-            newDomain = ACP(module=self, start=start, stop=stop)
-            newDomain.save()
-
-        if 'PCP' in domainDict.keys():
-            start = domainDict['PCP'][0]['start']
-            stop = domainDict['PCP'][0]['stop']
-            newDomain = PCP(module=self, start=start, stop=stop)
-            newDomain.save()
+        for domainType in ['KS', 'DH', 'ER', 'cMT', 'oMT', 'ACP', 'PCP']:
+            if domainType in domainDict.keys():
+                start = domainDict[domainType][0]['start']
+                stop = domainDict[domainType][0]['stop']
+                if domainType in ['DH', 'ER', 'cMT', 'oMT']:
+                    newDomain = getattr(sys.modules[__name__], domainType)(module=self, start=start, stop=stop, active=True)
+                else:
+                    newDomain = getattr(sys.modules[__name__], domainType)(module=self, start=start, stop=stop)
+                newDomain.save()
 
         if 'Thioesterase' in domainDict.keys():
             start = domainDict['Thioesterase'][0]['start']
             stop = domainDict['Thioesterase'][0]['stop']
-            newDomain = TE(module=self, start=start, stop=stop, cyclic=cyclic)
+            newDomain = TE(module=self, start=start, stop=stop, cyclic=cyclic, ring=0)
             newDomain.save()
         
         self.setLoading()
@@ -369,9 +364,10 @@ class Module(models.Model):
             return self.product.mol()
         domains = {type(domain): domain for domain in self.domains()}
         reactionOrder = [AT, KR, cMT, oMT, DH, ER, TE]
-        for reaction in reactionOrder:
-            if reaction in domains.keys():
-                chain = domains[reaction].operation(chain)
+        for iteration in range(self.iterations):
+            for reaction in reactionOrder:
+                if reaction in domains.keys():
+                    chain = domains[reaction].operation(chain)
         # Save this modules product in the database
         thisProduct = Compound(smiles = chem.MolToSmiles(chain, isomericSmiles=True))
         thisProduct.save()
@@ -382,7 +378,7 @@ class Module(models.Model):
     def deleteProduct(self):
         # set self.product to none, and delete the compound itself
         # if this is the only module
-        if Module.objects.filter(product=self.product).exclude(id=self.id).count() == 0:
+        if Module.objects.filter(product=self.product).exclude(id=self.id).count() == 0 and self.product != None:
             self.product.delete()
         self.product = None
 
@@ -653,6 +649,7 @@ class oMT(Domain):
 
 class TE(Domain):
     cyclic = models.BooleanField()
+    ring = models.IntegerField(default=0)
 
     def operation(self, chain):
         assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C(=O)S'),
@@ -664,7 +661,7 @@ class TE(Domain):
             rxn = AllChem.ReactionFromSmarts('[C:1](=[O:2])[S:3]>>[C:1](=[O:2])[O].[S:3]')
 
         # Using index -1 will yield the largest ring
-        prod = rxn.RunReactants((chain,))[-1][0]
+        prod = rxn.RunReactants((chain,))[-1-self.ring][0]
         chem.SanitizeMol(prod)
 
         return prod
