@@ -104,8 +104,10 @@ def processSubunitModules(sec_met):
         if domaintype not in ['KS', 'AT', 'KR', 'DH', 'ER', 'ACP', 'Thioesterase', 
                               'cMT', 'oMT', 'CAL', 'PCP', 
                               'Heterocyclization', 'AMP-binding', 
+                              'Condensation_Starter',
                               'Condensation_DCL', 'Condensation_LCL',
                               'PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
+            print('\tIgnoring domain type: %s' %(domaintype))
             # Break out of for loop and stop looking for additional catalytic domains if 
             # we encounter a domain that we don't recognize
             # We end up excluding any subunit that has a non-recognized catalytic domain
@@ -117,6 +119,7 @@ def processSubunitModules(sec_met):
         # Here, we add each domain to a list, which will be converted to an OrderedDict
         if domaintype in ['KS', 'DH', 'ER', 'ACP', 'cMT', 'oMT', 'CAL', 'PCP',
                           'Heterocyclization', 'AMP-binding', 
+                          'Condensation_Starter',
                           'Condensation_DCL', 'Condensation_LCL',
                           'PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
             module_domains.append((domaintype, 
@@ -129,9 +132,7 @@ def processSubunitModules(sec_met):
                 notesdict[item[0]] = item[1]
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}, notesdict]))
-        elif domaintype not in ['Thioesterase']:
-            print('\tIgnoring domain type: %s' %(domaintype))
-                
+ 
         # End of the module has been reached of the domain is 'ACP' or 'PCP
         if domaintype in ['ACP', 'PCP']:
             domains_present = [d[0] for d in module_domains]

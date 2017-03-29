@@ -641,11 +641,11 @@ class oMT(Domain):
             if len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)CC(=O)S'))) == 1:
                 rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4][C:5](=[O:6])[S:7]>>'
                                                   '[C:1][C:2]([O:3]C)[C:4][C:5](=[O:6])[S:7]'))
-                prod = self.rxn.RunReactants((chain,))[0][0]
+                prod = rxn.RunReactants((chain,))[0][0]
             elif len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(O)CC(=O)S'))) == 1:
                 rxn = AllChem.ReactionFromSmarts(('[C:1][C:2]([O:3])[C:4][C:5](=[O:6])[S:7]>>'
                                                   '[C:1][C:2]([O:3]C)[C:4][C:5](=[O:6])[S:7]'))
-                prod = self.rxn.RunReactants((chain,))[0][0]
+                prod = rxn.RunReactants((chain,))[0][0]
             else:
                 prod = chain
             chem.SanitizeMol(prod)
