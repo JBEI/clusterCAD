@@ -12,7 +12,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
 import django
 django.setup()
 import pks.models
-import compounddb.models
 
 ##########################################################
 # Identifying valid type I modular PKSs from MIBiG files #
@@ -20,14 +19,7 @@ import compounddb.models
 
 print('Analyzing contents of MIBiG database.')
 mibigpath = './data/mibig/raw' 
-
-antismashpath = '../notebooks/mibig/antismash/split_files'
-
-
-
-
-
-#antismashpath = './data/antismash/split'
+antismashpath = './data/antismash/split'
 print('Set of PKS subtypes found in MIBiG: %s' %(mibigSubtypes(mibigpath)))
 mibigsubtypes = set(['Modular type I', 'Modular Type I', 'Type I'])
 print('Set of PKS subtypes recognized for inclusion in ClusterCAD: %s' %(mibigsubtypes))
@@ -45,6 +37,7 @@ print('ClusterCAD database reset.')
 # Assumes that chemical structures have already been aggregated
 allknowncompounds = pickle.load(open('./data/compounds/all_known_products.p', 'rb'))
 
+#for accession in ['BGC0000031']:
 for accession in mibigaccessions:
     # Use accession number to get paths to MIBiG and antiSMASH files
     mibigfile = os.path.join(mibigpath, accession + '.json')
@@ -55,9 +48,10 @@ for accession in mibigaccessions:
 
     # Get compound information
     try:
-        compound = allknowncompounds[record.id.split('.')[0]]
+        compound = allknowncompounds[accession]
     # If compound is missing, we skip the cluster
     except KeyError:
+        print('Missing compound %s.' %(accession))
         continue
     knownproductsmiles = compound[0][0]
     knownproductsource = compound[1]
@@ -74,6 +68,8 @@ for accession in mibigaccessions:
             )
         cluster.save()
         # Processes subunits and modules belonging to cluster
-        enterCluster(clusterfile, clusterfile, mibigfile)
+        enterCluster(cluster, record, mibigfile)
+        print('Processed cluster %s: %s.' %(record.id, record.description))
     except Exception as e:
+        print(e)
         pass

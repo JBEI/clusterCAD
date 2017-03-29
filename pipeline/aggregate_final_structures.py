@@ -13,7 +13,7 @@ allknownproducts = {}
 # Add structures from JSON files #
 ##################################
 
-mibigpath = './data/antismash/raw'
+mibigpath = './data/mibig/raw'
 mibigjson = glob.glob(os.path.join(mibigpath, '*.json'))
 
 # Some of the compounds in MIBiG are the predicted final product for multiple clusters
@@ -28,6 +28,7 @@ mibignames = {}
 for jsonfile in mibigjson:
     with open(jsonfile) as f:
         data = json.loads(f.read())
+        print(data)
     try:
         # Get names
         accession = os.path.basename(jsonfile).split('.')[0]
@@ -71,7 +72,7 @@ with open(chemaxonsmi) as f:
 ##################################################################
 
 # Iterate over all accession numbers
-mibigaccessions = [os.path.basename().split()[0] for jsonfile in mibigjson]
+mibigaccessions = [os.path.basename(jsonfile).split('.')[0] for jsonfile in mibigjson]
 
 for accession,compound in mibignames.items():
     # Check if we already have a product for the cluster
