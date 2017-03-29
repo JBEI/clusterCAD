@@ -69,10 +69,9 @@ class Cluster(models.Model):
                 self.save()
         return chain
 
-    def reorderSubunits(self, newOrder, recompute=True):
+    def reorderSubunits(self, newOrder):
         '''Takes as input a list of subunit names and reordereds subunits within
            the gene cluster.
-           Recomputes final products in database if recompute=True
         '''
         for subunit in self.subunits():
             assert subunit.name in newOrder, 'Missing subunit %s.' %(subunit)
@@ -106,10 +105,6 @@ class Cluster(models.Model):
         newLoading.loading = True
         newLoading.setLoading()
         newLoading.save()
-
-        # compute new final products after reordering
-        if recompute:
-            self.computeProduct(recompute=True)
 
         return self.subunits()
 
@@ -233,6 +228,7 @@ class Cluster(models.Model):
         # Must be done last since this is when products are recomputed
         newOrder = [str(x) for x in corr['architecture'].keys()]
         self.reorderSubunits(newOrder)
+        self.computeProduct(recompute=True)
 
     def __str__(self):
         return "%s gene cluster" % self.description
