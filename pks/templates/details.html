@@ -51,7 +51,7 @@
 
 {% for subunit in architecture %}
 <div class="panel panel-default">
-    <div class="panel-heading">
+    <div id={{ subunit.0.name }}  class="panel-heading">
         {{ subunit.0 }}
     </div>
     <div class="panel-body">
@@ -66,7 +66,11 @@
                         <div class="col-md-3 col-sm-4">
                     {% endif %}
                 {% endif %}
-                module {{ module.0.order }}
+                {% if module.0.order == mark %}
+                    <mark>module {{ module.0.order }}</mark>
+                {% else %}
+                    module {{ module.0.order }}
+                {% endif %}
                 <br/>
                 <div class="btn-group" role="group">
                     {% for domain in module.1 %}

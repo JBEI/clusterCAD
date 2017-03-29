@@ -28,6 +28,15 @@ def details(request, mibigAccession):
     except Cluster.DoesNotExist:
         raise Http404
 
-    context={'cluster': cluster, 'architecture': cluster.architecture()}
+    if 'mark' in request.GET:
+        mark = int(request.GET['mark'])
+    else:
+        mark = False
+
+    context={
+            'cluster': cluster, 
+            'architecture': cluster.architecture(),
+            'mark': mark,
+    }
 
     return render(request, 'details.html', context)
