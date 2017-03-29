@@ -15,15 +15,12 @@ Browse Clusters
 {% endblock %}
 
 {% block content %}
+<div class="row-fluid">
 <h2>Type I modular polyketide synthase clusters</h2>
-
-<div class="row">
-<div class="col-md-12">
 <dl class="dl-horizontal">
     <dt>{{ clusters|length }} clusters total</dt>
     <dd></dd>
 </dl>
-</div>
 </div>
 
 <div class="row-fluid">
@@ -64,7 +61,7 @@ Browse Clusters
 {% endfor %}
 </tbody>
 </table>
-</div>
+</div><!--/col-->
 </div><!--/row-->
 
 {% endblock %}
