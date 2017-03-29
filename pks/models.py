@@ -111,18 +111,17 @@ class Cluster(models.Model):
         return self.subunits()
 
     def setIterations(self, sub, mod, iterations):
-        module = Module.objects.get(subunit__cluster=self,
-                                    subunit__name=sub,
-                                    order=mod)
+        module = Module.objects.filter(subunit__cluster=self,
+                                       subunit__name=sub).order_by('order')[mod]
         module.iterations = iterations
         module.save()
         
     def setActive(self, sub, mod, dom, active):
         assert dom in ['KR', 'DH', 'ER']
         assert isinstance(active, bool)
-        domain = Domain.objects.filter(module__subunit__cluster=self, 
-                                       module__subunit__name=sub,
-                                       module__order=mod).select_subclasses( \
+        module = Module.objects.filter(subunit__cluster=self, 
+                                       subunit__name=sub).order_by('order')[mod]
+        domain = Domain.objects.filter(module=module).select_subclasses( \
                                            getattr(sys.modules[__name__], dom))[0]
         domain.active = active
         domain.save()
@@ -130,26 +129,26 @@ class Cluster(models.Model):
     def setSubstrate(self, sub, mod, update):
         assert update in ['mal', 'mmal', 'mxmal', 'emal', 'cemal',
                           'prop', 'isobut', '2metbut', 'trans-1,2-CPDA', 'CHC-CoA']
-        d = AT.objects.get(module__subunit__cluster=self, 
-                              module__subunit__name=sub,
-                              module__order=mod)
-        d.substrate = update
-        d.save()
+        module = Module.objects.filter(subunit__cluster=self, 
+                                       subunit__name=sub).order_by('order')[mod]
+        domain = AT.objects.get(module=module)
+        domain.substrate = update
+        domain.save()
 
     def setStereochemistry(self, sub, mod, update):
         assert update in ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'U']
-        d = KR.objects.get(module__subunit__cluster=self,
-                           module__subunit__name=sub,
-                           module__order=mod)
-        d.type = update
-        d.save()
+        module = Module.objects.filter(subunit__cluster=self, 
+                                       subunit__name=sub).order_by('order')[mod]
+        domain = KR.objects.get(module=module)
+        domain.type = update
+        domain.save()
 
     def setCyclization(self, cyclic, ring=0):
-        d = TE.objects.get(module__subunit__cluster=self)
-        d.cyclic = cyclic
+        domain = TE.objects.get(module__subunit__cluster=self)
+        domain.cyclic = cyclic
         if cyclic:
-            d.ring = ring
-        d.save()
+            domain.ring = ring
+        domain.save()
 
     def clusterDict(self):
         '''Function that generates OrderedDict representation of changeable parameters
@@ -661,14 +660,17 @@ class TE(Domain):
     def operation(self, chain):
         assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C(=O)S'),
                    useChirality=True)) == 1, chem.MolToSmiles(chain)
+
+        index = -1
         if self.cyclic:
             rxn = AllChem.ReactionFromSmarts('([C:1](=[O:2])[S:3].[O:4][C:5][C:6])>>'
                                                   '[C:1](=[O:2])[O:4][C:5][C:6].[S:3]')
+            index -= self.ring
         else:
             rxn = AllChem.ReactionFromSmarts('[C:1](=[O:2])[S:3]>>[C:1](=[O:2])[O].[S:3]')
 
         # Using index -1 will yield the largest ring
-        prod = rxn.RunReactants((chain,))[-1-self.ring][0]
+        prod = rxn.RunReactants((chain,))[index][0]
         chem.SanitizeMol(prod)
 
         return prod
