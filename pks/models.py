@@ -83,8 +83,8 @@ class Cluster(models.Model):
         oldLoading.save()
 
         # Update subunit ordering
-        subunitCounter = 1
-        moduleCounter = 1
+        subunitCounter = 0 
+        moduleCounter = 0 
         for subunit in subunits:
             subunit.order = subunitCounter
             print(subunit.order)
@@ -233,7 +233,7 @@ class Subunit(models.Model):
 
     # Properties
         cluster: class<Cluster>. cluster containing subunit.
-        order: int. order of subunit within cluster starting with 1. Auto-set on self.save()
+        order: int. order of subunit within cluster starting with 0. Auto-set on self.save()
         genbankAccession: str. GenBank accession number.
         name: str. name of subunit.
         start: int. start of subunit in cluster nucleotide sequence.
@@ -273,16 +273,16 @@ class Subunit(models.Model):
 @receiver(pre_save, sender=Subunit)
 def setSubunitOrder(sender, instance, **kwargs):
     # sets the subunit order
-    if not instance.order:
+    if not isinstance(instance.order, int):
         subunitCount = sender.objects.filter(cluster=instance.cluster).count()
-        instance.order = subunitCount + 1 
+        instance.order = subunitCount 
 
 class Module(models.Model):
     '''Class representing a PKS module.
 
     # Properties
         subunit: class<Subunit>. subunit containing module.
-        order: int. order of module within cluster starting with 1. Auto-set on self.save()
+        order: int. order of module within cluster starting with 0. Auto-set on self.save()
         loading: bool. Whether or not module is a loading module.
         terminal: bool. Whether or not module is a terminal module.
         product: class<Compound>. Product small molecule structure.
@@ -392,9 +392,9 @@ def deleteModuleProduct(sender, instance, **kwargs):
 @receiver(pre_save, sender=Module)
 def setModuleOrder(sender, instance, **kwargs):
     # sets the module order based on current count
-    if not instance.order:
+    if not isinstance(instance.order, int):
         moduleCount = sender.objects.filter(subunit__cluster=instance.subunit.cluster).count()
-        instance.order = moduleCount + 1 
+        instance.order = moduleCount 
 
 class Domain(models.Model):
     ''' Abstract base class used to build PKS catalytic domains.
