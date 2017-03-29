@@ -31,7 +31,7 @@ def details(request, mibigAccession):
     if 'mark' in request.GET:
         mark = int(request.GET['mark'])
     else:
-        mark = False
+        mark = -1 
 
     context={
             'cluster': cluster, 
