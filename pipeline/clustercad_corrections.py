@@ -9,10 +9,10 @@ import django
 django.setup()
 import pks.models
 
-correctionpath = './data/corrections'
+correctionpath = './data/corrections/modified'
 correctionlist = glob.glob(os.path.join(correctionpath, '*.json'))
 
 for corrfile in correctionlist:
-    accession = os.path.basename(corrfile).split('.')[0]
+    acc = os.path.basename(corrfile).strip('.json')
     cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
     cluster.correctCluster(corrfile)

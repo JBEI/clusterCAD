@@ -24,3 +24,10 @@ for cluster in pks.models.Cluster.objects.all():
     except:
         print('%s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
+
+# Delete clusters we've decided not to fix
+rejectclusters = []
+for acc in rejectclusters:
+    cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
+    print('%s: %s' %(cluster.mibigAccession, cluster.description))
+    cluster.delete()

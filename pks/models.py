@@ -73,7 +73,7 @@ class Cluster(models.Model):
         '''
         for subunit in self.subunits():
             assert subunit.name in newOrder, 'Missing subunit %s.' %(subunit)
-        subunits = [Subunit.objects.get(name__exact=x, cluster__exact=self) for x in newOrder] 
+        subunits = [Subunit.objects.get(cluster__exact=self, name__exact=x) for x in newOrder] 
         assert len(newOrder) == len(subunits), 'Non-existant subunits provided in new order.'
 
         # Reset loading bool of first module in oldOrder
@@ -111,8 +111,9 @@ class Cluster(models.Model):
         return self.subunits()
 
     def setIterations(self, sub, mod, iterations):
-        module = Module.objects.filter(subunit_cluster=self,
-                                       subunit_name=sub).order_by('start')[mod]
+        module = Module.objects.get(subunit__cluster=self,
+                                    subunit__name=sub,
+                                    order=mod)
         module.iterations = iterations
         module.save()
         
@@ -120,24 +121,26 @@ class Cluster(models.Model):
         assert dom in ['KR', 'DH', 'ER']
         assert isinstance(active, bool)
         domain = Domain.objects.filter(module__subunit__cluster=self, 
-                                       module__subunit__name=sub).select_subclasses( \
-                                       getattr(sys.modules[__name__], dom)).order_by( \
-                                       'start')[mod]
+                                       module__subunit__name=sub,
+                                       module__order=mod).select_subclasses( \
+                                           getattr(sys.modules[__name__], dom))[0]
         domain.active = active
         domain.save()
 
     def setSubstrate(self, sub, mod, update):
         assert update in ['mal', 'mmal', 'mxmal', 'emal', 'cemal',
                           'prop', 'isobut', '2metbut', 'trans-1,2-CPDA', 'CHC-CoA']
-        d = AT.objects.filter(module__subunit__cluster=self, 
-                              module__subunit__name=sub).order_by('start')[mod]
+        d = AT.objects.get(module__subunit__cluster=self, 
+                              module__subunit__name=sub,
+                              module__order=mod)
         d.substrate = update
         d.save()
 
     def setStereochemistry(self, sub, mod, update):
         assert update in ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'U']
-        d = KR.objects.filter(module__subunit__cluster=self,
-                              module__subunit__name=sub).order_by('start')[mod]
+        d = KR.objects.get(module__subunit__cluster=self,
+                           module__subunit__name=sub,
+                           module__order=mod)
         d.type = update
         d.save()
 
@@ -199,19 +202,20 @@ class Cluster(models.Model):
         assert corr['mibigAccession'] == self.mibigAccession
         assert corr['genbankAccession'] == self.genbankAccession
         # Delete subunits if necessary
-        for s in Subunit.objects.filter(cluster.self):
-            if s not in corr['architecture'].keys():
-                Subunit.objects.get(cluster.self, name=s).delete()
+        for s in Subunit.objects.filter(cluster=self):
+            if s.name not in corr['architecture'].keys():
+                Subunit.objects.get(cluster=self, name=s).delete()
         # Reorder subunits if necessary
         newOrder = [str(x) for x in corr['architecture'].keys()]
         self.reorderSubunits(newOrder)
         # Change domain properties if necessary
         for s,sdict in corr['architecture'].items():
-            for m,mdict in sdict.items():
+            for m,mdict_iters in sdict.items():
                 m = int(m) # Key is expected to be integer
-                for d,mdictv in mdict.items():
-                    ddict = mdictv['domains']
-                    self.setIterations(s, m, mdictv['iterations'])
+                mdict = mdict_iters['domains']
+                iters = mdict_iters['iterations']
+                self.setIterations(s, m, iters)
+                for d,ddict in mdict.items():
                     if d == 'AT':
                         self.setSubstrate(s, m, ddict['substrate'])
                     elif d == 'KR':
@@ -482,7 +486,10 @@ class AT(Domain):
             return prod
 
     def __str__(self):
-        return "substrate %s, loading %s" % (self.substrate, self.module.loading)
+        if self.module.iterations > 1:
+            return "substrate %s, loading %s, iterations %d" % (self.substrate, self.module.loading, self.module.iterations)
+        else:
+            return "substrate %s, loading %s" % (self.substrate, self.module.loading)
 
     def __repr__(self):
         return("AT")

@@ -48,6 +48,8 @@ antismash_to_database.py
 # Implement corrections to ClusterCAD #
 #######################################
 
+The folders ./data/corrections and ./data/corrections/modified will need to be created.
+
 These need to be done manually. Write JSON templates to the folder ./data/corrections
 using the script clustercad_templates.py. Then the template JSON files can be 
 manually updated. The changes to the database should be implemented using the script
