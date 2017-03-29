@@ -3,6 +3,15 @@
 import os,sys
 import glob
 import json
+from collections import OrderedDict
+
+from Bio import SeqIO
+
+sys.path.insert(0, '/clusterCAD')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
+import django
+django.setup()
+import pks.models
 
 def mibigSubtypes(filepath):
     '''Takes as input a file path and outputs set of all PKS subtypes that 
@@ -206,16 +215,15 @@ def checkModuleValidity(modulelist):
     else:
         return False
 
-def enterCluster(cluster, clusterfile, mibigfile):
-    '''Takes in a reference to a Django cluster object, as well as paths to an 
+def enterCluster(cluster, clusterrecord, mibigfile):
+    '''Takes in a reference to a Django cluster object, a record opened from a
        antiSMASH embl file and corresponding MiBiG JSON file, then uses these 
        enters cluster information into Django database.
     '''
 
-    # Read cluster annotations
-    record = SeqIO.read(clusterfile, "embl")
     # Get information about the gene
-    gene_data = processClusterSeqRecord(record)
+    gene_data = processClusterSeqRecord(clusterrecord)
+
     if len(gene_data) == 0:
         return
 
@@ -266,7 +274,7 @@ def enterCluster(cluster, clusterfile, mibigfile):
     # CREATE STANDALONE #
     #####################
 
-#            pks.models.Standalone(cluster=cluster_ref)
+#            pks.models.Standalone(cluster=cluster)
 #            standalones.append(pks.Standalone(geneid, genename, genedesc, 
 #                                              genestart, genestop, genetranslation))
     
@@ -372,7 +380,7 @@ def enterCluster(cluster, clusterfile, mibigfile):
             subunitdata = unordered_subunits_alt[subunit_key]
      
         if not alt:
-            subunit = pks.models.Subunit(cluster=cluster_ref,
+            subunit = pks.models.Subunit(cluster=cluster,
                                          genbankAccession=subunit_key,
                                          name=subunitdata[0],
                                          start=subunitdata[2],
@@ -380,7 +388,7 @@ def enterCluster(cluster, clusterfile, mibigfile):
                                          sequence=subunitdata[-1])
             subunit.save()
         else:
-            subunit = pks.models.Subunit(cluster=cluster_ref,
+            subunit = pks.models.Subunit(cluster=cluster,
                                          genbankAccession=subunitdata[0],
                                          name=subunit_key,
                                          start=subunitdata[2],
