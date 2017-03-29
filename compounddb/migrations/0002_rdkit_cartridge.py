@@ -24,10 +24,10 @@ class Migration(migrations.Migration):
                           'ADD PRIMARY KEY ("inchiKey");'),
         migrations.RunSQL('CREATE INDEX fps_apfp_idx ON rdk.fps USING gist (apfp);'),
         migrations.RunSQL('CREATE OR REPLACE FUNCTION get_ap_neighbors(smiles text) '\
-                          'RETURNS TABLE("inchiKey" character, m mol, similarity double precision) AS '\
+                          'RETURNS TABLE("inchiKey" character, similarity double precision) AS '\
                           '$$ '\
-                          'SELECT "inchiKey",m,tanimoto_sml(atompair_fp(mol_from_smiles($1::cstring)),apfp) AS similarity '\
-                          'FROM rdk.fps JOIN compounddb_compound USING ("inchiKey") '\
+                          'SELECT "inchiKey",tanimoto_sml(atompair_fp(mol_from_smiles($1::cstring)),apfp) AS similarity '\
+                          'FROM rdk.fps '\
                           'WHERE atompair_fp(mol_from_smiles($1::cstring))%apfp '\
                           'ORDER BY similarity DESC; '\
                           '$$ LANGUAGE SQL STABLE;'),

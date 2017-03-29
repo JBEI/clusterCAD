@@ -87,7 +87,6 @@ class Cluster(models.Model):
         moduleCounter = 0 
         for subunit in subunits:
             subunit.order = subunitCounter
-            print(subunit.order)
             subunit.save()
             subunitCounter += 1
 
