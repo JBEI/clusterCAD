@@ -52,10 +52,12 @@ class Cluster(models.Model):
         # Returns the entire structure of the cluster
         return [[x, x.architecture()] for x in self.subunits()]
 
-    def computeProduct(self, computeMCS=True):
+    def computeProduct(self, computeMCS=True, recompute=False):
         chain = []        
         for subunit in self.subunits():
             for module in subunit.modules():
+                if recompute:
+                    module.deleteProduct()
                 if len(chain) == 0:
                     chain.append(module.computeProduct())
                 else:
@@ -67,9 +69,10 @@ class Cluster(models.Model):
                 self.save()
         return chain
 
-    def reorderSubunits(self, newOrder):
+    def reorderSubunits(self, newOrder, recompute=True):
         '''Takes as input a list of subunit names and reordereds subunits within
            the gene cluster.
+           Recomputes final products in database if recompute=True
         '''
         for subunit in self.subunits():
             assert subunit.name in newOrder, 'Missing subunit %s.' %(subunit)
@@ -105,7 +108,8 @@ class Cluster(models.Model):
         newLoading.save()
 
         # compute new final products after reordering
-        self.computeProduct()
+        if recompute:
+            self.computeProduct(recompute=True)
 
         return self.subunits()
 
