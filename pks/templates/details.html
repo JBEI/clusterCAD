@@ -57,10 +57,14 @@
     <div class="panel-body">
         <div class="row">
             {% for module in subunit.1 %}
-            {% if module.1|length > 4 %}
-            <div class="col-md-4 col-sm-6">
+                {% if module.1|length == 5 %}
+                    <div class="col-md-4 col-sm-6">
                 {% else %}
-                <div class="col-md-3 col-sm-4">
+                    {% if module.1|length > 5 %}
+                        <div class="col-md-5 col-sm-6">
+                    {% else %}
+                        <div class="col-md-3 col-sm-4">
+                    {% endif %}
                 {% endif %}
                 module {{ module.0.order }}
                 <br/>
