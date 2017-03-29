@@ -28,9 +28,6 @@ class Compound(models.Model):
             return c.fetchone()[0]
 
     def save(self, *args, **kwargs):
-        # if this is the first save, add mols column to database
-        addMolsCol()
-
         # compute inchiKey from structure
         if not self.inchiKey:
             self.computeInchiKey()
@@ -74,51 +71,8 @@ def delete_fp(sender, instance, **kwargs):
     with connection.cursor() as c:
         c.execute('DELETE FROM rdk.fps WHERE "inchiKey" = \'%s\';' % instance.inchiKey)
 
-def addMolsCol():
-    # add RDKit mol column to database table
-
-    # if column already exists, return false
-    with connection.cursor() as cursor:
-        cursor.execute('SELECT * FROM compounddb_compound LIMIT 0;')
-        colnames = [desc[0] for desc in cursor.description]
-    if 'm' in colnames:
-        return False
-
-    # add indexed mol column
-    with connection.cursor() as c:
-        c.execute('CREATE EXTENSION IF NOT EXISTS rdkit;')
-        c.execute('CREATE SCHEMA IF NOT EXISTS rdk;')
-        c.execute('ALTER TABLE compounddb_compound '\
-                       'ADD COLUMN m mol;') 
-        c.execute('CREATE INDEX molidx ON compounddb_compound USING gist (m);')
-    return True
-
-def createFingerprintTable():
-    # add atom pair fingerprint table to database
-
-    with connection.cursor() as c:
-        c.execute('CREATE TABLE IF NOT EXISTS rdk.fps '\
-            '("inchiKey" character varying(27) NOT NULL, '\
-            'apfp sfp);')
-        c.execute('ALTER TABLE ONLY rdk.fps '\
-            'ADD PRIMARY KEY ("inchiKey");')
-        c.execute('CREATE INDEX fps_apfp_idx ON rdk.fps USING gist (apfp);')
-        
-        # define atom pair search function
-        c.execute('CREATE OR REPLACE FUNCTION get_ap_neighbors(smiles text) '\
-                  'RETURNS TABLE("inchiKey" character, m mol, similarity double precision) AS '\
-                  '$$ '\
-                  'SELECT "inchiKey",m,tanimoto_sml(atompair_fp(mol_from_smiles($1::cstring)),apfp) AS similarity '\
-                  'FROM rdk.fps JOIN compounddb_compound USING ("inchiKey") '\
-                  'WHERE atompair_fp(mol_from_smiles($1::cstring))%apfp '\
-                  'ORDER BY similarity DESC; '\
-                  '$$ LANGUAGE SQL STABLE;')
-
 def addFingerprint(inchiKey):
     with connection.cursor() as c:
-        c.execute('SELECT * FROM information_schema.tables WHERE table_schema = \'rdk\';')
-        if not c.fetchone():
-            createFingerprintTable()
         c.execute('SELECT "inchiKey" FROM rdk.fps WHERE "inchiKey" = \'%s\' LIMIT 1;' % inchiKey)
         if c.fetchone():
             return False
