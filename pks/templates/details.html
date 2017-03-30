@@ -39,7 +39,7 @@
         <dd>
         {% with architecture|last as lastsubunit %}
             {% with lastsubunit.1|last as lastmodule %}
-                <img style="width: 100% \9;" src="/compounddb/renderer/{{ cluster.knownProductSmiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/>
+                <img style="width: 100% \9;" alt="Known final product" data-smilesq="{{ cluster.knownProductSmiles|urlq }}" data-smiles="{{ cluster.knownProductSmiles }}" src="/compounddb/renderer/{{ cluster.knownProductSmiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/> 
             {% endwith %}
         {% endwith %}
         </dd>
@@ -51,7 +51,7 @@
         <dd>
         {% with architecture|last as lastsubunit %}
             {% with lastsubunit.1|last as lastmodule %}
-                <img style="width: 100% \9;" src="/compounddb/renderer/{{ lastmodule.0.product.smiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/>
+                <img style="width: 100% \9;" alt="Predicted final product" data-smilesq="{{ lastmodule.0.product.smiles|urlq }}" data-smiles="{{ lastmodule.0.product.smiles }}" src="/compounddb/renderer/{{ lastmodule.0.product.smiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/>
             {% endwith %}
         {% endwith %}
         </dd>
@@ -94,18 +94,7 @@
                     {% endfor %}
                 </div>
                 <br/>
-                <img style="width: 100% \9;" id="img_{{ subunit.0.order }}_{{ module.0.order }}" src="/compounddb/renderer/{{ module.0.product.smiles|urlq }}"/>
-                <script type="text/javascript">
-                $(document).ready(function(){
-                 $("#img_{{ subunit.0.order }}_{{ module.0.order }}").click(function(){
-                    $('#structureImg').attr("src", "/compounddb/renderer/{{ module.0.product.smiles|urlq }}");
-                    $('#structureTitle').text("{{ subunit.0 }} module {{ forloop.counter }} predicted product");
-                    $('#structureSMILES').text("{{ module.0.product.smiles }}");
-                    $('#searchButton').attr("href", "/structureSearch/?smiles={{ module.0.product.smiles|urlq }}");
-                    $('#structureView').modal('show');
-                 });
-                });
-                </script>
+                <img style="width: 100% \9;" alt="{{ subunit.0 }} module {{ module.0.order }} predicted product" data-smilesq="{{ module.0.product.smiles|urlq }}" data-smiles="{{ module.0.product.smiles }}" src="/compounddb/renderer/{{ module.0.product.smiles|urlq }}"/>
             </div>
             {% endfor %}
         </div>
@@ -180,6 +169,21 @@ $(document).ready(function(){
       }
     );
 
+    // code to enable structure zoom modal
+    $('[data-smiles]').click(function(){
+        $('#structureImg').attr("src", $( this ).attr("src"));
+        $('#structureTitle').text($( this ).attr("alt"));
+        $('#structureSMILES').text($( this ).attr("data-smiles"));
+        var searchUrl = "/structureSearch/?smiles="
+        $('#searchButton').attr("href", searchUrl.concat($( this ).attr("data-smilesq")));
+        $('#structureView').modal('show');
+    });
+    $('[data-smiles]').tooltip({
+      placement: 'bottom',
+      title: 'Click to zoom or obtain SMILES',
+      trigger: 'hover',
+    });
+
 // code to allow clipboard button
     var clipboard = new Clipboard('#copy');
     clipboard.on('success', function(e) {
@@ -207,7 +211,7 @@ $(document).ready(function(){
 </script>
 <script src="/static/js/clipboard.min.js"></script>
 
-<!-- Modal -->
+<!-- Structure Zoom Modal -->
 <div class="modal fade" id="structureView" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
