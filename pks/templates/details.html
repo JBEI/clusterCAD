@@ -22,6 +22,16 @@
             <dt>GenBank accession</dt>
             <dd><a href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a></dd>
         </dl>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="atcheck">Show AT annotations 
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="krcheck">Show KR annotations 
+            </label>
+          </div>
     </div>
     <div class="col-md-3 col-sm-4">
         <dl>
@@ -75,7 +85,11 @@
                 <div class="btn-group" role="group">
                     {% for domain in module.1 %}
                     {% with domain|classname as domainclass %}
-                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="{{ domain }}">{{ domainclass }}</button>
+                    {% if domainclass in notips %}
+                    <button type="button" class="btn btn-default" data-domain="{{ domainclass }}">{{ domainclass }}</button>
+                    {% else %}
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-domain="{{ domainclass }}" title="{{ domain }}">{{ domainclass }}</button>
+                    {% endif %}
                     {% endwith %}
                     {% endfor %}
                 </div>
@@ -102,7 +116,69 @@
 <script>
 $(document).ready(function(){
 // code to enable bootstrap tooltips
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-domain="AT"]').tooltip({
+      placement: 'bottom',
+      trigger: 'manual'
+    });
+    $('[data-domain="KR"]').tooltip({
+      placement: 'top',
+      trigger: 'manual'
+    });
+    $('[data-domain="DH"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="ER"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="cMT"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="oMT"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="TE"]').tooltip({
+      placement: 'right'
+    });
+
+    // code to enable domain popups on checkboxes
+    $("#atcheck").on("click", function() {
+        if($("#atcheck").is(':checked')){
+            $('[data-domain="AT"]').tooltip('show');
+        } else {
+            $('[data-domain="AT"]').tooltip('hide');
+        }
+    });
+    $("#krcheck").on("click", function() {
+        if($("#krcheck").is(':checked')){
+            $('[data-domain="KR"]').tooltip('show');
+        } else {
+            $('[data-domain="KR"]').tooltip('hide');
+        }
+    });
+
+    // keep tooltip up after hover if checkbox is checked 
+    $('[data-domain="AT"]').hover(
+      function() {
+        if(!($("#atcheck").is(':checked'))){
+            $( this ).tooltip('show');
+        }
+      }, function() {
+        if(!($("#atcheck").is(':checked'))){
+            $( this ).tooltip('hide');
+        }
+      }
+    );
+    $('[data-domain="KR"]').hover(
+      function() {
+        if(!($("#krcheck").is(':checked'))){
+            $( this ).tooltip('show');
+        }
+      }, function() {
+        if(!($("#krcheck").is(':checked'))){
+            $( this ).tooltip('hide');
+        }
+      }
+    );
 
 // code to allow clipboard button
     var clipboard = new Clipboard('#copy');
