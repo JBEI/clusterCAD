@@ -86,9 +86,9 @@
                     {% for domain in module.1 %}
                     {% with domain|classname as domainclass %}
                     {% if domainclass in notips %}
-                    <button type="button" class="btn btn-default" data-domain="{{ domainclass }}">{{ domainclass }}</button>
+                    <button type="button" class="btn btn-default" data-domainid="{{ domain.id }}" data-domain="{{ domainclass }}">{{ domainclass }}</button>
                     {% else %}
-                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-domain="{{ domainclass }}" title="{{ domain }}">{{ domainclass }}</button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-domainid="{{ domain.id }}" data-domain="{{ domainclass }}" title="{{ domain }}">{{ domainclass }}</button>
                     {% endif %}
                     {% endwith %}
                     {% endfor %}
@@ -208,6 +208,31 @@ $(document).ready(function(){
         $(btn).tooltip('hide');
       }, 1000);
     }
+
+    // enable domain modals
+    $('[data-domain]').click(function(){
+        var domainid = $( this ).attr("data-domainid");
+        $.ajax({
+                type: 'GET',
+                url: '/pks/domainLookup',
+                dataType: 'json',
+                success: function(data){
+                    $('#domainAASequence').text(data.AAsequence);
+                    $('#domainDNASequence').text(data.DNAsequence);
+                    $('#domainTitle').text(data.name);
+                    $('#domainStart').text(data.start);
+                    $('#domainStop').text(data.stop);
+                    if(data.annotations == 'domain') {
+                        $('#domainAnnotations').text("None");
+                    } else {
+                        $('#domainAnnotations').text(data.annotations);
+                    }
+                    $('#domainView').modal('show');
+                },
+                data: { domainid: domainid },
+                async: true
+        }); 
+    });
 </script>
 <script src="/static/js/clipboard.min.js"></script>
 
@@ -228,6 +253,53 @@ SMILES
 Copy to clipboard
 </button>
 <a href="#" id="searchButton" class="btn btn-default" role="button">Send to structure search</a>
+</div>
+
+                <img id="structureImg" class="img-responsive" style="width: 50%;" src=""/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Domain View Modal -->
+<div class="modal fade" id="domainView" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 id="domainTitle" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt style='white-space: normal;'>Subunit AA start</dt>
+            <dd id="domainStart"><dd>
+            <dt style='white-space: normal;'>Subunit AA stop</dt>
+            <dd id="domainStop"><dd>
+            <dt>Annotations</dt>
+            <dd id="domainAnnotations"><dd>
+        </dl>
+
+<div class="row">
+AA sequence
+<textarea id="domainAASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+<button id="copy" class="btn btn-default" data-clipboard-target="#domainAASequence">
+Copy to clipboard
+</button>
+</div>
+</div>
+
+<div class="row">
+Nucleotide sequence
+<textarea id="domainDNASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+<button id="copy" class="btn btn-default" data-clipboard-target="#domainDNASequence">
+Copy to clipboard
+</button>
+</div>
 </div>
 
                 <img id="structureImg" class="img-responsive" style="width: 50%;" src=""/>
