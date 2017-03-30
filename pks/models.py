@@ -439,7 +439,7 @@ starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             'isobut': chem.MolFromSmiles('CC(C)C(=O)[S]'),
             '2metbut': chem.MolFromSmiles('CCC(C)C(=O)[S]'),
             'CHC-CoA': chem.MolFromSmiles('C1CCCCC1C(=O)[S]'),
-            'trans-1,2-CPDA': chem.MolFromSmiles('C1[C@@H](C(=O)O)CC[C@@H]1C(=O)[S]'),
+            'trans-1,2-CPDA': chem.MolFromSmiles('C1CC[C@@H](C(=O)O)[C@@H]1C(=O)[S]'),
             'N/A': None
            }
 
