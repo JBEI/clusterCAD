@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render
 from model_utils.managers import InheritanceManager
 from django.http import HttpResponse
@@ -49,14 +50,33 @@ def domainLookup(request):
         try:
             domainid = request.GET['domainid']
             domain = Domain.objects.filter(id=int(domainid)).select_subclasses()[0]
-            # domain = Domain.objects.get(id=int(domainid))
             response = {
-                'name': '%s module %s %s domain' % (domain.module.subunit.cluster.description, domain.module.order, repr(domain)),
+                'name': '%s subunit %s module %s: %s domain' % (domain.module.subunit.cluster.description, domain.module.subunit.name, domain.module.order, repr(domain)),
                 'start': str(domain.start),
                 'stop': str(domain.stop),
                 'annotations': str(domain),
                 'AAsequence': domain.getAminoAcidSequence(),
                 'DNAsequence': domain.getNucleotideSequence(),
+            }
+        except:
+            raise Http404
+        return HttpResponse(dumps(response), 'text/json')
+    else:
+        raise Http404
+
+def subunitLookup(request):
+    if request.is_ajax():
+        try:
+            subunitid = request.GET['subunitid']
+            subunit = Subunit.objects.get(id=int(subunitid))
+            response = {
+                'name': '%s subunit %s' % (subunit.cluster.description, subunit.name),
+                'start': str(subunit.start),
+                'stop': str(subunit.stop),
+                'genbankAccession': subunit.genbankAccession,
+                'genbankAccessionShort': re.sub("\.\d+$", "", subunit.genbankAccession),
+                'AAsequence': subunit.getAminoAcidSequence(),
+                'DNAsequence': subunit.getNucleotideSequence(),
             }
         except:
             raise Http404
