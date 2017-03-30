@@ -10,15 +10,12 @@ import django
 django.setup()
 import pks.models
 
-with open('./data/blast/subunits.fasta', 'wb') as f:
+with open('/clusterCAD/pipeline/data/blast/clustercad_subunits', 'w') as f:
     for cluster in pks.models.Cluster.objects.all():
-        index = 0
         for subunit in cluster.subunits():
-            acc = subunit.genbankAccession.split('.')
-            modacc = acc[0] + '.' + str(index + int(acc[1]))
-            index += 1
+            modacc = cluster.mibigAccession + '_' + subunit.name
             sseq = SeqRecord.SeqRecord(Seq.Seq(subunit.sequence, IUPAC.protein),
-                                       id='gb|' + modacc,
+                                       id=modacc,
                                        name=subunit.name,
                                        description=''
                                       )

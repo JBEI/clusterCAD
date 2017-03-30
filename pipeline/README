@@ -73,26 +73,14 @@ three modules or lack a computable product.
 
 It will be necessary to make the folder ./data/blast/.
 
-Use script blast_database.py to generate Fasta file containing all known subunits.
+Use script blast_database.py to generate fasta file containing all known subunits. File
+will be generated in file ./data/blast/clustercad_subunits. Sequence IDs are 
+mibigAccession_subunit.name.
 
+makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
 
+The database can then be searched using the blasp command, with options adjusted as per:
+https://www.ncbi.nlm.nih.gov/books/NBK279675/
 
-Download executables
-ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
-
-BLAST programs expect BLASTDB to be located in working directory
-
-Build BLAST database from FASTA file
--Text in the definition line will be stored and displayed, but 
- cannot be used to get or filter the sequences by default. To
- enable this feature, the -parse_seqids flag must be used when
- invoking makeblastdb
--The following format is chsoen for the sequence ID: 
- gb|genbankAccession   # note that this refers to the subunit sequence ID
--Amino acid sequences for all subunits were written to the single 
- FASTA file , and a database generated as follows
- $ makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
-
-Search database use blastp
-Options can be adjusted as per https://www.ncbi.nlm.nih.gov/books/NBK279675/
-blastp -db clustercad_subunits -query query-max_target_seqs 10 -max_hsps=3 -outfmt "10 sseqid qstart qend sstart ssend evalue"
+Queries can be compared against the database using the following command:
+blastp -db clustercad_subunits -max_target_seqs 10 -max_hsps 4 -outfmt "10 sseqid qstart qend sstart send evalue" -query <(echo -e "ARNDCEQGHILKMFPSTWYV")
