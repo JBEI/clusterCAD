@@ -171,6 +171,11 @@ $(document).ready(function(){
 
     // code to enable structure zoom modal
     $('[data-smiles]').click(function(){
+        $('#atcheck').prop('checked', false);
+        $('[data-domain="AT"]').tooltip('hide');
+        $('#krcheck').prop('checked', false);
+        $('[data-domain="KR"]').tooltip('hide');
+
         $('#structureImg').attr("src", $( this ).attr("src"));
         $('#structureTitle').text($( this ).attr("alt"));
         $('#structureSMILES').text($( this ).attr("data-smiles"));
@@ -211,6 +216,11 @@ $(document).ready(function(){
 
     // enable domain modals
     $('[data-domain]').click(function(){
+        $('#atcheck').prop('checked', false);
+        $('[data-domain="AT"]').tooltip('hide');
+        $('#krcheck').prop('checked', false);
+        $('[data-domain="KR"]').tooltip('hide');
+
         var domainid = $( this ).attr("data-domainid");
         $.ajax({
                 type: 'GET',
@@ -236,6 +246,11 @@ $(document).ready(function(){
 
     // enable subunit modals
     $('[data-subunitid]').click(function(){
+        $('#atcheck').prop('checked', false);
+        $('[data-domain="AT"]').tooltip('hide');
+        $('#krcheck').prop('checked', false);
+        $('[data-domain="KR"]').tooltip('hide');
+
         var subunitid = $( this ).attr("data-subunitid");
         $.ajax({
                 type: 'GET',
