@@ -12,7 +12,10 @@ import pks.models
 for cluster in pks.models.Cluster.objects.all():
     nmodules = 0
     for subunit in cluster.subunits():
-        nmodules += len(subunit.modules())
+        nsubmodules = len(subunit.modules())
+        if nsubmodules == 0:
+            subunit.delete()
+        nmodules += nsubmodules
     if nmodules < 3:
         print('%s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
