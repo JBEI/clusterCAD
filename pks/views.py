@@ -37,6 +37,7 @@ def details(request, mibigAccession):
             'cluster': cluster, 
             'architecture': cluster.architecture(),
             'mark': mark,
+            'notips': ('KS', 'ACP', 'PCP'),
     }
 
     return render(request, 'details.html', context)
