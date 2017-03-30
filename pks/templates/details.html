@@ -17,10 +17,10 @@
     <div class="col-md-3 col-sm-4">
         <dl>
             <dt>MIBiG accession</dt>
-            <dd><a href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a></dd>
+            <dd><a target="_blank" href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a></dd>
 
             <dt>GenBank accession</dt>
-            <dd><a href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a></dd>
+            <dd><a target="_blank" href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a></dd>
         </dl>
           <div class="checkbox">
             <label>
@@ -60,11 +60,11 @@
 </div>
 
 {% for subunit in architecture %}
-<div class="panel panel-default">
-    <div id={{ subunit.0.name }}  class="panel-heading">
+<ul id="{{ subunit.0.name }}" class="list-group">
+ <a data-subunitid="{{ subunit.0.id }}" class="list-group-item list-group-item-info">
         {{ subunit.0 }}
-    </div>
-    <div class="panel-body">
+ </a>
+ <li class="list-group-item">
         <div class="row">
             {% for module in subunit.1 %}
                 {% if module.1|length == 5 %}
@@ -94,12 +94,12 @@
                     {% endfor %}
                 </div>
                 <br/>
-                <img style="width: 100% \9;" alt="{{ subunit.0 }} module {{ module.0.order }} predicted product" data-smilesq="{{ module.0.product.smiles|urlq }}" data-smiles="{{ module.0.product.smiles }}" src="/compounddb/renderer/{{ module.0.product.smiles|urlq }}"/>
+                <img style="width: 100% \9;" alt="{{ cluster.description }} subunit {{ subunit.0 }} module {{ module.0.order }}: predicted product" data-smilesq="{{ module.0.product.smiles|urlq }}" data-smiles="{{ module.0.product.smiles }}" src="/compounddb/renderer/{{ module.0.product.smiles|urlq }}"/>
             </div>
             {% endfor %}
-        </div>
-    </div>
 </div>
+</li>
+</ul>
 {% endfor %}
 
 <script>
@@ -233,6 +233,29 @@ $(document).ready(function(){
                 async: true
         }); 
     });
+
+    // enable subunit modals
+    $('[data-subunitid]').click(function(){
+        var subunitid = $( this ).attr("data-subunitid");
+        $.ajax({
+                type: 'GET',
+                url: '/pks/subunitLookup',
+                dataType: 'json',
+                success: function(data){
+                    $('#subunitAASequence').text(data.AAsequence);
+                    $('#subunitDNASequence').text(data.DNAsequence);
+                    $('#subunitTitle').text(data.name);
+                    $('#subunitStart').text(data.start);
+                    $('#subunitStop').text(data.stop);
+                    $('#subunitGenbankAccession').text(data.genbankAccession);
+                    var proteinBase = 'https://www.ncbi.nlm.nih.gov/protein/';
+                    $('#subunitGenbankAccession').attr("href", proteinBase.concat(data.genbankAccessionShort));
+                    $('#subunitView').modal('show');
+                },
+                data: { subunitid: subunitid },
+                async: true
+        }); 
+    });
 </script>
 <script src="/static/js/clipboard.min.js"></script>
 
@@ -258,7 +281,7 @@ Copy to clipboard
                 <img id="structureImg" class="img-responsive" style="width: 50%;" src=""/>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -308,7 +331,57 @@ Copy to clipboard
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Subunit View Modal -->
+<div class="modal fade" id="subunitView" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 id="subunitTitle" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt style='white-space: normal;'>Cluster nucleotide start</dt>
+            <dd id="subunitStart"><dd>
+            <dt style='white-space: normal;'>Cluster nucleotide stop</dt>
+            <dd id="subunitStop"><dd>
+            <dt>GenBank accession</dt>
+            <dd><a target="_blank" href="" id="subunitGenbankAccession"></a></dd>
+        </dl>
+
+<dl>
+<dt>
+AA sequence
+</dt>
+<dd>
+<textarea id="subunitAASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+<button id="copy" class="btn btn-default" data-clipboard-target="#subunitAASequence">
+Copy to clipboard
+</button>
+</dd>
+
+<dt>
+Nucleotide sequence
+</dt>
+<dd>
+<textarea id="subunitDNASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+<button id="copy" class="btn btn-default" data-clipboard-target="#subunitDNASequence">
+Copy to clipboard
+</button>
+</dd>
+</dl>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
