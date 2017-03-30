@@ -87,6 +87,7 @@
                     $('#structureImg').attr("src", "/compounddb/renderer/{{ module.0.product.smiles|urlq }}");
                     $('#structureTitle').text("{{ subunit.0 }} module {{ forloop.counter }} predicted product");
                     $('#structureSMILES').text("{{ module.0.product.smiles }}");
+                    $('#searchButton').attr("href", "/structureSearch/?smiles={{ module.0.product.smiles|urlq }}");
                     $('#structureView').modal('show');
                  });
                 });
@@ -142,9 +143,12 @@ $(document).ready(function(){
 
 SMILES
 <textarea id="structureSMILES" class="form-control" rows="2"></textarea>
-<button id="copy" class="btn" data-clipboard-target="#structureSMILES">
+<div class="btn-group" role="group">
+<button id="copy" class="btn btn-default" data-clipboard-target="#structureSMILES">
 Copy to clipboard
 </button>
+<a href="#" id="searchButton" class="btn btn-default" role="button">Send to structure search</a>
+</div>
 
                 <img id="structureImg" class="img-responsive" style="width: 50%;" src=""/>
       </div>
