@@ -13,7 +13,12 @@ import pks.models
 with open('/clusterCAD/pipeline/data/blast/clustercad_subunits', 'w') as f:
     for cluster in pks.models.Cluster.objects.all():
         for subunit in cluster.subunits():
-            modacc = cluster.mibigAccession + '_' + subunit.name.split()[0] + '_' + str(subunit.order)
+            namesplit = subunit.name.split()
+            namefirst = namesplit[0]
+            namelast = namesplit[-1]
+            if namefirst != namelast:
+                namefirst += namelast
+            modacc = cluster.mibigAccession + '_' + namefirst
             sseq = SeqRecord.SeqRecord(Seq.Seq(subunit.sequence, IUPAC.protein),
                                        id=modacc,
                                        name=subunit.name,
