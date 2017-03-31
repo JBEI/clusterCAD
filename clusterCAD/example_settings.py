@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'pks',
     'compounddb',
     'structureSearch',
+    'sequenceSearch',
 ]
 
 MIDDLEWARE = [
