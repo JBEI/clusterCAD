@@ -45,13 +45,14 @@ for accession in mibigaccessions:
 
     # Read antiSMASH annotations for cluster
     record = SeqIO.read(clusterfile, "embl")
+    description = record.description.replace(' biosynthetic gene cluster', '')
 
     # Get compound information
     try:
         compound = allknowncompounds[accession]
     # If compound is missing, we skip the cluster
     except KeyError:
-        print('Missing compound %s.' %(accession))
+        print('Missing compound %s: %s.' %(accession, description))
         continue
     knownproductsmiles = compound[0][0]
     knownproductsource = compound[1]
@@ -61,7 +62,7 @@ for accession in mibigaccessions:
         cluster = pks.models.Cluster(
             genbankAccession=record.annotations['comment'].split()[-1].strip().strip('.'), \
             mibigAccession=record.id, \
-            description=record.description.replace(' biosynthetic gene cluster', ''), \
+            description=description, \
             sequence=record.seq,
             knownProductSmiles=knownproductsmiles,
             knownProductSource=knownproductsource

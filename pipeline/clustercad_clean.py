@@ -16,6 +16,13 @@ for cluster in pks.models.Cluster.objects.all():
         if nsubmodules == 0:
             subunit.delete()
         nmodules += nsubmodules
+    # Recompute product once invalid clusters have been deleted
+    try:
+        cluster.computeProduct(recompute=True)
+    except:
+        cluster.delete()
+        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        continue
     if nmodules < 3:
         print('%s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
