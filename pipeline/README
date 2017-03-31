@@ -74,7 +74,7 @@ It will be necessary to make the folder ./data/blast/.
 
 Use script blast_database.py to generate fasta file containing all known subunits. File
 will be generated in file ./data/blast/clustercad_subunits. Sequence IDs are 
-mibigAccession_subunit.name.
+mibigAccession_${subunit.name.split()[0]}_${subunit.order}
 
 makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
 
