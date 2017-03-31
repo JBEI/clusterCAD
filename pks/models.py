@@ -421,10 +421,6 @@ class Domain(models.Model):
     # query all Domain subclasses
     objects = InheritanceManager()
 
-    def getNucleotideSequence(self):
-        sequence = self.module.subunit.getNucleotideSequence()
-        return sequence[self.start*3:self.stop*3]
-
     def getAminoAcidSequence(self):
         sequence = self.module.subunit.getAminoAcidSequence()
         return sequence[self.start:self.stop]
