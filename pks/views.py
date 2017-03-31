@@ -56,7 +56,6 @@ def domainLookup(request):
                 'stop': str(domain.stop),
                 'annotations': str(domain),
                 'AAsequence': domain.getAminoAcidSequence(),
-                'DNAsequence': domain.getNucleotideSequence(),
             }
         except:
             raise Http404
