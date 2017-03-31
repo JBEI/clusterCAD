@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% load domainFilters %}
+
+{% block js_content %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+    $("[data-toggle=popover]").popover({ trigger: 'hover' });
+});
+</script>
+{% endblock %}
+
+{% block subtitle %}
+Similarity hits
+{% endblock %}
+
+{% block content %}
+<h2>Subunit amino acid sequence blast hits</h2>
+
+<div class="row-fluid">
+<div class="col-md-12">
+<dl class="dl-horizontal">
+<dt>Query sequence</dt>
+<dd>
+<textarea class="form-control" rows="6">{{ aainput }}</textarea>
+</dd>
+<dt>Maximum E-value</dt>
+<dd>{{ evalue }} </dd>
+<dt>Max hits returned</dt>
+<dd>{{ maxHits }} </dd>
+</dl>
+</div>
+</div><!--/row-->
+
+<div class="row-fluid">
+<div class="col-md-12">
+<table class="table table-hover">
+<thead>
+<tr>
+    <th class="text-right">
+        Hit 
+    </th>
+    <th>
+        Cluster
+    </th>
+    <th>
+        Subunit
+    </th>
+    <th class="text-right">
+        HSP
+    </th>
+    <th class="text-right">
+       E-value 
+    </th>
+    <th class="text-right">
+       Bit 
+    </th>
+    <th class="text-right">
+       Query 
+    </th>
+    <th class="text-right">
+       Subject 
+    </th>
+    <th class="text-right">
+        Modules
+    </th>
+</tr>
+</thead>
+<tbody>
+{% for alignment in alignments %}
+ <tr>
+<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/#{{ alignment.subunit.name }}">
+        <td class="text-right" rowspan="{{ alignment.hsps|length }}">
+            {{ forloop.counter }}
+        </td>
+        <td rowspan="{{ alignment.hsps|length }}">
+            {{ alignment.subunit.cluster.mibigAccession }}
+            {{ alignment.subunit.cluster.description }}
+        </td>
+        <td rowspan="{{ alignment.hsps|length }}">
+            {{ alignment.subunit.name }}
+        </td>
+        {% for hsp in alignment.hsps %}
+            {% if forloop.counter != 1 %}
+            <tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/#{{ alignment.subunit.name }}">
+            {% endif %}
+            <td class="text-right">
+                {{ forloop.counter }}
+            </td>
+            <td class="text-right">
+                {{ hsp.hsp.expect|sigfig }}
+            </td>
+            <td class="text-right">
+                {{ hsp.hsp.bits }}
+            </td>
+            <td class="text-right">
+                {{ hsp.hsp.query_start }}..{{ hsp.hsp.query_end }}
+            </td>
+            <td class="text-right">
+                {{ hsp.hsp.sbjct_start }}..{{ hsp.hsp.sbjct_end }}
+            </td>
+            <td class="text-right">
+            {% if hsp.modules|length == 0 %}
+                N/A
+            {% endif %}
+            {% for module in hsp.modules %}
+                {% if forloop.counter != 1 %}
+                ,
+                {% endif %}
+                {{ module.module.order }} (
+                {% for domain in module.domains %}
+                    {% if forloop.counter != 1 %}
+                    ,
+                    {% endif %}
+                    {{ domain|classname }}
+                {% endfor %}
+                )
+            {% endfor %}
+            </td>
+        {% endfor %}
+
+{% endfor %}
+{% for compound in moduleHits %}
+    <tr class="clickable-row" data-container="body" data-href="/pks/{{ compound.modules.0.subunit.cluster.mibigAccession }}/?mark={{ compound.modules.0.order }};#{{ compound.modules.0.subunit.name }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
+        <td rowspan="{{ compound.modules|length }}">
+            {{ forloop.counter }}
+        </td>
+        <td rowspan="{{ compound.modules|length }}">
+            {{ compound.similarity|floatformat:-3 }}
+        </td>
+        {% for module in compound.modules %}
+            {% if forloop.counter != 1 %} 
+                <tr class="clickable-row" data-container="body" data-href="/pks/{{ module.subunit.cluster.mibigAccession }}/?mark={{ module.order }};#{{ module.subunit.name }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
+            {% endif %}
+            <td>{{ module.subunit.cluster.mibigAccession }}</td>
+            <td>{{ module.subunit.cluster }}</td>
+            <td>{{ module.subunit.name }}</td>
+            <td>{{ module }}</td>
+            </tr>
+        {% endfor %} 
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+{% endblock %}
