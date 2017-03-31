@@ -15,5 +15,6 @@ correctiontargets = ['BGC0000029.1', 'BGC0000031.1', 'BGC0000042.1',
                      'BGC0001381.1']
 
 for acc in correctiontargets:
+    print('Getting template for cluster %s' %(acc))
     cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
     cluster.clusterJSON(correctionpath)
