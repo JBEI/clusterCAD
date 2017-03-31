@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os, sys
 from Bio import Seq, SeqRecord, SeqIO
@@ -13,7 +13,7 @@ import pks.models
 with open('/clusterCAD/pipeline/data/blast/clustercad_subunits', 'w') as f:
     for cluster in pks.models.Cluster.objects.all():
         for subunit in cluster.subunits():
-            modacc = cluster.mibigAccession + '_' + subunit.name.split()[0] + '_' + str(subunit.order)
+            modacc = cluster.mibigAccession + '_' + str(subunit.id) 
             sseq = SeqRecord.SeqRecord(Seq.Seq(subunit.sequence, IUPAC.protein),
                                        id=modacc,
                                        name=subunit.name,

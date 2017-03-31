@@ -29,3 +29,7 @@ def stripTrailingVersion(accession):
 @register.filter
 def urlq(str):
     return urlquote(str)
+
+@register.filter
+def sigfig(inputFloat):
+    return '%s' % float('%.3g' % inputFloat)
