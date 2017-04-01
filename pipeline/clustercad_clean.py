@@ -16,7 +16,7 @@ for cluster in pks.models.Cluster.objects.all():
         if nsubmodules == 0:
             subunit.delete()
         nmodules += nsubmodules
-    # Recompute product once invalid clusters have been deleted
+    # Recompute product once invalid subunits have been deleted
     try:
         cluster.computeProduct(recompute=True)
     except:
@@ -36,7 +36,8 @@ for cluster in pks.models.Cluster.objects.all():
         cluster.delete()
 
 # Delete clusters we've decided not to fix
-rejectclusters = []
+# BGC0000110.1 rejected because it has an atypical non-AT start
+rejectclusters = ['BGC0000110.1']
 for acc in rejectclusters:
     cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
     print('%s: %s' %(cluster.mibigAccession, cluster.description))

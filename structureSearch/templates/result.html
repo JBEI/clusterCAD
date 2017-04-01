@@ -21,23 +21,15 @@ Similarity hits
 <h2>Predicted intermediate structure similarity hits</h2>
 
 <div class="row-fluid">
-<div class="col-xs-8 col-sm-7 col-md-6 col-lg-5">
-<table class="table table-bordered table-condensed">
-<tbody>
-<tr>
-    <th>Query structure</th>
-    <td><img src="/compounddb/renderer/{{ querySmiles }}?align=False"/></td>
-</tr>
-<tr>
-    <th>Minimum similarity cutoff</th>
-    <td>{{ minSim }}</td>
-</tr>
-<tr>
-    <th>Max compounds returned</th>
-    <td>{{ maxHits }}</td>
-</tr>
-</tbody>
-</table>
+<div class="col-md-12">
+<dl class="dl-horizontal">
+<dt>Query structure</dt>
+<dd><img src="/compounddb/renderer/{{ querySmiles }}?align=False"/></dd>
+<dt>Minimum similarity</dt>
+<dd>{{ minSim }}</dd>
+<dt>Max compounds</dt>
+<dd>{{ maxHits }}</dd>
+</dl>
 </div>
 </div><!--/row-->
 

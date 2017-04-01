@@ -65,7 +65,7 @@ Similarity hits
        Subject 
     </th>
     <th class="text-right">
-        Modules
+        Modules (domains)
     </th>
 </tr>
 </thead>
@@ -106,19 +106,7 @@ Similarity hits
             {% if hsp.modules|length == 0 %}
                 N/A
             {% endif %}
-            {% for module in hsp.modules %}
-                {% if forloop.counter != 1 %}
-                ,
-                {% endif %}
-                {{ module.module.order }} (
-                {% for domain in module.domains %}
-                    {% if forloop.counter != 1 %}
-                    ,
-                    {% endif %}
-                    {{ domain|classname }}
-                {% endfor %}
-                )
-            {% endfor %}
+            {% for module in hsp.modules %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}{{ domain|classname }}{% endfor %}){% endfor %}
             </td>
         {% endfor %}
 
