@@ -267,7 +267,7 @@ class Subunit(models.Model):
         return [[x, x.domains()] for x in self.modules()]
 
     def getNucleotideSequence(self):
-        return self.cluster.sequence[self.start:self.stop]
+        return self.cluster.sequence[(self.start - 1):self.stop]
 
     def getAminoAcidSequence(self):
         return self.sequence
@@ -423,7 +423,7 @@ class Domain(models.Model):
 
     def getAminoAcidSequence(self):
         sequence = self.module.subunit.getAminoAcidSequence()
-        return sequence[self.start:self.stop]
+        return sequence[(self.start - 1):self.stop]
 
 # dict of supported starter units
 starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
