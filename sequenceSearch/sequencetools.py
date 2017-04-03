@@ -1,6 +1,5 @@
 import os
 from io import StringIO
-from textwrap import wrap
 from Bio.Blast.Applications import NcbiblastpCommandline
 from Bio.Blast import NCBIXML
 from Bio.Alphabet import IUPAC
@@ -57,7 +56,7 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
         for hsp in alignment.hsps:
             domains = Domain.objects.filter(module__subunit=subunit, 
                                             stop__gte=hsp.sbjct_start,
-                                            start__lte=hsp.sbjct_end).select_subclasses() 
+                                            start__lte=hsp.sbjct_end).select_subclasses().order_by('start') 
             modules = list(set([domain.module for domain in domains]))
             modules = sorted(modules, key=lambda module: module.order)
             modules = [{'module': module, 'domains': list(domains.filter(module=module))} for module in modules]
