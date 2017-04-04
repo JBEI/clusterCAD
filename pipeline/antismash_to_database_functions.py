@@ -113,7 +113,8 @@ def processSubunitModules(sec_met):
             # We end up excluding any subunit that has a non-recognized catalytic domain
             break    
         # Get the boundaries of the catalytic domain
-        boundaries = [int(bound) for bound in domainsplit[3].replace( \
+        # AntiSMASH seems to position these starting at 0, so we add 1 here
+        boundaries = [int(bound) + 1 for bound in domainsplit[3].replace( \
           '(', '').replace(')', '').replace('.', '').split('-')]
         
         # Here, we add each domain to a list, which will be converted to an OrderedDict
@@ -196,7 +197,7 @@ def processClusterSeqRecord(record):
                     subunit_modules = processSubunitModules(feature.qualifiers['sec_met'])
 
             # Append description and position of gene within nucleotide sequence
-            gene_data[-1].extend([description, [location.start.position, location.end.position]])
+            gene_data[-1].extend([description, [location.start.position + 1, location.end.position]])
 
             # Subunit information (if no subunit information, assumed to be a standalone enzyme)
             if subunit_modules:
