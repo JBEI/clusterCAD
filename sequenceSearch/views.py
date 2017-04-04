@@ -3,6 +3,7 @@ from django.utils.http import urlunquote, urlquote
 from django.contrib import messages
 from . import sequencetools
 from django.http import Http404
+from pks.models import AT, KR
 
 def search(request):
     if request.method != 'POST':
@@ -34,7 +35,9 @@ def search(request):
         'alignments': alignments,
         'aainput': input,
         'evalue': str(evalue),
-        'maxHits': str(maxHits)
+        'maxHits': str(maxHits),
+        'atsubstrates': AT.SUBSTRATE_CHOICES,
+        'krtypes': KR.TYPE_CHOICES,
     }
     
     return render(request, 'sequenceresult.html', context)    
