@@ -4,11 +4,9 @@ from django.utils.http import urlunquote, urlquote
 from django.contrib import messages
 from . import sequencetools
 from django.http import Http404
-from django.views.decorators.cache import cache_page
 
 from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit
 
-@cache_page(60 * 60 * 24 * 7) # cache for one week
 def search(request):
     if request.method != 'POST':
         if 'aainput' in request.GET:
