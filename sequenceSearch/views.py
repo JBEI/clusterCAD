@@ -48,7 +48,7 @@ def search(request):
 
     context = {
         'alignments': alignments,
-        'aainput': input,
+        'queryResidues': len(input),
         'evalue': str(evalue),
         'maxHits': str(maxHits),
         'atsubstrates': atsubstrates,

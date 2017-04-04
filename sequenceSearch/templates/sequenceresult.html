@@ -18,14 +18,14 @@ Similarity hits
 {% endblock %}
 
 {% block content %}
-<h2>Subunit amino acid sequence blast hits</h2>
+<h2>Subunit amino acid sequence blastp hits</h2>
 
 <div class="row-fluid">
 <div class="col-md-12">
 <dl class="dl-horizontal">
-<dt>Query sequence</dt>
+<dt>Query residues</dt>
 <dd>
-<textarea class="form-control" rows="6">{{ aainput }}</textarea>
+{{ queryResidues }}
 </dd>
 <dt>Maximum E-value</dt>
 <dd>{{ evalue }} </dd>
