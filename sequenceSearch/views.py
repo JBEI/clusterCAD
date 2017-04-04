@@ -3,7 +3,7 @@ from django.utils.http import urlunquote, urlquote
 from django.contrib import messages
 from . import sequencetools
 from django.http import Http404
-from pks.models import AT, KR
+from pks.models import AT, KR, DH, ER, cMT, oMT, TE
 
 def search(request):
     if request.method != 'POST':
@@ -31,13 +31,30 @@ def search(request):
         messages.error(request, 'No hits - please refine query!')
         return render(request, 'sequencesearch.html')
 
+    # get domain options to display in UI
+    domains = [domain for alignment in alignments for hsp in alignment['hsps'] for module in hsp['modules'] for domain in module['domains']]
+    ats = list(filter(lambda d: isinstance(d, AT), domains))
+    atsubstrates = list(set([at.substrate for at in ats]))
+    krs = list(filter(lambda d: isinstance(d, KR), domains))
+    krtypes = list(set([kr.type for kr in krs]))
+    boolDomains = []
+    for domain in (DH, ER, cMT, oMT):
+        thesedomains = list(filter(lambda d: isinstance(d, domain), domains))
+        typelist = list(set([str(d) for d in thesedomains]))
+        if len(typelist) > 0:
+            boolDomains.append((domain.__name__, typelist))
+    tes = list(filter(lambda d: isinstance(d, TE), domains))
+    tetypes = list(set([str(te) for te in tes]))
+
     context = {
         'alignments': alignments,
         'aainput': input,
         'evalue': str(evalue),
         'maxHits': str(maxHits),
-        'atsubstrates': AT.SUBSTRATE_CHOICES,
-        'krtypes': KR.TYPE_CHOICES,
+        'atsubstrates': atsubstrates,
+        'krtypes': krtypes,
+        'boolDomains': boolDomains,
+        'tetypes': tetypes,
     }
     
     return render(request, 'sequenceresult.html', context)    

@@ -37,72 +37,62 @@ Similarity hits
 
 <script>
 $(document).ready(function(){
-    $('[data-domain]').click(function(){
-       var domain = $( this ).attr("data-domain");
-       var type = $( this ).attr("data-type");
-       $('[data-domain="' + domain + '"]').attr("style", "background-color: transparent;"); 
-       $('[data-domain="' + domain + '"][data-type="' + type + '"]').attr("style", "background-color: orange;"); 
+    $('[data-domainselect]').change(function(){
+       var domain = $(this).attr("data-domainselect");
+       var types = $(this).selectpicker('val');
+       $('[data-domain="' + domain + '"]').attr("style", "padding: 0; background-color: transparent;"); 
+       $.each(types, function(index,value){
+            if (value){
+                $('[data-domain="' + domain + '"][data-type="' + value + '"]').attr("style", "padding: 0; background-color: orange;"); 
+            }
+       });
     });
 });
 </script>
 
 <div class="row-fluid">
-<h3><small>Highlight domains</small></h3>
 <div class="btn-group" role="group">
+
+  {% if atsubstrates|length > 0 %}
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-     AT 
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
+    <select data-domainselect="AT" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight AT substrates" data-selected-text-format="count">
       {% for substrate in atsubstrates %}
-      <li><a data-domain="AT" data-type="{{ substrate.0 }}">Substrate {{ substrate.0 }}</a></li>
+      <option value="{{ substrate }}">AT substrate {{ substrate }}</option>
       {% endfor %}
-      <li><a data-domain="AT" data-type="clear">Clear highlighting</a></li>
-    </ul>
+    </select>
   </div>
+  {% endif %}
+
+  {% if krtypes|length > 0 %}
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      KR 
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
+    <select data-domainselect="KR" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight KR types" data-selected-text-format="count">
       {% for type in krtypes %}
-      <li><a data-domain="KR" data-type="{{ type.0 }}">Type {{ type.0 }}</a></li>
+      <option value="{{ type }}">KR type {{ type }}</option>
       {% endfor %}
-      <li><a data-domain="KR" data-type="clear">Clear highlighting</a></li>
-    </ul>
+    </select>
   </div>
+  {% endif %}
+
+  {% for domaintype in boolDomains %}
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      DH 
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a>Active</a></li>
-      <li><a>Inactive</a></li>
-    </ul>
+    <select data-domainselect="{{ domaintype.0 }}" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight {{ domaintype.0 }} types" data-selected-text-format="count">
+      {% for type in domaintype.1 %}
+      <option value="{{ type }}">{{ domaintype.0 }} type {{ type }}</option>
+      {% endfor %}
+    </select>
   </div>
+  {% endfor %}
+
+  {% if tetypes|length > 0 %}
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      ER 
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a>Active</a></li>
-      <li><a>Inactive</a></li>
-    </ul>
+    <select data-domainselect="TE" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight TE types" data-selected-text-format="count">
+      {% for type in tetypes %}
+      <option value="{{ type }}">TE type {{ type }}</option>
+      {% endfor %}
+    </select>
   </div>
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      cMT 
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a>Active</a></li>
-      <li><a>Inactive</a></li>
-    </ul>
-  </div>
+  {% endif %}
+
 </div>
 </div>
 
@@ -176,7 +166,7 @@ $(document).ready(function(){
             {% if hsp.modules|length == 0 %}
                 N/A
             {% endif %}
-            {% for module in hsp.modules %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" %}data-type="{{ domain.type }}"{% endif %}{% if domain|classname == "AT" %}data-type="{{ domain.substrate }}"{% endif %} style="background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
+            {% for module in hsp.modules %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" %}data-type="{{ domain.type }}"{% elif domain|classname == "AT" %}data-type="{{ domain.substrate }}"{% else %}data-type="{{ domain }}"{% endif %} style="padding:0; background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
             </td>
         {% endfor %}
 </tr>
