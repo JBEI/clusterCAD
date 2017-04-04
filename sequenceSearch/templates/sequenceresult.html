@@ -132,7 +132,7 @@ $(document).ready(function(){
 </thead>
 <tbody>
 {% for alignment in alignments %}
-<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/#{{ alignment.subunit.name }}">
+<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if alignment.hsps.0.modules|length > 0 %}?mark={% for module in alignment.hsps.0.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
         <td class="text-right" rowspan="{{ alignment.hsps|length }}">
             {{ forloop.counter }}
         </td>
@@ -145,7 +145,7 @@ $(document).ready(function(){
         </td>
         {% for hsp in alignment.hsps %}
             {% if forloop.counter != 1 %}
-            <tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/#{{ alignment.subunit.name }}">
+            <tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if hsp.modules|length > 0 %}?mark={% for module in hsp.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
             {% endif %}
             <td class="text-right">
                 {{ forloop.counter }}

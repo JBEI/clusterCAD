@@ -32,9 +32,9 @@ def details(request, mibigAccession):
         raise Http404
 
     if 'mark' in request.GET:
-        mark = int(request.GET['mark'])
+        mark = [int(m) for m in request.GET['mark'].split(',')]
     else:
-        mark = -1 
+        mark = [] 
 
     context={
             'cluster': cluster, 
@@ -70,6 +70,7 @@ def subunitLookup(request):
             subunit = Subunit.objects.get(id=int(subunitid))
             response = {
                 'name': '%s subunit %s' % (subunit.cluster.description, subunit.name),
+                'id': str(subunit.id),
                 'start': str(subunit.start),
                 'stop': str(subunit.stop),
                 'genbankAccession': subunit.genbankAccession,

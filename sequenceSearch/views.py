@@ -1,14 +1,22 @@
+import re
 from django.shortcuts import render
 from django.utils.http import urlunquote, urlquote
 from django.contrib import messages
 from . import sequencetools
 from django.http import Http404
-from pks.models import AT, KR, DH, ER, cMT, oMT, TE
+from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit
 
 def search(request):
     if request.method != 'POST':
         if 'aainput' in request.GET:
             aainput = urlunquote(request.GET['aainput'])
+            messages.success(request, 'Imported AA sequence from previous page')
+        elif 'subunit' in request.GET:
+            subunitid = int(request.GET['subunit'])
+            assert 0 <= subunitid
+            subunit = Subunit.objects.get(id=subunitid)
+            aainput = subunit.sequence
+            messages.success(request, 'Imported sequence for PKS cluster %s subunit %s' % (subunit.cluster.description, subunit.name))
         else:
             aainput = ''
         context = {'aainput': aainput}
@@ -20,6 +28,11 @@ def search(request):
             assert 1 <= maxHits <= 10000
             evalue = float(request.POST['evalue'])
             assert 0.0 <= evalue <= 10.0
+            input = input.strip()
+            input = re.sub('^>.*?\n', '', input)
+            if len(input) > 50000:
+                messages.error(request, 'Error: max query size is 50,000 residues')
+                return render(request, 'sequencesearch.html')
             alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
         except:
             messages.error(request, 'Error: Invalid query!')
