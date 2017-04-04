@@ -387,6 +387,12 @@ class Module(models.Model):
             self.product.delete()
         self.product = None
 
+    def loadingStr(self):
+        if self.loading:
+            return 'loading'
+        else:
+            return 'non-loading'
+
     def __str__(self):
         return "%s" % str(self.order)
 
@@ -424,6 +430,12 @@ class Domain(models.Model):
     def getAminoAcidSequence(self):
         sequence = self.module.subunit.getAminoAcidSequence()
         return sequence[(self.start - 1):self.stop]
+
+def activityString(domain):
+    if domain.active:
+        return 'active'
+    else:
+        return 'inactive'
 
 # dict of supported starter units
 starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
@@ -484,9 +496,9 @@ class AT(Domain):
 
     def __str__(self):
         if self.module.iterations > 1:
-            return "substrate %s, loading %s, iterations %d" % (self.substrate, self.module.loading, self.module.iterations)
+            return "substrate %s, %s, iterations %d" % (self.substrate, self.module.loadingStr(), self.module.iterations)
         else:
-            return "substrate %s, loading %s" % (self.substrate, self.module.loading)
+            return "substrate %s, %s" % (self.substrate, self.module.loadingStr())
 
     def __repr__(self):
         return("AT")
@@ -559,7 +571,7 @@ class KR(Domain):
         return prod
 
     def __str__(self):
-        return "type %s, active %s" % (self.type, self.active)
+        return "type %s, %s" % (self.type, activityString(self))
 
     def __repr__(self):
         return("KR")
@@ -580,7 +592,7 @@ class DH(Domain):
             return chain
 
     def __str__(self):
-        return "active %s" % self.active
+        return activityString(self)
 
     def __repr__(self):
         return("DH")
@@ -599,7 +611,7 @@ class ER(Domain):
             return chain
 
     def __str__(self):
-        return "active %s" % self.active
+        return activityString(self)
 
     def __repr__(self):
         return("ER")
@@ -620,7 +632,7 @@ class cMT(Domain):
             return chain
 
     def __str__(self):
-        return "active %s" % self.active
+        return activityString(self)
 
     def __repr__(self):
         return("cMT")
@@ -646,7 +658,7 @@ class oMT(Domain):
             return chain
 
     def __str__(self):
-        return "active %s" % self.active
+        return activityString(self)
 
     def __repr__(self):
         return("oMT")
@@ -674,7 +686,10 @@ class TE(Domain):
         return prod
 
     def __str__(self):
-        return "cyclic %s" % self.cyclic
+        if self.cyclic:
+            return 'cyclic'
+        else:
+            return 'non-cyclic'
 
     def __repr__(self):
         return("TE")

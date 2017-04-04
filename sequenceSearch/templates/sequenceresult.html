@@ -18,14 +18,14 @@ Similarity hits
 {% endblock %}
 
 {% block content %}
-<h2>Subunit amino acid sequence blast hits</h2>
+<h2>Subunit amino acid sequence blastp hits</h2>
 
 <div class="row-fluid">
 <div class="col-md-12">
 <dl class="dl-horizontal">
-<dt>Query sequence</dt>
+<dt>Query residues</dt>
 <dd>
-<textarea class="form-control" rows="6">{{ aainput }}</textarea>
+{{ queryResidues }}
 </dd>
 <dt>Maximum E-value</dt>
 <dd>{{ evalue }} </dd>
@@ -34,6 +34,67 @@ Similarity hits
 </dl>
 </div>
 </div><!--/row-->
+
+<script>
+$(document).ready(function(){
+    $('[data-domainselect]').change(function(){
+       var domain = $(this).attr("data-domainselect");
+       var types = $(this).selectpicker('val');
+       $('[data-domain="' + domain + '"]').attr("style", "padding: 0; background-color: transparent;"); 
+       $.each(types, function(index,value){
+            if (value){
+                $('[data-domain="' + domain + '"][data-type="' + value + '"]').attr("style", "padding: 0; background-color: orange;"); 
+            }
+       });
+    });
+});
+</script>
+
+<div class="row-fluid">
+<div class="btn-group" role="group">
+
+  {% if atsubstrates|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="AT" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight AT substrates" data-selected-text-format="count">
+      {% for substrate in atsubstrates %}
+      <option value="{{ substrate }}">AT substrate {{ substrate }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  {% if krtypes|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="KR" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight KR types" data-selected-text-format="count">
+      {% for type in krtypes %}
+      <option value="{{ type }}">KR type {{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  {% for domaintype in boolDomains %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="{{ domaintype.0 }}" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight {{ domaintype.0 }} types" data-selected-text-format="count">
+      {% for type in domaintype.1 %}
+      <option value="{{ type }}">{{ domaintype.0 }} type {{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endfor %}
+
+  {% if tetypes|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="TE" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight TE types" data-selected-text-format="count">
+      {% for type in tetypes %}
+      <option value="{{ type }}">TE type {{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+</div>
+</div>
 
 <div class="row-fluid">
 <div class="col-md-12">
@@ -71,7 +132,7 @@ Similarity hits
 </thead>
 <tbody>
 {% for alignment in alignments %}
-<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/#{{ alignment.subunit.name }}">
+<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if alignment.hsps.0.modules|length > 0 %}?mark={% for module in alignment.hsps.0.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
         <td class="text-right" rowspan="{{ alignment.hsps|length }}">
             {{ forloop.counter }}
         </td>
@@ -84,7 +145,7 @@ Similarity hits
         </td>
         {% for hsp in alignment.hsps %}
             {% if forloop.counter != 1 %}
-            <tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/#{{ alignment.subunit.name }}">
+            <tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if hsp.modules|length > 0 %}?mark={% for module in hsp.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
             {% endif %}
             <td class="text-right">
                 {{ forloop.counter }}
@@ -105,7 +166,7 @@ Similarity hits
             {% if hsp.modules|length == 0 %}
                 N/A
             {% endif %}
-            {% for module in hsp.modules %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}{{ domain|classname }}{% endfor %}){% endfor %}
+            {% for module in hsp.modules %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" %}data-type="{{ domain.type }}"{% elif domain|classname == "AT" %}data-type="{{ domain.substrate }}"{% else %}data-type="{{ domain }}"{% endif %} style="padding:0; background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
             </td>
         {% endfor %}
 </tr>
