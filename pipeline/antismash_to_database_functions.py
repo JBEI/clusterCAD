@@ -113,9 +113,13 @@ def processSubunitModules(sec_met):
             # We end up excluding any subunit that has a non-recognized catalytic domain
             break    
         # Get the boundaries of the catalytic domain
-        # AntiSMASH seems to position these starting at 0, so we add 1 here
-        boundaries = [int(bound) + 1 for bound in domainsplit[3].replace( \
+        boundaries = [int(bound) for bound in domainsplit[3].replace( \
           '(', '').replace(')', '').replace('.', '').split('-')]
+
+        # AntiSMASH seems to count from 0 for start positions
+        # but 1 for stop positions, as in BioPython
+        # so we add 1 to the start start here
+        boundaries[0] += 1
         
         # Here, we add each domain to a list, which will be converted to an OrderedDict
         if domaintype in ['KS', 'DH', 'ER', 'ACP', 'cMT', 'oMT', 'CAL', 'PCP',
