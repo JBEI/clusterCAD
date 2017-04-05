@@ -4,8 +4,10 @@ from django.utils.http import urlunquote, urlquote
 from django.contrib import messages
 from . import sequencetools
 from django.http import Http404
+from model_utils.managers import InheritanceManager
+from copy import deepcopy
 
-from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit
+from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
 
 def search(request):
     if request.method != 'POST':
@@ -29,6 +31,10 @@ def search(request):
             assert 1 <= maxHits <= 10000
             evalue = float(request.POST['evalue'])
             assert 0.0 <= evalue <= 10.0
+            showAllDomains = int(request.POST['showAllDomains'])
+            assert 0 <= showAllDomains <= 1
+            sortOutput = int(request.POST['sortOutput'])
+            assert 0 <= sortOutput <= 1
             input = input.strip()
             input = re.sub('^>.*?\n', '', input)
             if len(input) > 50000:
@@ -44,6 +50,25 @@ def search(request):
     if len(alignments) == 0:
         messages.error(request, 'No hits - please refine query!')
         return render(request, 'sequencesearch.html')
+
+    # if sortOutput = 1, break apart HSPs and resort by bit order
+    if sortOutput:
+        individualHSPs = []
+        for alignment in alignments:
+            for hsp in alignment['hsps']:
+                alignmentCopy = deepcopy(alignment)
+                alignmentCopy['hsps'] = [hsp]
+                individualHSPs.append(alignmentCopy)
+        alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:maxHits]
+        
+
+    # if showAllDomains = 1, we will replace the contents of 
+    # each domain list with all domains in it's module
+    if showAllDomains:
+        for alignment in alignments:
+            for hsp in alignment['hsps']:
+                for module in hsp['modules']:
+                    module['domains'] = list(Domain.objects.filter(module=module['module']).select_subclasses().order_by('start'))
 
     # get domain options to display in UI
     domains = [domain for alignment in alignments for hsp in alignment['hsps'] for module in hsp['modules'] for domain in module['domains']]
@@ -65,6 +90,8 @@ def search(request):
         'queryResidues': len(input),
         'evalue': str(evalue),
         'maxHits': str(maxHits),
+        'showAllDomains': showAllDomains,
+        'sortOutput': sortOutput,
         'atsubstrates': atsubstrates,
         'krtypes': krtypes,
         'boolDomains': boolDomains,
