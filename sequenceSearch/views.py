@@ -5,7 +5,7 @@ from django.contrib import messages
 from . import sequencetools
 from django.http import Http404
 from model_utils.managers import InheritanceManager
-from copy import deepcopy
+from django.core.cache import cache
 
 from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
 
@@ -40,8 +40,14 @@ def search(request):
             if len(input) > 50000:
                 messages.error(request, 'Error: max query size is 50,000 residues')
                 return render(request, 'sequencesearch.html')
-            alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
-        except:
+
+            # use alignment cache if it exists
+            alignments = cache.get((input, evalue, maxHits, sortOutput))
+            if not alignments:
+                alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits, sortOutput=sortOutput)
+                cache.set((input, evalue, maxHits, sortOutput), alignments, 60 * 60 * 24 * 7) # cache for one week
+                
+        except ValueError:
             messages.error(request, 'Error: Invalid query!')
             return render(request, 'sequencesearch.html')
     else:
@@ -50,17 +56,6 @@ def search(request):
     if len(alignments) == 0:
         messages.error(request, 'No hits - please refine query!')
         return render(request, 'sequencesearch.html')
-
-    # if sortOutput = 1, break apart HSPs and resort by bit order
-    if sortOutput:
-        individualHSPs = []
-        for alignment in alignments:
-            for hsp in alignment['hsps']:
-                alignmentCopy = deepcopy(alignment)
-                alignmentCopy['hsps'] = [hsp]
-                individualHSPs.append(alignmentCopy)
-        alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:maxHits]
-        
 
     # if showAllDomains = 1, we will replace the contents of 
     # each domain list with all domains in it's module

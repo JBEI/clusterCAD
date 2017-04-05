@@ -8,8 +8,9 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from pks.models import Subunit, Domain
 from model_utils.managers import InheritanceManager
+from copy import deepcopy
 
-def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalue=10.0, max_target_seqs=10):
+def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalue=10.0, max_target_seqs=10, sortOutput=False):
     # run blast and return results as a list
     # of alignment dicts with the following structure:
     # {'alignment': alignment, 'subunit': subunit, 'hsps': hsps}
@@ -37,6 +38,7 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
                                          db=db,
                                          evalue=evalue,
                                          outfmt=5,
+                                         num_threads=2,
                                          max_target_seqs=max_target_seqs)
     result, stderr = blastp_cline(stdin=queryFasta)
 
@@ -62,5 +64,15 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
             modules = [{'module': module, 'domains': list(domains.filter(module=module))} for module in modules]
             hsps.append({'hsp': hsp, 'modules': modules})
         alignments.append({'alignment': alignment, 'subunit': subunit, 'hsps': hsps})
+
+    # if sortOutput=True, break apart HSPs and resort by bit order
+    if sortOutput:
+        individualHSPs = []
+        for alignment in alignments:
+            for hsp in alignment['hsps']:
+                alignmentCopy = deepcopy(alignment)
+                alignmentCopy['hsps'] = [hsp]
+                individualHSPs.append(alignmentCopy)
+        alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:max_target_seqs]
 
     return alignments
