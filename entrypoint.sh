@@ -16,8 +16,8 @@ python3 manage.py collectstatic --noinput
 # reload, if we are in development start only two, with reload
 if grep --quiet "DEBUG = True" clusterCAD/settings.py; then
     echo "starting development gunicorn"
-    /usr/local/bin/gunicorn clusterCAD.wsgi:application -w 2 -b :8000 --reload
+    /usr/local/bin/gunicorn clusterCAD.wsgi:application -w 2 -b :8000 --reload -t 120 --graceful-timeout 120
 else
     echo "starting production gunicorn"
-    /usr/local/bin/gunicorn clusterCAD.wsgi:application -w 5 -b :8000
+    /usr/local/bin/gunicorn clusterCAD.wsgi:application -w 5 -b :8000 -t 120 --graceful-timeout 120
 fi
