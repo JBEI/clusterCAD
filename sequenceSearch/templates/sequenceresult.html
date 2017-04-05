@@ -30,7 +30,11 @@ sequence hits
 <dt>Maximum E-value</dt>
 <dd>{{ evalue }} </dd>
 <dt>Max hits returned</dt>
-<dd>{{ maxHits }} </dd>
+<dd>{{ maxHits }}</dd>
+<dt>Show domains</dt>
+<dd>{% if showAllDomains %}All domains in modules overlapping alignment{% else %}Only domains overlapping alignment{% endif %}</dd>
+<dt>Sort output HSPs</dt>
+<dd>{% if sortOutput %}Order HSPs by bit score{% else %}Group HSPs by subunit (blast default){% endif %}</dd>
 </dl>
 </div>
 </div><!--/row-->
@@ -110,9 +114,11 @@ $(document).ready(function(){
     <th>
         Subunit
     </th>
+    {% if not sortOutput %}
     <th class="text-right">
         HSP
     </th>
+    {% endif %}
     <th class="text-right">
        E-value 
     </th>
@@ -147,9 +153,11 @@ $(document).ready(function(){
             {% if forloop.counter != 1 %}
             <tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if hsp.modules|length > 0 %}?mark={% for module in hsp.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
             {% endif %}
+            {% if not sortOutput %}
             <td class="text-right">
                 {{ forloop.counter }}
             </td>
+            {% endif %}
             <td class="text-right">
                 {{ hsp.hsp.expect|sigfig }}
             </td>
