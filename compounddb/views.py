@@ -80,3 +80,52 @@ def renderer(request, smiles, smiles2=None):
 
     return HttpResponse(fixedSVG.getvalue(), content_type='image/svg+xml')
 
+@cache_page(60 * 120)
+def mcsrenderer(request, smiles1, smiles2, mcsSmarts=False):
+    # parse input
+    smiles1 = urlunquote(smiles1)
+    smiles1 = re.match(r'^(\S{1,10000})', str(smiles1)).group(1)
+    mol1 = Chem.MolFromSmiles(smiles1)
+    smiles2 = urlunquote(smiles2)
+    smiles2 = re.match(r'^(\S{1,10000})', str(smiles2)).group(1)
+    mol2 = Chem.MolFromSmiles(smiles2)
+
+    # find MCS if not provided
+    if mcsSmarts:
+        mcsSmarts = urlunquote(mcsSmarts)
+        mcsSmarts = re.match(r'^(\S{1,10000})', str(mcsSmarts)).group(1)
+        template = Chem.MolFromSmarts(mcsSmarts)
+    else:
+        mcs = rdFMCS.FindMCS([mol1, mol2])
+        template = Chem.MolFromSmarts(mcs.smartsString)
+    highlightAtomList1 = mol1.GetSubstructMatch(template)
+    highlightAtomList2 = mol2.GetSubstructMatch(template)
+    
+    # generate coords for first molecule 
+    AllChem.Compute2DCoords(mol1)
+    atoms = [atom.GetIdx() for atom in mol1.GetAtoms()]
+    nonMCSatoms = list(filter(lambda x: x not in highlightAtomList1, atoms))
+    nonMCSatoms.sort(reverse=True)
+    rwmol = Chem.RWMol(mol1)
+    for atom in nonMCSatoms:
+        rwmol.RemoveAtom(atom)
+    templateMol = rwmol.GetMol()
+
+    # apply coords to second molecule
+    AllChem.GenerateDepictionMatching2DStructure(mol2, templateMol, acceptFailure=True)
+
+    # draw SVG
+    svg = Draw.MolsToGridImage([mol1, mol2], highlightAtomLists=[highlightAtomList1, highlightAtomList2],
+                 molsPerRow=2,
+                 subImgSize=(426, 350), useSVG=True)
+
+    # fix XML namespace in RDKit export
+    xmlTree = ET.fromstring(svg) 
+    xmlTree.attrib['xmlns'] = 'http://www.w3.org/2000/svg'
+    xmlTree.attrib['xmlns:svg'] = 'http://www.w3.org/2000/svg'
+
+    # convert XML to string
+    fixedSVG = BytesIO()
+    ET.ElementTree(xmlTree).write(fixedSVG, encoding='utf-8', xml_declaration=True)
+
+    return HttpResponse(fixedSVG.getvalue(), content_type='image/svg+xml')

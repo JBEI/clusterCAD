@@ -33,29 +33,28 @@
             </label>
           </div>
     </div>
-    <div class="col-md-3 col-sm-4">
-        <dl>
-            <dt>Known final product</dt>
-        <dd>
-        {% with architecture|last as lastsubunit %}
-            {% with lastsubunit.1|last as lastmodule %}
-                <img style="width: 100% \9;" alt="Known final product" data-smilesq="{{ cluster.knownProductSmiles|urlq }}" data-smiles="{{ cluster.knownProductSmiles }}" src="/compounddb/renderer/{{ cluster.knownProductSmiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/> 
+    <div class="col-md-9 col-sm-8">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <dl>
+                    <dt>Known final product</dt>
+                </dl>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <dl>
+                    <dt>Predicted final product</dt>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+            {% with architecture|last as lastsubunit %}
+                {% with lastsubunit.1|last as lastmodule %}
+                    <img class="img-responsive" style="width: 100% \9;" alt="Known final product" data-smilesq="{{ cluster.knownProductSmiles|urlq }}" data-smiles="{{ cluster.knownProductSmiles }}" src="/compounddb/mcsrenderer/{{ cluster.knownProductSmiles|urlq }}/{{ lastmodule.0.product.smiles|urlq }}/{{ cluster.knownProductMCS|urlq }}/"/> 
+                {% endwith %}
             {% endwith %}
-        {% endwith %}
-        </dd>
-        </dl>
-    </div>
-    <div class="col-md-3 col-sm-4">
-        <dl>
-            <dt>Predicted final product</dt>
-        <dd>
-        {% with architecture|last as lastsubunit %}
-            {% with lastsubunit.1|last as lastmodule %}
-                <img style="width: 100% \9;" alt="Predicted final product" data-smilesq="{{ lastmodule.0.product.smiles|urlq }}" data-smiles="{{ lastmodule.0.product.smiles }}" src="/compounddb/renderer/{{ lastmodule.0.product.smiles|urlq }}/{{ cluster.knownProductMCS|urlq }}?align=False;smarts=True;"/>
-            {% endwith %}
-        {% endwith %}
-        </dd>
-        </dl>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -296,7 +295,11 @@ Copy to clipboard
 <a href="#" id="searchButton" class="btn btn-default" role="button">Send to structure search</a>
 </div>
 
-                <img id="structureImg" class="img-responsive" style="width: 50%;" src=""/>
+<div class="row">
+    <div class="col-md-12">
+                <img id="structureImg" class="img-responsive" src="" width="100%"/>
+    </div>
+</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
