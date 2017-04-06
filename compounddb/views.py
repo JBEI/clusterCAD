@@ -7,7 +7,7 @@ import re
 import xml.etree.ElementTree as ET
 from io import BytesIO
 
-@cache_page(60 * 120)
+# @cache_page(60 * 120)
 def renderer(request, smiles, smiles2=None):
     try:
         # parse smiles input
@@ -44,7 +44,7 @@ def renderer(request, smiles, smiles2=None):
     # lock molecule to template
     AllChem.Compute2DCoords(template)
     height = 30 + mol.GetNumAtoms() * 7 
-    width = 213 
+    width = 243 
 
     align = True 
     if 'align' in request.GET:
