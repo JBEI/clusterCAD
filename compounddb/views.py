@@ -7,7 +7,7 @@ import re
 import xml.etree.ElementTree as ET
 from io import BytesIO
 
-# @cache_page(60 * 120)
+@cache_page(60 * 60 * 24 * 7) # cache for one week
 def renderer(request, smiles, width=243):
     try:
         # parse smiles input
@@ -61,7 +61,7 @@ def renderer(request, smiles, width=243):
 
     return HttpResponse(fixedSVG.getvalue(), content_type='image/svg+xml')
 
-# @cache_page(60 * 120)
+@cache_page(60 * 60 * 24 * 7) # cache for one week
 def mcsrenderer(request, smiles1, smiles2, mcsSmarts=False, width=852, align=True, chiral=False):
     # parse input
     try:
