@@ -8,43 +8,24 @@ import xml.etree.ElementTree as ET
 from io import BytesIO
 
 # @cache_page(60 * 120)
-def renderer(request, smiles, smiles2=None):
+def renderer(request, smiles, width=243):
     try:
         # parse smiles input
         smiles = urlunquote(smiles)
         smiles = re.match(r'^(\S{1,10000})', str(smiles)).group(1)
         mol = Chem.MolFromSmiles(smiles)
-        if smiles2:
-            smiles2 = urlunquote(smiles2)
-            smiles2 = re.match(r'^(\S{1,10000})', str(smiles2)).group(1)
+        width=int(width)
+        assert 0 < width < 2000
     except:
         raise Http404
 
-    if smiles2:
-        if ('smarts' in request.GET) and (request.GET['smarts'] == 'True'):
-            try:
-                template = Chem.MolFromSmarts(smiles2)
-            except:
-                raise Http404
-        else:
-            try:
-                mol2 = Chem.MolFromSmiles(smiles2)
-            except:
-                raise Http404
-            mcs = rdFMCS.FindMCS([mol, mol2])
-            template = Chem.MolFromSmarts(mcs.smartsString)
-        highlightAtomLists = mol.GetSubstructMatch(template)
-        resultFraction = 100.0 * float(template.GetNumAtoms()) / float(mol.GetNumAtoms())
-        legend = "MCS: {:.1f}% of atoms".format(resultFraction) 
-    else:
-        template = Chem.MolFromSmiles('C(=O)[S]')
-        highlightAtomLists = None
-        legend = ''
+    template = Chem.MolFromSmiles('C(=O)[S]')
+    highlightAtomLists = None
+    legend = ''
 
     # lock molecule to template
     AllChem.Compute2DCoords(template)
-    height = 30 + mol.GetNumAtoms() * 7 
-    width = 243 
+    height = int(width * ((30.0 + mol.GetNumAtoms() * 7.0) / 243.0))
 
     align = True 
     if 'align' in request.GET:
@@ -60,13 +41,13 @@ def renderer(request, smiles, smiles2=None):
             try:
                 AllChem.GenerateDepictionMatching2DStructure(mol, template, acceptFailure=False)
             except ValueError:
-                height = 213
+                height = width 
     else:
-        height = 213
+        height = width
 
     # draw SVG
     svg = Draw.MolsToGridImage([mol], highlightAtomLists=[highlightAtomLists],
-                 legends = [legend], molsPerRow=1,
+                 molsPerRow=1,
                  subImgSize=(width, height), useSVG=True)
 
     # fix XML namespace in RDKit export
@@ -80,44 +61,59 @@ def renderer(request, smiles, smiles2=None):
 
     return HttpResponse(fixedSVG.getvalue(), content_type='image/svg+xml')
 
-@cache_page(60 * 120)
-def mcsrenderer(request, smiles1, smiles2, mcsSmarts=False):
+# @cache_page(60 * 120)
+def mcsrenderer(request, smiles1, smiles2, mcsSmarts=False, width=852, align=True, chiral=False):
     # parse input
-    smiles1 = urlunquote(smiles1)
-    smiles1 = re.match(r'^(\S{1,10000})', str(smiles1)).group(1)
-    mol1 = Chem.MolFromSmiles(smiles1)
-    smiles2 = urlunquote(smiles2)
-    smiles2 = re.match(r'^(\S{1,10000})', str(smiles2)).group(1)
-    mol2 = Chem.MolFromSmiles(smiles2)
+    try:
+        smiles1 = urlunquote(smiles1)
+        smiles1 = re.match(r'^(\S{1,10000})', str(smiles1)).group(1)
+        mol1 = Chem.MolFromSmiles(smiles1)
+        smiles2 = urlunquote(smiles2)
+        smiles2 = re.match(r'^(\S{1,10000})', str(smiles2)).group(1)
+        mol2 = Chem.MolFromSmiles(smiles2)
+        width=int(width)
+        assert 0 < width < 2000
+        align=int(align)
+        assert 0 <= align <= 1
+        chiral=int(chiral)
+        assert 0 <= chiral <= 1
+    except:
+        raise Http404
 
     # find MCS if not provided
-    if mcsSmarts:
+    if mcsSmarts and mcsSmarts != '':
         mcsSmarts = urlunquote(mcsSmarts)
         mcsSmarts = re.match(r'^(\S{1,10000})', str(mcsSmarts)).group(1)
         template = Chem.MolFromSmarts(mcsSmarts)
     else:
-        mcs = rdFMCS.FindMCS([mol1, mol2])
+        if chiral:
+            mcs = rdFMCS.FindMCS([mol1, mol2], matchChiralTag=True)
+        else:
+            mcs = rdFMCS.FindMCS([mol1, mol2])
         template = Chem.MolFromSmarts(mcs.smartsString)
     highlightAtomList1 = mol1.GetSubstructMatch(template)
     highlightAtomList2 = mol2.GetSubstructMatch(template)
     
-    # generate coords for first molecule 
-    AllChem.Compute2DCoords(mol1)
-    atoms = [atom.GetIdx() for atom in mol1.GetAtoms()]
-    nonMCSatoms = list(filter(lambda x: x not in highlightAtomList1, atoms))
-    nonMCSatoms.sort(reverse=True)
-    rwmol = Chem.RWMol(mol1)
-    for atom in nonMCSatoms:
-        rwmol.RemoveAtom(atom)
-    templateMol = rwmol.GetMol()
+    if align:
+        # generate coords for first molecule 
+        AllChem.Compute2DCoords(mol1)
+        atoms = [atom.GetIdx() for atom in mol1.GetAtoms()]
+        nonMCSatoms = list(filter(lambda x: x not in highlightAtomList1, atoms))
+        nonMCSatoms.sort(reverse=True)
+        rwmol = Chem.RWMol(mol1)
+        for atom in nonMCSatoms:
+            rwmol.RemoveAtom(atom)
+        templateMol = rwmol.GetMol()
 
-    # apply coords to second molecule
-    AllChem.GenerateDepictionMatching2DStructure(mol2, templateMol, acceptFailure=True)
+        # apply coords to second molecule
+        AllChem.GenerateDepictionMatching2DStructure(mol2, templateMol, acceptFailure=True)
 
     # draw SVG
+    width = int(float(width) / 2)
+    height = int(float(width) * (350.0 / 426.0))
     svg = Draw.MolsToGridImage([mol1, mol2], highlightAtomLists=[highlightAtomList1, highlightAtomList2],
                  molsPerRow=2,
-                 subImgSize=(426, 350), useSVG=True)
+                 subImgSize=(width, height), useSVG=True)
 
     # fix XML namespace in RDKit export
     xmlTree = ET.fromstring(svg) 
