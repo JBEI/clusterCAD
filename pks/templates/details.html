@@ -42,7 +42,7 @@
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
                 <dl>
-                    <dt>Predicted pks subset of final product</dt>
+                    <dt>Predicted pks subset</dt>
                 </dl>
             </div>
         </div>
@@ -53,6 +53,18 @@
                     <img class="img-responsive" style="width: 100% \9;" alt="Known final product" data-smilesq="{{ cluster.knownProductSmiles|urlq }}" data-smiles="{{ cluster.knownProductSmiles }}" src="/compounddb/mcsrenderer/{{ cluster.knownProductSmiles|urlq }}_{{ lastmodule.0.product.smiles|urlq }}_{{ cluster.knownProductMCS|urlq }}/700"/> 
                 {% endwith %}
             {% endwith %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6 text-center">
+            <h6>
+            MCS: {{ knownProductPercent|floatformat }}% of atoms
+            </h6>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 text-center">
+            <h6>
+            MCS: {{ predictedProductPercent|floatformat }}% of atoms
+            </h6>
             </div>
         </div>
     </div>
