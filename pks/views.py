@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from .models import Cluster, Module, Subunit, Domain
 from django.http import Http404
 from json import dumps
+from rdkit import Chem as chem
 
 def index(request):
     try:
@@ -32,15 +33,26 @@ def details(request, mibigAccession):
         raise Http404
 
     if 'mark' in request.GET:
-        mark = int(request.GET['mark'])
+        mark = [int(m) for m in request.GET['mark'].split(',')]
     else:
-        mark = -1 
+        mark = [] 
+
+    architecture = cluster.architecture()
+
+    # compute MCS percentages
+    knownProduct = chem.MolFromSmiles(cluster.knownProductSmiles)
+    mcs = chem.MolFromSmarts(cluster.knownProductMCS) 
+    knownProductPercent = 100.0 * float(mcs.GetNumAtoms()) / float(knownProduct.GetNumAtoms())
+    predictedProduct = architecture[-1][1][-1][0].product.mol()
+    predictedProductPercent = 100.0 * float(mcs.GetNumAtoms()) / float(predictedProduct.GetNumAtoms())
 
     context={
             'cluster': cluster, 
-            'architecture': cluster.architecture(),
+            'architecture': architecture,
             'mark': mark,
             'notips': ('KS', 'ACP', 'PCP'),
+            'predictedProductPercent': predictedProductPercent,
+            'knownProductPercent': knownProductPercent,
     }
 
     return render(request, 'details.html', context)
@@ -70,6 +82,7 @@ def subunitLookup(request):
             subunit = Subunit.objects.get(id=int(subunitid))
             response = {
                 'name': '%s subunit %s' % (subunit.cluster.description, subunit.name),
+                'id': str(subunit.id),
                 'start': str(subunit.start),
                 'stop': str(subunit.stop),
                 'genbankAccession': subunit.genbankAccession,

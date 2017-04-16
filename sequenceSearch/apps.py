@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class StructuresearchConfig(AppConfig):
-    name = 'structureSearch'
+class SequencesearchConfig(AppConfig):
+    name = 'sequenceSearch'
