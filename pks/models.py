@@ -259,6 +259,10 @@ class Subunit(models.Model):
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
+    acc = models.TextField()
+    acc20 = models.CommaSeparatedIntegerField(max_length=20000)
+    ss = models.TextField()
+    ss8 = models.TextField()
 
     def modules(self):
         return Module.objects.filter(subunit=self).order_by('order')
