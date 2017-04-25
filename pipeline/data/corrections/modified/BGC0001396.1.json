@@ -1,45 +1,14 @@
 {
-    "description": "Borrelidin",
-    "genbankAccession": "AJ580915.1",
-    "mibigAccession": "BGC0000031.1",
+    "description": "Aldgamycin",
+    "genbankAccession": "KU568466.1",
+    "mibigAccession": "BGC0001396.1",
     "architecture": {
-        "borA1": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "trans-1,2-CPDA"
-                    }
-                }
-            }
-        },
-        "borA2": {
+        "almHI": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "borA3": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
                     }
                 }
             },
@@ -53,29 +22,74 @@
                         "active": true
                     },
                     "KR": {
-                        "type": "B1",
+                        "type": "C2",
                         "active": true
                     }
                 }
-            }
-        },
-        "borA4": {
-            "0": {
+            },
+            "2": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
                     },
                     "KR": {
-                        "type": "A1",
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "3": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
                         "active": true
                     }
                 }
             }
         },
-        "borA5": {
+        "almHII": {
             "0": {
-                "iterations": 3,
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "almHIII": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "C2",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
@@ -93,20 +107,30 @@
                 }
             }
         },
-        "borA6": {
+        "almHIV": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "almHV": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
                     },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    },
                     "TE": {
-                        "ring": 1,
-                        "cyclic": true
+                        "cyclic": false,
+                        "ring": 0
                     }
                 }
             }

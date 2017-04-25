@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os, sys
+import pandas as pd
 
 sys.path.insert(0, '/clusterCAD')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
@@ -35,9 +36,11 @@ for cluster in pks.models.Cluster.objects.all():
         print('%s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
 
+# read in clusters we decided not to fix
+rejectclusters = pd.read_csv("data/corrections/modified/drop_clusters.txt", comment="#", header=None)[0].tolist()
+rejectclusters = [x.strip() for x in rejectclusters]
+
 # Delete clusters we've decided not to fix
-# BGC0000110.1 rejected because it has an atypical non-AT start
-rejectclusters = ['BGC0000110.1']
 for acc in rejectclusters:
     cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
     print('%s: %s' %(cluster.mibigAccession, cluster.description))
