@@ -119,8 +119,8 @@ class Cluster(models.Model):
         assert isinstance(active, bool)
         module = Module.objects.filter(subunit__cluster=self, 
                                        subunit__name=sub).order_by('order')[mod]
-        domain = Domain.objects.filter(module=module).select_subclasses( \
-                                           getattr(sys.modules[__name__], dom))[0]
+        domains = Domain.objects.filter(module=module).select_subclasses()
+        domain = list(filter(lambda x: repr(x) == dom, list(domains)))[0]
         domain.active = active
         domain.save()
 
