@@ -1,9 +1,9 @@
 {
-  "description": "Aldgamycin",
-  "genbankAccession": "KU568466.1",
-  "mibigAccession": "BGC0001396.1",
+  "description": "Monensin",
+  "genbankAccession": "AF440781.1",
+  "mibigAccession": "BGC0000100.1",
   "architecture": {
-    "almHI": {
+    "monAI": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -19,43 +19,36 @@
             "substrate": "mmal"
           },
           "DH": {
-            "active": false
-          },
-          "KR": {
-            "type": "C2",
-            "active": true
-          }
-        }
-      },
-      "2": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      },
-      "3": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "DH": {
             "active": true
           },
           "KR": {
-            "type": "B1",
+            "type": "C1",
             "active": true
           }
         }
       }
     },
-    "almHII": {
+    "monAII": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "type": "U",
+            "active": true
+          }
+        }
+      }
+    },
+    "monAIII": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -67,23 +60,6 @@
           },
           "KR": {
             "type": "B1",
-            "active": true
-          }
-        }
-      }
-    },
-    "almHIII": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": false
-          },
-          "KR": {
-            "type": "C2",
             "active": true
           }
         }
@@ -107,7 +83,91 @@
         }
       }
     },
-    "almHIV": {
+    "monAIV": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "emal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "type": "U",
+            "active": true
+          }
+        }
+      }
+    },
+    "monAV": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "type": "U",
+            "active": true
+          }
+        }
+      }
+    },
+    "monAVI": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "C1",
+            "active": true
+          }
+        }
+      }
+    },
+    "monAVII": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -121,16 +181,31 @@
         }
       }
     },
-    "almHV": {
+    "monAVIII": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mal"
+            "substrate": "mmal"
           },
-          "TE": {
-            "cyclic": false,
-            "ring": 0
+          "KR": {
+            "type": "A1",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": false
+          },
+          "KR": {
+            "type": "B2",
+            "active": true
           }
         }
       }

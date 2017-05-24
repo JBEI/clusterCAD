@@ -1,14 +1,14 @@
 {
-    "description": "Angolamycin",
-    "genbankAccession": "EU220288.1",
-    "mibigAccession": "BGC0000018.1",
+    "description": "Megalomicin",
+    "genbankAccession": "AF263245.1",
+    "mibigAccession": "BGC0000092.1",
     "architecture": {
-        "angAI": {
+        "megAI": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mmal"
+                        "substrate": "prop"
                     }
                 }
             },
@@ -19,7 +19,7 @@
                         "substrate": "mmal"
                     },
                     "KR": {
-                        "type": "A1",
+                        "type": "B2",
                         "active": true
                     }
                 }
@@ -30,34 +30,14 @@
                     "AT": {
                         "substrate": "mmal"
                     },
-                    "DH": {
-                        "active": true
-                    },
                     "KR": {
-                        "type": "B1",
+                        "type": "A1",
                         "active": true
                     }
                 }
             }
         },
-        "angAII": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "angAIII": {
+        "megAII": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -74,7 +54,7 @@
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "emal"
+                        "substrate": "mmal"
                     },
                     "DH": {
                         "active": true
@@ -83,43 +63,38 @@
                         "active": true
                     },
                     "KR": {
-                        "type": "B1",
+                        "type": "U",
                         "active": true
                     }
                 }
             }
         },
-        "angAIV": {
+        "megAIII": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
                     },
-                    "DH": {
-                        "active": false
-                    },
                     "KR": {
                         "type": "A1",
                         "active": true
                     }
                 }
-            }
-        },
-        "angAV": {
-            "0": {
+            },
+            "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mal"
+                        "substrate": "mmal"
                     },
                     "KR": {
                         "type": "A1",
                         "active": true
                     },
                     "TE": {
-                        "cyclic": true,
-                        "ring": 0
+                        "ring": 0,
+                        "cyclic": true
                     }
                 }
             }

@@ -1,14 +1,14 @@
 {
-  "description": "Aldgamycin",
-  "genbankAccession": "KU568466.1",
-  "mibigAccession": "BGC0001396.1",
+  "description": "Tylactone",
+  "genbankAccession": "U78289.1",
+  "mibigAccession": "BGC0000166.1",
   "architecture": {
-    "almHI": {
+    "tylG": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mal"
+            "substrate": "mmal"
           }
         }
       },
@@ -22,7 +22,7 @@
             "active": false
           },
           "KR": {
-            "type": "C2",
+            "type": "B1",
             "active": true
           }
         }
@@ -33,18 +33,6 @@
           "AT": {
             "substrate": "mmal"
           },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      },
-      "3": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
           "DH": {
             "active": true
           },
@@ -55,7 +43,7 @@
         }
       }
     },
-    "almHII": {
+    "tylG_1": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -72,15 +60,12 @@
         }
       }
     },
-    "almHIII": {
+    "tylG_2": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mmal"
-          },
-          "DH": {
-            "active": false
           },
           "KR": {
             "type": "C2",
@@ -92,7 +77,7 @@
         "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mmal"
+            "substrate": "emal"
           },
           "DH": {
             "active": true
@@ -107,7 +92,7 @@
         }
       }
     },
-    "almHIV": {
+    "tylG_3": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -121,15 +106,19 @@
         }
       }
     },
-    "almHV": {
+    "tylG_4": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mal"
           },
+          "KR": {
+            "type": "A1",
+            "active": true
+          },
           "TE": {
-            "cyclic": false,
+            "cyclic": true,
             "ring": 0
           }
         }
