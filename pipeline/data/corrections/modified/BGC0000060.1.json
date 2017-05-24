@@ -1,9 +1,9 @@
 {
-    "description": "Angolamycin",
-    "genbankAccession": "EU220288.1",
-    "mibigAccession": "BGC0000018.1",
+    "description": "Fostriecin",
+    "genbankAccession": "HQ434551.1",
+    "mibigAccession": "BGC0000060.1",
     "architecture": {
-        "angAI": {
+        "fosA": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -16,22 +16,13 @@
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mmal"
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            },
-            "2": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mmal"
+                        "substrate": "mal"
                     },
                     "DH": {
                         "active": true
+                    },
+                    "ER": {
+                        "active": false
                     },
                     "KR": {
                         "type": "B1",
@@ -40,7 +31,70 @@
                 }
             }
         },
-        "angAII": {
+        "fosB": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "fosC": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "fosD": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "fosE": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -55,49 +109,12 @@
                         "active": true
                     }
                 }
-            }
-        },
-        "angAIII": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mmal"
-                    },
-                    "KR": {
-                        "type": "C2",
-                        "active": true
-                    }
-                }
             },
             "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "emal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "ER": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "angAIV": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mmal"
-                    },
-                    "DH": {
-                        "active": false
+                        "substrate": "mal"
                     },
                     "KR": {
                         "type": "A1",
@@ -106,7 +123,7 @@
                 }
             }
         },
-        "angAV": {
+        "fosF": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -118,8 +135,8 @@
                         "active": true
                     },
                     "TE": {
-                        "cyclic": true,
-                        "ring": 0
+                        "ring": 0,
+                        "cyclic": false
                     }
                 }
             }
