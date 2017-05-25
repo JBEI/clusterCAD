@@ -115,7 +115,7 @@ class Cluster(models.Model):
         module.save()
         
     def setActive(self, sub, mod, dom, active):
-        assert dom in ['KR', 'DH', 'ER']
+        assert dom in ['KR', 'DH', 'ER', 'oMT', 'cMT']
         assert isinstance(active, bool)
         module = Module.objects.filter(subunit__cluster=self, 
                                        subunit__name=sub).order_by('order')[mod]
@@ -217,7 +217,7 @@ class Cluster(models.Model):
                     elif d == 'KR':
                         self.setStereochemistry(s, m, ddict['type'])
                         self.setActive(s, m, d, ddict['active'])
-                    elif d in ['DH', 'ER']:
+                    elif d in ['DH', 'ER', 'cMT', 'oMT']:
                         self.setActive(s, m, d, ddict['active'])
                     else:
                         assert d == 'TE'
