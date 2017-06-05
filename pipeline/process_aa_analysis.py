@@ -48,22 +48,31 @@ pickle.dump(ss8_dict, open(os.path.join(dirname, 'ss8_dict.p'), 'wb'))
 
 # Insert sequence information into database
 for cluster in pks.models.Cluster.objects.all():
-    for subunit in pks.cluster.subunits():
+    for subunit in cluster.subunits():
         # Reconstruct reference string
-        reference = subunit.genbankAccession
+        reference = subunit.cluster.mibigAccession
+        print("loading data for " + reference + " subunit " + subunit.genbankAccession)
         reference += '_'
-        name = subunit.name.split('_')
+        name = subunit.name.split()
         reference += name[0]
         if name[-1] != name[0]:
             reference += name[-1]
-            order = subunit.order
-            if order != 0:
-                reference += '_%s' %(order)
+
         # Add data to database
         try:
-            subunit.acc = acc_dict[reference]
-            subunit.acc20 = acc20_dict[reference]
-            subunit.ss = ss_dict[reference]
-            subunit.ss8 = ss8_dict[reference]
-        except Exception:
-            raise Exception('Missing data!')
+            subunit.acc = ''.join(acc_dict[reference])
+        except KeyError:
+            print("Missing acc for subunit " + reference)
+        try:
+            subunit.acc20 = ','.join([str(x) for x in acc20_dict[reference]])
+        except KeyError:
+            print("Missing acc20 for subunit " + reference)
+        try:
+            subunit.ss = ''.join(ss_dict[reference])
+        except KeyError:
+            print("Missing ss for subunit " + reference)
+        try:
+            subunit.ss8 = ''.join(ss8_dict[reference])
+        except KeyError:
+            print("Missing ss8 for subunit " + reference)
+        subunit.save()
