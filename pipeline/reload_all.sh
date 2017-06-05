@@ -3,6 +3,7 @@
 ./antismash_to_database.py
 ./clustercad_corrections.py
 ./clustercad_clean.py
+./process_aa_analysis.py
 
 mkdir -p /clusterCAD/pipeline/data/blast
 cd /clusterCAD/pipeline

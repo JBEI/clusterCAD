@@ -276,6 +276,8 @@ $(document).ready(function(){
                 success: function(data){
                     $('#subunitAASequence').text(data.AAsequence);
                     $('#subunitDNASequence').text(data.DNAsequence);
+                    $('#subunitss').text(data.ss);
+                    $('#subunitacc').text(data.acc);
                     $('#subunitTitle').text(data.name);
                     $('#subunitStart').text(data.start);
                     $('#subunitStop').text(data.stop);
@@ -368,53 +370,81 @@ Copy to clipboard
 
 <!-- Subunit View Modal -->
 <div class="modal fade" id="subunitView" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 id="subunitTitle" class="modal-title"></h4>
-      </div>
-      <div class="modal-body">
-        <dl class="dl-horizontal">
-            <dt style='white-space: normal;'>Cluster nucleotide start</dt>
-            <dd id="subunitStart"><dd>
-            <dt style='white-space: normal;'>Cluster nucleotide stop</dt>
-            <dd id="subunitStop"><dd>
-            <dt>GenBank accession</dt>
-            <dd><a target="_blank" href="" id="subunitGenbankAccession"></a></dd>
-        </dl>
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 id="subunitTitle" class="modal-title"></h4>
+</div> <!-- end modal-header -->
 
-<dl>
-<dt>
-AA sequence
-</dt>
-<dd>
-<textarea id="subunitAASequence" class="form-control" rows="6"></textarea>
-<div class="btn-group" role="group">
-<button id="copy" class="btn btn-default" data-clipboard-target="#subunitAASequence">
-Copy to clipboard
-</button>
-<a href="#" id="subunitSearchButton" class="btn btn-default" role="button">Send to sequence search</a>
-</dd>
+<div class="modal-body">
 
-<dt>
-Nucleotide sequence
-</dt>
-<dd>
-<textarea id="subunitDNASequence" class="form-control" rows="6"></textarea>
-<div class="btn-group" role="group">
-<button id="copy" class="btn btn-default" data-clipboard-target="#subunitDNASequence">
-Copy to clipboard
-</button>
-</dd>
+<dl class="dl-horizontal">
+    <dt style='white-space: normal;'>Cluster nucleotide start</dt>
+    <dd id="subunitStart"><dd>
+    <dt style='white-space: normal;'>Cluster nucleotide stop</dt>
+    <dd id="subunitStop"><dd>
+    <dt>GenBank accession</dt>
+    <dd><a target="_blank" href="" id="subunitGenbankAccession"></a></dd>
 </dl>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#aaseqtab" aria-controls="aaseqtab" role="tab" data-toggle="tab">AA sequence</a></li>
+    <li role="presentation"><a href="#ntseqtab" aria-controls="ntseqtab" role="tab" data-toggle="tab">Nucleotide sequence</a></li>
+    <li role="presentation"><a href="#secondarystructuretab" aria-controls="secondarystructuretab" role="tab" data-toggle="tab">Secondary structure</a></li>
+    <li role="presentation"><a href="#solventaccessibilitytab" aria-controls="solventaccessibilitytab" role="tab" data-toggle="tab">Solvent accessibility</a></li>
+</ul>
+
+
+<!-- Tab panes -->
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane active" id="aaseqtab">
+
+<textarea id="subunitAASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+    <button id="copy" class="btn btn-default" data-clipboard-target="#subunitAASequence">
+    Copy to clipboard
+    </button>
+    <a href="#" id="subunitSearchButton" class="btn btn-default" role="button">Send to sequence search</a>
+</div> <!-- end btn-group -->
+</div> <!-- end tab aaseqtab -->
+
+<div role="tabpanel" class="tab-pane" id="ntseqtab">
+<textarea id="subunitDNASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+    <button id="copy" class="btn btn-default" data-clipboard-target="#subunitDNASequence">
+    Copy to clipboard
+    </button>
+</div> <!-- end btn-group -->
+</div> <!-- end tab ntseqtab -->
+
+<div role="tabpanel" class="tab-pane" id="secondarystructuretab">
+<textarea id="subunitss" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+    <button id="copy" class="btn btn-default" data-clipboard-target="#subunitss">
+    Copy to clipboard
+    </button>
+</div> <!-- end btn-group -->
 </div>
+
+<div role="tabpanel" class="tab-pane" id="solventaccessibilitytab">
+<textarea id="subunitacc" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+    <button id="copy" class="btn btn-default" data-clipboard-target="#subunitacc">
+    Copy to clipboard
+    </button>
+</div> <!-- end btn-group -->
+</div>
+</div>  <!-- end tab-content -->
+</div> <!-- end modal-body -->
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div> <!-- end modal-footer -->
+
+</div> <!-- end modal-content  -->
+</div> <!-- end modal-dialog -->
+</div> <!-- modal -->
 
 {% endblock %}
