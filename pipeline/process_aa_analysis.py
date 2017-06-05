@@ -31,6 +31,7 @@ def file_to_dict(dirname, filename, val_type='str'):
                 sequence.extend(list(line))
             else:
                 sequence.extend([int(v) for v in line.split()])
+    sequence_dict[key] = sequence
     return sequence_dict
 
 # Directory containing sequence data
