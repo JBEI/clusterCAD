@@ -260,7 +260,7 @@ class Subunit(models.Model):
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
     acc = models.TextField()
-    acc20 = models.CommaSeparatedIntegerField(max_length=20000)
+    acc20 = models.CommaSeparatedIntegerField(max_length=1000000)
     ss = models.TextField()
     ss8 = models.TextField()
 
