@@ -11,6 +11,7 @@ from django.http import Http404
 from json import dumps
 from rdkit import Chem as chem
 from io import StringIO
+from django.core.cache import cache
 
 def index(request):
     try:
@@ -138,6 +139,9 @@ def plot_heatmap(values, labels):
       values: A list or string of values
       labels: A list or string of labels
     """
+    cacheResults = cache.get(('plot_heatmap', values, labels))
+    if cacheResults:
+        return cacheResults
 
     # This is the number of positions to plot per line
     # Note: Spacing between lines will break for n <= 25 
@@ -210,4 +214,8 @@ def plot_heatmap(values, labels):
 
     outputSVG = StringIO()
     plt.savefig(outputSVG, format="svg")
-    return outputSVG.getvalue()
+    plotSVGstring = outputSVG.getvalue()
+
+    # cache result forever
+    cache.set(('plot_heatmap', values, labels), plotSVGstring, None)
+    return plotSVGstring

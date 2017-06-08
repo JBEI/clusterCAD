@@ -286,6 +286,8 @@ $(document).ready(function(){
                     $('#subunitGenbankAccession').attr("href", proteinBase.concat(data.genbankAccessionShort));
                     var searchUrl = "/sequenceSearch/?subunit="
                     $('#subunitSearchButton').attr("href", searchUrl.concat(data.id));
+                    $('#secondarystructureImg').attr("src", "/pks/secondaryStruturePlot/".concat(subunitid));
+                    $('#solventaccessibilityImg').attr("src", "/pks/solventAccessibilityPlot/".concat(subunitid));
                     $('#subunitView').modal('show');
                 },
                 data: { subunitid: subunitid },
@@ -426,6 +428,11 @@ Copy to clipboard
     Copy to clipboard
     </button>
 </div> <!-- end btn-group -->
+<div class="row">
+    <div class="col-md-12">
+                <img id="secondarystructureImg" class="img-responsive" src="" width="100%"/>
+    </div>
+</div>
 </div>
 
 <div role="tabpanel" class="tab-pane" id="solventaccessibilitytab">
@@ -435,6 +442,11 @@ Copy to clipboard
     Copy to clipboard
     </button>
 </div> <!-- end btn-group -->
+<div class="row">
+    <div class="col-md-12">
+                <img id="solventaccessibilityImg" class="img-responsive" src="" width="100%"/>
+    </div>
+</div>
 </div>
 </div>  <!-- end tab-content -->
 </div> <!-- end modal-body -->
