@@ -1,0 +1,78 @@
+{
+    "description": "Gephyronic acid",
+    "genbankAccession": "KF479198.1",
+    "mibigAccession": "BGC0000069.1",
+    "architecture": {
+        "gphG": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "cMT": {
+                        "active": false
+                    },
+                    "KR": {
+                        "type": "C1",
+                        "active": false
+                    }
+                }
+            }
+        },
+        "gphH": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "cMT": {
+                        "active": true
+                    }
+                }
+            }
+        },
+        "gphI": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "cMT": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "U",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "gphJ": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "U",
+                        "active": true
+                    },
+                    "TE": {
+                        "ring": 0,
+                        "cyclic": false
+                    }
+                }
+            }
+        }
+    }
+}

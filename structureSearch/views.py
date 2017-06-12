@@ -29,7 +29,7 @@ def search(request):
             messages.error(request, 'Error: Invalid structure!')
             return render(request, 'search.html')
 
-    querySmiles = chem.MolToSmiles(mol)
+    querySmiles = chem.MolToSmiles(mol, isomericSmiles=True)
 
     assert 'cutoff' in request.POST
     minSim = float(request.POST['cutoff'])

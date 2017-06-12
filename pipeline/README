@@ -47,6 +47,9 @@ antismash_to_database.py
 If run with antismash_to_database.py > antismash_to_database.log then we can check
 what potential catalytic domains have been ignored. Search for "Ignoring domain type".
 
+Add amino acid sequence annotations to database.
+
+process_aa_analysis.py
 
 #######################################
 # Implement corrections to ClusterCAD #
@@ -64,8 +67,8 @@ the JSON files.
 # Clean up ClusterCAD entries #
 ###############################
 
-Use script clustercad_clean.py to delete clusters that have less than
-three modules or lack a computable product.
+Use script clustercad_clean.py to delete invalid subunits, and clusters that have less than
+three modules or lack a computable product. Products are recomputed after subunit deletion.
 
 #########################################
 # Compile Blast database for ClusterCAD #
@@ -75,7 +78,8 @@ It will be necessary to make the folder ./data/blast/.
 
 Use script blast_database.py to generate fasta file containing all known subunits. File
 will be generated in file ./data/blast/clustercad_subunits. Sequence IDs are 
-mibigAccession_subunit.name.
+mibigAccession_${subunit.name.split()[0] + subunit.name.split()[-1]}   # if the first and last split elements are different
+mibigAccession_${subunit.name.split()[0]}   # if the first and last split element are the same
 
 makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
 

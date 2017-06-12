@@ -115,6 +115,11 @@ def processSubunitModules(sec_met):
         # Get the boundaries of the catalytic domain
         boundaries = [int(bound) for bound in domainsplit[3].replace( \
           '(', '').replace(')', '').replace('.', '').split('-')]
+
+        # AntiSMASH seems to count from 0 for start positions
+        # but 1 for stop positions, as in BioPython
+        # so we add 1 to the start start here
+        boundaries[0] += 1
         
         # Here, we add each domain to a list, which will be converted to an OrderedDict
         if domaintype in ['KS', 'DH', 'ER', 'ACP', 'cMT', 'oMT', 'CAL', 'PCP',
@@ -165,19 +170,23 @@ def processClusterSeqRecord(record):
     '''
     # Get list to hold information about all genes in the record
     gene_data = []
+
     
-    # Only the "CDS" features are potentially gene
     for feature in record.features:
         # These are the features we are interested in
         if feature.type == 'CDS' and 'protein_id' in feature.qualifiers.keys() and \
-          'gene' in feature.qualifiers.keys(): 
+                ('gene' in feature.qualifiers.keys() or 'product' in feature.qualifiers.keys()): 
             # This gets the location of the feature
             location = feature.location
             # General information about gene
             if 'product' in feature.qualifiers.keys():
                 description = feature.qualifiers['product'][0]
+            if 'gene' in feature.qualifiers.keys(): 
+                genename = feature.qualifiers['gene'][0]
+            elif 'product' in feature.qualifiers.keys():
+                genename = feature.qualifiers['product'][0]
             gene_data.append([feature.qualifiers['protein_id'][0],
-                              feature.qualifiers['gene'][0],
+                              genename,
                              ])
             # Feature may not be a PKS module and therefore may not have have subunits 
             # (this will be overwritten if it does have subunits)
@@ -192,7 +201,7 @@ def processClusterSeqRecord(record):
                     subunit_modules = processSubunitModules(feature.qualifiers['sec_met'])
 
             # Append description and position of gene within nucleotide sequence
-            gene_data[-1].extend([description, [location.start.position, location.end.position]])
+            gene_data[-1].extend([description, [location.start.position + 1, location.end.position]])
 
             # Subunit information (if no subunit information, assumed to be a standalone enzyme)
             if subunit_modules:

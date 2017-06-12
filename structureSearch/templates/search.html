@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block subtitle %}
+structure search
+{% endblock %}
+
 {% block extra_headers %}
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <link rel="stylesheet" href="/static/ChemDoodle/ChemDoodleWeb.css" type="text/css">
@@ -9,7 +13,7 @@
 {% block js_content %}
 <script type="text/javascript">
 function do_example(){
-   $("#smiles").val('CCC1OC(=O)C(C)C(O)C(C)C(O)C(C)C(O)C(C)C(=O)C(C)C(O)C1C');
+   $("#smiles").val('C[C@H]1C[C@H](C[C@@H]([C@H](/C(=C\\C=C\\C[C@H](OC(=O)C[C@@H]([C@H](C1)C)O)[C@@H]2CCC[C@H]2C(=O)O)/C#N)O)C)C');
 }
 
 $(document).ready(function() {
@@ -135,8 +139,8 @@ Selecting a starting point for engineering<br/>
         <div class="form-group">
             <div class="btn-group">
                 <button class="btn btn-primary" type="submit">Search</button>
-                <button class="btn" id="loadexample">Load an example query</button>
-                <button class="btn" type="reset">Clear entry field</button>
+                <button class="btn btn-default" id="loadexample">Load an example query</button>
+                <button class="btn btn-default" type="reset">Reset entry field</button>
             </div>
         </div>
     </div>
@@ -200,6 +204,7 @@ Selecting a starting point for engineering<br/>
 </div>
 </form>
 </div>
+This tool uses atom pair descriptors with the Tanimoto similarity metric. Stereoisomers will appear as separate hits, with identical scores.
 </div>
 
 </div>

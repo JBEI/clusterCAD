@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}
+sequence search
+{% endblock %}
+
+{% block js_content %}
+<script type="text/javascript">
+function do_example(){
+   $("#aainput").val('MTAEASQDKLRDYLRKTLADLRTTKQRLRDTERRATEPVAIVGMSCRLPGDVRTPERFWELLDTGTDALTPLPTDRGWNLDTAFDDERPYRREGGFLYDAGRFDAEFFGISPREALAMDPQQRLLLESSWEAIEHARIDPRSLHGSRTGVWFGTIGQDYFSLFAASGGEHANYLATACSASVMSGRVSYVLGLEGPAVTVDTACSSSLVALHSAVQALRSGECELALAGGATVMATPTVFTAFSHQRGLAGDGRCKAFAAGADGAGFAEGVGVLVLERLSVARRNGHRVLAVVRGSAVNQDGASNGLTAPNGPSQQRVIRAALANARLAPEDVDAVEGHGTGTSLGDPIEAQALLATYGRGRDAERPLWLGSVKSNIGHAQAAAGVAGVIKMVLAMEKGRLPRTLHVDEPSGEVDWDSGAVRLLTEARDWPSGEGRVRRAGVSSFGISGTNAHVIIEEPQEEEAAPDSSASGAVPWVLSARSAEALQALASQLADHSAKSSPVDVGWSLVSTRAAFEHRAVVVGRGRDELVRGLSEVAQGRGVRGVASSASGGLAFVFAGQGSQRLGMGRGLYERFPVFAEAFDEVCGRVGPGVREVVFGSDAGELDRTVWAQAGLFALEVALFRLLESWGVRPGCLIGHSVGELSAACVAGLWSLEDACRVVAARARLMQALPAGGVMVAVRAEAGELAGFLGEDVVIASVNAPGQVVIAGPEGGVERVVAACGARSRRLAVSHAFHSPLVEPMLGEFRRVVESVAFGVPSLRVVSNVTGAWVDPEEWGTPEYWVRQVREPVRFADGVATLLDAGVRTFVELGPAGTLTSMVSHCADATATSVTAVPTLRPDHDESRTVLSAAASLYVQGHPVDWAPLFPRARTVDLPTYPFQHQHYWMESAARPTVEDTPREPLDGWTHRIDWVPLVDEEPAPVLAGTWLLVRPEEGPRPLADAVADALTRHGASVVEAARVPHQSDTELTGVVSLLGPGADGDGGLDATLRLVQDLATAGSTAPLWIVTSGAVAVGTSDTVPNPEQATLWGLARAAATEWPGLGAARIDLPADLTEQVGRRLCARLLDRSEQETAVRQAGVFARRLVRARTSDGRWTPRGTVLVTGGTGALAGHVARWLAEEGAEHIVLAGRRGPDGQGAEALRADLVAAGVKATIVRCDVADRDAVRLLLDAHRPSAIVHTAGVVDDGLLTSLTPAQVERVLRPKLLGARNLHELTRDRELDAFVLFSSLAGVLGGAGQANYAAANAYLDALAAHRTAHGLPAASLAWGPWEGDGMAAAQEAADRLRRSGLTPLPPEQAVRALGRGHGPLVVADADWARLAAGSTQRLLDELPEVRAVRPAEPAVGQRPDLPARLAGRPAEEQSAVLLEAVREEIAAVLRYADPARIGADHEFLALGFDSLTSIELRNRLATRIGLTLPATLTLEQRTPAGLAAHLRERIADRPVGSGAVPVPGSADVPEAGGGSGLGELWQEADRHGRRLEFIDVLTAAAAFRPAYREPAELELPPLRLTSGGDEPPLFCIPSHLGKADPHKFLRFAAALRGRRDVFVLRQPGFVPGQPLPAGLDVLLDTHARAMAGHDRPVLLGYSAGGLAAQALAARLAELGRPPAAVVLVDTYAPDETEVMARIQGAMEQGQRDRDGRTGAAFGEAWLTAMGHYFGFDWTPCPVDVPVLHVRAGDPMTGMPVEGRWQARWNLPHTAVDVPGDHFTMMEDHAPRTADTVHDWLGTAVRRPERTRD');
+}
+
+$(document).ready(function() {
+$("#loadexample").click(function() {
+do_example();
+return false;
+});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+<div class="span12">
+<h2>
+Selecting a donor module for domain exchange experiments<br/>
+<small class="text-muted">
+search for modules based on similarity to a query amino acid sequence</small>
+</h2>
+</div>
+</div><!--/row-->
+
+<div class="row-fluid">
+<form action="." method="post" accept-charset="utf-8">
+{% csrf_token %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+          <label for="aainput">Amino acid sequence</label>
+          <textarea class="form-control" rows="6" name="aainput" id="aainput">{{ aainput }}</textarea>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-sm-5">
+
+        <div class="form-group">
+          <label for="evalue">Maximum E-value cutoff (0&lt;E&lt;=10)</label>
+          <input type="text" class="form-control" id="evalue" name="evalue" value="10.0"/>
+        </div>
+
+    </div>
+    <div class="col-md-4 col-sm-5">
+
+        <div class="form-group">
+          <label for="maxHits">Max hits returned</label>
+                <select class="form-control" name="maxHits" id="maxHits">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                </select>
+        </div>
+
+    </div>
+    <div class="col-md-4 col-sm-5">
+
+        <div class="form-group">
+          <label for="showAllDomains">Show domains overlapping with alignment</label>
+                <select class="form-control" name="showAllDomains" id="showAllDomains">
+                    <option value="0">Only domains overlapping</option>
+                    <option value="1">All domains in overlapping modules</option>
+                </select>
+        </div>
+
+    </div>
+    <div class="col-md-4 col-sm-5">
+
+        <div class="form-group">
+          <label for="sortOutput">Sort output HSPs</label>
+                <select class="form-control" name="sortOutput" id="sortOutput">
+                    <option value="0">Group HSPs by subunit (blast default)</option>
+                    <option value="1">Order HSPs by bit score</option>
+                </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="btn-group">
+                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-default" id="loadexample">Load an example query</button>
+                <button class="btn btn-default" type="reset">Reset entry field</button>
+            </div>
+        </div>
+    </div>
+</div>
+	
+</form>
+This tool uses NCBI blastp (protein-protein BLAST) to align your query against all PKS subunits (polypeptides) in our database, while identifying overlapping domains and modules in each hit.
+</div>
+{% endblock %}

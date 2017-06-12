@@ -3,6 +3,12 @@
 {% load structureSearch_filters %}
 
 {% block js_content %}
+
+<style type="text/css">
+    .popover{
+        max-width:1000px;
+    }
+</style>
 <script>
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
@@ -14,30 +20,22 @@ jQuery(document).ready(function($) {
 {% endblock %}
 
 {% block subtitle %}
-Similarity hits
+structure hits
 {% endblock %}
 
 {% block content %}
 <h2>Predicted intermediate structure similarity hits</h2>
 
 <div class="row-fluid">
-<div class="col-xs-8 col-sm-7 col-md-6 col-lg-5">
-<table class="table table-bordered table-condensed">
-<tbody>
-<tr>
-    <th>Query structure</th>
-    <td><img src="/compounddb/renderer/{{ querySmiles }}?align=False"/></td>
-</tr>
-<tr>
-    <th>Minimum similarity cutoff</th>
-    <td>{{ minSim }}</td>
-</tr>
-<tr>
-    <th>Max compounds returned</th>
-    <td>{{ maxHits }}</td>
-</tr>
-</tbody>
-</table>
+<div class="col-md-12">
+<dl class="dl-horizontal">
+<dt>Query structure</dt>
+<dd><img src="/compounddb/renderer/{{ querySmiles }}/243?align=False"/></dd>
+<dt>Minimum similarity</dt>
+<dd>{{ minSim }}</dd>
+<dt>Max compounds</dt>
+<dd>{{ maxHits }}</dd>
+</dl>
 </div>
 </div><!--/row-->
 
@@ -68,7 +66,7 @@ Similarity hits
 </thead>
 <tbody>
 {% for compound in moduleHits %}
-    <tr class="clickable-row" data-container="body" data-href="/pks/{{ compound.modules.0.subunit.cluster.mibigAccession }}/?mark={{ compound.modules.0.order }};#{{ compound.modules.0.subunit.name }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
+    <tr class="clickable-row" data-container="body" data-href="/pks/{{ compound.modules.0.subunit.cluster.mibigAccession }}/?mark={{ compound.modules.0.order }};#{{ compound.modules.0.subunit.name }}" data-content="<img height='295' width='720' src='/compounddb/mcsrenderernew/{{ compound.smiles|urlq }}_{{ querySmiles }}/720/0' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
         <td rowspan="{{ compound.modules|length }}">
             {{ forloop.counter }}
         </td>
@@ -77,7 +75,7 @@ Similarity hits
         </td>
         {% for module in compound.modules %}
             {% if forloop.counter != 1 %} 
-                <tr class="clickable-row" data-container="body" data-href="/pks/{{ module.subunit.cluster.mibigAccession }}/?mark={{ module.order }};#{{ module.subunit.name }}" data-content="<img height='213' width= '213' src='/compounddb/renderer/{{ compound.smiles|urlq }}/{{ querySmiles }}?align=False' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
+                <tr class="clickable-row" data-container="body" data-href="/pks/{{ module.subunit.cluster.mibigAccession }}/?mark={{ module.order }};#{{ module.subunit.name }}" data-content="<img height='295' width='720' src='/compounddb/mcsrenderernew/{{ compound.smiles|urlq }}_{{ querySmiles }}/720/0' />" data-toggle="popover" data-placement="top" title="Result vs query maximum common substructure" data-html="true"/">
             {% endif %}
             <td>{{ module.subunit.cluster.mibigAccession }}</td>
             <td>{{ module.subunit.cluster }}</td>

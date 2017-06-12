@@ -1,0 +1,21 @@
+Path to lookup a reaction in BIGG to metacyc:
+
+-use bigg cross-ref to get EC code
+-lookup EC code in reaction-links.dat
+-lookup atom transition in atom-mappings-smiles.dat
+
+Path to lookup a metabolite id:
+
+-use bigg cross-ref
+
+PFK example:
+
+1) Get universal reaction ID and metabolite IDs from BiGG
+id="R_PFK"
+atp_c + f6p_c ⇌ adp_c + fdp_c + h_c
+
+2) lookup metabolites in bigg_model_metabolites.txt
+f6p - BioCyc - CPD-15709
+
+3) Lookup EC number in BIGG
+2.7.1.11
