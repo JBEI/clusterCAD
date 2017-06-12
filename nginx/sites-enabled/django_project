@@ -17,3 +17,11 @@ server {
     }
 
 }
+
+server {
+        listen 80;
+        server_name www.clustercad.jbei.org;
+        # $scheme will get the http protocol
+        # and 301 is best practice for tablet, phone, desktop and seo
+        return 301 $scheme://domain.com$request_uri;
+}
