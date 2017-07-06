@@ -11,8 +11,8 @@ from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 
 class Cluster(models.Model):
-    '''Cluster is defined by GenBank and MIBiG accession numbers. 
-    
+    '''Cluster is defined by GenBank and MIBiG accession numbers.
+
     # Properties
         mibigAccession: str. MIBiG accession number.
         genbankAccession: str. GenBank accession number.
@@ -26,7 +26,7 @@ class Cluster(models.Model):
         subunits: Returns subunits in cluster.
         architecture: Returns structure of cluster as list of lists.
         reorderSubunits: Reorders subunits in cluster.
-        computeProduct: Compute list of intermediates for each module in cluster. 
+        computeProduct: Compute list of intermediates for each module in cluster.
         setIterations: Sets module iterations parameter specificying number of iterations.
         setActive: Sets module KR, DH, ER, oMT, or cMT domain active boolean.
         setSubstrate: Sets AT substrate specificity of module.
@@ -34,7 +34,7 @@ class Cluster(models.Model):
         setCyclization: Sets cyclization of cluster TE.
         clusterDict: Generates OrderedDict representation of cluster.
         clusterJSON: Generates JSON file representation of cluster and save to file path.
-        correctCluster: Corrects errors in cluster using JSON file. 
+        correctCluster: Corrects errors in cluster using JSON file.
                         Template JSON file should be generated using clusterJSON.
     '''
     mibigAccession = models.CharField(max_length=100, primary_key=True)
@@ -53,7 +53,7 @@ class Cluster(models.Model):
         return [[x, x.architecture()] for x in self.subunits()]
 
     def computeProduct(self, computeMCS=True, recompute=False):
-        chain = []        
+        chain = []
         for subunit in self.subunits():
             for module in subunit.modules():
                 if recompute:
@@ -61,7 +61,7 @@ class Cluster(models.Model):
                 if len(chain) == 0:
                     chain.append(module.computeProduct())
                 else:
-                    chain.append(module.computeProduct(chain[-1]))    
+                    chain.append(module.computeProduct(chain[-1]))
 
         if computeMCS:
                 mcs = rdFMCS.FindMCS([chem.MolFromSmiles(self.knownProductSmiles), chain[-1]])
@@ -75,7 +75,7 @@ class Cluster(models.Model):
         '''
         for subunit in self.subunits():
             assert subunit.name in newOrder, 'Missing subunit %s.' %(subunit)
-        subunits = [Subunit.objects.get(cluster__exact=self, name__exact=x) for x in newOrder] 
+        subunits = [Subunit.objects.get(cluster__exact=self, name__exact=x) for x in newOrder]
         assert len(newOrder) == len(subunits), 'Non-existant subunits provided in new order.'
 
         # Reset loading bool of first module in oldOrder
@@ -85,8 +85,8 @@ class Cluster(models.Model):
         oldLoading.save()
 
         # Update subunit ordering
-        subunitCounter = 0 
-        moduleCounter = 0 
+        subunitCounter = 0
+        moduleCounter = 0
         for subunit in subunits:
             subunit.order = subunitCounter
             subunit.save()
@@ -113,11 +113,11 @@ class Cluster(models.Model):
                                        subunit__name=sub).order_by('order')[mod]
         module.iterations = iterations
         module.save()
-        
+
     def setActive(self, sub, mod, dom, active):
         assert dom in ['KR', 'DH', 'ER', 'oMT', 'cMT']
         assert isinstance(active, bool)
-        module = Module.objects.filter(subunit__cluster=self, 
+        module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
         domains = Domain.objects.filter(module=module).select_subclasses()
         domain = list(filter(lambda x: repr(x) == dom, list(domains)))[0]
@@ -127,7 +127,7 @@ class Cluster(models.Model):
     def setSubstrate(self, sub, mod, update):
         assert update in ['mal', 'mmal', 'mxmal', 'emal', 'cemal',
                           'prop', 'isobut', '2metbut', 'trans-1,2-CPDA', 'CHC-CoA']
-        module = Module.objects.filter(subunit__cluster=self, 
+        module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
         domain = AT.objects.get(module=module)
         domain.substrate = update
@@ -135,7 +135,7 @@ class Cluster(models.Model):
 
     def setStereochemistry(self, sub, mod, update):
         assert update in ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'U']
-        module = Module.objects.filter(subunit__cluster=self, 
+        module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
         domain = KR.objects.get(module=module)
         domain.type = update
@@ -179,7 +179,7 @@ class Cluster(models.Model):
                                       'ring': domain.ring})
                     if dname in ['AT', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE']:
                         mdict.update({dname: ddict})
-                sdict.update({imodule: {'domains': mdict, 
+                sdict.update({imodule: {'domains': mdict,
                                         'iterations': module.iterations}})
             adict.update({sname: sdict})
         ret.update({'architecture': adict})
@@ -268,7 +268,7 @@ class Subunit(models.Model):
 
     def modules(self):
         return Module.objects.filter(subunit=self).order_by('order')
-    
+
     def architecture(self):
         return [[x, x.domains()] for x in self.modules()]
 
@@ -286,7 +286,7 @@ def setSubunitOrder(sender, instance, **kwargs):
     # sets the subunit order
     if not isinstance(instance.order, int):
         subunitCount = sender.objects.filter(cluster=instance.cluster).count()
-        instance.order = subunitCount 
+        instance.order = subunitCount
 
 class Module(models.Model):
     '''Class representing a PKS module.
@@ -337,13 +337,13 @@ class Module(models.Model):
                 substrate = 'mal'
             newDomain = AT(module=self, start=start, stop=stop, substrate=substrate)
             newDomain.save()
-        
+
         if 'KR' in domainDict.keys():
             start = domainDict['KR'][0]['start']
             stop = domainDict['KR'][0]['stop']
             type =  domainDict['KR'][1]['Predicted KR stereochemistry']
             if type == '?':
-                type = 'U' 
+                type = 'U'
             activity = domainDict['KR'][1]['Predicted KR activity']
             if activity == 'active':
                 active = True
@@ -367,7 +367,7 @@ class Module(models.Model):
             stop = domainDict['Thioesterase'][0]['stop']
             newDomain = TE(module=self, start=start, stop=stop, cyclic=cyclic, ring=0)
             newDomain.save()
-        
+
         self.setLoading()
 
     def computeProduct(self, chain=False):
@@ -411,7 +411,7 @@ def setModuleOrder(sender, instance, **kwargs):
     # sets the module order based on current count
     if not isinstance(instance.order, int):
         moduleCount = sender.objects.filter(subunit__cluster=instance.subunit.cluster).count()
-        instance.order = moduleCount 
+        instance.order = moduleCount
 
 class Domain(models.Model):
     ''' Abstract base class used to build PKS catalytic domains.
@@ -454,13 +454,16 @@ starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             '2metbut': chem.MolFromSmiles('CCC(C)C(=O)[S]'),
             'CHC-CoA': chem.MolFromSmiles('C1CCCCC1C(=O)[S]'),
             'trans-1,2-CPDA': chem.MolFromSmiles('C1CC[C@@H](C(=O)O)[C@@H]1C(=O)[S]'),
+            'cyclopentene': cheml.MolFromSmiles('C1(=O)C(=CCC1)C[S]'),
             'N/A': None
            }
 
 extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
              'mmal': chem.MolFromSmiles('C[C@@H](C(=O)O)C(=O)[S]'),
              'mxmal': chem.MolFromSmiles('CO[C@@H](C(=O)O)C(=O)[S]'),
-             'emal': chem.MolFromSmiles('CC[C@@H](C(=O)O)C(=O)[S]')
+             'emal': chem.MolFromSmiles('CC[C@@H](C(=O)O)C(=O)[S]'),
+             'bmal': chem.MolFromSmiles('CCCC[C@@H](C(=O)O)C(=O)[S]'),
+             'hexmal': chem.MolFromSmiles('CCCCCC[C@@H](C(=O)O)C(=O)[S]')
              }
 
 class AT(Domain):
@@ -470,12 +473,15 @@ class AT(Domain):
         ('mxmal', 'mxmal'),
         ('emal', 'emal'),
         ('cemal', 'cemal'),
+        ('bmal', 'bmal'),
+        ('hexmal', 'hexmal'),
         ('Acetyl-CoA', 'Acetyl-CoA'),
         ('prop', 'prop'),
         ('isobut', 'isobut'),
         ('2metbut', '2metbut'),
         ('CHC-CoA', 'CHC-CoA'),
         ('trans-1,2-CPDA', 'trans-1,2-CPDA'),
+        ('cyclopentene', 'cyclopentene')
         ('N/A', 'N/A'),
     )
     substrate = models.CharField(
@@ -728,8 +734,7 @@ class Standalone(models.Model):
     # a standalone PKS enzyme within a gene cluster
     cluster = models.ForeignKey(Cluster)
     order = models.PositiveSmallIntegerField()
-    name = models.CharField(max_length=2000) # name of enzyme 
+    name = models.CharField(max_length=2000) # name of enzyme
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
-
