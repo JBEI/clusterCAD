@@ -11,5 +11,6 @@ rm /clusterCAD/pipeline/data/blast/*
 cd /clusterCAD/pipeline/data/blast
 makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
 
+cd /clusterCAD/pipeline
 ./process_aa_analysis.py
 ./generate_aa_plots.py
