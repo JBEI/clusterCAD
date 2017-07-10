@@ -1,31 +1,14 @@
 {
-    "description": "Amphotericin",
-    "genbankAccession": "AF357202.1",
-    "mibigAccession": "BGC0000015.1",
+    "description": "Halstoctacosanolide",
+    "genbankAccession": "AB241068.1",
+    "mibigAccession": "BGC0000073.1",
     "architecture": {
-        "amphA": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": false
-                    }
-                }
-            }
-        },
-        "amphB": {
+        "hlsA": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
-                    },
-                    "KR": {
-                        "type": "A2",
-                        "active": true
                     }
                 }
             },
@@ -40,20 +23,88 @@
                         "active": true
                     }
                 }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
             }
         },
-        "amphC": {
+        "hlsB": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
                     },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
                     "DH": {
                         "active": true
                     },
                     "KR": {
-                        "type": "U",
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "3": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "hlsC": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "B2",
                         "active": true
                     }
                 }
@@ -82,54 +133,6 @@
                     "DH": {
                         "active": true
                     },
-                    "ER": {
-                        "active": false
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            },
-            "3": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            },
-            "4": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            },
-            "5": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
                     "KR": {
                         "type": "B1",
                         "active": true
@@ -137,14 +140,17 @@
                 }
             }
         },
-        "amphI": {
+        "hlsD": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mal"
+                        "substrate": "mmal"
                     },
                     "DH": {
+                        "active": true
+                    },
+                    "ER": {
                         "active": true
                     },
                     "KR": {
@@ -161,7 +167,7 @@
                     },
                     "KR": {
                         "type": "A1",
-                        "active": true
+                        "active": false
                     }
                 }
             },
@@ -169,72 +175,21 @@
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mmal"
-                    },
-                    "KR": {
-                        "type": "A2",
-                        "active": true
-                    }
-                }
-            },
-            "3": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
                         "substrate": "mal"
                     },
                     "KR": {
-                        "type": "U",
-                        "active": true
-                    }
-                }
-            },
-            "4": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "C1",
-                        "active": true
-                    }
-                }
-            },
-            "5": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "B1",
+                        "type": "A1",
                         "active": true
                     }
                 }
             }
         },
-        "amphJ": {
+        "hlsE": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": false
-                    }
-                }
-            },
-            "1": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
+                        "substrate": "mmal"
                     },
                     "DH": {
                         "active": true
@@ -248,39 +203,80 @@
                     }
                 }
             },
-            "2": {
+            "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": false
+                    }
+                }
+            }
+        },
+        "hlsF": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
                     },
                     "DH": {
                         "active": true
                     },
                     "KR": {
                         "type": "B1",
-                        "active": false
+                        "active": true
                     }
                 }
-            }
-        },
-        "amphK": {
-            "0": {
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
                     },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "hlsG": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
                     "DH": {
-                        "active": false
+                        "active": true
                     },
                     "KR": {
                         "type": "B1",
                         "active": true
                     },
                     "TE": {
-                        "cyclic": true,
-                        "ring": 0
+                        "ring": 3,
+                        "cyclic": true
                     }
                 }
             }

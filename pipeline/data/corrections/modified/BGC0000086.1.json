@@ -1,18 +1,33 @@
 {
-    "description": "Fostriecin",
-    "genbankAccession": "HQ434551.1",
-    "mibigAccession": "BGC0000060.1",
+    "description": "Lasalocid",
+    "genbankAccession": "AB449340.1",
+    "mibigAccession": "BGC0000086.1",
     "architecture": {
-        "fosA": {
+        "lsd11": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mmal"
+                        "substrate": "mal"
                     }
                 }
             },
             "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "emal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
@@ -22,7 +37,7 @@
                         "active": true
                     },
                     "ER": {
-                        "active": false
+                        "active": true
                     },
                     "KR": {
                         "type": "B1",
@@ -31,24 +46,78 @@
                 }
             }
         },
-        "fosB": {
+        "lsd12": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mal"
+                        "substrate": "emal"
                     },
                     "DH": {
                         "active": true
                     },
                     "KR": {
-                        "type": "A1",
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "emal"
+                    },
+                    "KR": {
+                        "type": "A2",
                         "active": true
                     }
                 }
             }
         },
-        "fosC": {
+        "lsd13": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    }
+                }
+            }
+        },
+        "lsd14": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "B2",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "lsd15": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -58,8 +127,11 @@
                     "DH": {
                         "active": true
                     },
+                    "ER": {
+                        "active": true
+                    },
                     "KR": {
-                        "type": "A1",
+                        "type": "B1",
                         "active": true
                     }
                 }
@@ -71,13 +143,13 @@
                         "substrate": "mal"
                     },
                     "KR": {
-                        "type": "A1",
+                        "type": "C1",
                         "active": true
                     }
                 }
             }
         },
-        "fosD": {
+        "lsd16": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -94,45 +166,12 @@
                 }
             }
         },
-        "fosE": {
+        "lsd17": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            },
-            "1": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosF": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
                     },
                     "TE": {
                         "ring": 0,

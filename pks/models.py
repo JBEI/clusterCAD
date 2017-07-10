@@ -125,8 +125,7 @@ class Cluster(models.Model):
         domain.save()
 
     def setSubstrate(self, sub, mod, update):
-        assert update in ['mal', 'mmal', 'mxmal', 'emal', 'cemal',
-                          'prop', 'isobut', '2metbut', 'trans-1,2-CPDA', 'CHC-CoA']
+        assert update in list(set(list(starters.keys()) + list(extenders.keys()))), update
         module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
         domain = AT.objects.get(module=module)
@@ -454,7 +453,7 @@ starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             '2metbut': chem.MolFromSmiles('CCC(C)C(=O)[S]'),
             'CHC-CoA': chem.MolFromSmiles('C1CCCCC1C(=O)[S]'),
             'trans-1,2-CPDA': chem.MolFromSmiles('C1CC[C@@H](C(=O)O)[C@@H]1C(=O)[S]'),
-            'cyclopentene': cheml.MolFromSmiles('C1(=O)C(=CCC1)C[S]'),
+            'cyclopentene': chem.MolFromSmiles('C1(=O)C(=CCC1)C(=O)[S]'),
             'N/A': None
            }
 
@@ -481,7 +480,7 @@ class AT(Domain):
         ('2metbut', '2metbut'),
         ('CHC-CoA', 'CHC-CoA'),
         ('trans-1,2-CPDA', 'trans-1,2-CPDA'),
-        ('cyclopentene', 'cyclopentene')
+        ('cyclopentene', 'cyclopentene'),
         ('N/A', 'N/A'),
     )
     substrate = models.CharField(

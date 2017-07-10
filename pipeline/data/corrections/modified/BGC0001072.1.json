@@ -1,60 +1,18 @@
 {
-    "description": "Gephyronic acid",
-    "genbankAccession": "KF479198.1",
-    "mibigAccession": "BGC0000069.1",
+    "description": "Simocyclinone",
+    "genbankAccession": "AF324838.2",
+    "mibigAccession": "BGC0001072.1",
     "architecture": {
-        "gphG": {
+        "simC1A": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
-                    },
-                    "cMT": {
-                        "active": false
-                    },
-                    "KR": {
-                        "type": "C1",
-                        "active": false
                     }
                 }
-            }
-        },
-        "gphH": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "cMT": {
-                        "active": true
-                    }
-                }
-            }
-        },
-        "gphI": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": false
-                    },
-                    "cMT": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "U",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "gphJ": {
-            "0": {
+            },
+            "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
@@ -64,8 +22,50 @@
                         "active": true
                     },
                     "KR": {
-                        "type": "U",
+                        "type": "B1",
                         "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "simC1B": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": false
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "simC1C": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
                     },
                     "TE": {
                         "ring": 0,

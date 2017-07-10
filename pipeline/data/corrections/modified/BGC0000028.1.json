@@ -1,14 +1,14 @@
 {
-  "description": "Monensin",
-  "genbankAccession": "AF440781.1",
-  "mibigAccession": "BGC0000100.1",
+  "description": "Bafilomycin",
+  "genbankAccession": "GU390405.1",
+  "mibigAccession": "BGC0000028.1",
   "architecture": {
-    "monAI": {
+    "BafAI": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mal"
+            "substrate": "isobut"
           }
         }
       },
@@ -18,175 +18,17 @@
           "AT": {
             "substrate": "mmal"
           },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "C1",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAII": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "U",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAIII": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "DH": {
-            "active": true
-          },
           "KR": {
             "type": "B1",
             "active": true
           }
         }
       },
-      "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAIV": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "emal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      },
-      "1": {
+      "2": {
         "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "U",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAV": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      },
-      "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "U",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAVI": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "KR": {
-            "type": "C1",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAVII": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "KR": {
-            "type": "A1",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAVIII": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
           },
           "KR": {
             "type": "A1",
@@ -194,6 +36,72 @@
           }
         }
       },
+      "3": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          }
+        }
+      }
+    },
+    "BafAII": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "KR": {
+            "type": "A2",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mxmal"
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "2": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      }
+    },
+    "BafAIII": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
       "1": {
         "iterations": 1,
         "domains": {
@@ -201,11 +109,64 @@
             "substrate": "mmal"
           },
           "DH": {
-            "active": false
+            "active": true
+          },
+          "ER": {
+            "active": true
           },
           "KR": {
-            "type": "B2",
+            "type": "B1",
             "active": true
+          }
+        }
+      }
+    },
+    "BafAIV": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "KR": {
+            "type": "A2",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      }
+    },
+    "BafAV": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          },
+          "TE": {
+            "ring": 3,
+            "cyclic": true
           }
         }
       }
