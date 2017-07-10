@@ -1,9 +1,9 @@
 {
-  "description": "Monensin",
-  "genbankAccession": "AF440781.1",
-  "mibigAccession": "BGC0000100.1",
+  "description": "Filipin",
+  "genbankAccession": "BA000030.3",
+  "mibigAccession": "BGC0000059.1",
   "architecture": {
-    "monAI": {
+    "pteA1": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -16,39 +16,61 @@
         "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
+            "substrate": "mal"
           },
           "KR": {
-            "type": "C1",
+            "type": "B1",
             "active": true
           }
         }
-      }
-    },
-    "monAII": {
-      "0": {
+      },
+      "2": {
         "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mmal"
+            "substrate": "mal"
           },
           "DH": {
             "active": true
           },
-          "ER": {
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "3": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
             "active": true
           },
           "KR": {
-            "type": "U",
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "4": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
             "active": true
           }
         }
       }
     },
-    "monAIII": {
+    "pteA2": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -73,9 +95,6 @@
           "DH": {
             "active": true
           },
-          "ER": {
-            "active": true
-          },
           "KR": {
             "type": "B1",
             "active": true
@@ -83,129 +102,99 @@
         }
       }
     },
-    "monAIV": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "emal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      },
-      "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "U",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAV": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      },
-      "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "U",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAVI": {
+    "pteA3": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mal"
-          },
-          "KR": {
-            "type": "C1",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAVII": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "KR": {
-            "type": "A1",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAVIII": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "KR": {
-            "type": "A1",
-            "active": true
-          }
-        }
-      },
-      "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
           },
           "DH": {
             "active": false
           },
           "KR": {
-            "type": "B2",
+            "type": "B1",
             "active": true
+          }
+        }
+      }
+    },
+    "pteA4": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "A1",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "A1",
+            "active": true
+          }
+        }
+      },
+      "2": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "A1",
+            "active": true
+          }
+        }
+      },
+      "3": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "A1",
+            "active": true
+          }
+        }
+      }
+    },
+    "pteA5": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "A1",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "hexmal"
+          },
+          "KR": {
+            "type": "U",
+            "active": true
+          },
+          "TE": {
+            "ring": 0,
+            "cyclic": true
           }
         }
       }

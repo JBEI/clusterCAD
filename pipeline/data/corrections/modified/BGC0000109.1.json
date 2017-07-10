@@ -1,14 +1,43 @@
 {
-    "description": "Fostriecin",
-    "genbankAccession": "HQ434551.1",
-    "mibigAccession": "BGC0000060.1",
+    "description": "Nemadectin",
+    "genbankAccession": "AB363939.1",
+    "mibigAccession": "BGC0000109.1",
     "architecture": {
-        "fosA": {
+        "nemA1-1": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "2metbut"
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "nemA1-2": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
                     }
                 }
             },
@@ -22,7 +51,7 @@
                         "active": true
                     },
                     "ER": {
-                        "active": false
+                        "active": true
                     },
                     "KR": {
                         "type": "B1",
@@ -31,36 +60,12 @@
                 }
             }
         },
-        "fosB": {
+        "nemA2": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosC": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
                     }
                 }
             },
@@ -71,13 +76,40 @@
                         "substrate": "mal"
                     },
                     "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
                         "type": "A1",
+                        "active": true
+                    }
+                }
+            },
+            "3": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
                         "active": true
                     }
                 }
             }
         },
-        "fosD": {
+        "nemA3": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -85,23 +117,9 @@
                         "substrate": "mmal"
                     },
                     "DH": {
-                        "active": false
-                    },
-                    "KR": {
-                        "type": "B1",
                         "active": true
-                    }
-                }
-            }
-        },
-        "fosE": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
                     },
-                    "DH": {
+                    "ER": {
                         "active": true
                     },
                     "KR": {
@@ -116,14 +134,32 @@
                     "AT": {
                         "substrate": "mal"
                     },
+                    "DH": {
+                        "active": true
+                    },
                     "KR": {
-                        "type": "A1",
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
                         "active": true
                     }
                 }
             }
         },
-        "fosF": {
+        "nemA4": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -131,12 +167,39 @@
                         "substrate": "mal"
                     },
                     "KR": {
-                        "type": "A1",
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
                         "active": true
                     },
                     "TE": {
-                        "ring": 0,
-                        "cyclic": false
+                        "ring": 1,
+                        "cyclic": true
                     }
                 }
             }

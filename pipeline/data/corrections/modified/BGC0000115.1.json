@@ -1,9 +1,9 @@
 {
-    "description": "Amphotericin",
-    "genbankAccession": "AF357202.1",
-    "mibigAccession": "BGC0000015.1",
+    "description": "Nystatin",
+    "genbankAccession": "AF263912.1",
+    "mibigAccession": "BGC0000115.1",
     "architecture": {
-        "amphA": {
+        "nysA": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -16,7 +16,7 @@
                 }
             }
         },
-        "amphB": {
+        "nysB": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -42,7 +42,7 @@
                 }
             }
         },
-        "amphC": {
+        "nysC": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -53,7 +53,7 @@
                         "active": true
                     },
                     "KR": {
-                        "type": "U",
+                        "type": "B1",
                         "active": true
                     }
                 }
@@ -83,7 +83,7 @@
                         "active": true
                     },
                     "ER": {
-                        "active": false
+                        "active": true
                     },
                     "KR": {
                         "type": "B1",
@@ -137,7 +137,7 @@
                 }
             }
         },
-        "amphI": {
+        "nysI": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -184,7 +184,7 @@
                         "substrate": "mal"
                     },
                     "KR": {
-                        "type": "U",
+                        "type": "A1",
                         "active": true
                     }
                 }
@@ -214,23 +214,8 @@
                 }
             }
         },
-        "amphJ": {
+        "nysJ": {
             "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": false
-                    }
-                }
-            },
-            "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
@@ -248,6 +233,18 @@
                     }
                 }
             },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
             "2": {
                 "iterations": 1,
                 "domains": {
@@ -255,16 +252,16 @@
                         "substrate": "mal"
                     },
                     "DH": {
-                        "active": true
+                        "active": false
                     },
                     "KR": {
                         "type": "B1",
-                        "active": false
+                        "active": true
                     }
                 }
             }
         },
-        "amphK": {
+        "nysK": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -279,8 +276,8 @@
                         "active": true
                     },
                     "TE": {
-                        "cyclic": true,
-                        "ring": 0
+                        "ring": 0,
+                        "cyclic": true
                     }
                 }
             }

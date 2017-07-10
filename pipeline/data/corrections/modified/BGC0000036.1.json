@@ -1,14 +1,61 @@
 {
-    "description": "Fostriecin",
-    "genbankAccession": "HQ434551.1",
-    "mibigAccession": "BGC0000060.1",
+    "description": "Chlorothricin",
+    "genbankAccession": "DQ116941.2",
+    "mibigAccession": "BGC0000036.1",
     "architecture": {
-        "fosA": {
+        "ChlA1": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
+                        "substrate": "mal"
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
                         "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "ChlA2": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
                     }
                 }
             },
@@ -22,7 +69,7 @@
                         "active": true
                     },
                     "ER": {
-                        "active": false
+                        "active": true
                     },
                     "KR": {
                         "type": "B1",
@@ -31,7 +78,7 @@
                 }
             }
         },
-        "fosB": {
+        "ChlA3": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -41,25 +88,11 @@
                     "DH": {
                         "active": true
                     },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosC": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
+                    "ER": {
                         "active": true
                     },
                     "KR": {
-                        "type": "A1",
+                        "type": "B1",
                         "active": true
                     }
                 }
@@ -70,22 +103,75 @@
                     "AT": {
                         "substrate": "mal"
                     },
+                    "DH": {
+                        "active": true
+                    },
                     "KR": {
-                        "type": "A1",
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "U",
                         "active": true
                     }
                 }
             }
         },
-        "fosD": {
+        "ChlA4": {
             "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "ChlA5": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
                     },
                     "DH": {
-                        "active": false
+                        "active": true
                     },
                     "KR": {
                         "type": "B1",
@@ -94,36 +180,7 @@
                 }
             }
         },
-        "fosE": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            },
-            "1": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosF": {
+        "ChlA6": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -131,15 +188,12 @@
                         "substrate": "mal"
                     },
                     "KR": {
-                        "type": "A1",
+                        "type": "C1",
                         "active": true
-                    },
-                    "TE": {
-                        "ring": 0,
-                        "cyclic": false
                     }
                 }
             }
         }
     }
 }
+    

@@ -1,33 +1,46 @@
 {
-  "description": "Borrelidin",
-  "genbankAccession": "AJ580915.1",
-  "mibigAccession": "BGC0000031.1",
+  "description": "E-492 / E-975",
+  "genbankAccession": "DQ272521.1",
+  "mibigAccession": "BGC0000049.1",
   "architecture": {
-    "borA1": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "trans-1,2-CPDA"
-          }
-        }
-      }
-    },
-    "borA2": {
+    "polyketide synthase type I": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mal"
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
           },
           "KR": {
             "type": "B1",
             "active": true
           }
         }
+      },
+      "2": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "KR": {
+            "type": "A2",
+            "active": true
+          }
+        }
       }
     },
-    "borA3": {
+    "polyketide synthase type I_1": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -47,66 +60,14 @@
         "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      }
-    },
-    "borA4": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "KR": {
-            "type": "A1",
-            "active": true
-          }
-        }
-      }
-    },
-    "borA5": {
-      "0": {
-        "iterations": 3,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      }
-    },
-    "borA6": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
             "substrate": "mal"
           },
+          "DH": {
+            "active": true
+          },
           "KR": {
             "type": "B1",
             "active": true
-          },
-          "TE": {
-            "ring": 1,
-            "cyclic": true
           }
         }
       }

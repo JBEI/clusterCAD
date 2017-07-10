@@ -1,9 +1,9 @@
 {
-  "description": "Monensin",
-  "genbankAccession": "AF440781.1",
-  "mibigAccession": "BGC0000100.1",
+  "description": "Nystatin-like Pseudonocardia polyene",
+  "genbankAccession": "EU108007.1",
+  "mibigAccession": "BGC0000116.1",
   "architecture": {
-    "monAI": {
+    "cppA": {
       "0": {
         "iterations": 1,
         "domains": {
@@ -11,164 +11,22 @@
             "substrate": "mal"
           }
         }
-      },
-      "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "C1",
-            "active": true
-          }
-        }
       }
     },
-    "monAII": {
+    "cppB": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mmal"
           },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
           "KR": {
-            "type": "U",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAIII": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
+            "type": "A2",
             "active": true
           }
         }
       },
       "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAIV": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "emal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      },
-      "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "U",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAV": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        }
-      },
-      "1": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "DH": {
-            "active": true
-          },
-          "ER": {
-            "active": true
-          },
-          "KR": {
-            "type": "U",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAVI": {
-      "0": {
-        "iterations": 1,
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "KR": {
-            "type": "C1",
-            "active": true
-          }
-        }
-      }
-    },
-    "monAVII": {
-      "0": {
         "iterations": 1,
         "domains": {
           "AT": {
@@ -181,15 +39,18 @@
         }
       }
     },
-    "monAVIII": {
+    "cppC": {
       "0": {
         "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mmal"
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
           },
           "KR": {
-            "type": "A1",
+            "type": "B1",
             "active": true
           }
         }
@@ -198,14 +59,222 @@
         "iterations": 1,
         "domains": {
           "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "2": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "3": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "4": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "5": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      }
+    },
+    "cppI": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "A1",
+            "active": true
+          }
+        }
+      },
+      "2": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
             "substrate": "mmal"
+          },
+          "KR": {
+            "type": "A2",
+            "active": true
+          }
+        }
+      },
+      "3": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "4": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "C1",
+            "active": true
+          }
+        }
+      },
+      "5": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      }
+    },
+    "cppJ": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "2": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
           },
           "DH": {
             "active": false
           },
           "KR": {
-            "type": "B2",
+            "type": "B1",
             "active": true
+          }
+        }
+      }
+    },
+    "cppK": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": false
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          },
+          "TE": {
+            "ring": 0,
+            "cyclic": true
           }
         }
       }
