@@ -1,5 +1,6 @@
 #!/bin/bash
 
+./aggregate_final_structures.py
 ./antismash_to_database.py
 ./clustercad_corrections.py
 ./clustercad_clean.py
