@@ -1,14 +1,14 @@
 {
-    "description": "Fostriecin",
-    "genbankAccession": "HQ434551.1",
-    "mibigAccession": "BGC0000060.1",
+    "description": "Erythromycin",
+    "genbankAccession": "AY623658.2",
+    "mibigAccession": "BGC0000054.1",
     "architecture": {
-        "fosA": {
+        "eryAI": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mmal"
+                        "substrate": "prop"
                     }
                 }
             },
@@ -16,96 +16,71 @@
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mal"
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B2",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "eryAII": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "C2",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
                     },
                     "DH": {
                         "active": true
                     },
                     "ER": {
-                        "active": false
+                        "active": true
                     },
                     "KR": {
-                        "type": "B1",
+                        "type": “B1”,
                         "active": true
                     }
                 }
             }
         },
-        "fosB": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosC": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            },
-            "1": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosD": {
+        "eryAIII": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
                     },
-                    "DH": {
-                        "active": false
-                    },
                     "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosE": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "B1",
+                        "type": "A1",
                         "active": true
                     }
                 }
@@ -114,21 +89,7 @@
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosF": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
+                        "substrate": "mmal"
                     },
                     "KR": {
                         "type": "A1",

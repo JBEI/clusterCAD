@@ -1,33 +1,77 @@
 {
-  "description": "Meilingmycin",
-  "genbankAccession": "FJ952082.1",
-  "mibigAccession": "BGC0000093.1",
+  "description": "Mycolactone",
+  "genbankAccession": "BX649209.1",
+  "mibigAccession": "BGC0000103.1",
   "architecture": {
-    "meiA1": {
+    "mlsA1": {
       "0": {
+        "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "Acetyl-CoA"
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": false
+          },
+          "KR": {
+            "type": "B1",
+            "active": false
           }
-        },
-        "iterations": 1
+        }
       },
       "1": {
+        "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mmal"
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": false
           },
           "KR": {
             "type": "B1",
             "active": true
           }
-        },
-        "iterations": 1
+        }
       },
       "2": {
+        "iterations": 1,
         "domains": {
           "AT": {
-            "substrate": "mal"
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": false
+          },
+          "ER": {
+            "active": false
+          },
+          "KR": {
+            "type": "B2",
+            "active": true
+          }
+        }
+      },
+      "3": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "4": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
           },
           "DH": {
             "active": true
@@ -36,35 +80,13 @@
             "active": true
           },
           "KR": {
-            "type": "B1",
+            "type": "B",
             "active": true
           }
-        },
-        "iterations": 1
-      }
-    },
-    "meiA2": {
-      "0": {
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          }
-        },
-        "iterations": 1
+        }
       },
-      "1": {
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        },
-        "iterations": 1
-      },
-      "2": {
+      "5": {
+        "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mal"
@@ -73,10 +95,10 @@
             "type": "A1",
             "active": true
           }
-        },
-        "iterations": 1
+        }
       },
-      "3": {
+      "6": {
+        "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mmal"
@@ -88,12 +110,10 @@
             "type": "B1",
             "active": true
           }
-        },
-        "iterations": 1
-      }
-    },
-    "meiA3": {
-      "0": {
+        }
+      },
+      "7": {
+        "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mmal"
@@ -108,66 +128,27 @@
             "type": "B1",
             "active": true
           }
-        },
-        "iterations": 1
+        }
       },
-      "1": {
+      "8": {
+        "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mal"
           },
           "DH": {
-            "active": true
+            "active": false
           },
           "KR": {
             "type": "B1",
             "active": true
           }
-        },
-        "iterations": 1
-      },
-      "2": {
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "DH": {
-            "active": true
-          },
-          "KR": {
-            "type": "B1",
-            "active": true
-          }
-        },
-        "iterations": 1
+        }
       }
     },
-    "meiA4": {
+    "mlsA2": {
       "0": {
-        "domains": {
-          "AT": {
-            "substrate": "mal"
-          },
-          "KR": {
-            "type": "C1",
-            "active": true
-          }
-        },
-        "iterations": 1
-      },
-      "1": {
-        "domains": {
-          "AT": {
-            "substrate": "mmal"
-          },
-          "KR": {
-            "type": "C1",
-            "active": true
-          }
-        },
-        "iterations": 1
-      },
-      "2": {
+        "iterations": 1,
         "domains": {
           "AT": {
             "substrate": "mal"
@@ -175,16 +156,14 @@
           "DH": {
             "active": true
           },
+          "ER": {
+            "active": true
+          },
           "KR": {
             "type": "B1",
             "active": true
-          },
-          "TE": {
-            "ring": 2,
-            "cyclic": false
           }
-        },
-        "iterations": 1
+        }
       }
     }
   }
