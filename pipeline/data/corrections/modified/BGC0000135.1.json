@@ -1,14 +1,73 @@
 {
-    "description": "Fostriecin",
-    "genbankAccession": "HQ434551.1",
-    "mibigAccession": "BGC0000060.1",
+    "description": "Reveromycin",
+    "genbankAccession": "AB568601.1",
+    "mibigAccession": "BGC0000135.1",
     "architecture": {
-        "fosA": {
+        "revA": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "3": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "revB": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "butmal"
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
                     }
                 }
             },
@@ -22,49 +81,15 @@
                         "active": true
                     },
                     "ER": {
-                        "active": false
+                        "active": true
                     },
                     "KR": {
                         "type": "B1",
                         "active": true
                     }
                 }
-            }
-        },
-        "fosB": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "fosC": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
             },
-            "1": {
+            "2": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
@@ -77,7 +102,7 @@
                 }
             }
         },
-        "fosD": {
+        "revC": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -85,23 +110,9 @@
                         "substrate": "mmal"
                     },
                     "DH": {
-                        "active": false
-                    },
-                    "KR": {
-                        "type": "B1",
                         "active": true
-                    }
-                }
-            }
-        },
-        "fosE": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
                     },
-                    "DH": {
+                    "ER": {
                         "active": true
                     },
                     "KR": {
@@ -123,15 +134,60 @@
                 }
             }
         },
-        "fosF": {
+        "revD": {
             "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mal"
                     },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "2": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
                     "KR": {
                         "type": "A1",
+                        "active": true
+                    }
+                }
+            },
+            "3": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
                         "active": true
                     },
                     "TE": {

@@ -1,9 +1,10 @@
 {
-    "description": "Lasalocid",
-    "genbankAccession": "AB449340.1",
-    "mibigAccession": "BGC0000086.1",
+    "description": "Salinomycin",
+    "genbankAccession": "JN033543.1",
+    "mibigAccession": "BGC0000144.1",
     "architecture": {
-        "lsd11": {
+        "putative peptide synthetase": {},
+        "slnA1": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -46,12 +47,12 @@
                 }
             }
         },
-        "lsd12": {
+        "slnA2": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "emal"
+                        "substrate": "mmal"
                     },
                     "DH": {
                         "active": true
@@ -63,6 +64,62 @@
                 }
             },
             "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "slnA3": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "A1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "slnA4": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "C1",
+                        "active": true
+                    }
+                }
+            }
+        },
+        "slnA5": {
+            "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
@@ -80,30 +137,33 @@
                     }
                 }
             },
-            "2": {
+            "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "emal"
                     },
                     "KR": {
-                        "type": "A2",
+                        "type": "U",
                         "active": true
                     }
                 }
             }
         },
-        "lsd13": {
+        "slnA6": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": false
                     }
                 }
             }
         },
-        "lsd14": {
+        "slnA7": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -117,8 +177,20 @@
                 }
             }
         },
-        "lsd15": {
+        "slnA8": {
             "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "type": "A2",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
@@ -131,51 +203,22 @@
                         "active": true
                     },
                     "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                }
-            },
-            "1": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "C1",
+                        "type": "U",
                         "active": true
                     }
                 }
             }
         },
-        "lsd16": {
+        "slnA9": {
             "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mmal"
-                    },
-                    "DH": {
-                        "active": false
+                        "substrate": "emal"
                     },
                     "KR": {
-                        "type": "B1",
+                        "type": "A2",
                         "active": true
-                    }
-                }
-            }
-        },
-        "lsd17": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "TE": {
-                        "ring": 0,
-                        "cyclic": false
                     }
                 }
             }
