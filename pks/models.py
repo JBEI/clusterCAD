@@ -70,7 +70,7 @@ class Cluster(models.Model):
         return chain
 
     def reorderSubunits(self, newOrder):
-        '''Takes as input a list of subunit names and reordereds subunits within
+        '''Takes as input a list of subunit names and reorders subunits within
            the gene cluster.
         '''
         for subunit in self.subunits():
@@ -79,10 +79,11 @@ class Cluster(models.Model):
         assert len(newOrder) == len(subunits), 'Non-existant subunits provided in new order.'
 
         # Reset loading bool of first module in oldOrder
-        oldLoading = self.subunits()[0].modules()[0]
-        oldLoading.loading = False
-        oldLoading.setLoading()
-        oldLoading.save()
+        if len(self.subunits()[0].modules()) > 0:
+            oldLoading = self.subunits()[0].modules()[0]
+            oldLoading.loading = False
+            oldLoading.setLoading()
+            oldLoading.save()
 
         # Update subunit ordering
         subunitCounter = 0
@@ -133,7 +134,7 @@ class Cluster(models.Model):
         domain.save()
 
     def setStereochemistry(self, sub, mod, update):
-        assert update in ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'U']
+        assert update in [x[0] for x in KR.TYPE_CHOICES]
         module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
         domain = KR.objects.get(module=module)
@@ -461,7 +462,7 @@ extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
              'mmal': chem.MolFromSmiles('C[C@@H](C(=O)O)C(=O)[S]'),
              'mxmal': chem.MolFromSmiles('CO[C@@H](C(=O)O)C(=O)[S]'),
              'emal': chem.MolFromSmiles('CC[C@@H](C(=O)O)C(=O)[S]'),
-             'bmal': chem.MolFromSmiles('CCCC[C@@H](C(=O)O)C(=O)[S]'),
+             'butmal': chem.MolFromSmiles('CCCC[C@@H](C(=O)O)C(=O)[S]'),
              'hexmal': chem.MolFromSmiles('CCCCCC[C@@H](C(=O)O)C(=O)[S]')
              }
 
@@ -472,7 +473,7 @@ class AT(Domain):
         ('mxmal', 'mxmal'),
         ('emal', 'emal'),
         ('cemal', 'cemal'),
-        ('bmal', 'bmal'),
+        ('butmal', 'butmal'),
         ('hexmal', 'hexmal'),
         ('Acetyl-CoA', 'Acetyl-CoA'),
         ('prop', 'prop'),
@@ -519,8 +520,10 @@ class KR(Domain):
     TYPE_CHOICES = (
         ('A1', 'A1'),
         ('A2', 'A2'),
+        ('A', 'A'),
         ('B1', 'B1'),
         ('B2', 'B2'),
+        ('B', 'B'),
         ('C1', 'C1'),
         ('C2', 'C2'),
         ('U', 'U'),
@@ -544,12 +547,24 @@ class KR(Domain):
                                                    '[C:5](=[O:6])[S:7]>>'
                                                    '[C:1][C@:2]([O:3])[C@@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
+        elif self.type == 'A':
+            # note this was copied from A2, should be updated
+            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+                                                   '[C:5](=[O:6])[S:7]>>'
+                                                   '[C:1][C@:2]([O:3])[C@@:4]'
+                                                   '[C:5](=[O:6])[S:7]'))
         elif self.type == 'B1':
             rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
                                                    '[C:1][C@@:2]([O:3])[C@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'B2':
+            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+                                                   '[C:5](=[O:6])[S:7]>>'
+                                                   '[C:1][C@@:2]([O:3])[C@@:4]'
+                                                   '[C:5](=[O:6])[S:7]'))
+        elif self.type == 'B':
+            # note this was copied from B2, should be updated
             rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
                                                    '[C:1][C@@:2]([O:3])[C@@:4]'
