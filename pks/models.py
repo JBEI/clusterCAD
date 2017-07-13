@@ -548,10 +548,9 @@ class KR(Domain):
                                                    '[C:1][C@:2]([O:3])[C@@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'A':
-            # note this was copied from A2, should be updated
             rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C@:2]([O:3])[C@@:4]'
+                                                   '[C:1][C@:2]([O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'B1':
             rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
@@ -564,10 +563,9 @@ class KR(Domain):
                                                    '[C:1][C@@:2]([O:3])[C@@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'B':
-            # note this was copied from B2, should be updated
             rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C@@:2]([O:3])[C@@:4]'
+                                                   '[C:1][C@@:2]([O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'C1':
             rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
