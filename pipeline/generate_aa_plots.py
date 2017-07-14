@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import seaborn as sns
+import gc
 from io import StringIO
 
 sys.path.insert(0, '/clusterCAD')
@@ -122,3 +123,6 @@ for subunit in subunits:
     ssPlot = plot_heatmap(ss_seq_nums, aaseq)
     subunit.ssPlot = ssPlot
     subunit.save()
+
+    # run garbage collection
+    gc.collect()
