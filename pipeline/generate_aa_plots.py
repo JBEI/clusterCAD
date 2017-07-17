@@ -6,7 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import seaborn as sns
-import gc
 from io import StringIO
 
 sys.path.insert(0, '/clusterCAD')
@@ -99,30 +98,36 @@ def plot_heatmap(values, labels):
 
 subunits = pks.models.Subunit.objects.all()
 
+# keep only subunits with no plots
+subunits = [x for x in subunits if x.accPlot == '']
+
+# exit if everything has been plot already
+if len(subunits) == 0:
+    sys.exit("Done generating all plots.")
+
+# process only one subunit
+subunit = subunits[0]
+
 mapping = {'C':50, 
            'G':60, 'H':70, 'I':80, 
            'E':30, 'B':10, 
            'T':100, 
            'S':0}
 
-# generate all plots 
-for subunit in subunits:
-    print("Generating plots for " + subunit.cluster.description + " subunit " + subunit.name)
+# generate plot 
+print("Generating plots for " + subunit.cluster.description + " subunit " + subunit.name)
 
-    # generate solvent accessibility plot
-    intList = [int(i) for i in subunit.acc20.split(',')]
-    aaseq = list(subunit.getAminoAcidSequence())
-    assert len(intList) == len(aaseq)
-    accPlot = plot_heatmap(intList, aaseq)
-    subunit.accPlot = accPlot
+# generate solvent accessibility plot
+intList = [int(i) for i in subunit.acc20.split(',')]
+aaseq = list(subunit.getAminoAcidSequence())
+assert len(intList) == len(aaseq)
+accPlot = plot_heatmap(intList, aaseq)
+subunit.accPlot = accPlot
 
-    # generate secondary structure plot
-    f = lambda x: mapping[x]
-    ss_seq_nums = list(map(f, subunit.ss))
-    assert len(aaseq) == len(aaseq)
-    ssPlot = plot_heatmap(ss_seq_nums, aaseq)
-    subunit.ssPlot = ssPlot
-    subunit.save()
-
-    # run garbage collection
-    gc.collect()
+# generate secondary structure plot
+f = lambda x: mapping[x]
+ss_seq_nums = list(map(f, subunit.ss))
+assert len(aaseq) == len(aaseq)
+ssPlot = plot_heatmap(ss_seq_nums, aaseq)
+subunit.ssPlot = ssPlot
+subunit.save()

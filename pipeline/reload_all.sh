@@ -14,4 +14,12 @@ makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
 
 cd /clusterCAD/pipeline
 ./process_aa_analysis.py
-./generate_aa_plots.py
+
+# loop generating plots until an error occurs, then stop
+# script will exit with error code 1 if there are no
+# plots left to generate
+# this is a temporary hack to overcome a memory leak in the plot
+# code
+while [ $? -eq 0 ]; do
+    ./generate_aa_plots.py
+done
