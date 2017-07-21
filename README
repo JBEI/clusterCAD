@@ -4,8 +4,11 @@ Copyright (c) 2017, The Regents of the University of California, through
 Lawrence Berkeley National Laboratory (subject to receipt of any required
 approvals from the U.S. Dept. of Energy).  All rights reserved.
 
-Starting service:
+Starting service (connect to HTTP on port 8000):
 docker-compose up -d
+
+Loading PKS data into database:
+docker-compose exec web /bin/bash -c 'cd pipeline && make clean && make all'
 
 Shutting down (restart possible with up -d):
 docker-compose stop
