@@ -3,6 +3,7 @@
 # Makefile to load PKS data
 ################################################################################
 
+SHELL := /bin/bash
 dataUrl = https://clustercad.jbei.org/static/data
 username = pkscluster
 password = pkscluster
@@ -25,7 +26,6 @@ clean:
 data/mibigdata_clustercad_production.tgz:
 	mkdir -p data
 	wget --user=$(username) --password=$(password) $(dataUrl)/mibigdata_clustercad_production.tgz -O $@ --no-check-certificate
-	# curl -L -o $@ -u $(username):$(password) $(dataUrl)/mibigdata_clustercad_production.tgz
 	tar xvfz data/mibigdata_clustercad_production.tgz
 
 # aggregate chemical structures
@@ -66,7 +66,7 @@ data/process_aa_analysis_placeholder: process_aa_analysis.py data/blast/clusterc
 # this is a temporary hack to overcome a memory leak in the plot
 # code
 data/generate_aa_plots_placeholder: generate_aa_plots.py data/process_aa_analysis_placeholder
-	-while [ $? -eq 0 ]; do \\
-		./$< \\
-	done 
-	touch $@
+	while [ $$? -eq 0 ]; do \
+		./$<; \
+	done; \
+	touch $@ 
