@@ -1,0 +1,36 @@
+version: '2'
+services:
+  db:
+    user: postgres
+    restart: always
+    image: tbackman/debian-cheminformatics:latest
+    command: ["/usr/lib/postgresql/9.4/bin/postgres", "-D", "/var/lib/postgresql/9.4/main", "-c", "config_file=/etc/postgresql/9.4/main/postgresql.conf"]
+  redis:
+    restart: always
+    image: redis:3.2-alpine 
+  web:
+    restart: always
+    image: tbackman/debian-cheminformatics:latest
+    volumes:
+      - .:/clusterCAD
+      - /www/static
+    expose:
+      - "8000"
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+      - redis
+    working_dir: /clusterCAD
+    command: ["./wait-for-it.sh", "db:5432", "--", "./entrypoint.sh"]
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "8000:80"
+    volumes:
+      - /www/static
+    volumes_from:
+      - web
+    links:
+      - web:web

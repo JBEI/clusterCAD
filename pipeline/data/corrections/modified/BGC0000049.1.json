@@ -1,0 +1,76 @@
+{
+  "description": "E-492 / E-975",
+  "genbankAccession": "DQ272521.1",
+  "mibigAccession": "BGC0000049.1",
+  "architecture": {
+    "polyketide synthase type I": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "2": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "KR": {
+            "type": "A2",
+            "active": true
+          }
+        }
+      }
+    },
+    "polyketide synthase type I_1": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      }
+    }
+  }
+}

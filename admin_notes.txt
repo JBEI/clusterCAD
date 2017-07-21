@@ -1,0 +1,20 @@
+# create a new app
+python3 manage.py startapp pks
+
+# create database tables for new app
+python3 manage.py migrate
+
+# update app migrations
+python3 manage.py makemigrations pks
+python3 manage.py migrate
+
+
+# example to create and save a cluster object
+from pks.models import Cluster
+a = Cluster(description="ok")
+a.save()
+
+Cluster.objects.all()
+
+# flush redis cache
+docker-compose exec redis redis-cli flushall

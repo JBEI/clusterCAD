@@ -1,0 +1,28 @@
+server {
+
+    listen 80;
+    charset utf-8;
+
+    location /static {
+        alias /www/static;
+    }
+
+    location / {
+        proxy_pass http://web:8000;
+        proxy_set_header Host $host;
+        proxy_read_timeout 120s;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        auth_basic "Restricted Content";
+        auth_basic_user_file /etc/nginx/sites-enabled/.htpasswd;
+    }
+
+}
+
+server {
+        listen 80;
+        server_name www.clustercad.jbei.org;
+        # $scheme will get the http protocol
+        # and 301 is best practice for tablet, phone, desktop and seo
+        return 301 $scheme://domain.com$request_uri;
+}
