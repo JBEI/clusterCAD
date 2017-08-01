@@ -1,4 +1,4 @@
-FROM debian:8 
+FROM debian:8
 
 MAINTAINER Tyler W. H. Backman "tbackman@lbl.gov"
 
@@ -14,6 +14,7 @@ RUN apt-get update \
         python3-pip \
         python3-all \
         python3-all-dev \
+	python3-tk \
         postgresql \
         postgresql-client \
 	postgresql-server-dev-all \
@@ -40,6 +41,8 @@ RUN apt-get update \
         openjdk-7-jre \
         sudo \
         ncbi-blast+ \
+	libigraph0 \
+	libigraph0-dev \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
@@ -48,7 +51,7 @@ RUN pip3 install -U pip setuptools
 RUN pip3 install -r requirements.txt
 
 # compile and install rdkit from source code
-ENV RDKIT_VERSION Release_2016_09_3
+ENV RDKIT_VERSION Release_2017_03_3
 ENV RDBASE /root/rdkit-$RDKIT_VERSION
 ENV LD_LIBRARY_PATH $RDBASE/lib
 ENV PYTHONPATH $PYTHONPATH:$RDBASE
