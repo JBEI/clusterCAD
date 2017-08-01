@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+import matplotlib
+matplotlib.use('Agg')
+
 import os
 import sys
 import numpy as np
