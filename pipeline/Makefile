@@ -52,8 +52,7 @@ data/clustercad_clean_placeholder: clustercad_clean.py data/clustercad_correctio
 data/blast/clustercad_subunits: blast_database.py data/clustercad_clean_placeholder
 	mkdir -p data/blast
 	./$<
-	cd data/blast \
-	makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
+	cd data/blast && makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
 
 # load AA annotations into database
 data/process_aa_analysis_placeholder: process_aa_analysis.py data/blast/clustercad_subunits
