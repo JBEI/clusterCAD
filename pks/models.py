@@ -169,6 +169,8 @@ class Cluster(models.Model):
                     ddict = OrderedDict()
                     if dname == 'AT':
                         ddict.update({'substrate': domain.substrate})
+                    elif dname == 'CAL':
+                        ddict.update({'substrate': domain.substrate})
                     elif dname == 'KR':
                         ddict.update({'active': domain.active,
                                       'type': domain.type})
@@ -177,7 +179,7 @@ class Cluster(models.Model):
                     elif dname == 'TE':
                         ddict.update({'cyclic': domain.cyclic,
                                       'ring': domain.ring})
-                    if dname in ['AT', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE']:
+                    if dname in ['AT', 'CAL', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE']:
                         mdict.update({dname: ddict})
                 sdict.update({imodule: {'domains': mdict,
                                         'iterations': module.iterations}})
@@ -213,6 +215,8 @@ class Cluster(models.Model):
                 self.setIterations(s, m, iters)
                 for d,ddict in mdict.items():
                     if d == 'AT':
+                        self.setSubstrate(s, m, ddict['substrate'])
+                    elif d == 'CAL':
                         self.setSubstrate(s, m, ddict['substrate'])
                     elif d == 'KR':
                         self.setStereochemistry(s, m, ddict['type'])
@@ -327,6 +331,17 @@ class Module(models.Model):
                 d.save()
 
     def buildDomains(self, domainDict, cyclic=False):
+        if 'CAL' in domainDict.keys():
+            start = domainDict['CAL'][0]['start']
+            stop = domainDict['CAL'][0]['stop']
+            substrate = domainDict['CAL'][1]['Substrate specificity predictions'].split()[0]
+            if substrate == 'N/A':
+                substrate = domainDict['CAL'][1]['Substrate specificity predictions'].split()[3]
+            if substrate == 'N/A':
+                substrate = 'mal'
+            newDomain = CAL(module=self, start=start, stop=stop, substrate=substrate)
+            newDomain.save()
+
         if 'AT' in domainDict.keys():
             start = domainDict['AT'][0]['start']
             stop = domainDict['AT'][0]['stop']
@@ -374,7 +389,7 @@ class Module(models.Model):
         if self.product:
             return self.product.mol()
         domains = {type(domain): domain for domain in self.domains()}
-        reactionOrder = [AT, KR, cMT, oMT, DH, ER, TE]
+        reactionOrder = [CAL, AT, KR, cMT, oMT, DH, ER, TE]
         for iteration in range(self.iterations):
             for reaction in reactionOrder:
                 if reaction in domains.keys():
@@ -455,6 +470,11 @@ starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             'CHC-CoA': chem.MolFromSmiles('C1CCCCC1C(=O)[S]'),
             'trans-1,2-CPDA': chem.MolFromSmiles('C1CC[C@@H](C(=O)O)[C@@H]1C(=O)[S]'),
             'cyclopentene': chem.MolFromSmiles('C1(=O)C(=CCC1)C(=O)[S]'),
+            # the following structures still need confirmation
+            'shikimic_acid': chem.MolFromSmiles('C1[C@H]([C@@H]([C@@H](C=C1C(=O)[S])O)O)O'),
+            'AHBA': chem.MolFromSmiles('C1=C(C=C(C=C1N)O)C(=O)[S]'),
+            'fatty_acid': chem.MolFromSmiles('CCCC(=O)[S]'),
+            'NH2': chem.MolFromSmiles('NCC(=O)[S]'),
             'N/A': None
            }
 
@@ -465,6 +485,47 @@ extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
              'butmal': chem.MolFromSmiles('CCCC[C@@H](C(=O)O)C(=O)[S]'),
              'hexmal': chem.MolFromSmiles('CCCCCC[C@@H](C(=O)O)C(=O)[S]')
              }
+
+class CAL(Domain):
+    SUBSTRATE_CHOICES = (
+        ('mal', 'mal'),
+        ('mmal', 'mmal'),
+        ('mxmal', 'mxmal'),
+        ('emal', 'emal'),
+        ('cemal', 'cemal'),
+        ('butmal', 'butmal'),
+        ('hexmal', 'hexmal'),
+        ('Acetyl-CoA', 'Acetyl-CoA'),
+        ('prop', 'prop'),
+        ('isobut', 'isobut'),
+        ('2metbut', '2metbut'),
+        ('CHC-CoA', 'CHC-CoA'),
+        ('trans-1,2-CPDA', 'trans-1,2-CPDA'),
+        ('cyclopentene', 'cyclopentene'),
+        ('shikimic_acid', 'shikimic_acid'),
+        ('AHBA', 'AHBA'),
+        ('fatty_acid', 'fatty_acid'),
+        ('NH2', 'NH2'),
+        ('N/A', 'N/A'),
+    )
+    substrate = models.CharField(
+        max_length=20,
+        choices=SUBSTRATE_CHOICES,
+        default='mal',
+        blank=False,
+    )
+
+    def operation(self, chain):
+        return starters[self.substrate]
+
+    def __str__(self):
+        if self.module.iterations > 1:
+            return "substrate %s, %s, iterations %d" % (self.substrate, self.module.loadingStr(), self.module.iterations)
+        else:
+            return "substrate %s, %s" % (self.substrate, self.module.loadingStr())
+
+    def __repr__(self):
+        return("CAL")
 
 class AT(Domain):
     SUBSTRATE_CHOICES = (
