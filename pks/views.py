@@ -89,8 +89,8 @@ def subunitLookup(request):
                 'genbankAccessionShort': re.sub("\.\d+$", "", subunit.genbankAccession),
                 'AAsequence': subunit.getAminoAcidSequence(),
                 'DNAsequence': subunit.getNucleotideSequence(),
-                'ss': subunit.ss,
-                'acc': subunit.acc, 
+                'ss': subunit.ss8,
+                'acc': subunit.acc20, 
             }
         except:
             raise Http404

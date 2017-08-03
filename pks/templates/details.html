@@ -422,6 +422,18 @@ Copy to clipboard
 </div> <!-- end tab ntseqtab -->
 
 <div role="tabpanel" class="tab-pane" id="secondarystructuretab">
+Secondary structure predictions were computed with SSpro8 in the <a href="http://scratch.proteomics.ics.uci.edu" target="_blank">SCRATCH suite</a>.
+SSpro8 adopts the full DSSP 8-class output classification, and provides a single letter prediction for each residue. Please scroll to the end of the heatmap for a color key.
+Secondary structure predictions are encoded as follows:
+    H: alpha-helix
+    G: 3-10-helix
+    I: pi-helix (extremely rare)
+    E: extended strand
+    B: beta-bridge
+    T: turn
+    S: bend
+    C: the rest
+
 <textarea id="subunitss" class="form-control" rows="6"></textarea>
 <div class="btn-group" role="group">
     <button id="copy" class="btn btn-default" data-clipboard-target="#subunitss">
@@ -436,6 +448,8 @@ Copy to clipboard
 </div>
 
 <div role="tabpanel" class="tab-pane" id="solventaccessibilitytab">
+Solvent accessibility predictions were computed with ACCpro20 in the <a href="http://scratch.proteomics.ics.uci.edu" target="_blank">SCRATCH suite</a>.
+ACCpro20 predicts the relative solvent accessiblity at all thresholds between 0% and 95% at 5% increments, and provides an integer prediction for each residue. Please scroll to the end of the heatmap for a color key.
 <textarea id="subunitacc" class="form-control" rows="6"></textarea>
 <div class="btn-group" role="group">
     <button id="copy" class="btn btn-default" data-clipboard-target="#subunitacc">

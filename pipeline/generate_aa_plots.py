@@ -18,7 +18,7 @@ django.setup()
 
 import pks.models
 
-def plot_heatmap(values, labels):
+def plot_heatmap(values, labels, mapping=None):
     """Generates a 1D heat map in lines of length n.
     
     Args:
@@ -34,6 +34,9 @@ def plot_heatmap(values, labels):
     # Number of lines that will be added to plot
     l = int(np.ceil(len(labels) / float(n)))
 
+    if mapping:
+        l += 1
+
     # These multiplicative factors are important for keeping
     # the scaling of the last axis consistent with the others
     # scaling seems to get messed up when axis feels squished
@@ -41,13 +44,17 @@ def plot_heatmap(values, labels):
 
     # For each line
     for i in range(l):
-        try:
-            # Obtain values and labels for that line
-            vs = values[i * n: (i + 1) * n]
-            ls = labels[i * n: (i + 1) * n]
-        except:
-            vs = values[i * n: -1]
-            ls = labels[i * n: -1]
+        if mapping and i == (l - 1):
+            vs = list(mapping.values())
+            ls = ''.join(mapping.keys())
+        else:
+            try:
+                # Obtain values and labels for that line
+                vs = values[i * n: (i + 1) * n]
+                ls = labels[i * n: (i + 1) * n]
+            except:
+                vs = values[i * n: -1]
+                ls = labels[i * n: -1]
         
         # Generate masked array from data
         mat = np.ma.array([vs, vs])
@@ -67,7 +74,10 @@ def plot_heatmap(values, labels):
         plt.setp(ax.get_yticklines(), visible=False)
         ax.yaxis.tick_left()
         ax.set_yticks([0.5])
-        ax.set_yticklabels([str(i * n + 1) + ' '], size='small')
+        if mapping and i == (l - 1):
+            ax.set_yticklabels(['KEY'], size='small')
+        else:
+            ax.set_yticklabels([str(i * n + 1) + ' '], size='small')
         ax.xaxis.tick_bottom()
         ax.set_xticks(np.arange(0.5, len(ls) + 0.5, 1))
         ax.set_xticklabels(ls, size='x-small')
@@ -81,7 +91,7 @@ def plot_heatmap(values, labels):
         # Parameter set below can be used to fix spacing issues
         plt.subplots_adjust(left=0.05, right=0.95, bottom=0.20, top=0.95)
 
-        if i == l - 1:
+        if i == l - 1 and not mapping:
             # Must come after other settings to size last axis correctly
             ax.set_xlim([0, len(vs)], auto=False)
             # Not that get_position and set_position refer
@@ -129,8 +139,8 @@ subunit.accPlot = accPlot
 
 # generate secondary structure plot
 f = lambda x: mapping[x]
-ss_seq_nums = list(map(f, subunit.ss))
+ss_seq_nums = list(map(f, subunit.ss8))
 assert len(aaseq) == len(aaseq)
-ssPlot = plot_heatmap(ss_seq_nums, aaseq)
+ssPlot = plot_heatmap(ss_seq_nums, aaseq, mapping)
 subunit.ssPlot = ssPlot
 subunit.save()
