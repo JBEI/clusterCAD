@@ -129,7 +129,10 @@ class Cluster(models.Model):
         assert update in list(set(list(starters.keys()) + list(extenders.keys()))), update
         module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
-        domain = AT.objects.get(module=module)
+        try:
+            domain = AT.objects.get(module=module)
+        except DoesNotExist:
+            domain = CAL.objects.get(module=module)
         domain.substrate = update
         domain.save()
 
