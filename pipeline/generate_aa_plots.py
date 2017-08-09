@@ -140,7 +140,6 @@ assert len(intList) == len(aaseq)
 hashstring = json.dumps(tuple(intList)) + json.dumps(tuple(aaseq))
 hashstring = hashlib.sha224(hashstring.encode()).hexdigest()
 filename = plotCache + hashstring + '.svg'
-print(filename) # test code
 if os.path.isfile(filename):
     print('\tfound cached acc20 plot')
     with open(filename, 'r') as svgFile: 
@@ -149,7 +148,7 @@ else:
     print('\tno aac20 plot found, generating')
     accPlot = plot_heatmap(intList, aaseq)
     with open(filename, 'w') as svgFile:
-        svgFile.write(subunit.accPlot)
+        svgFile.write(accPlot)
 accplotname = str(subunit.id) + '.svg'
 subunit.accPlotFile.save(name=accplotname, content=ContentFile(accPlot), save=True)
 
@@ -168,6 +167,6 @@ else:
     print('\tno ss8 plot found, generating')
     ssPlot = plot_heatmap(ss_seq_nums, aaseq, mapping)
     with open(filename, 'w') as svgFile:
-        svgFile.write(subunit.ssPlot)
+        svgFile.write(ssPlot)
 ssplotname = str(subunit.id) + '.svg'
 subunit.ssPlotFile.save(name=ssplotname, content=ContentFile(ssPlot), save=True)
