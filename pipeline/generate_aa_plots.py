@@ -9,14 +9,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import seaborn as sns
+import hashlib
+import json
 from io import StringIO
 
 sys.path.insert(0, '/clusterCAD')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
 import django
 django.setup()
+from django.core.files import File
+from django.core.files.base import ContentFile
 
 import pks.models
+
+plotCache = 'data/aa_sequence_analysis/plotCache/'
 
 def plot_heatmap(values, labels, mapping=None):
     """Generates a 1D heat map in lines of length n.
@@ -109,10 +115,7 @@ def plot_heatmap(values, labels, mapping=None):
     plt.savefig(outputSVG, format="svg")
     return outputSVG.getvalue()
 
-subunits = pks.models.Subunit.objects.all()
-
-# keep only subunits with no plots
-subunits = [x for x in subunits if x.accPlot == '']
+subunits = pks.models.Subunit.objects.filter(accPlotFile='', ssPlotFile='')
 
 # exit if everything has been plot already
 if len(subunits) == 0:
@@ -128,19 +131,43 @@ mapping = {'C':50,
            'S':0}
 
 # generate plot 
-print("Generating plots for " + subunit.cluster.description + " subunit " + subunit.name)
+print("Loading plots for " + subunit.cluster.description + " subunit " + subunit.name)
 
 # generate solvent accessibility plot
 intList = [int(i) for i in subunit.acc20.split(',')]
 aaseq = list(subunit.getAminoAcidSequence())
 assert len(intList) == len(aaseq)
-accPlot = plot_heatmap(intList, aaseq)
-subunit.accPlot = accPlot
+hashstring = json.dumps(tuple(intList)) + json.dumps(tuple(aaseq))
+hashstring = hashlib.sha224(hashstring.encode()).hexdigest()
+filename = plotCache + hashstring + '.svg'
+print(filename) # test code
+if os.path.isfile(filename):
+    print('\tfound cached acc20 plot')
+    with open(filename, 'r') as svgFile: 
+        accPlot = svgFile.read()
+else:
+    print('\tno aac20 plot found, generating')
+    accPlot = plot_heatmap(intList, aaseq)
+    with open(filename, 'w') as svgFile:
+        svgFile.write(subunit.accPlot)
+accplotname = str(subunit.id) + '.svg'
+subunit.accPlotFile.save(name=accplotname, content=ContentFile(accPlot), save=True)
 
 # generate secondary structure plot
 f = lambda x: mapping[x]
 ss_seq_nums = list(map(f, subunit.ss8))
-assert len(aaseq) == len(aaseq)
-ssPlot = plot_heatmap(ss_seq_nums, aaseq, mapping)
-subunit.ssPlot = ssPlot
-subunit.save()
+assert len(ss_seq_nums) == len(aaseq)
+hashstring = json.dumps(tuple(ss_seq_nums)) + json.dumps(tuple(aaseq))
+hashstring = hashlib.sha224(hashstring.encode()).hexdigest()
+filename = plotCache + hashstring + '.svg'
+if os.path.isfile(filename):
+    print('\tfound cached ss8 plot')
+    with open(filename, 'r') as svgFile: 
+        ssPlot = svgFile.read()
+else:
+    print('\tno ss8 plot found, generating')
+    ssPlot = plot_heatmap(ss_seq_nums, aaseq, mapping)
+    with open(filename, 'w') as svgFile:
+        svgFile.write(subunit.ssPlot)
+ssplotname = str(subunit.id) + '.svg'
+subunit.ssPlotFile.save(name=ssplotname, content=ContentFile(ssPlot), save=True)
