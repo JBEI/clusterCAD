@@ -21,7 +21,7 @@ clean:
 	-rm data/clustercad_clean_placeholder
 	-rm data/process_aa_analysis_placeholder
 	-rm data/generate_aa_plots_placeholder
-	-rm data/aa_sequence_analysis/plotcache.p
+	# -rm data/aa_sequence_analysis/plotCache.tgz
 
 # download PKS data from online
 data/mibigdata_clustercad_production.tgz:
