@@ -92,22 +92,17 @@ def subunitLookup(request):
                 'ss': subunit.ss8,
                 'acc': subunit.acc20, 
             }
+            if subunit.accPlotFile != '':
+                response['accplot'] = subunit.accPlotFile.url
+            else:
+                response['accplot'] = ''
+            if subunit.ssPlotFile != '':
+                response['ssplot'] = subunit.ssPlotFile.url
+            else:
+                response['ssplot'] = ''
         except:
             raise Http404
         return HttpResponse(dumps(response), 'text/json')
     else:
         raise Http404
 
-def solventAccessibilityPlot(request, subunit):
-    try:
-        subunit=Subunit.objects.get(id=subunit)
-    except Subunit.DoesNotExist:
-        raise Http404
-    return HttpResponse(subunit.accPlot, content_type='image/svg+xml')
-
-def secondaryStruturePlot(request, subunit):
-    try:
-        subunit=Subunit.objects.get(id=subunit)
-    except Subunit.DoesNotExist:
-        raise Http404
-    return HttpResponse(subunit.ssPlot, content_type='image/svg+xml')

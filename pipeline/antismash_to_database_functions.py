@@ -122,15 +122,15 @@ def processSubunitModules(sec_met):
         boundaries[0] += 1
         
         # Here, we add each domain to a list, which will be converted to an OrderedDict
-        if domaintype in ['KS', 'DH', 'ER', 'ACP', 'cMT', 'oMT', 'CAL', 'PCP',
+        if domaintype in ['KS', 'DH', 'ER', 'ACP', 'cMT', 'oMT', 'PCP',
                           'Heterocyclization', 'AMP-binding', 
                           'Condensation_Starter',
                           'Condensation_DCL', 'Condensation_LCL',
                           'PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}]))
-        # Include substrate and stereospecificity annotations for AT and KR domains respectively
-        elif domaintype in ['AT', 'KR']:
+        # Include substrate and stereospecificity annotations for CAL, AT, and KR domains respectively
+        elif domaintype in ['AT', 'KR', 'CAL']:
             notesdict = {}
             for note in entrysplit[1:]:
                 item = note.split(': ')
@@ -141,10 +141,10 @@ def processSubunitModules(sec_met):
         # End of the module has been reached of the domain is 'ACP' or 'PCP
         if domaintype in ['ACP', 'PCP']:
             domains_present = [d[0] for d in module_domains]
-            # Make sure every module has an AT, or else it isn't valid and should be ignored
+            # Make sure every module has an AT or CAL, or else it isn't valid and should be ignored
             # This means it will be excluded from the subunit, which makes sense since we can't 
             # really perform a polyketide chain extension without an AT
-            if 'AT' in domains_present:            
+            if 'AT' in domains_present or 'CAL' in domains_present:            
                 subunit[module_index] = OrderedDict(module_domains)
                 old_module_domains = module_domains
                 module_index += 1
@@ -219,7 +219,7 @@ def checkModuleValidity(modulelist):
        ['KS', 'AT', 'T']
        ['Ketosynthase', 'Acyltransferase', 'Thiolation (ACP/PCP)']
     '''
-    atcheck = len(set(['AT', 'Acyltransferase']).intersection(set(modulelist)))
+    atcheck = len(set(['AT', 'CAL', 'Acyltransferase']).intersection(set(modulelist)))
     acpcheck = len(set(['ACP', 'PCP', 'T', 'Thiolation (ACP/PCP)']).intersection( \
       set(modulelist)))
     if atcheck and acpcheck:
@@ -435,7 +435,7 @@ def enterCluster(cluster, clusterrecord, mibigfile):
                 # The check for errors here is to compare against the known product
                 domains_present = moduledict.keys()
                 if 'ACP' in domains_present or 'PCP' in domains_present:
-                    if 'AT' in domains_present:
+                    if 'AT' in domains_present or 'CAL' in domains_present:
                         module = pks.models.Module(subunit=subunit, 
                                                    loading=loading, terminal=terminal)
                         module.save()
