@@ -265,10 +265,10 @@ class Subunit(models.Model):
     sequence = models.TextField()
     acc = models.TextField()
     acc20 = models.CommaSeparatedIntegerField(max_length=1000000)
-    accPlot = models.TextField()
+    accPlotFile = models.ImageField(upload_to='accplots')
     ss = models.TextField()
     ss8 = models.TextField()
-    ssPlot = models.TextField()
+    ssPlotFile = models.ImageField(upload_to='ssplots')
 
     def modules(self):
         return Module.objects.filter(subunit=self).order_by('order')
