@@ -131,7 +131,7 @@ class Cluster(models.Model):
                                        subunit__name=sub).order_by('order')[mod]
         try:
             domain = AT.objects.get(module=module)
-        except DoesNotExist:
+        except pks.models.DoesNotExist:
             domain = CAL.objects.get(module=module)
         domain.substrate = update
         domain.save()
