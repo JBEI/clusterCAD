@@ -286,8 +286,8 @@ $(document).ready(function(){
                     $('#subunitGenbankAccession').attr("href", proteinBase.concat(data.genbankAccessionShort));
                     var searchUrl = "/sequenceSearch/?subunit="
                     $('#subunitSearchButton').attr("href", searchUrl.concat(data.id));
-                    $('#secondarystructureImg').attr("src", "/pks/secondaryStruturePlot/".concat(subunitid));
-                    $('#solventaccessibilityImg').attr("src", "/pks/solventAccessibilityPlot/".concat(subunitid));
+                    $('#secondarystructureImg').attr("src", data.ssplot);
+                    $('#solventaccessibilityImg').attr("src", data.accplot);
                     $('#subunitView').modal('show');
                 },
                 data: { subunitid: subunitid },
@@ -449,7 +449,7 @@ Secondary structure predictions are encoded as follows:
 
 <div role="tabpanel" class="tab-pane" id="solventaccessibilitytab">
 Solvent accessibility predictions were computed with ACCpro20 in the <a href="http://scratch.proteomics.ics.uci.edu" target="_blank">SCRATCH suite</a>.
-ACCpro20 predicts the relative solvent accessiblity at all thresholds between 0% and 95% at 5% increments, and provides an integer prediction for each residue. Please scroll to the end of the heatmap for a color key.
+ACCpro20 predicts the relative solvent accessibility at all thresholds between 0% and 95% at 5% increments, and provides an integer prediction for each residue. Please scroll to the end of the heatmap for a color key.
 <textarea id="subunitacc" class="form-control" rows="6"></textarea>
 <div class="btn-group" role="group">
     <button id="copy" class="btn btn-default" data-clipboard-target="#subunitacc">
