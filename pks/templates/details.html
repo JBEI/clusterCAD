@@ -116,6 +116,9 @@
 <script>
 $(document).ready(function(){
 // code to enable bootstrap tooltips
+    $('[data-domain="CAL"]').tooltip({
+      placement: 'bottom'
+    });
     $('[data-domain="AT"]').tooltip({
       placement: 'bottom',
       trigger: 'manual'
