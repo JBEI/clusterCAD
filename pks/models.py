@@ -519,6 +519,7 @@ class CAL(Domain):
     )
 
     def operation(self, chain):
+        assert self.module.loading == True
         return starters[self.substrate]
 
     def __str__(self):
@@ -559,9 +560,9 @@ class AT(Domain):
         if not chain:
             return starters[self.substrate]
         else:
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[S].'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[S].'
                                               '[O:4][C:5](=[O:6])[C@@:7][C:8](=[O:9])[S:10]>>'
-                                              '[C:1][C:2](=[O:3])[C@:7][C:8](=[O:9])[S:10]'
+                                              '[C:2](=[O:3])[C@:7][C:8](=[O:9])[S:10]'
                                               '.[C:5](=[O:4])(=[O:6])'))
             assert KS in [type(domain) for domain in self.module.domains()]
             assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
@@ -602,52 +603,52 @@ class KR(Domain):
     def operation(self, chain):
         # Reaction is fixed once KR type is assigned
         if self.type == 'A1':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C@:2]([O:3])[C@:4]'
+                                                   '[C@:2]([O:3])[C@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'A2':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C@:2]([O:3])[C@@:4]'
+                                                   '[C@:2]([O:3])[C@@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'A':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C@:2]([O:3])[C:4]'
+                                                   '[C@:2]([O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'B1':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C@@:2]([O:3])[C@:4]'
+                                                   '[C@@:2]([O:3])[C@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'B2':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C@@:2]([O:3])[C@@:4]'
+                                                   '[C@@:2]([O:3])[C@@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'B':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C@@:2]([O:3])[C:4]'
+                                                   '[C@@:2]([O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'C1':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C:2](=[O:3])[C:4]'
+                                                   '[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         elif self.type == 'C2':
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C:2](=[O:3])[C@@:4]'
+                                                   '[C:2](=[O:3])[C@@:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         else:
             # By first specifying some stereochemistry in the reactants
             # and then explicitly "losing" the stereochemistry in the products
             # we can forget the stereochemistry in our molecule
-            rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C@:4]'
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C@:4]'
                                                    '[C:5](=[O:6])[S:7]>>'
-                                                   '[C:1][C:2]([O:3])[C:4]'
+                                                   '[C:2]([O:3])[C:4]'
                                                    '[C:5](=[O:6])[S:7]'))
         if self.active == True:
             assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C(=O)CC(=O)S'),
@@ -668,8 +669,8 @@ class DH(Domain):
     active = models.BooleanField(default=True)
 
     def operation(self, chain):
-        rxn = AllChem.ReactionFromSmarts(('[C:1][C:2]([O:3])[C:4][C:6](=[O:7])[S:8]>>'
-                                          '[C:1][CH1:2]=[CH0:4][C:6](=[O:7])[S:8].[O:3]'))
+        rxn = AllChem.ReactionFromSmarts(('[C:2]([O:3])[C:4][C:6](=[O:7])[S:8]>>'
+                                          '[CH1:2]=[CH0:4][C:6](=[O:7])[S:8].[O:3]'))
         # Changed assertion to if/else statement so that DH and ER do not
         # do anything if the KR is inactive
         if len(chain.GetSubstructMatches(chem.MolFromSmiles('C(O)CC(=O)S'), useChirality=True)) == 1 and self.active == True:
@@ -689,8 +690,8 @@ class ER(Domain):
     active = models.BooleanField(default=True)
 
     def operation(self, chain):
-        rxn = AllChem.ReactionFromSmarts(('[C:1][C:2]=[C:3][C:4](=[O:5])[S:6]>>'
-                                          '[C:1][C:2][C@@H1:3][C:4](=[O:5])[S:6]'))
+        rxn = AllChem.ReactionFromSmarts(('[C:2]=[C:3][C:4](=[O:5])[S:6]>>'
+                                          '[C:2][C@@H1:3][C:4](=[O:5])[S:6]'))
         if len(chain.GetSubstructMatches(chem.MolFromSmiles('C=CC(=O)S'), useChirality=True)) == 1 and self.active == True:
             prod = rxn.RunReactants((chain,))[0][0]
             chem.SanitizeMol(prod)
@@ -731,12 +732,12 @@ class oMT(Domain):
     def operation(self, chain):
         if self.active == True:
             if len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)CC(=O)S'))) == 1:
-                rxn = AllChem.ReactionFromSmarts(('[C:1][C:2](=[O:3])[C:4][C:5](=[O:6])[S:7]>>'
-                                                  '[C:1][C:2]([O:3]C)[C:4][C:5](=[O:6])[S:7]'))
+                rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[C:4][C:5](=[O:6])[S:7]>>'
+                                                  '[C:2]([O:3]C)[C:4][C:5](=[O:6])[S:7]'))
                 prod = rxn.RunReactants((chain,))[0][0]
             elif len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(O)CC(=O)S'))) == 1:
-                rxn = AllChem.ReactionFromSmarts(('[C:1][C:2]([O:3])[C:4][C:5](=[O:6])[S:7]>>'
-                                                  '[C:1][C:2]([O:3]C)[C:4][C:5](=[O:6])[S:7]'))
+                rxn = AllChem.ReactionFromSmarts(('[C:2]([O:3])[C:4][C:5](=[O:6])[S:7]>>'
+                                                  '[C:2]([O:3]C)[C:4][C:5](=[O:6])[S:7]'))
                 prod = rxn.RunReactants((chain,))[0][0]
             else:
                 prod = chain
