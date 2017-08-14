@@ -464,6 +464,7 @@ def activityString(domain):
 # dict of supported starter units
 starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             'mmal': chem.MolFromSmiles('CCC(=O)[S]'),
+            'butmal': chem.MolFromSmiles('CCCCCC(=O)[S]'),
             'mxmal': chem.MolFromSmiles('COCC(=O)[S]'),
             'cemal': chem.MolFromSmiles('CC(=O)[S]'),
             'Acetyl-CoA': chem.MolFromSmiles('CC(=O)[S]'),
@@ -473,9 +474,25 @@ starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             'CHC-CoA': chem.MolFromSmiles('C1CCCCC1C(=O)[S]'),
             'trans-1,2-CPDA': chem.MolFromSmiles('C1CC[C@@H](C(=O)O)[C@@H]1C(=O)[S]'),
             'cyclopentene': chem.MolFromSmiles('C1(=O)C(=CCC1)C(=O)[S]'),
+            'pyr': chem.MolFromSmiles('[S]C(C1=CC=CN1)=O'),
+            'cin': chem.MolFromSmiles('O=C([S])/C=C/C1=CC=CC=C1'),
+            'AHBA': chem.MolFromSmiles('[S]C(C1=CC(O)=CC(N)=C1)=O'),
+            'isoval': chem.MolFromSmiles('CC(CC([S])=O)C'),
+            'PABA': chem.MolFromSmiles('NC1=CC=C(C([S])=O)C=C1'),
+            'DCP': chem.MolFromSmiles('[S]C(C1=CNC(Cl)=C1Cl)=O'),
+            'guan': chem.MolFromSmiles('NC(NCC([S])=O)=[NH2+]'),
+            'mthz': chem.MolFromSmiles('CC1=NC(C([S])=O)=CS1'),
+            'DHCH': chem.MolFromSmiles('O[C@H]1[C@H](O)CCC(C([S])=O)C1'),
+            'DHCHene': chem.MolFromSmiles('O[C@H]1[C@H](O)CC=C(C([S])=O)C1'),
+            'plac': chem.MolFromSmiles('O=C([S])CC1=CC=CC=C1'),
+            'benz': chem.MolFromSmiles('[S]C(C1=CC=CC=C1)=O'),
+            'PNBA': chem.MolFromSmiles('[S]C(C1=CC=C([N+]([O-])=O)C=C1)=O'),
+            'ema': chem.MolFromSmiles('[S]C([C@@H](CC)C(N)=O)=O'),
+            '3measp': chem.MolFromSmiles('[S]C([C@@H](C)CNC([C@@H](N)C)=O)=O'),
             # the following structures still need confirmation
+            'AAnon': chem.MolFromSmiles('[S]C(CC(NC([C@H](C)N)=O)CCCCCC)=O'),
+            'a3abut': chem.MolFromSmiles('[S]C(C[C@@H](NC(C)=O)C)=O'),
             'shikimic_acid': chem.MolFromSmiles('C1[C@H]([C@@H]([C@@H](C=C1C(=O)[S])O)O)O'),
-            'AHBA': chem.MolFromSmiles('C1=C(C=C(C=C1N)O)C(=O)[S]'),
             'fatty_acid': chem.MolFromSmiles('CCCC(=O)[S]'),
             'NH2': chem.MolFromSmiles('NCC(=O)[S]'),
             'N/A': None
@@ -486,31 +503,15 @@ extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
              'mxmal': chem.MolFromSmiles('CO[C@@H](C(=O)O)C(=O)[S]'),
              'emal': chem.MolFromSmiles('CC[C@@H](C(=O)O)C(=O)[S]'),
              'butmal': chem.MolFromSmiles('CCCC[C@@H](C(=O)O)C(=O)[S]'),
+             'hmal': chem.MolFromSmiles('OC(C(C([S])=O)O)=O'),
+             'isobutmal': chem.MolFromSmiles('CC(C)C(C([S])=O)C(O)=O'),
+             'DCP': chem.MolFromSmiles('ClC1=C(Cl)NC=C1CCCCC(C(O)=O)C([S])=O'),
              'hexmal': chem.MolFromSmiles('CCCCCC[C@@H](C(=O)O)C(=O)[S]')
              }
 
 class CAL(Domain):
-    SUBSTRATE_CHOICES = (
-        ('mal', 'mal'),
-        ('mmal', 'mmal'),
-        ('mxmal', 'mxmal'),
-        ('emal', 'emal'),
-        ('cemal', 'cemal'),
-        ('butmal', 'butmal'),
-        ('hexmal', 'hexmal'),
-        ('Acetyl-CoA', 'Acetyl-CoA'),
-        ('prop', 'prop'),
-        ('isobut', 'isobut'),
-        ('2metbut', '2metbut'),
-        ('CHC-CoA', 'CHC-CoA'),
-        ('trans-1,2-CPDA', 'trans-1,2-CPDA'),
-        ('cyclopentene', 'cyclopentene'),
-        ('shikimic_acid', 'shikimic_acid'),
-        ('AHBA', 'AHBA'),
-        ('fatty_acid', 'fatty_acid'),
-        ('NH2', 'NH2'),
-        ('N/A', 'N/A'),
-    )
+    SUBSTRATE_CHOICES = tuple(((k, k) for k in list(set(list(extenders.keys()) + list(starters.keys())))))
+
     substrate = models.CharField(
         max_length=20,
         choices=SUBSTRATE_CHOICES,
@@ -532,23 +533,8 @@ class CAL(Domain):
         return("CAL")
 
 class AT(Domain):
-    SUBSTRATE_CHOICES = (
-        ('mal', 'mal'),
-        ('mmal', 'mmal'),
-        ('mxmal', 'mxmal'),
-        ('emal', 'emal'),
-        ('cemal', 'cemal'),
-        ('butmal', 'butmal'),
-        ('hexmal', 'hexmal'),
-        ('Acetyl-CoA', 'Acetyl-CoA'),
-        ('prop', 'prop'),
-        ('isobut', 'isobut'),
-        ('2metbut', '2metbut'),
-        ('CHC-CoA', 'CHC-CoA'),
-        ('trans-1,2-CPDA', 'trans-1,2-CPDA'),
-        ('cyclopentene', 'cyclopentene'),
-        ('N/A', 'N/A'),
-    )
+    SUBSTRATE_CHOICES = tuple(((k, k) for k in list(set(list(extenders.keys()) + list(starters.keys())))))
+
     substrate = models.CharField(
         max_length=20,
         choices=SUBSTRATE_CHOICES,

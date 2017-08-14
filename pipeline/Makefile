@@ -15,7 +15,6 @@ clean:
 	-rm -rf data/antismash
 	-rm -rf data/blast
 	-rm -rf data/mibig
-	-rm data/compounds/all_known_products.p
 	-rm data/database_loaded_placeholder
 	-rm data/clustercad_corrections_placeholder 
 	-rm data/clustercad_clean_placeholder
