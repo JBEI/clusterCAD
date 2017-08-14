@@ -1,0 +1,98 @@
+{
+  "description": "Calcimycin",
+  "genbankAccession": "HM452329.1",
+  "mibigAccession": "BGC0000032.1",
+  "architecture": {
+    "SchA1": {
+      "0": {
+        "domains": {
+          "AT": {
+            "substrate": "pyr"
+          }
+        },
+        "iterations": 1
+      },
+      "1": {
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "KR": {
+            "active": true,
+            "type": "B1"
+          }
+        },
+        "iterations": 1
+      }
+    },
+    "SchA2": {
+      "0": {
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "active": true,
+            "type": "B1"
+          }
+        },
+        "iterations": 1
+      }
+    },
+    "SchA5": {
+      "0": {
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": false
+          },
+          "KR": {
+            "active": true,
+            "type": "C1"
+          }
+        },
+        "iterations": 1
+      },
+      "1": {
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "active": true,
+            "type": "B1"
+          }
+        },
+        "iterations": 1
+      }
+    },
+      "SchA4": {
+      "0": {
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "KR": {
+            "active": true,
+            "type": "A1"
+          }
+        },
+        "iterations": 1
+      }
+    }
+  }
+}

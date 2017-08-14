@@ -1,0 +1,96 @@
+{
+  "description": "Chondrochloren",
+  "genbankAccession": "AM988861.1",
+  "mibigAccession": "BGC0000970.1",
+  "architecture": {
+    "cndA": {
+      "0": {
+        "domains": {
+          "CAL": {
+            "substrate": "butmal"
+          }
+        },
+        "iterations": 1
+      },
+      "1": {
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "active": true,
+            "type": "B1"
+          }
+        },
+        "iterations": 1
+      }
+    },
+    "cndB": {
+      "0": {
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": false
+          },
+          "KR": {
+            "active": true,
+            "type": "A1"
+          }
+        },
+        "iterations": 1
+      }
+    },
+    "cndC": {
+      "0": {
+        "domains": {
+          "AT": {
+            "substrate": "mmal"
+          },
+          "DH": {
+            "active": false
+          }
+        },
+        "iterations": 1
+      }
+    },
+    "cndD": {
+      "0": {
+        "domains": {
+          "AT": {
+            "substrate": "hmal"
+          },
+          "DH": {
+            "active": true
+          },
+          "KR": {
+            "active": true,
+            "type": "B1"
+          }
+        },
+        "iterations": 1
+      }
+    },
+    "cndE": {
+      "0": {
+        "domains": {
+          "AT": {
+            "substrate": "hmal"
+          },
+          "KR": {
+            "active": true,
+            "type": "U"
+          }
+        },
+        "iterations": 1
+      }
+    }
+  }
+}
