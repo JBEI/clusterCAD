@@ -464,7 +464,7 @@ def activityString(domain):
 # dict of supported starter units
 starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             'mmal': chem.MolFromSmiles('CCC(=O)[S]'),
-            'butmal': chem.MolFromSmiles('CCCCCC(=O)[S]'),
+            'butmal': chem.MolFromSmiles('CCCC(=O)[S]'),
             'mxmal': chem.MolFromSmiles('COCC(=O)[S]'),
             'cemal': chem.MolFromSmiles('CC(=O)[S]'),
             'Acetyl-CoA': chem.MolFromSmiles('CC(=O)[S]'),
