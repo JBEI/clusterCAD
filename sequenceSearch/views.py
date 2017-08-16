@@ -33,8 +33,6 @@ def search(request):
             assert 0.0 <= evalue <= 10.0
             showAllDomains = int(request.POST['showAllDomains'])
             assert 0 <= showAllDomains <= 1
-            sortOutput = int(request.POST['sortOutput'])
-            assert 0 <= sortOutput <= 1
             input = input.strip()
             input = re.sub('^>.*?\n', '', input)
             if len(input) > 50000:
@@ -42,10 +40,10 @@ def search(request):
                 return render(request, 'sequencesearch.html')
 
             # use alignment cache if it exists
-            alignments = cache.get((input, evalue, maxHits, sortOutput))
+            alignments = cache.get((input, evalue, maxHits))
             if not alignments:
-                alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits, sortOutput=sortOutput)
-                cache.set((input, evalue, maxHits, sortOutput), alignments, 60 * 60 * 24 * 7) # cache for one week
+                alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
+                cache.set((input, evalue, maxHits), alignments, 60 * 60 * 24 * 7) # cache for one week
                 
         except ValueError:
             messages.error(request, 'Error: Invalid query!')
@@ -86,7 +84,6 @@ def search(request):
         'evalue': str(evalue),
         'maxHits': str(maxHits),
         'showAllDomains': showAllDomains,
-        'sortOutput': sortOutput,
         'atsubstrates': atsubstrates,
         'krtypes': krtypes,
         'boolDomains': boolDomains,
