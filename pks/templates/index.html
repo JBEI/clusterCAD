@@ -1,10 +1,22 @@
 {% extends "base.html" %}
 
+{% block extra_headers %}
+<script type="text/javascript" src="/static/js/jquery.tablesorter.js"></script>
+{% endblock %}
+
 {% block js_content %}
 <script>
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
         window.location = $(this).data("href");
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $("#clusterTable").tablesorter({
+        sortAppend : [[0,0]],
     });
 });
 </script>
@@ -25,7 +37,7 @@ browse clusters
 
 <div class="row-fluid">
 <div class="col-md-12">
-<table class="table table-hover table-condensed">
+<table id="clusterTable" class="table table-hover table-condensed">
 <thead>
 <tr>
     <th>
