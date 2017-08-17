@@ -57,8 +57,6 @@ search for modules based on similarity to a query amino acid sequence</small>
         <div class="form-group">
           <label for="maxHits">Max hits returned</label>
                 <select class="form-control" name="maxHits" id="maxHits">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
                     <option value="200">200</option>
@@ -72,21 +70,11 @@ search for modules based on similarity to a query amino acid sequence</small>
         <div class="form-group">
           <label for="showAllDomains">Show domains overlapping with alignment</label>
                 <select class="form-control" name="showAllDomains" id="showAllDomains">
-                    <option value="0">Only domains overlapping</option>
                     <option value="1">All domains in overlapping modules</option>
+                    <option value="0">Only domains overlapping</option>
                 </select>
         </div>
 
-    </div>
-    <div class="col-md-4 col-sm-5">
-
-        <div class="form-group">
-          <label for="sortOutput">Sort output HSPs</label>
-                <select class="form-control" name="sortOutput" id="sortOutput">
-                    <option value="0">Group HSPs by subunit (blast default)</option>
-                    <option value="1">Order HSPs by bit score</option>
-                </select>
-        </div>
     </div>
 </div>
 

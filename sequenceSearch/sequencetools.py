@@ -10,7 +10,7 @@ from pks.models import Subunit, Domain
 from model_utils.managers import InheritanceManager
 from copy import deepcopy
 
-def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalue=10.0, max_target_seqs=10, sortOutput=False):
+def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalue=10.0, max_target_seqs=10, sortOutput=True):
     # run blast and return results as a list
     # of alignment dicts with the following structure:
     # {'alignment': alignment, 'subunit': subunit, 'hsps': hsps}
