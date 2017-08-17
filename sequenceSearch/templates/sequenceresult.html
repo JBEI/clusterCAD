@@ -21,6 +21,7 @@ $(document).ready(function()
     { 
         $("#resultsTable").tablesorter({
             debug: true,
+            sortAppend : [[0,0]],
             textExtraction: function(node) { 
                 // sort Modules row by number of highlights but return other text unmodified
                 var marks = node.getElementsByTagName("mark");
@@ -68,6 +69,10 @@ sequence hits
 <dd>{{ maxHits }}</dd>
 <dt>Show domains</dt>
 <dd>{% if showAllDomains %}All domains in modules overlapping alignment{% else %}Only domains overlapping alignment{% endif %}</dd>
+<dt>Instructions</dt>
+<dd>
+You can click any column header to sort results. If domains are highlighted, the list will auto-sort based on the number of unique highlighted domain types in each hit. Clicking a row will take you to the view page for that cluster, with the overlapping modules highlighted.
+</dd>
 </dl>
 </div>
 </div><!--/row-->
@@ -86,12 +91,8 @@ $(document).ready(function(){
            });
        }
        // update table cache and re-sort each time highlights are changed
-       // timer hack is required because the table library contains an internal delay on it's update
-       $("#resultsTable").trigger("update");
        var sortlist = [[7,1], [0,0]]
-       setTimeout(function () {
-           $("#resultsTable").trigger("sorton", [sortlist]);
-       }, 100);
+       $("#resultsTable").trigger("update").trigger("sorton", [sortlist]);
     });
 });
 </script>
@@ -141,15 +142,6 @@ $(document).ready(function(){
 
 
 </div>
-</div>
-
-<div class="row-fluid">
-<dl class="dl-horizontal">
-<dt>Tip</dt>
-<dd>
-You can click any column header to resort results. If domains are highlighted, the list will auto-sort based on the number of unique highlighted domain types in each hit.
-</dd>
-</dl>
 </div>
 
 <div class="row-fluid">
