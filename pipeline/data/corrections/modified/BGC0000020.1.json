@@ -1,16 +1,16 @@
 {
-    "description": "Erythromycin",
-    "genbankAccession": "AY623658.2",
-    "mibigAccession": "BGC0000054.1",
+    "description": "Ansamitocin",
+    "genbankAccession": "AF453501.1",
+    "mibigAccession": "BGC0000020.1",
     "architecture": {
-        "eryAI": {
+        "asmA": {
             "0": {
-                "iterations": 1,
                 "domains": {
-                    "AT": {
-                        "substrate": "prop"
+                    "CAL": {
+                        "substrate": "AHBA"
                     }
-                }
+                },
+                "iterations": 1
             },
             "1": {
                 "iterations": 1,
@@ -21,9 +21,12 @@
                     "DH": {
                         "active": false
                     },
+                    "ER": {
+                        "active": false
+                    },
                     "KR": {
-                        "type": "B2",
-                        "active": true
+                        "type": "B1",
+                        "active": false
                     }
                 }
             },
@@ -31,38 +34,9 @@
                 "iterations": 1,
                 "domains": {
                     "AT": {
-                        "substrate": "mmal"
-                    },
-                    "KR": {
-                        "type": "A1",
-                        "active": true
-                    }
-                }
-            }
-        },
-        "eryAII": {
-            "0": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mmal"
-                    },
-                    "KR": {
-                        "type": "C2",
-                        "active": true
-                    }
-                }
-            },
-            "1": {
-                "iterations": 1,
-                "domains": {
-                    "AT": {
-                        "substrate": "mmal"
+                        "substrate": "mal"
                     },
                     "DH": {
-                        "active": true
-                    },
-                    "ER": {
                         "active": true
                     },
                     "KR": {
@@ -72,7 +46,32 @@
                 }
             }
         },
-        "eryAIII": {
+        "asmB": {
+            "0": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mxmal_ACP"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                }
+            }
+        },
+        "asmC": {
             "0": {
                 "iterations": 1,
                 "domains": {
@@ -84,20 +83,36 @@
                         "active": true
                     }
                 }
-            },
-            "1": {
+            }
+        },
+        "asmD": {
+            "0": {
                 "iterations": 1,
                 "domains": {
                     "AT": {
                         "substrate": "mmal"
                     },
-                    "KR": {
-                        "type": "A1",
+                    "DH": {
                         "active": true
                     },
-                    "TE": {
-                        "ring": 0,
-                        "cyclic": true
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                }
+            },
+            "1": {
+                "iterations": 1,
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
                     }
                 }
             }
