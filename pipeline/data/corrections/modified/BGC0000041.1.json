@@ -1,0 +1,56 @@
+{
+  "description": "Coronafacic acid",
+  "genbankAccession": "AF098795.1",
+  "mibigAccession": "BGC0000041.1",
+  "architecture": {
+    "cfa6": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "cyclopentene"
+          }
+        }
+      },
+      "1": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "emal"
+          },
+          "DH": {
+            "active": true
+          },
+          "ER": {
+            "active": true
+          },
+          "KR": {
+            "type": "B1",
+            "active": true
+          }
+        }
+      }
+    },
+    "cfa7": {
+      "0": {
+        "iterations": 1,
+        "domains": {
+          "AT": {
+            "substrate": "mal"
+          },
+          "DH": {
+            "active": false
+          },
+          "KR": {
+            "type": "U",
+            "active": false
+          },
+          "TE": {
+            "ring": 0,
+            "cyclic": false
+          }
+        }
+      }
+    }
+  }
+}

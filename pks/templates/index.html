@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block extra_headers %}
+<script type="text/javascript" src="/static/js/jquery.tablesorter.js"></script>
+{% endblock %}
+
+{% block js_content %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $("#clusterTable").tablesorter({
+        sortAppend : [[0,0]],
+    });
+});
+</script>
+{% endblock %}
+
+{% block subtitle %}
+browse clusters
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+<h2>Type I modular polyketide synthase clusters</h2>
+<dl class="dl-horizontal">
+    <dt>{{ clusters|length }} clusters total</dt>
+    <dd></dd>
+</dl>
+</div>
+
+<div class="row-fluid">
+<div class="col-md-12">
+<table id="clusterTable" class="table table-hover table-condensed">
+<thead>
+<tr>
+    <th>
+        MIBiG accession
+    </th>
+    <th>
+        Description 
+    </th>
+    <th>
+        Subunits 
+    </th>
+    <th>
+        Modules
+    </th>
+</tr>
+</thead>
+<tbody>
+{% for cluster in clusters %}
+<tr class="clickable-row" data-href="/pks/{{ cluster.clusterObject.mibigAccession }}">
+    <td>
+    {{ cluster.clusterObject.mibigAccession }}
+    </td>
+    <td>
+    {{ cluster.clusterObject.description }}
+    </td>
+    <td>
+    {{ cluster.subunitCount }}
+    </td>
+    <td>
+    {{ cluster.moduleCount }}
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div><!--/col-->
+</div><!--/row-->
+
+{% endblock %}

@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% load domainFilters %}
+
+{% block extra_headers %}
+<script type="text/javascript" src="/static/js/jquery.tablesorter.js"></script> 
+{% endblock %}
+
+{% block js_content %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+    $("[data-toggle=popover]").popover({ trigger: 'hover' });
+});
+</script>
+
+<script>
+$(document).ready(function() 
+    { 
+        $("#resultsTable").tablesorter({
+            debug: false,
+            sortAppend : [[0,0]],
+            textExtraction: function(node) { 
+                // sort Modules row by number of highlights but return other text unmodified
+                var marks = node.getElementsByTagName("mark");
+                if(marks.length === 0){
+                    return node.innerHTML;
+                }
+                // var counter = 0;
+                var domains = [];
+                for(var i = 0; i < marks.length; i++){
+                    mark = marks[i];
+                    if(mark.getAttribute(["style"]) == "padding: 0; background-color: orange;"){
+                        // counter++;
+                        domains.push(mark.getAttribute(["data-domain"]));
+                    }
+                }
+                // the following filter line was taken from stackoverflow
+                var uniqueDomains = domains.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+                return uniqueDomains.length;
+                // return counter;
+            } 
+        }); 
+
+    } 
+); 
+</script>
+{% endblock %}
+
+{% block subtitle %}
+sequence hits
+{% endblock %}
+
+{% block content %}
+<h2>Subunit amino acid sequence blastp hits</h2>
+
+<div class="row-fluid">
+<div class="col-md-12">
+<dl class="dl-horizontal">
+<dt>Query residues</dt>
+<dd>
+{{ queryResidues }}
+</dd>
+<dt>Maximum E-value</dt>
+<dd>{{ evalue }} </dd>
+<dt>Max hits returned</dt>
+<dd>{{ maxHits }}</dd>
+<dt>Show domains</dt>
+<dd>{% if showAllDomains %}All domains in modules overlapping alignment{% else %}Only domains overlapping alignment{% endif %}</dd>
+<dt>Instructions</dt>
+<dd>
+You can click any column header to sort results. If domains are highlighted, the list will auto-sort based on the number of unique highlighted domain types in each hit. Clicking a row will take you to the view page for that cluster, with the overlapping modules highlighted.
+</dd>
+</dl>
+</div>
+</div><!--/row-->
+
+<script>
+$(document).ready(function(){
+    $('[data-domainselect]').change(function(){
+       var domain = $(this).attr("data-domainselect");
+       var types = $(this).selectpicker('val');
+       $('[data-domain="' + domain + '"]').attr("style", "padding: 0; background-color: transparent;"); 
+       if (types !== null){
+           $.each(types, function(index,value){
+                if (value){
+                    $('[data-domain="' + domain + '"][data-type="' + value + '"]').attr("style", "padding: 0; background-color: orange;"); 
+                }
+           });
+       }
+       // update table cache and re-sort each time highlights are changed
+       var sortlist = [[7,1], [0,0]]
+       $("#resultsTable").trigger("update").trigger("sorton", [sortlist]);
+    });
+});
+</script>
+
+<div class="row-fluid">
+<div class="btn-group" role="group">
+
+  {% if atsubstrates|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="AT" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight AT substrates" data-selected-text-format="count">
+      {% for substrate in atsubstrates %}
+      <option value="{{ substrate }}">AT substrate {{ substrate }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  {% if krtypes|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="KR" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight KR types" data-selected-text-format="count">
+      {% for type in krtypes %}
+      <option value="{{ type }}">KR type {{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  {% for domaintype in boolDomains %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="{{ domaintype.0 }}" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight {{ domaintype.0 }} types" data-selected-text-format="count">
+      {% for type in domaintype.1 %}
+      <option value="{{ type }}">{{ domaintype.0 }} type {{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endfor %}
+
+  {% if tetypes|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="TE" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight TE types" data-selected-text-format="count">
+      {% for type in tetypes %}
+      <option value="{{ type }}">TE type {{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+
+</div>
+</div>
+
+<div class="row-fluid">
+<div class="col-md-12">
+<table id="resultsTable" class="table table-hover table-condensed">
+<thead>
+<tr>
+    <th class="text-right">
+        Hit 
+    </th>
+    <th>
+        Cluster
+    </th>
+    <th>
+        Subunit
+    </th>
+    <th class="text-right">
+       E-value 
+    </th>
+    <th class="text-right">
+       Bit 
+    </th>
+    <th class="text-right">
+       Query 
+    </th>
+    <th class="text-right">
+       Subject 
+    </th>
+    <th class="text-right">
+        Modules (domains)
+    </th>
+</tr>
+</thead>
+<tbody>
+{% for alignment in alignments %}
+<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if alignment.hsps.0.modules|length > 0 %}?mark={% for module in alignment.hsps.0.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
+        <td class="text-right" rowspan="{{ alignment.hsps|length }}">
+            {{ forloop.counter }}
+        </td>
+        <td rowspan="{{ alignment.hsps|length }}">
+            {{ alignment.subunit.cluster.mibigAccession }}
+            {{ alignment.subunit.cluster.description }}
+        </td>
+        <td rowspan="{{ alignment.hsps|length }}">
+            {{ alignment.subunit.name }}
+        </td>
+        {% for hsp in alignment.hsps %}
+            {% if forloop.counter != 1 %}
+            <tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if hsp.modules|length > 0 %}?mark={% for module in hsp.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
+            {% endif %}
+            <td class="text-right">
+                {{ hsp.hsp.expect|sigfig }}
+            </td>
+            <td class="text-right">
+                {{ hsp.hsp.bits }}
+            </td>
+            <td class="text-right">
+                {{ hsp.hsp.query_start }}..{{ hsp.hsp.query_end }}
+            </td>
+            <td class="text-right">
+                {{ hsp.hsp.sbjct_start }}..{{ hsp.hsp.sbjct_end }}
+            </td>
+            <td class="text-right">
+            {% if hsp.modules|length == 0 %}
+                N/A
+            {% endif %}
+            {% for module in hsp.modules %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" %}data-type="{{ domain.type }}"{% elif domain|classname == "AT" %}data-type="{{ domain.substrate }}"{% else %}data-type="{{ domain }}"{% endif %} style="padding:0; background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
+            </td>
+        {% endfor %}
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+{% endblock %}

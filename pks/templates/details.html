@@ -1,0 +1,481 @@
+{% extends "base.html" %}
+{% load domainFilters %}
+
+{% block subtitle %}
+{{ cluster.description }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{ cluster.description }}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 col-sm-4">
+        <dl>
+            <dt>MIBiG accession</dt>
+            <dd><a target="_blank" href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a></dd>
+
+            <dt>GenBank accession</dt>
+            <dd><a target="_blank" href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a></dd>
+            <dt>Submit corrections</dt>
+            <dd><a href="mailto:jbei-help@lbl.gov?subject=ClusterCAD%20corrections%20for%20{{ cluster.mibigAccession|stripTrailingVersion }}">Send e-mail</a></dd>
+        </dl>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="atcheck">Show AT annotations 
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="krcheck">Show KR annotations 
+            </label>
+          </div>
+    </div>
+    <div class="col-md-6 col-sm-8">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <dl>
+                    <dt>Known final product</dt>
+                </dl>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <dl>
+                    <dt>Predicted pks subset</dt>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+            {% with architecture|last as lastsubunit %}
+                {% with lastsubunit.1|last as lastmodule %}
+                    <img class="img-responsive" style="width: 100% \9;" alt="Known final product" data-smilesq="{{ cluster.knownProductSmiles|urlq }}" data-smiles="{{ cluster.knownProductSmiles }}" src="/compounddb/mcsrenderer/{{ cluster.knownProductSmiles|urlq }}_{{ lastmodule.0.product.smiles|urlq }}_{{ cluster.knownProductMCS|urlq }}/700"/> 
+                {% endwith %}
+            {% endwith %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6 text-center">
+            <h6>
+            MCS: {{ knownProductPercent|floatformat }}% of atoms
+            </h6>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 text-center">
+            <h6>
+            MCS: {{ predictedProductPercent|floatformat }}% of atoms
+            </h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for subunit in architecture %}
+<ul id="{{ subunit.0.name }}" class="list-group">
+ <a data-subunitid="{{ subunit.0.id }}" class="list-group-item list-group-item-info">
+        {{ subunit.0 }}
+ </a>
+ <li class="list-group-item">
+        <div class="row">
+            {% for module in subunit.1 %}
+                {% if module.1|length == 5 %}
+                    <div class="col-md-4 col-sm-6">
+                {% else %}
+                    {% if module.1|length > 5 %}
+                        <div class="col-md-5 col-sm-6">
+                    {% else %}
+                        <div class="col-md-3 col-sm-4">
+                    {% endif %}
+                {% endif %}
+                {% if module.0.order in mark %}
+                    <mark style="background-color: orange;">module {{ module.0.order }}</mark>
+                {% else %}
+                    module {{ module.0.order }}
+                {% endif %}
+                <br/>
+                <div class="btn-group" role="group">
+                    {% for domain in module.1 %}
+                    {% with domain|classname as domainclass %}
+                    {% if domainclass in notips %}
+                    <button type="button" class="btn btn-default" data-domainid="{{ domain.id }}" data-domain="{{ domainclass }}">{{ domainclass }}</button>
+                    {% else %}
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-domainid="{{ domain.id }}" data-domain="{{ domainclass }}" title="{{ domain }}">{{ domainclass }}</button>
+                    {% endif %}
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+                <br/>
+                <img style="width: 100% \9;" alt="{{ cluster.description }} subunit {{ subunit.0 }} module {{ module.0.order }}: predicted product" data-smilesq="{{ module.0.product.smiles|urlq }}" data-smiles="{{ module.0.product.smiles }}" src="/compounddb/renderer/{{ module.0.product.smiles|urlq }}/243"/>
+            </div>
+            {% endfor %}
+</div>
+</li>
+</ul>
+{% endfor %}
+
+<script>
+$(document).ready(function(){
+// code to enable bootstrap tooltips
+    $('[data-domain="CAL"]').tooltip({
+      placement: 'bottom'
+    });
+    $('[data-domain="AT"]').tooltip({
+      placement: 'bottom',
+      trigger: 'manual'
+    });
+    $('[data-domain="KR"]').tooltip({
+      placement: 'top',
+      trigger: 'manual'
+    });
+    $('[data-domain="DH"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="ER"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="cMT"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="oMT"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="TE"]').tooltip({
+      placement: 'right'
+    });
+
+    // code to enable domain popups on checkboxes
+    $("#atcheck").on("click", function() {
+        if($("#atcheck").is(':checked')){
+            $('[data-domain="AT"]').tooltip('show');
+        } else {
+            $('[data-domain="AT"]').tooltip('hide');
+        }
+    });
+    $("#krcheck").on("click", function() {
+        if($("#krcheck").is(':checked')){
+            $('[data-domain="KR"]').tooltip('show');
+        } else {
+            $('[data-domain="KR"]').tooltip('hide');
+        }
+    });
+
+    // keep tooltip up after hover if checkbox is checked 
+    $('[data-domain="AT"]').hover(
+      function() {
+        if(!($("#atcheck").is(':checked'))){
+            $( this ).tooltip('show');
+        }
+      }, function() {
+        if(!($("#atcheck").is(':checked'))){
+            $( this ).tooltip('hide');
+        }
+      }
+    );
+    $('[data-domain="KR"]').hover(
+      function() {
+        if(!($("#krcheck").is(':checked'))){
+            $( this ).tooltip('show');
+        }
+      }, function() {
+        if(!($("#krcheck").is(':checked'))){
+            $( this ).tooltip('hide');
+        }
+      }
+    );
+
+    // code to enable structure zoom modal
+    $('[data-smiles]').click(function(){
+        $('#atcheck').prop('checked', false);
+        $('[data-domain="AT"]').tooltip('hide');
+        $('#krcheck').prop('checked', false);
+        $('[data-domain="KR"]').tooltip('hide');
+
+        if($( this ).attr("alt") == 'Known final product') {
+            $('#structureImg').attr("src", $( this ).attr("src"));
+        } else {
+            var renderurl = "/compounddb/renderer/";
+            $('#structureImg').attr("src", renderurl.concat($( this ).attr("data-smilesq")).concat("/729"));
+        }
+        $('#structureTitle').text($( this ).attr("alt"));
+        $('#structureSMILES').text($( this ).attr("data-smiles"));
+        var searchUrl = "/structureSearch/?smiles=";
+        $('#searchButton').attr("href", searchUrl.concat($( this ).attr("data-smilesq")));
+        $('#structureView').modal('show');
+    });
+    $('[data-smiles]').tooltip({
+      placement: 'bottom',
+      title: 'Click to zoom or obtain SMILES',
+      trigger: 'hover',
+    });
+
+// code to allow clipboard button
+    var clipboard = new Clipboard('#copy');
+    clipboard.on('success', function(e) {
+      setTooltip(e.trigger, 'Copied!');
+      hideTooltip(e.trigger);
+    });
+
+    $('#copy').tooltip({
+      trigger: 'click',
+      placement: 'bottom'
+    });
+});
+
+    function setTooltip(btn, message) {
+      $(btn).tooltip('hide')
+        .attr('data-original-title', message)
+        .tooltip('show');
+    }
+
+    function hideTooltip(btn) {
+      setTimeout(function() {
+        $(btn).tooltip('hide');
+      }, 1000);
+    }
+
+    // enable domain modals
+    $('[data-domain]').click(function(){
+        $('#atcheck').prop('checked', false);
+        $('[data-domain="AT"]').tooltip('hide');
+        $('#krcheck').prop('checked', false);
+        $('[data-domain="KR"]').tooltip('hide');
+
+        var domainid = $( this ).attr("data-domainid");
+        $.ajax({
+                type: 'GET',
+                url: '/pks/domainLookup',
+                dataType: 'json',
+                success: function(data){
+                    $('#domainAASequence').text(data.AAsequence);
+                    $('#domainTitle').text(data.name);
+                    $('#domainStart').text(data.start);
+                    $('#domainStop').text(data.stop);
+                    if(data.annotations == 'domain') {
+                        $('#domainAnnotations').text("None");
+                    } else {
+                        $('#domainAnnotations').text(data.annotations);
+                    }
+                    var searchUrl = "/sequenceSearch/?aainput="
+                    $('#domainSearchButton').attr("href", searchUrl.concat(data.AAsequence));
+                    $('#domainView').modal('show');
+                },
+                data: { domainid: domainid },
+                async: true
+        }); 
+    });
+
+    // enable subunit modals
+    $('[data-subunitid]').click(function(){
+        $('#atcheck').prop('checked', false);
+        $('[data-domain="AT"]').tooltip('hide');
+        $('#krcheck').prop('checked', false);
+        $('[data-domain="KR"]').tooltip('hide');
+
+        var subunitid = $( this ).attr("data-subunitid");
+        $.ajax({
+                type: 'GET',
+                url: '/pks/subunitLookup',
+                dataType: 'json',
+                success: function(data){
+                    $('#subunitAASequence').text(data.AAsequence);
+                    $('#subunitDNASequence').text(data.DNAsequence);
+                    $('#subunitss').text(data.ss);
+                    $('#subunitacc').text(data.acc);
+                    $('#subunitTitle').text(data.name);
+                    $('#subunitStart').text(data.start);
+                    $('#subunitStop').text(data.stop);
+                    $('#subunitGenbankAccession').text(data.genbankAccession);
+                    var proteinBase = 'https://www.ncbi.nlm.nih.gov/protein/';
+                    $('#subunitGenbankAccession').attr("href", proteinBase.concat(data.genbankAccessionShort));
+                    var searchUrl = "/sequenceSearch/?subunit="
+                    $('#subunitSearchButton').attr("href", searchUrl.concat(data.id));
+                    $('#secondarystructureImg').attr("src", data.ssplot);
+                    $('#solventaccessibilityImg').attr("src", data.accplot);
+                    $('#subunitView').modal('show');
+                },
+                data: { subunitid: subunitid },
+                async: true
+        }); 
+    });
+</script>
+<script src="/static/js/clipboard.min.js"></script>
+
+<!-- Structure Zoom Modal -->
+<div class="modal fade" id="structureView" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 id="structureTitle" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+
+SMILES
+<textarea id="structureSMILES" class="form-control" rows="2"></textarea>
+<div class="btn-group" role="group">
+<button id="copy" class="btn btn-default" data-clipboard-target="#structureSMILES">
+Copy to clipboard
+</button>
+<a href="#" id="searchButton" class="btn btn-default" role="button">Send to structure search</a>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+                <img id="structureImg" class="img-responsive" src="" width="100%"/>
+    </div>
+</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Domain View Modal -->
+<div class="modal fade" id="domainView" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 id="domainTitle" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt style='white-space: normal;'>Subunit AA start</dt>
+            <dd id="domainStart"><dd>
+            <dt style='white-space: normal;'>Subunit AA stop</dt>
+            <dd id="domainStop"><dd>
+            <dt>Annotations</dt>
+            <dd id="domainAnnotations"><dd>
+        </dl>
+
+<dl>
+<dt>
+AA sequence
+</dt>
+<dd>
+<textarea id="domainAASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+<button id="copy" class="btn btn-default" data-clipboard-target="#domainAASequence">
+Copy to clipboard
+</button>
+<a href="#" id="domainSearchButton" class="btn btn-default" role="button">Send to sequence search</a>
+</div>
+</dd>
+</dl>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Subunit View Modal -->
+<div class="modal fade" id="subunitView" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 id="subunitTitle" class="modal-title"></h4>
+</div> <!-- end modal-header -->
+
+<div class="modal-body">
+
+<dl class="dl-horizontal">
+    <dt style='white-space: normal;'>Cluster nucleotide start</dt>
+    <dd id="subunitStart"><dd>
+    <dt style='white-space: normal;'>Cluster nucleotide stop</dt>
+    <dd id="subunitStop"><dd>
+    <dt>GenBank accession</dt>
+    <dd><a target="_blank" href="" id="subunitGenbankAccession"></a></dd>
+</dl>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#aaseqtab" aria-controls="aaseqtab" role="tab" data-toggle="tab">AA sequence</a></li>
+    <li role="presentation"><a href="#ntseqtab" aria-controls="ntseqtab" role="tab" data-toggle="tab">Nucleotide sequence</a></li>
+    <li role="presentation"><a href="#secondarystructuretab" aria-controls="secondarystructuretab" role="tab" data-toggle="tab">Secondary structure</a></li>
+    <li role="presentation"><a href="#solventaccessibilitytab" aria-controls="solventaccessibilitytab" role="tab" data-toggle="tab">Solvent accessibility</a></li>
+</ul>
+
+
+<!-- Tab panes -->
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane active" id="aaseqtab">
+
+<textarea id="subunitAASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+    <button id="copy" class="btn btn-default" data-clipboard-target="#subunitAASequence">
+    Copy to clipboard
+    </button>
+    <a href="#" id="subunitSearchButton" class="btn btn-default" role="button">Send to sequence search</a>
+</div> <!-- end btn-group -->
+</div> <!-- end tab aaseqtab -->
+
+<div role="tabpanel" class="tab-pane" id="ntseqtab">
+<textarea id="subunitDNASequence" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+    <button id="copy" class="btn btn-default" data-clipboard-target="#subunitDNASequence">
+    Copy to clipboard
+    </button>
+</div> <!-- end btn-group -->
+</div> <!-- end tab ntseqtab -->
+
+<div role="tabpanel" class="tab-pane" id="secondarystructuretab">
+Secondary structure predictions were computed with SSpro8 in the <a href="http://scratch.proteomics.ics.uci.edu" target="_blank">SCRATCH suite</a>.
+SSpro8 adopts the full DSSP 8-class output classification, and provides a single letter prediction for each residue. Please scroll to the end of the heatmap for a color key.
+Secondary structure predictions are encoded as follows:
+    H: alpha-helix
+    G: 3-10-helix
+    I: pi-helix (extremely rare)
+    E: extended strand
+    B: beta-bridge
+    T: turn
+    S: bend
+    C: the rest
+
+<textarea id="subunitss" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+    <button id="copy" class="btn btn-default" data-clipboard-target="#subunitss">
+    Copy to clipboard
+    </button>
+</div> <!-- end btn-group -->
+<div class="row">
+    <div class="col-md-12">
+                <img id="secondarystructureImg" class="img-responsive" src="" width="100%"/>
+    </div>
+</div>
+</div>
+
+<div role="tabpanel" class="tab-pane" id="solventaccessibilitytab">
+Solvent accessibility predictions were computed with ACCpro20 in the <a href="http://scratch.proteomics.ics.uci.edu" target="_blank">SCRATCH suite</a>.
+ACCpro20 predicts the relative solvent accessibility at all thresholds between 0% and 95% at 5% increments, and provides an integer prediction for each residue. Please scroll to the end of the heatmap for a color key.
+<textarea id="subunitacc" class="form-control" rows="6"></textarea>
+<div class="btn-group" role="group">
+    <button id="copy" class="btn btn-default" data-clipboard-target="#subunitacc">
+    Copy to clipboard
+    </button>
+</div> <!-- end btn-group -->
+<div class="row">
+    <div class="col-md-12">
+                <img id="solventaccessibilityImg" class="img-responsive" src="" width="100%"/>
+    </div>
+</div>
+</div>
+</div>  <!-- end tab-content -->
+</div> <!-- end modal-body -->
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div> <!-- end modal-footer -->
+
+</div> <!-- end modal-content  -->
+</div> <!-- end modal-dialog -->
+</div> <!-- modal -->
+
+{% endblock %}
