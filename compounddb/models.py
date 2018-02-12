@@ -12,6 +12,7 @@ class Compound(models.Model):
     smiles = models.TextField()
 
     def computeInchiKey(self):
+        # returns the Inchi key for this compound
         self.inchiKey = chem.InchiToInchiKey(chem.MolToInchi(chem.MolFromSmiles(self.smiles)))  
         return self.inchiKey
 
@@ -40,7 +41,7 @@ class Compound(models.Model):
                       'WHERE "inchiKey" = \'%s\';' \
                       % (self.smiles, self.inchiKey))
 
-        # add fingerprints
+        # add fingerprints to fingerprint table
         addFingerprint(self.inchiKey)
 
     @classmethod
@@ -48,13 +49,6 @@ class Compound(models.Model):
         # perform atom pair similarity search
         # result is a list of tuples where each tuple is of the form
         # (tanimito similarity as integer, Compound object)
-
-        # validate query
-        try:
-            query = chem.MolFromSmiles(querySmiles)
-            chem.SanitizeMol(query)
-        except:
-            raise ValueError('Invalid input smiles') 
 
         with connection.cursor() as c:
             c.execute('SET rdkit.tanimoto_threshold=%s;' % str(minSim))
@@ -72,6 +66,8 @@ def delete_fp(sender, instance, **kwargs):
         c.execute('DELETE FROM rdk.fps WHERE "inchiKey" = \'%s\';' % instance.inchiKey)
 
 def addFingerprint(inchiKey):
+    # add fingerprint of a compound with the given incihKey to the fingerprint table.
+    # Compound must be already in the compounddb_compound table.
     with connection.cursor() as c:
         c.execute('SELECT "inchiKey" FROM rdk.fps WHERE "inchiKey" = \'%s\' LIMIT 1;' % inchiKey)
         if c.fetchone():
