@@ -506,7 +506,7 @@ extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
              'emal': chem.MolFromSmiles('CC[C@@H](C(=O)O)C(=O)[S]'),
              'butmal': chem.MolFromSmiles('CCCC[C@@H](C(=O)O)C(=O)[S]'),
              'hmal': chem.MolFromSmiles('OC(C(C([S])=O)O)=O'),
-             'isobutmal': chem.MolFromSmiles('CC(C)C(C([S])=O)C(O)=O'),
+             'isobutmal': chem.MolFromSmiles('CC(C)[C@@H](C([S])=O)C(O)=O'),
              'DCP': chem.MolFromSmiles('ClC1=C(Cl)NC=C1CCCCC(C(O)=O)C([S])=O'),
              'hexmal': chem.MolFromSmiles('CCCCCC[C@@H](C(=O)O)C(=O)[S]')
              }
