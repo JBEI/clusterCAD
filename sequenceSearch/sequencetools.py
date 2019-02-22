@@ -41,10 +41,11 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
                                          num_threads=2,
                                          max_target_seqs=max_target_seqs)
     
-    try:
+    try: #Changed by Yifei
         result, stderr = blastp_cline(stdin=queryFasta)
     except:
-        return 0
+        return 0 #End change
+
 
 
 
