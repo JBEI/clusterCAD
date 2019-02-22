@@ -40,7 +40,14 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
                                          outfmt=5,
                                          num_threads=2,
                                          max_target_seqs=max_target_seqs)
-    result, stderr = blastp_cline(stdin=queryFasta)
+    
+    try:
+        result, stderr = blastp_cline(stdin=queryFasta)
+    except:
+        return 0
+
+
+
 
     # parse blastp output and delete files
     resultIO = StringIO(result)

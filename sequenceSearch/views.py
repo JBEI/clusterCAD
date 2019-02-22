@@ -34,7 +34,12 @@ def search(request):
             showAllDomains = int(request.POST['showAllDomains'])
             assert 0 <= showAllDomains <= 1
             input = input.strip()
+            if len(re.findall('>.*?\n', input)) >= 2:
+                messages.error(request, "Error: Multiple queries detected, please remove until only one query is present")
+                return render(request, 'sequencesearch.html')
             input = re.sub('^>.*?\n', '', input)
+            input = re.sub('\n', '', input)
+            input = re.sub('\s', '', input)
             if len(input) > 50000:
                 messages.error(request, 'Error: max query size is 50,000 residues')
                 return render(request, 'sequencesearch.html')
@@ -43,6 +48,9 @@ def search(request):
             alignments = cache.get((input, evalue, maxHits))
             if not alignments:
                 alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
+                if alignments == 0:
+                    messages.error(request, 'Error: Query not found')
+                    return render(request, 'sequencesearch.html')
                 cache.set((input, evalue, maxHits), alignments, 60 * 60 * 24 * 7) # cache for one week
                 
         except ValueError:
