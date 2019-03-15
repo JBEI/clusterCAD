@@ -27,8 +27,8 @@ def search(request):
     elif 'aainput' in request.POST:
         try:
             input = request.POST['aainput']
-            maxHits = int(request.POST['maxHits'])
-            assert 1 <= maxHits <= 10000
+            # maxHits = int(request.POST['maxHits'])
+            # assert 1 <= maxHits <= 10000
             evalue = float(request.POST['evalue'])
             assert 0.0 <= evalue <= 10.0
             showAllDomains = int(request.POST['showAllDomains'])
@@ -45,13 +45,14 @@ def search(request):
                 return render(request, 'sequencesearch.html')
 
             # use alignment cache if it exists
-            alignments = cache.get((input, evalue, maxHits))
+            alignments = cache.get((input, evalue))
+            #alignments = cache.get((input, evalue, maxHits))
             if not alignments:
-                alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
-                if alignments == 0:
-                    messages.error(request, 'Error: Query not found')
-                    return render(request, 'sequencesearch.html')
-                cache.set((input, evalue, maxHits), alignments, 60 * 60 * 24 * 7) # cache for one week
+                alignments = sequencetools.blast(query=input, evalue=evalue)
+                cache.set((input, evalue), alignments, 60 * 60 * 24 * 7) # cache for one week
+
+                # alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
+                # cache.set((input, evalue, maxHits), alignments, 60 * 60 * 24 * 7) # cache for one week
                 
         except ValueError:
             messages.error(request, 'Error: Invalid query!')
@@ -90,7 +91,7 @@ def search(request):
         'alignments': alignments,
         'queryResidues': len(input),
         'evalue': str(evalue),
-        'maxHits': str(maxHits),
+        #'maxHits': str(maxHits),
         'showAllDomains': showAllDomains,
         'atsubstrates': atsubstrates,
         'krtypes': krtypes,

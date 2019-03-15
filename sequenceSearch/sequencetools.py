@@ -10,7 +10,7 @@ from pks.models import Subunit, Domain
 from model_utils.managers import InheritanceManager
 from copy import deepcopy
 
-def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalue=10.0, max_target_seqs=10, sortOutput=True):
+def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalue=10.0, max_target_seqs=0, sortOutput=True):
     # run blast and return results as a list
     # of alignment dicts with the following structure:
     # {'alignment': alignment, 'subunit': subunit, 'hsps': hsps}
@@ -22,8 +22,8 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
     # check inputs
     assert isinstance(evalue, float)
     assert 0.0 <= evalue <= 10.0
-    assert isinstance(max_target_seqs, int)
-    assert 1 <= max_target_seqs <= 10000
+    # assert isinstance(max_target_seqs, int)
+    # assert 1 <= max_target_seqs <= 10000
     assert isinstance(query, str)
 
     # convert query to fasta format 
@@ -34,18 +34,20 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
     queryStringIO.close()
 
     # run blastp
+    # blastp_cline = NcbiblastpCommandline(
+    #                                      db=db,
+    #                                      evalue=evalue,
+    #                                      outfmt=5,
+    #                                      num_threads=2,
+    #                                      max_target_seqs=max_target_seqs)
+
     blastp_cline = NcbiblastpCommandline(
                                          db=db,
                                          evalue=evalue,
                                          outfmt=5,
-                                         num_threads=2,
-                                         max_target_seqs=max_target_seqs)
+                                         num_threads=2
+                                         )
     
-    try: #Changed by Yifei
-        result, stderr = blastp_cline(stdin=queryFasta)
-    except:
-        return 0 #End change
-
 
 
 
@@ -81,6 +83,7 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
                 alignmentCopy = deepcopy(alignment)
                 alignmentCopy['hsps'] = [hsp]
                 individualHSPs.append(alignmentCopy)
-        alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:max_target_seqs]
+        #alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:max_target_seqs]
+        alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)
 
     return alignments
