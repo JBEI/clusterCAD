@@ -38,7 +38,6 @@ def search(request):
                 messages.error(request, "Error: Multiple queries detected, please remove until only one query is present")
                 return render(request, 'sequencesearch.html')
             input = re.sub('^>.*?\n', '', input)
-            input = re.sub('\n', '', input)
             input = re.sub('\s', '', input)
             if len(input) > 50000:
                 messages.error(request, 'Error: max query size is 50,000 residues')
