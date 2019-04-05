@@ -27,23 +27,31 @@ def search(request):
     elif 'aainput' in request.POST:
         try:
             input = request.POST['aainput']
-            maxHits = int(request.POST['maxHits'])
-            assert 1 <= maxHits <= 10000
+            # maxHits = int(request.POST['maxHits'])
+            # assert 1 <= maxHits <= 10000
             evalue = float(request.POST['evalue'])
             assert 0.0 <= evalue <= 10.0
             showAllDomains = int(request.POST['showAllDomains'])
             assert 0 <= showAllDomains <= 1
             input = input.strip()
+            if len(re.findall('>.*?\n', input)) >= 2:
+                messages.error(request, "Error: Multiple queries detected, please remove until only one query is present")
+                return render(request, 'sequencesearch.html')
             input = re.sub('^>.*?\n', '', input)
+            input = re.sub('\s', '', input)
             if len(input) > 50000:
                 messages.error(request, 'Error: max query size is 50,000 residues')
                 return render(request, 'sequencesearch.html')
 
             # use alignment cache if it exists
-            alignments = cache.get((input, evalue, maxHits))
+            alignments = cache.get((input, evalue))
+            #alignments = cache.get((input, evalue, maxHits))
             if not alignments:
-                alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
-                cache.set((input, evalue, maxHits), alignments, 60 * 60 * 24 * 7) # cache for one week
+                alignments = sequencetools.blast(query=input, evalue=evalue)
+                cache.set((input, evalue), alignments, 60 * 60 * 24 * 7) # cache for one week
+
+                # alignments = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
+                # cache.set((input, evalue, maxHits), alignments, 60 * 60 * 24 * 7) # cache for one week
                 
         except ValueError:
             messages.error(request, 'Error: Invalid query!')
@@ -82,7 +90,7 @@ def search(request):
         'alignments': alignments,
         'queryResidues': len(input),
         'evalue': str(evalue),
-        'maxHits': str(maxHits),
+        #'maxHits': str(maxHits),
         'showAllDomains': showAllDomains,
         'atsubstrates': atsubstrates,
         'krtypes': krtypes,
