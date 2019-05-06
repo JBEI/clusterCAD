@@ -6,28 +6,36 @@ from . import sequencetools
 from django.http import Http404
 from model_utils.managers import InheritanceManager
 from django.core.cache import cache
-
 from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
 
 def search(request):
     timeTaken = 0
     if request.method != 'POST':
-        if 'aainput' in request.GET:
+        # if not a post, show the search form
+
+        if 'aainput' in request.GET: 
+            # prefill the search form with a referring AA sequence
             aainput = urlunquote(request.GET['aainput'])
             messages.success(request, 'Imported AA sequence from previous page')
-        elif 'subunit' in request.GET:
+        elif 'subunit' in request.GET: 
+            # prefill the search form with a referring PKS subunit id
             subunitid = int(request.GET['subunit'])
             assert 0 <= subunitid
             subunit = Subunit.objects.get(id=subunitid)
             aainput = subunit.sequence
-            messages.success(request, 'Imported sequence for PKS cluster %s subunit %s' % (subunit.cluster.description, subunit.name))
+            messages.success(request, 
+                'Imported sequence for PKS cluster %s subunit %s' 
+                % (subunit.cluster.description, subunit.name))
         else:
             aainput = ''
         context = {'aainput': aainput}
         return render(request, 'sequencesearch.html', context)
     elif 'aainput' in request.POST:
-        try:
+        # if this is a post, validate the input and
+        # run alignment
 
+        try:
+            # validate all inputs
             maxHits = int(request.POST['maxHits'])
             assert 1 <= maxHits <= 10000
             input = request.POST['aainput']
@@ -37,7 +45,8 @@ def search(request):
             assert 0 <= showAllDomains <= 1
             input = input.strip()
             if len(re.findall('>.*?\n', input)) >= 2:
-                messages.error(request, "Error: Multiple queries detected, please remove until only one query is present")
+                messages.error(request, 
+                    'Error: Multiple queries detected, please remove until only one query is present')
                 return render(request, 'sequencesearch.html')
             input = re.sub('^>.*?\n', '', input)
             input = re.sub('\s', '', input)
@@ -50,10 +59,13 @@ def search(request):
 
             # use alignment cache if it exists
             alignments = cache.get((input, evalue, maxHits))
+
+            # run Blast if there is no cached alignment
             if not alignments:
-                alignments, timeTaken = sequencetools.blast(query=input, evalue=evalue, max_target_seqs=maxHits)
-                cache.set((input, evalue, maxHits), alignments, 60 * 60 * 24 * 7) # cache for one week
-               
+                alignments, timeTaken = sequencetools.blast(query=input, 
+                    evalue=evalue, max_target_seqs=maxHits)
+                cache.set((input, evalue, maxHits), alignments,
+                    60 * 60 * 24 * 7) # cache for one week
                 
         except ValueError:
             messages.error(request, 'Error: Invalid query!')
@@ -74,7 +86,8 @@ def search(request):
                     module['domains'] = list(Domain.objects.filter(module=module['module']).select_subclasses().order_by('start'))
 
     # get domain options to display in UI
-    domains = [domain for alignment in alignments for hsp in alignment['hsps'] for module in hsp['modules'] for domain in module['domains']]
+    domains = [domain for alignment in alignments for hsp in alignment['hsps'] 
+        for module in hsp['modules'] for domain in module['domains']]
     ats = list(filter(lambda d: isinstance(d, AT), domains))
     atsubstrates = list(set([at.substrate for at in ats]))
     krs = list(filter(lambda d: isinstance(d, KR), domains))
@@ -88,6 +101,7 @@ def search(request):
     tes = list(filter(lambda d: isinstance(d, TE), domains))
     tetypes = list(set([str(te) for te in tes]))
 
+    # create context dict of all results to show the user
     context = {
         'alignments': alignments,
         'queryResidues': len(input),

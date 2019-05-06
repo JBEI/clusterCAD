@@ -10,8 +10,18 @@ from pks.models import Subunit, Domain
 from model_utils.managers import InheritanceManager
 from copy import deepcopy
 from time import time
+from django.conf import settings
 
-def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalue=10.0, max_target_seqs=10, sortOutput=True):
+def blast(
+        query, 
+        db=os.path.join(
+            settings.BASE_DIR, 
+            'pipeline', 'data', 'blast', 'clustercad_subunits',
+        ),
+        evalue=10.0, 
+        max_target_seqs=10, 
+        sortOutput=True,
+    ):
     # run blast and return results as a list
     # of alignment dicts with the following structure:
     # {'alignment': alignment, 'subunit': subunit, 'hsps': hsps}
@@ -33,8 +43,9 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
     SeqIO.write(queryRecord, queryStringIO, "fasta")
     queryFasta = queryStringIO.getvalue()
     queryStringIO.close()
-    start = time()
 
+    # run blast
+    start = time()
     blastp_cline = NcbiblastpCommandline(
                                          db=db,
                                          evalue=evalue,
@@ -42,13 +53,12 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
                                          num_threads=2
                                          )
     result, stderr = blastp_cline(stdin=queryFasta)
-    # parse blastp output and delete files
+
+    # parse blast output and delete files
     resultIO = StringIO(result)
     blast_record = NCBIXML.read(resultIO)
     resultIO.close()
-
     end = time()
-    # print("Search took "+str(int(end-start))+" seconds.")
 
     # iterate over record and generate output structure 
     alignments = []
@@ -76,7 +86,6 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
                 alignmentCopy = deepcopy(alignment)
                 alignmentCopy['hsps'] = [hsp]
                 individualHSPs.append(alignmentCopy)
-        #alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:max_target_seqs]
         alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:max_target_seqs]
 
     return alignments, str(int(end-start))
