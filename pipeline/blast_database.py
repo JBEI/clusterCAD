@@ -9,8 +9,17 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
 import django
 django.setup()
 import pks.models
+from django.conf import settings
 
-with open('/clusterCAD/pipeline/data/blast/clustercad_subunits', 'w') as f:
+# resolve the path to the blast database
+dbPath = os.path.join(
+    settings.BASE_DIR, 
+    'pipeline', 'data', 'blast', 'clustercad_subunits',
+)
+
+# loop over all AA sequences in ClusterCAD and write them to the database
+# file
+with open(dbPath, 'w') as f:
     for cluster in pks.models.Cluster.objects.all():
         for subunit in cluster.subunits():
             modacc = cluster.mibigAccession + '_' + str(subunit.id) 
