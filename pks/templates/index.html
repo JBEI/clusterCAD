@@ -29,10 +29,11 @@ browse clusters
 {% block content %}
 <div class="row-fluid">
 <h2>Type I modular polyketide synthase clusters</h2>
-<dl class="dl-horizontal">
-    <dt>{{ clusters|length }} clusters total</dt>
-    <dd></dd>
-</dl>
+{% if showAll %}
+    Showing {{ clusters|length }} reviewed and unreviewed (machine curated, potentially erroneous) clusters. <a href='/pks/'>show reviewed only</a>
+{% else %}
+    Showing {{ clusters|length }} reviewed clusters. <a href='/pks/all/'>show all</a>  
+{% endif %}
 </div>
 
 <div class="row-fluid">
