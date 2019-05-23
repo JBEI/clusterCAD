@@ -36,16 +36,3 @@ for cluster in pks.models.Cluster.objects.all():
         print('%s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
 
-# read in clusters we decided not to fix
-rejectclusters = pd.read_csv("data/corrections/modified/drop_clusters.txt", comment="#", header=None)[0].tolist()
-rejectclusters = [x.strip() for x in rejectclusters]
-
-# Delete clusters we've decided not to fix
-for acc in rejectclusters:
-    try:
-        cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
-    except:
-        print('cluster %s not found to delete' %(acc))
-        continue
-    print('%s: %s' %(cluster.mibigAccession, cluster.description))
-    cluster.delete()

@@ -1,0 +1,124 @@
+{
+    "description": "Phoslactomycin B",
+    "genbankAccession": "AY354515.1",
+    "mibigAccession": "BGC0000123.1",
+    "architecture": {
+        "plm1": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "CHC-CoA"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "plm2-3": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "plm4": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "emal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "plm5": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "plm6": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "emal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "plm7": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    },
+                    "TE": {
+                        "ring": 0,
+                        "cyclic": false
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }
+}
