@@ -61,7 +61,7 @@ class Compound(models.Model):
                     'WHERE "inchiKey"=pks_module.product_id AND '
                     'pks_module.subunit_id=pks_subunit.id AND '
                     'pks_subunit.cluster_id=pks_cluster."mibigAccession" AND '
-                    'pks_cluster.reviewed=true '
+                    'pks_cluster.reviewed=TRUE '
                     'ORDER BY similarity DESC LIMIT %s;'
                     % (querySmiles, str(maxHits))
                 )
