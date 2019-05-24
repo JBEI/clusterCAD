@@ -30,10 +30,20 @@ browse clusters
 <div class="row-fluid">
 <h2>Type I modular polyketide synthase clusters</h2>
 {% if showAll %}
-    Showing {{ clusters|length }} reviewed and unreviewed (machine curated, potentially erroneous) clusters. <a href='/pks/'>show reviewed only</a>
+    <div class="btn-group">
+        <a href='/pks/' class="btn btn-default">Reviewed only</a>
+        <a href='/pks/all/' class="btn btn-primary">Reviewed and unreviewed</a>
+    </div>
 {% else %}
-    Showing {{ clusters|length }} reviewed clusters. <a href='/pks/all/'>show all</a>  
+    <div class="btn-group">
+        <a href='/pks/' class="btn btn-primary">Reviewed only</a>
+        <a href='/pks/all/' class="btn btn-default">Reviewed and unreviewed</a>
+    </div>
 {% endif %}
+<dl class="dl-horizontal">
+    <dt>Showing {{ clusters|length }} clusters</dt>
+    <dd></dd>
+</dl>
 </div>
 
 <div class="row-fluid">

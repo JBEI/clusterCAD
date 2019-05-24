@@ -45,7 +45,7 @@ class Compound(models.Model):
         addFingerprint(self.inchiKey)
 
     @classmethod
-    def atomPairSearch(cls, querySmiles, maxHits=10, minSim=0.5):
+    def atomPairSearch(cls, querySmiles, maxHits=10, minSim=0.5, reviewedOnly=True):
         # perform atom pair similarity search
         # result is a list of tuples where each tuple is of the form
         # (tanimito similarity as integer, Compound object)

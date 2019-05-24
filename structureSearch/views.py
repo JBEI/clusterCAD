@@ -40,11 +40,21 @@ def search(request):
     maxHits = int(request.POST['maxCompounds'])
     assert 0 < maxHits <= 1000 
 
-    compoundHits = Compound.atomPairSearch(querySmiles, minSim=minSim, maxHits=maxHits)
+    assert 'searchDatabase' in request.POST
+    assert request.POST['searchDatabase'] in {'reviewed', 'all',}
+    if request.POST['searchDatabase'] == 'reviewed':
+        reviewedOnly = True
+    else:
+        reviewedOnly = False
+
+    compoundHits = Compound.atomPairSearch(querySmiles, minSim=minSim, maxHits=maxHits, reviewedOnly=reviewedOnly)
 
     moduleHits = [] 
     for similarity, compound in compoundHits:
-        modules = list(Module.objects.filter(product=compound))
+        if reviewedOnly:
+            modules = list(Module.objects.filter(product=compound).filter(subunit__cluster__reviewed = True))
+        else:
+            modules = list(Module.objects.filter(product=compound))
         if len(modules) == 0:
             continue 
         hitDict = {
@@ -52,6 +62,7 @@ def search(request):
             'smiles': compound.smiles,
             'modules': modules
         }
+
         moduleHits.append(hitDict)
 
     if len(moduleHits) == 0:
@@ -62,7 +73,8 @@ def search(request):
         'querySmiles': urlquote(querySmiles),
         'moduleHits': moduleHits,
         'minSim': minSim,
-        'maxHits': maxHits
+        'maxHits': maxHits,
+        'searchDatabase': reviewedOnly,
     }
     
     return render(request, 'result.html', context)    
