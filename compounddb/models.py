@@ -56,7 +56,7 @@ class Compound(models.Model):
                 # get only compounds which we can join to a reviewed PKS gene cluster
                 c.execute(
                     'SELECT DISTINCT ON (similarity, "inchiKey") '
-                    'similarity, "inchiKey", pks_cluster."mibigAccession", pks_cluster.reviewed, pks_subunit.id, product_id '
+                    'similarity, "inchiKey" '
                     'FROM get_ap_neighbors(\'%s\'), pks_module, pks_subunit, pks_cluster '
                     'WHERE "inchiKey"=pks_module.product_id AND '
                     'pks_module.subunit_id=pks_subunit.id AND '
