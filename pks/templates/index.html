@@ -63,6 +63,9 @@ browse clusters
     <th>
         Modules
     </th>
+    <th>
+        Reviewed 
+    </th>
 </tr>
 </thead>
 <tbody>
@@ -79,6 +82,13 @@ browse clusters
     </td>
     <td>
     {{ cluster.moduleCount }}
+    </td>
+    <td>
+    {% if cluster.clusterObject.reviewed %}
+        Y
+    {% else %}
+        N
+    {% endif %}
     </td>
 </tr>
 {% endfor %}
