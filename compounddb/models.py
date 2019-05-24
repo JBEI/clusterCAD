@@ -54,6 +54,8 @@ class Compound(models.Model):
             c.execute('SET rdkit.tanimoto_threshold=%s;' % str(minSim))
             if reviewedOnly:
                 # get only compounds which we can join to a reviewed PKS gene cluster
+                # note this can break easily if the PKS app isn't installed, is changed,
+                # or has changed table or column names
                 c.execute(
                     'SELECT DISTINCT ON (similarity, "inchiKey") '
                     'similarity, "inchiKey" '
