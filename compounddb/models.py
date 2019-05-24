@@ -45,14 +45,30 @@ class Compound(models.Model):
         addFingerprint(self.inchiKey)
 
     @classmethod
-    def atomPairSearch(cls, querySmiles, maxHits=10, minSim=0.5, reviewedOnly=True):
+    def atomPairSearch(cls, querySmiles, maxHits=10, minSim=0.5, reviewedOnly=False):
         # perform atom pair similarity search
         # result is a list of tuples where each tuple is of the form
         # (tanimito similarity as integer, Compound object)
 
         with connection.cursor() as c:
             c.execute('SET rdkit.tanimoto_threshold=%s;' % str(minSim))
-            c.execute('SELECT similarity, "inchiKey" FROM get_ap_neighbors(\'%s\') limit %s;' % (querySmiles, str(maxHits)))
+            if reviewedOnly:
+                # get only compounds which we can join to a reviewed PKS gene cluster
+                c.execute(
+                    'SELECT DISTINCT ON (similarity, "inchiKey") '
+                    'similarity, "inchiKey", pks_cluster."mibigAccession", pks_cluster.reviewed, pks_subunit.id, product_id '
+                    'FROM get_ap_neighbors(\'%s\'), pks_module, pks_subunit, pks_cluster '
+                    'WHERE "inchiKey"=pks_module.product_id AND '
+                    'pks_module.subunit_id=pks_subunit.id AND '
+                    'pks_subunit.cluster_id=pks_cluster."mibigAccession" AND '
+                    'pks_cluster.reviewed=true '
+                    'ORDER BY similarity DESC LIMIT %s;'
+                    % (querySmiles, str(maxHits))
+                )
+                    
+            else:
+                # get all compounds
+                c.execute('SELECT similarity, "inchiKey" FROM get_ap_neighbors(\'%s\') LIMIT %s;' % (querySmiles, str(maxHits)))
             results = c.fetchall()
         objectResult = []
         for result in results:
