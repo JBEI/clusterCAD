@@ -55,7 +55,7 @@ search for modules based on similarity to a query amino acid sequence</small>
     <div class="col-md-4 col-sm-5">
 
         <div class="form-group">
-          <label for="maxHits">Max hits returned</label>
+          <label for="maxHits">Show number of top hits</label>
                 <select class="form-control" name="maxHits" id="maxHits">
                     <option value="50">50</option>
                     <option value="100">100</option>
@@ -76,6 +76,17 @@ search for modules based on similarity to a query amino acid sequence</small>
         </div>
 
     </div>
+
+    <div class="col-md-4 col-sm-5">
+        <div class="form-group">
+          <label for="searchDatabase">Search cluster database</label>
+                <select class="form-control" name="searchDatabase" id="searchDatabase">
+                    <option value="reviewed">Reviewed only</option>
+                    <option value="all">Reviewed and unreviewed</option>
+                </select>
+        </div>
+    </div>
+    
 </div>
 
 <div class="row">
@@ -92,5 +103,6 @@ search for modules based on similarity to a query amino acid sequence</small>
 	
 </form>
 This tool uses NCBI blastp (protein-protein BLAST) to align your query against all PKS subunits (polypeptides) in our database, while identifying overlapping domains and modules in each hit.
+Note that 'Show number of top hits' option above limits the number of top hits returned, but searches the full database and does not use the commonly misunderstood max_target_seqs option.
 </div>
 {% endblock %}

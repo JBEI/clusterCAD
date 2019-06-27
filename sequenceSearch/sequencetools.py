@@ -9,8 +9,17 @@ from Bio.Seq import Seq
 from pks.models import Subunit, Domain
 from model_utils.managers import InheritanceManager
 from copy import deepcopy
+from time import time
+from django.conf import settings
 
-def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalue=10.0, max_target_seqs=10, sortOutput=True):
+def blast(
+        query, 
+        evalue=10.0, 
+        max_target_seqs=10, 
+        sortOutput=True,
+        database='reviewed'
+
+    ):
     # run blast and return results as a list
     # of alignment dicts with the following structure:
     # {'alignment': alignment, 'subunit': subunit, 'hsps': hsps}
@@ -26,6 +35,18 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
     assert 1 <= max_target_seqs <= 10000
     assert isinstance(query, str)
 
+    #Choose the correct database
+    if database == "reviewed":
+        db=os.path.join(
+                settings.BASE_DIR, 
+                'pipeline', 'data', 'blast', 'clustercad_subunits_reviewed',
+            )
+    else:
+        db=os.path.join(
+                settings.BASE_DIR, 
+                'pipeline', 'data', 'blast', 'clustercad_subunits_all',
+            )
+
     # convert query to fasta format 
     queryStringIO = StringIO()
     queryRecord = SeqRecord(Seq(query, IUPAC.protein), id='query')
@@ -33,19 +54,21 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
     queryFasta = queryStringIO.getvalue()
     queryStringIO.close()
 
-    # run blastp
+    # run blast
+    start = time()
     blastp_cline = NcbiblastpCommandline(
                                          db=db,
                                          evalue=evalue,
                                          outfmt=5,
-                                         num_threads=2,
-                                         max_target_seqs=max_target_seqs)
+                                         num_threads=2
+                                         )
     result, stderr = blastp_cline(stdin=queryFasta)
 
-    # parse blastp output and delete files
+    # parse blast output and delete files
     resultIO = StringIO(result)
     blast_record = NCBIXML.read(resultIO)
     resultIO.close()
+    end = time()
 
     # iterate over record and generate output structure 
     alignments = []
@@ -75,4 +98,4 @@ def blast(query, db="/clusterCAD/pipeline/data/blast/clustercad_subunits", evalu
                 individualHSPs.append(alignmentCopy)
         alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:max_target_seqs]
 
-    return alignments
+    return alignments, str(int(end-start))

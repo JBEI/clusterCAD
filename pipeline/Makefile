@@ -11,16 +11,16 @@ password = pkscluster
 all: data/generate_aa_plots_placeholder
 
 clean:
-	-rm -rf data/mibigdata_clustercad_production.tgz
-	-rm -rf data/antismash
-	-rm -rf data/blast
-	-rm -rf data/mibig
-	-rm data/database_loaded_placeholder
-	-rm data/clustercad_corrections_placeholder 
-	-rm data/clustercad_clean_placeholder
-	-rm data/process_aa_analysis_placeholder
-	-rm data/generate_aa_plots_placeholder
-	-rm data/aa_sequence_analysis/plotCache.tgz
+# 	-rm -rf data/mibigdata_clustercad_production.tgz
+# 	-rm -rf data/antismash
+# 	-rm -rf data/blast
+# 	-rm -rf data/mibig
+# 	-rm data/database_loaded_placeholder
+# 	-rm data/clustercad_corrections_placeholder 
+# 	-rm data/clustercad_clean_placeholder
+# 	-rm data/process_aa_analysis_placeholder
+# 	-rm data/generate_aa_plots_placeholder
+# 	-rm data/aa_sequence_analysis/plotCache.tgz
 
 # download PKS data from online
 data/mibigdata_clustercad_production.tgz:
@@ -54,14 +54,21 @@ data/clustercad_clean_placeholder: clustercad_clean.py data/clustercad_correctio
 	./$<
 	touch $@
 
-# generate blast database
-data/blast/clustercad_subunits: blast_database.py data/clustercad_clean_placeholder
+# generate blast database (Reviewed and all)
+data/blast/clustercad_subunits_reviewed: blast_database.py data/clustercad_clean_placeholder 
 	mkdir -p data/blast
 	./$<
-	cd data/blast && makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
+	cd data/blast && makeblastdb -in clustercad_subunits_reviewed -parse_seqids -dbtype prot && makeblastdb -in clustercad_subunits_all -parse_seqids -dbtype prot
+
+# generate blast database (This is just a header.. for makefile purposes)
+data/blast/clustercad_subunits_all: 
 
 # load AA annotations into database
-data/process_aa_analysis_placeholder: process_aa_analysis.py data/blast/clustercad_subunits
+data/process_aa_analysis_placeholder: process_aa_analysis.py data/blast/clustercad_subunits_reviewed
+	./$<
+	touch $@
+
+data/process_aa_analysis_placeholder: process_aa_analysis.py data/blast/clustercad_subunits_all
 	./$<
 	touch $@
 
