@@ -11,16 +11,16 @@ password = pkscluster
 all: data/generate_aa_plots_placeholder
 
 clean:
-# 	-rm -rf data/mibigdata_clustercad_production.tgz
-# 	-rm -rf data/antismash
-# 	-rm -rf data/blast
-# 	-rm -rf data/mibig
-# 	-rm data/database_loaded_placeholder
-# 	-rm data/clustercad_corrections_placeholder 
-# 	-rm data/clustercad_clean_placeholder
-# 	-rm data/process_aa_analysis_placeholder
-# 	-rm data/generate_aa_plots_placeholder
-# 	-rm data/aa_sequence_analysis/plotCache.tgz
+	-rm -rf data/mibigdata_clustercad_production.tgz
+	-rm -rf data/antismash
+	-rm -rf data/blast
+	-rm -rf data/mibig
+	-rm data/database_loaded_placeholder
+	-rm data/clustercad_corrections_placeholder 
+	-rm data/clustercad_clean_placeholder
+	-rm data/process_aa_analysis_placeholder
+	-rm data/generate_aa_plots_placeholder
+	-rm data/aa_sequence_analysis/plotCache.tgz
 
 # download PKS data from online
 data/mibigdata_clustercad_production.tgz:
