@@ -7,6 +7,8 @@ from django.http import Http404
 from model_utils.managers import InheritanceManager
 from django.core.cache import cache
 from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
+import os
+from django.conf import settings
 
 def search(request):
     timeTaken = 0
@@ -36,6 +38,7 @@ def search(request):
 
         try:
             # validate all inputs
+            searchDatabase = str(request.POST['searchDatabase'])
             maxHits = int(request.POST['maxHits'])
             assert 1 <= maxHits <= 10000
             input = request.POST['aainput']
@@ -58,13 +61,23 @@ def search(request):
                 return render(request, 'sequencesearch.html')
 
             # use alignment cache if it exists
-            alignments = cache.get((input, evalue, maxHits))
+            alignments = cache.get((input, evalue, maxHits, searchDatabase))
 
             # run Blast if there is no cached alignment
             if not alignments:
+                if searchDatabase == "reviewed":
+                    db=os.path.join(
+                            settings.BASE_DIR, 
+                            'pipeline', 'data', 'blast', 'clustercad_subunits_reviewed',
+                        )
+                else:
+                    db=os.path.join(
+                            settings.BASE_DIR, 
+                            'pipeline', 'data', 'blast', 'clustercad_subunits_all',
+                        )
                 alignments, timeTaken = sequencetools.blast(query=input, 
-                    evalue=evalue, max_target_seqs=maxHits)
-                cache.set((input, evalue, maxHits), alignments,
+                    evalue=evalue, max_target_seqs=maxHits, database=db)
+                cache.set((input, evalue, maxHits, searchDatabase), alignments,
                     60 * 60 * 24 * 7) # cache for one week
                 
         except ValueError:
@@ -113,6 +126,7 @@ def search(request):
         'krtypes': krtypes,
         'boolDomains': boolDomains,
         'tetypes': tetypes,
+        'searchDatabase': str(searchDatabase),
     }
     
     return render(request, 'sequenceresult.html', context)    
