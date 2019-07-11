@@ -1,5 +1,5 @@
 This folder builds tbackman/debian-cheminformatics with the following commands:
 
-docker build -t tbackman/debian-cheminformatics:latest .
+docker build -t tbackman/debian-cheminformatics:debian8 .
 docker login
 docker push tbackman/debian-cheminformatics

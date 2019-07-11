@@ -3,14 +3,14 @@ services:
   db:
     user: postgres
     restart: always
-    image: tbackman/debian-cheminformatics:latest
+    image: tbackman/debian-cheminformatics:debian8
     command: ["/usr/lib/postgresql/9.4/bin/postgres", "-D", "/var/lib/postgresql/9.4/main", "-c", "config_file=/etc/postgresql/9.4/main/postgresql.conf"]
   redis:
     restart: always
     image: redis:3.2-alpine 
   web:
     restart: always
-    image: tbackman/debian-cheminformatics:latest
+    image: tbackman/debian-cheminformatics:debian8
     volumes:
       - .:/clusterCAD
       - /www/static
