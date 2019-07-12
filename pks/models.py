@@ -9,7 +9,7 @@ from collections import OrderedDict
 from compounddb.models import Compound
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
-
+from  django.core.validators import validate_comma_separated_integer_list
 class Cluster(models.Model):
     '''Cluster is defined by GenBank and MIBiG accession numbers.
 
@@ -267,7 +267,7 @@ class Subunit(models.Model):
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
     acc = models.TextField()
-    acc20 = models.CommaSeparatedIntegerField(max_length=1000000)
+    acc20 = models.CharField(validators = [validate_comma_separated_integer_list], max_length=1000000)
     accPlotFile = models.ImageField(upload_to='accplots')
     ss = models.TextField()
     ss8 = models.TextField()
