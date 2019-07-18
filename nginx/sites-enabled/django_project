@@ -7,6 +7,10 @@ server {
         alias /www/static;
     }
 
+    location /media {
+	alias /www/media;
+    }
+
     location / {
         proxy_pass http://web:8000;
         proxy_set_header Host $host;

@@ -9,7 +9,7 @@ from collections import OrderedDict
 from compounddb.models import Compound
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
-
+from  django.core.validators import validate_comma_separated_integer_list
 class Cluster(models.Model):
     '''Cluster is defined by GenBank and MIBiG accession numbers.
 
@@ -259,7 +259,7 @@ class Subunit(models.Model):
         getNucleotideSequence: Returns nucleotide sequence of subunit.
         getAminoAcidSequence: Returns amino acid sequence of subunit.
     '''
-    cluster = models.ForeignKey(Cluster)
+    cluster = models.ForeignKey(Cluster, on_delete=models.CASCADE)
     order = models.IntegerField()
     genbankAccession = models.CharField(max_length=2000, unique=False)
     name = models.CharField(max_length=2000)
@@ -267,7 +267,7 @@ class Subunit(models.Model):
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
     acc = models.TextField()
-    acc20 = models.CommaSeparatedIntegerField(max_length=1000000)
+    acc20 = models.CharField(validators = [validate_comma_separated_integer_list], max_length=1000000)
     accPlotFile = models.ImageField(upload_to='accplots')
     ss = models.TextField()
     ss8 = models.TextField()
@@ -312,7 +312,7 @@ class Module(models.Model):
         computeProduct: Compute product of module given chain.
         deleteProduct: Reset product to Null, and properly delete it from database.
     '''
-    subunit = models.ForeignKey(Subunit)
+    subunit = models.ForeignKey(Subunit, on_delete=models.CASCADE)
     order = models.IntegerField()
     loading = models.BooleanField() # Whether or not module is a loading module
     terminal = models.BooleanField() # Whether or not module is a terminal module
@@ -443,7 +443,7 @@ class Domain(models.Model):
         getNucleotideSequence: Returns nucleotide sequence of domain.
         getAminoAcidSequence: Returns amino acid sequence of domain.
     '''
-    module = models.ForeignKey(Module)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE)
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
 
@@ -799,7 +799,7 @@ class PCP(Domain):
 
 class Standalone(models.Model):
     # a standalone PKS enzyme within a gene cluster
-    cluster = models.ForeignKey(Cluster)
+    cluster = models.ForeignKey(Cluster, on_delete=models.CASCADE)
     order = models.PositiveSmallIntegerField()
     name = models.CharField(max_length=2000) # name of enzyme
     start = models.PositiveIntegerField()
