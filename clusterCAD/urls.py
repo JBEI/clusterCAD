@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,4 +26,4 @@ urlpatterns = [
     url(r'^sequenceSearch/', include('sequenceSearch.urls')),
     url(r'^$', TemplateView.as_view(template_name='home.html')),
     url(r'^about/$', TemplateView.as_view(template_name='about.html')),
-]
+] 
