@@ -57,12 +57,13 @@ data/clustercad_clean_placeholder: clustercad_clean.py data/clustercad_correctio
 # generate blast database (Reviewed and all)
 data/blast/clustercad_subunits_reviewed: blast_database.py data/clustercad_clean_placeholder 
 	mkdir -p data/blast
-	./$< --name='clustercad_subunits_reviewed'
+	./$< --name='clustercad_subunits_reviewed' --include_all=0
 	cd data/blast && makeblastdb -in clustercad_subunits_reviewed -parse_seqids -dbtype prot 
 
 # generate blast database (This is just a header.. for makefile purposes)
 data/blast/clustercad_subunits_all: blast_database.py data/clustercad_clean_placeholder 
-	./$< --name='clustercad_subunits_all'
+	mkdir -p data/blast
+	./$< --name='clustercad_subunits_all' --include_all=1
 	cd data/blast && makeblastdb -in clustercad_subunits_all -parse_seqids -dbtype prot
 
 # load AA annotations into database
