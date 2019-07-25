@@ -21,6 +21,7 @@ class Cluster(models.Model):
         knownProductSmiles: str. Known final product from literature or external databases, in smiles format.
         knownProductMCS: str. SMARTS string of MCS comparing knownProductSmiles to the predicted final product. Auto-generated when running self.computeProduct().
         knownProductSource: str. Where the knownProduct structure was obtained from.
+        reviewed: bool. True if the final chemical structure has been manually reviewed for correctness. This is usually set to True only if a corrections file is provided.
 
     # Methods
         subunits: Returns subunits in cluster.
@@ -44,6 +45,7 @@ class Cluster(models.Model):
     knownProductSmiles = models.TextField()
     knownProductMCS = models.TextField()
     knownProductSource = models.TextField(default='unknown')
+    reviewed = models.BooleanField(default=False)
 
     def subunits(self):
         return Subunit.objects.filter(cluster=self).order_by('order')

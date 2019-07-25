@@ -21,6 +21,8 @@
 
             <dt>GenBank accession</dt>
             <dd><a target="_blank" href="https://www.ncbi.nlm.nih.gov/nuccore/{{ cluster.genbankAccession|stripTrailingVersion }}">{{ cluster.genbankAccession }}</a></dd>
+            <dt>Status</dt>
+            <dd>{% if cluster.reviewed %}Reviewed{% else %}Unreviewed{% endif %}</dd>
             <dt>Submit corrections</dt>
             <dd><a href="mailto:jbei-help@lbl.gov?subject=ClusterCAD%20corrections%20for%20{{ cluster.mibigAccession|stripTrailingVersion }}">Send e-mail</a></dd>
         </dl>

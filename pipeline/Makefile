@@ -8,7 +8,7 @@ dataUrl = https://clustercad.jbei.org/static/data
 username = pkscluster
 password = pkscluster
 
-all: data/generate_aa_plots_placeholder
+all: data/generate_aa_plots_placeholder 
 
 clean:
 	-rm -rf data/mibigdata_clustercad_production.tgz
@@ -37,7 +37,7 @@ data/aa_sequence_analysis/plotCache.tgz:
 # aggregate chemical structures
 data/compounds/all_known_products.p: aggregate_final_structures.py data/mibigdata_clustercad_production.tgz
 	mkdir -p data/compounds
-	./$<
+	./$< 
 
 # load database
 data/database_loaded_placeholder: antismash_to_database.py data/compounds/all_known_products.p
@@ -54,14 +54,20 @@ data/clustercad_clean_placeholder: clustercad_clean.py data/clustercad_correctio
 	./$<
 	touch $@
 
-# generate blast database
-data/blast/clustercad_subunits: blast_database.py data/clustercad_clean_placeholder
+# generate blast database (Reviewed and all)
+data/blast/clustercad_subunits_reviewed: blast_database.py data/clustercad_clean_placeholder 
 	mkdir -p data/blast
-	./$<
-	cd data/blast && makeblastdb -in clustercad_subunits -parse_seqids -dbtype prot
+	./$< --name='clustercad_subunits_reviewed' --include_all=0
+	cd data/blast && makeblastdb -in clustercad_subunits_reviewed -parse_seqids -dbtype prot 
+
+# generate blast database (This is just a header.. for makefile purposes)
+data/blast/clustercad_subunits_all: blast_database.py data/clustercad_clean_placeholder 
+	mkdir -p data/blast
+	./$< --name='clustercad_subunits_all' --include_all=1
+	cd data/blast && makeblastdb -in clustercad_subunits_all -parse_seqids -dbtype prot
 
 # load AA annotations into database
-data/process_aa_analysis_placeholder: process_aa_analysis.py data/blast/clustercad_subunits
+data/process_aa_analysis_placeholder: process_aa_analysis.py data/blast/clustercad_subunits_reviewed data/blast/clustercad_subunits_all
 	./$<
 	touch $@
 
