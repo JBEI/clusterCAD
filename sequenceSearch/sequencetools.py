@@ -17,13 +17,14 @@ import pandas as pd
 
 def blast(
         query, 
-        db=os.path.join(
-            settings.BASE_DIR, 
-            'pipeline', 'data', 'blast', 'clustercad_subunits',
-        ),
         evalue=10.0, 
         max_target_seqs=10, 
         sortOutput=True,
+        database=os.path.join(
+                settings.BASE_DIR, 
+                'pipeline', 'data', 'blast', 'clustercad_subunits_reviewed',
+            ),
+
     ):
     # run blast and return results as a list
     # of alignment dicts with the following structure:
@@ -52,7 +53,7 @@ def blast(
     # run blast
     start = time()
     blastp_cline = NcbiblastpCommandline(
-                                         db=db,
+                                         db=database,
                                          evalue=evalue,
                                          outfmt=7,
                                          num_threads=2

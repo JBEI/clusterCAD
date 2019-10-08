@@ -29,8 +29,19 @@ browse clusters
 {% block content %}
 <div class="row-fluid">
 <h2>Type I modular polyketide synthase clusters</h2>
+{% if showAll %}
+    <div class="btn-group">
+        <a href='/pks/' class="btn btn-default">Reviewed only</a>
+        <a href='/pks/all/' class="btn btn-primary">Reviewed and unreviewed</a>
+    </div>
+{% else %}
+    <div class="btn-group">
+        <a href='/pks/' class="btn btn-primary">Reviewed only</a>
+        <a href='/pks/all/' class="btn btn-default">Reviewed and unreviewed</a>
+    </div>
+{% endif %}
 <dl class="dl-horizontal">
-    <dt>{{ clusters|length }} clusters total</dt>
+    <dt>Showing {{ clusters|length }} clusters</dt>
     <dd></dd>
 </dl>
 </div>
@@ -52,6 +63,9 @@ browse clusters
     <th>
         Modules
     </th>
+    <th>
+        Reviewed 
+    </th>
 </tr>
 </thead>
 <tbody>
@@ -68,6 +82,13 @@ browse clusters
     </td>
     <td>
     {{ cluster.moduleCount }}
+    </td>
+    <td>
+    {% if cluster.clusterObject.reviewed %}
+        Y
+    {% else %}
+        N
+    {% endif %}
     </td>
 </tr>
 {% endfor %}

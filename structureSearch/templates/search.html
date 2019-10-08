@@ -134,6 +134,15 @@ Selecting a starting point for engineering<br/>
                 </select>
         </div>
     </div>
+    <div class="col-md-4 col-sm-5">
+        <div class="form-group">
+          <label for="searchDatabase">Search cluster database</label>
+                <select class="form-control" name="searchDatabase" id="searchDatabase">
+                    <option value="reviewed">Reviewed only</option>
+                    <option value="all">Reviewed and unreviewed</option>
+                </select>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -195,6 +204,15 @@ Selecting a starting point for engineering<br/>
                 </select>
         </div>
     </div>
+    <div class="col-md-4 col-sm-5">
+        <div class="form-group">
+          <label for="searchDatabase">Search cluster database</label>
+                <select class="form-control" name="searchDatabase" id="searchDatabase">
+                    <option value="reviewed">Reviewed only</option>
+                    <option value="all">Reviewed and unreviewed</option>
+                </select>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -208,7 +226,9 @@ Selecting a starting point for engineering<br/>
 </div>
 </form>
 </div>
-This tool uses atom pair descriptors with the Tanimoto similarity metric. Stereoisomers will appear as separate hits, with identical scores.
+This tool uses atom pair descriptors with the Tanimoto similarity metric. Stereoisomers will appear as separate hits, with identical scores. The "Search cluster database" option can limit search
+hits to only gene clusters with manually confirmed annotations, or also include
+a large set of machine annotated gene clusters, which may contain errors.
 </div>
 
 </div>

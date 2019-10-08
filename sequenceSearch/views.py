@@ -7,12 +7,12 @@ from django.http import Http404
 from model_utils.managers import InheritanceManager
 from django.core.cache import cache
 from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
-from Bio.Blast import NCBIXML
 import json
 from io import StringIO
-from copy import deepcopy
 import pandas as pd
 from itertools import chain
+import os
+from django.conf import settings
 
 def search(request):
     timeTaken = 0
@@ -42,6 +42,7 @@ def search(request):
 
         try:
             # validate all inputs
+            searchDatabase = str(request.POST['searchDatabase'])
             maxHits = int(request.POST['maxHits'])
             assert 1 <= maxHits <= 10000
             inputs = request.POST['aainput']
@@ -89,6 +90,7 @@ def search(request):
 
                 module_getter = lambda x: list(set([domain.module for domain in x['domains']]))
                 df['modules'] = df.apply(module_getter, axis=1)
+
                 
                 #User option to show all domains
                 if showAllDomains:
@@ -147,6 +149,7 @@ def search(request):
         'krtypes': krtypes,
         'boolDomains': boolDomains,
         'tetypes': tetypes,
+        'searchDatabase': str(searchDatabase),
     }
     
     return render(request, 'sequenceresult.html', context)    
