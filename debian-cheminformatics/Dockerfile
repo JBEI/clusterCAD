@@ -9,6 +9,7 @@ ENV LANG C.UTF-8
 WORKDIR /root
 ADD ./requirements.txt /root/
 
+
 # include Debian packages required to build pip packages
 RUN apt-get update \
     && apt-get install -y \
@@ -55,6 +56,7 @@ RUN apt-get update \
 # note: requirements.txt can be updated with 'pip3 install pur; pur -r requirements.txt'
 RUN pip3 install -U pip setuptools
 RUN pip3 install -r requirements.txt
+
 
 # compile and install rdkit from source code
 ENV RDKIT_VERSION Release_2019_03_3
