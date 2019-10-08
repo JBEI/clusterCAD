@@ -6,11 +6,14 @@ from Bio.Alphabet import IUPAC
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.Seq import Seq
+from django.conf import settings
 from pks.models import Subunit, Domain
 from model_utils.managers import InheritanceManager
 from copy import deepcopy
 from time import time
-from django.conf import settings
+import json
+from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
+import pandas as pd
 
 def blast(
         query, 
@@ -45,48 +48,51 @@ def blast(
     queryFasta = queryStringIO.getvalue()
     queryStringIO.close()
 
+    #query acc.ver, subject acc.ver, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+
     # run blast
     start = time()
     blastp_cline = NcbiblastpCommandline(
                                          db=database,
                                          evalue=evalue,
-                                         outfmt=5,
+                                         outfmt=7,
                                          num_threads=2
                                          )
     result, stderr = blastp_cline(stdin=queryFasta)
 
+    queries_found = True
+
+    results = result.split("\n")
+    columns = results[3].split(":")[-1].split(",")
+    columns = [i.lstrip() for i in columns]
+
+    if results[3] == "# 0 hits found":
+        return None, None, False
+
+    # assert False, result
     # parse blast output and delete files
     resultIO = StringIO(result)
-    blast_record = NCBIXML.read(resultIO)
+
+    #Remeber bitscore cant convert to int by rule 'safe'
+    # df = pd.read_csv(resultIO, sep="\s+", comment="#", names=columns, dtype={'bit score': 'int32'})
+    df = pd.read_csv(resultIO, sep="\t", comment="#", names=columns)
+
     resultIO.close()
+
+    if sortOutput:
+        df = df.sort_values('bit score', ascending=False)
+
+    if max_target_seqs < len(df):
+        df = df[:max_target_seqs]
+
+    # #Get the mibigAccession and subunitID for each query
+    # df[['mibigAccession','subunitID']] = df["subject acc.ver"].str.split('_',expand=True)
+
+
     end = time()
 
-    # iterate over record and generate output structure 
-    alignments = []
-    for alignment in blast_record.alignments:
-        alignmentHit = alignment.title.split()[0].split('_')
-        mibigAccession = alignmentHit[0]
-        subunitId = alignmentHit[1]
-        subunit = Subunit.objects.get(id=subunitId, cluster__mibigAccession=mibigAccession)
-        hsps = []
-        for hsp in alignment.hsps:
-            domains = Domain.objects.filter(module__subunit=subunit, 
-                                            stop__gte=hsp.sbjct_start,
-                                            start__lte=hsp.sbjct_end).select_subclasses().order_by('start') 
-            modules = list(set([domain.module for domain in domains]))
-            modules = sorted(modules, key=lambda module: module.order)
-            modules = [{'module': module, 'domains': list(domains.filter(module=module))} for module in modules]
-            hsps.append({'hsp': hsp, 'modules': modules})
-        alignments.append({'alignment': alignment, 'subunit': subunit, 'hsps': hsps})
+    #Raise exception or assert statement
 
-    # if sortOutput=True, break apart HSPs and resort by bit order
-    if sortOutput:
-        individualHSPs = []
-        for alignment in alignments:
-            for hsp in alignment['hsps']:
-                alignmentCopy = deepcopy(alignment)
-                alignmentCopy['hsps'] = [hsp]
-                individualHSPs.append(alignmentCopy)
-        alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:max_target_seqs]
+    return df.to_json(), str(int(end-start)), True
 
-    return alignments, str(int(end-start))
+    

@@ -181,41 +181,43 @@ $(document).ready(function(){
 </tr>
 </thead>
 <tbody>
+
 {% for alignment in alignments %}
-<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if alignment.hsps.0.modules|length > 0 %}?mark={% for module in alignment.hsps.0.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
-        <td class="text-right" rowspan="{{ alignment.hsps|length }}">
+<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.0.cluster.mibigAccession }}/?mark={% for module in alignment.1 %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};#{{ alignment.0.name }}">
+        <td class="text-right">
             {{ forloop.counter }}
         </td>
-        <td rowspan="{{ alignment.hsps|length }}">
-            {{ alignment.subunit.cluster.mibigAccession }}
-            {{ alignment.subunit.cluster.description }}
+        <td>
+            {{ alignment.0.cluster.mibigAccession }}
+            {{ alignment.0.cluster.description }}
         </td>
-        <td rowspan="{{ alignment.hsps|length }}">
-            {{ alignment.subunit.name }}
+        <td>
+            {{ alignment.0.name }}
         </td>
-        {% for hsp in alignment.hsps %}
-            {% if forloop.counter != 1 %}
-            <tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.subunit.cluster.mibigAccession }}/{% if hsp.modules|length > 0 %}?mark={% for module in hsp.modules %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.subunit.name }}">
-            {% endif %}
-            <td class="text-right">
-                {{ hsp.hsp.expect|sigfig }}
-            </td>
-            <td class="text-right">
-                {{ hsp.hsp.bits }}
-            </td>
-            <td class="text-right">
-                {{ hsp.hsp.query_start }}..{{ hsp.hsp.query_end }}
-            </td>
-            <td class="text-right">
-                {{ hsp.hsp.sbjct_start }}..{{ hsp.hsp.sbjct_end }}
-            </td>
-            <td class="text-right">
-            {% if hsp.modules|length == 0 %}
-                N/A
-            {% endif %}
-            {% for module in hsp.modules %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" %}data-type="{{ domain.type }}"{% elif domain|classname == "AT" %}data-type="{{ domain.substrate }}"{% else %}data-type="{{ domain }}"{% endif %} style="padding:0; background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
-            </td>
-        {% endfor %}
+        
+        <td class="text-right">
+          <!-- evalue -->
+            {{ alignment.6|sigfig }}
+        </td>
+        <td class="text-right">
+          <!-- bitscore -->
+            {{ alignment.7 }}
+        </td>
+        <td class="text-right">
+          <!-- q_start - q_end -->
+            {{ alignment.2 }}..{{ alignment.3 }}
+        </td>
+        <td class="text-right">
+          <!-- s_start - s_start -->
+            {{ alignment.4 }}..{{ alignment.5 }}
+        </td>
+        <td class="text-right">
+        {% if alignment.1|length == 0 %}
+            N/A
+        {% endif %}
+        {% for module in alignment.1 %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" %}data-type="{{ domain.type }}"{% elif domain|classname == "AT" %}data-type="{{ domain.substrate }}"{% else %}data-type="{{ domain }}"{% endif %} style="padding:0; background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
+        </td>
+        
 </tr>
 {% endfor %}
 </tbody>
