@@ -14,13 +14,13 @@ from clusterCAD.celery import app
 
 @app.task()
 def blast(query, 
-        db=os.path.join(
-            settings.BASE_DIR, 
-            'pipeline', 'data', 'blast', 'clustercad_subunits',
-        ),
         evalue=10.0, 
         max_target_seqs=10, 
         sortOutput=True,
+        database=os.path.join(
+                settings.BASE_DIR, 
+                'pipeline', 'data', 'blast', 'clustercad_subunits_reviewed',
+            ),
     ):
-    return sequencetools.blast(query, db, evalue, max_target_seqs, sortOutput)
+    return sequencetools.blast(query, evalue, max_target_seqs, sortOutput, database)
    

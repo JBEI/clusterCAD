@@ -48,6 +48,7 @@ def search(request):
             inputs = request.POST['aainput']
             evalue = float(request.POST['evalue'])
             assert 0.0 <= evalue <= 10.0
+            
             showAllDomains = int(request.POST['showAllDomains'])
             assert 0 <= showAllDomains <= 1
             inputs = inputs.strip()
@@ -64,13 +65,24 @@ def search(request):
                 messages.error(request, 'Error: max query size is 50,000 residues')
                 return render(request, 'sequencesearch.html')
 
+
             # use alignment cache if it exists
-            alignments = cache.get((inputs, evalue, maxHits, showAllDomains))
+            alignments = cache.get((inputs, evalue, maxHits, showAllDomains, searchDatabase))
             # assert False, 3
             # run Blast if there is no cached alignment
             if alignments is None:
+                if searchDatabase == "reviewed":
+                    db=os.path.join(
+                            settings.BASE_DIR, 
+                            'pipeline', 'data', 'blast', 'clustercad_subunits_reviewed',
+                        )
+                else:
+                    db=os.path.join(
+                            settings.BASE_DIR, 
+                            'pipeline', 'data', 'blast', 'clustercad_subunits_all',
+                        )
                 results = blast.delay(query=inputs, 
-                    evalue=evalue, max_target_seqs=maxHits,sortOutput=True)
+                    evalue=evalue, max_target_seqs=maxHits,sortOutput=True,database=db)
                 results, timeTaken, queries_found = results.get()
 
                 #If no queries found, then no hits
@@ -107,7 +119,7 @@ def search(request):
                 alignments = df
 
                 #Set cache
-                cache.set((inputs, evalue, maxHits, showAllDomains), alignments,
+                cache.set((inputs, evalue, maxHits, showAllDomains, searchDatabase), alignments,
                     60 * 60 * 24 * 7) # cache for one week
         except ValueError:
             messages.error(request, 'Error: Invalid query!')
