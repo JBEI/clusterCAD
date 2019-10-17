@@ -12,6 +12,7 @@ class Compound(models.Model):
     smiles = models.TextField()
 
     def computeInchiKey(self):
+        # returns the Inchi key for this compound
         self.inchiKey = chem.InchiToInchiKey(chem.MolToInchi(chem.MolFromSmiles(self.smiles)))  
         return self.inchiKey
 
@@ -40,25 +41,36 @@ class Compound(models.Model):
                       'WHERE "inchiKey" = \'%s\';' \
                       % (self.smiles, self.inchiKey))
 
-        # add fingerprints
+        # add fingerprints to fingerprint table
         addFingerprint(self.inchiKey)
 
     @classmethod
-    def atomPairSearch(cls, querySmiles, maxHits=10, minSim=0.5):
+    def atomPairSearch(cls, querySmiles, maxHits=10, minSim=0.5, reviewedOnly=False):
         # perform atom pair similarity search
         # result is a list of tuples where each tuple is of the form
         # (tanimito similarity as integer, Compound object)
 
-        # validate query
-        try:
-            query = chem.MolFromSmiles(querySmiles)
-            chem.SanitizeMol(query)
-        except:
-            raise ValueError('Invalid input smiles') 
-
         with connection.cursor() as c:
             c.execute('SET rdkit.tanimoto_threshold=%s;' % str(minSim))
-            c.execute('SELECT similarity, "inchiKey" FROM get_ap_neighbors(\'%s\') limit %s;' % (querySmiles, str(maxHits)))
+            if reviewedOnly:
+                # get only compounds which we can join to a reviewed PKS gene cluster
+                # note this can break easily if the PKS app isn't installed, is changed,
+                # or has changed table or column names
+                c.execute(
+                    'SELECT DISTINCT ON (similarity, "inchiKey") '
+                    'similarity, "inchiKey" '
+                    'FROM get_ap_neighbors(\'%s\'), pks_module, pks_subunit, pks_cluster '
+                    'WHERE "inchiKey"=pks_module.product_id AND '
+                    'pks_module.subunit_id=pks_subunit.id AND '
+                    'pks_subunit.cluster_id=pks_cluster."mibigAccession" AND '
+                    'pks_cluster.reviewed=TRUE '
+                    'ORDER BY similarity DESC LIMIT %s;'
+                    % (querySmiles, str(maxHits))
+                )
+                    
+            else:
+                # get all compounds
+                c.execute('SELECT similarity, "inchiKey" FROM get_ap_neighbors(\'%s\') LIMIT %s;' % (querySmiles, str(maxHits)))
             results = c.fetchall()
         objectResult = []
         for result in results:
@@ -72,6 +84,8 @@ def delete_fp(sender, instance, **kwargs):
         c.execute('DELETE FROM rdk.fps WHERE "inchiKey" = \'%s\';' % instance.inchiKey)
 
 def addFingerprint(inchiKey):
+    # add fingerprint of a compound with the given incihKey to the fingerprint table.
+    # Compound must be already in the compounddb_compound table.
     with connection.cursor() as c:
         c.execute('SELECT "inchiKey" FROM rdk.fps WHERE "inchiKey" = \'%s\' LIMIT 1;' % inchiKey)
         if c.fetchone():

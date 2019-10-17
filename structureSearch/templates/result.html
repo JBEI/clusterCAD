@@ -35,6 +35,12 @@ structure hits
 <dd>{{ minSim }}</dd>
 <dt>Max compounds</dt>
 <dd>{{ maxHits }}</dd>
+<dt>Search database</dt>
+{% if searchDatabase %}
+<dd>Reviewed clusters only</dd>
+{% else %}
+<dd>Reviewed and unreviewed clusters</dd>
+{% endif %}
 </dl>
 </div>
 </div><!--/row-->

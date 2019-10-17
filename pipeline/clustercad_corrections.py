@@ -17,3 +17,8 @@ for corrfile in correctionlist:
     print('Correcting cluster %s.'  % acc)
     cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
     cluster.correctCluster(corrfile)
+
+    # if this cluster has a corrections file we will consider it
+    # 'reviewed' and set the boolean value accordingly
+    cluster.reviewed = True
+    cluster.save()

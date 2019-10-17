@@ -3,17 +3,18 @@ services:
   db:
     user: postgres
     restart: always
-    image: tbackman/debian-cheminformatics:latest
-    command: ["/usr/lib/postgresql/9.4/bin/postgres", "-D", "/var/lib/postgresql/9.4/main", "-c", "config_file=/etc/postgresql/9.4/main/postgresql.conf"]
+    image: tbackman/debian-cheminformatics:debian10
+    command: ["/usr/lib/postgresql/11/bin/postgres", "-D", "/var/lib/postgresql/11/main", "-c", "config_file=/etc/postgresql/11/main/postgresql.conf"]
   redis:
     restart: always
     image: redis:3.2-alpine 
   web:
     restart: always
-    image: tbackman/debian-cheminformatics:latest
+    image: tbackman/debian-cheminformatics:debian10
     volumes:
       - .:/clusterCAD
       - /www/static
+      - /www/media
     expose:
       - "8000"
     ports:
@@ -30,6 +31,7 @@ services:
       - "8000:80"
     volumes:
       - /www/static
+      - /www/media
     volumes_from:
       - web
     links:

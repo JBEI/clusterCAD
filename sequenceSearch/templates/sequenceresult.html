@@ -28,7 +28,6 @@ $(document).ready(function()
                 if(marks.length === 0){
                     return node.innerHTML;
                 }
-                // var counter = 0;
                 var domains = [];
                 for(var i = 0; i < marks.length; i++){
                     mark = marks[i];
@@ -37,16 +36,15 @@ $(document).ready(function()
                         domains.push(mark.getAttribute(["data-domain"]));
                     }
                 }
-                // the following filter line was taken from stackoverflow
                 var uniqueDomains = domains.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
                 return uniqueDomains.length;
-                // return counter;
             } 
         }); 
 
     } 
 ); 
 </script>
+
 {% endblock %}
 
 {% block subtitle %}
@@ -65,10 +63,17 @@ sequence hits
 </dd>
 <dt>Maximum E-value</dt>
 <dd>{{ evalue }} </dd>
-<dt>Max hits returned</dt>
+<dt>Number of top hits</dt>
 <dd>{{ maxHits }}</dd>
 <dt>Show domains</dt>
 <dd>{% if showAllDomains %}All domains in modules overlapping alignment{% else %}Only domains overlapping alignment{% endif %}</dd>
+<dt>Search time (sec)</dt>
+<dd>
+{{ timeTaken }}
+</dd>
+<dt>Database</dt>
+<dd>{{ searchDatabase }}</dd>
+
 <dt>Instructions</dt>
 <dd>
 You can click any column header to sort results. If domains are highlighted, the list will auto-sort based on the number of unique highlighted domain types in each hit. Clicking a row will take you to the view page for that cluster, with the overlapping modules highlighted.

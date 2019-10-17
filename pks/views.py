@@ -7,9 +7,21 @@ from django.http import Http404
 from json import dumps
 from rdkit import Chem as chem
 
-def index(request):
+def index(request, show):
+
+    # determine if we will show all or only reviewed PKSs
+    if show == 'reviewed':
+        showAll = False
+    else:
+        showAll = True
+
     try:
-        clusters=Cluster.objects.order_by('description')
+        if showAll:
+            # get all PKS clusters
+            clusters = Cluster.objects.order_by('description')
+        else:
+            # get only manually reviewed PKS clusters
+            clusters = Cluster.objects.filter(reviewed=True).order_by('description')
     except Cluster.DoesNotExist:
         raise Http404
 
@@ -22,7 +34,7 @@ def index(request):
         }
         clusterlist.append(clusterDict)
 
-    context={'clusters': clusterlist}
+    context={'clusters': clusterlist, 'showAll': showAll}
 
     return render(request, 'index.html', context)
 

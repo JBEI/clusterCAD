@@ -1,10 +1,10 @@
 ClusterCAD: a computational platform for type I modular polyketide synthase design
 
-Copyright (c) 2017, The Regents of the University of California, through
+Copyright (c) 2019, The Regents of the University of California, through
 Lawrence Berkeley National Laboratory (subject to receipt of any required
 approvals from the U.S. Dept. of Energy).  All rights reserved.
 
-Starting service (connect to HTTP on port 8000 with username and password 'pkscluster'):
+Starting service (connect to HTTP at http://127.0.0.1:8000/):
 docker-compose up -d
 
 Loading PKS data into database:
@@ -29,4 +29,4 @@ Obtaining a Django shell:
 docker-compose exec web python3 manage.py shell
 
 Running jupyter notebook for development:
-docker-compose exec web jupyter notebook --no-browser --ip=* --allow-root
+docker-compose exec web jupyter notebook --no-browser --allow-root --ip 0.0.0.0 --port 8888

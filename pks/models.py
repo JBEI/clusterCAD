@@ -9,7 +9,7 @@ from collections import OrderedDict
 from compounddb.models import Compound
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
-
+from  django.core.validators import validate_comma_separated_integer_list
 class Cluster(models.Model):
     '''Cluster is defined by GenBank and MIBiG accession numbers.
 
@@ -21,6 +21,7 @@ class Cluster(models.Model):
         knownProductSmiles: str. Known final product from literature or external databases, in smiles format.
         knownProductMCS: str. SMARTS string of MCS comparing knownProductSmiles to the predicted final product. Auto-generated when running self.computeProduct().
         knownProductSource: str. Where the knownProduct structure was obtained from.
+        reviewed: bool. True if the final chemical structure has been manually reviewed for correctness. This is usually set to True only if a corrections file is provided.
 
     # Methods
         subunits: Returns subunits in cluster.
@@ -44,6 +45,7 @@ class Cluster(models.Model):
     knownProductSmiles = models.TextField()
     knownProductMCS = models.TextField()
     knownProductSource = models.TextField(default='unknown')
+    reviewed = models.BooleanField(default=False)
 
     def subunits(self):
         return Subunit.objects.filter(cluster=self).order_by('order')
@@ -259,7 +261,7 @@ class Subunit(models.Model):
         getNucleotideSequence: Returns nucleotide sequence of subunit.
         getAminoAcidSequence: Returns amino acid sequence of subunit.
     '''
-    cluster = models.ForeignKey(Cluster)
+    cluster = models.ForeignKey(Cluster, on_delete=models.CASCADE)
     order = models.IntegerField()
     genbankAccession = models.CharField(max_length=2000, unique=False)
     name = models.CharField(max_length=2000)
@@ -267,7 +269,7 @@ class Subunit(models.Model):
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
     acc = models.TextField()
-    acc20 = models.CommaSeparatedIntegerField(max_length=1000000)
+    acc20 = models.CharField(validators = [validate_comma_separated_integer_list], max_length=1000000)
     accPlotFile = models.ImageField(upload_to='accplots')
     ss = models.TextField()
     ss8 = models.TextField()
@@ -312,7 +314,7 @@ class Module(models.Model):
         computeProduct: Compute product of module given chain.
         deleteProduct: Reset product to Null, and properly delete it from database.
     '''
-    subunit = models.ForeignKey(Subunit)
+    subunit = models.ForeignKey(Subunit, on_delete=models.CASCADE)
     order = models.IntegerField()
     loading = models.BooleanField() # Whether or not module is a loading module
     terminal = models.BooleanField() # Whether or not module is a terminal module
@@ -443,7 +445,7 @@ class Domain(models.Model):
         getNucleotideSequence: Returns nucleotide sequence of domain.
         getAminoAcidSequence: Returns amino acid sequence of domain.
     '''
-    module = models.ForeignKey(Module)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE)
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
 
@@ -504,9 +506,11 @@ extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
              'mxmal': chem.MolFromSmiles('CO[C@@H](C(=O)O)C(=O)[S]'),
              'mxmal_ACP': chem.MolFromSmiles('CO[C@@H](C(=O)O)C(=O)[S]'),
              'emal': chem.MolFromSmiles('CC[C@@H](C(=O)O)C(=O)[S]'),
+             'allylmal': chem.MolFromSmiles('C=CC[C@@H](C(=O)O)C(=O)[S]'),
              'butmal': chem.MolFromSmiles('CCCC[C@@H](C(=O)O)C(=O)[S]'),
              'hmal': chem.MolFromSmiles('OC(C(C([S])=O)O)=O'),
-             'isobutmal': chem.MolFromSmiles('CC(C)C(C([S])=O)C(O)=O'),
+             'isobutmal': chem.MolFromSmiles('CC(C)[C@@H](C([S])=O)C(O)=O'),
+             'D-isobutmal': chem.MolFromSmiles('CC(C)[C@H](C([S])=O)C(O)=O'),
              'DCP': chem.MolFromSmiles('ClC1=C(Cl)NC=C1CCCCC(C(O)=O)C([S])=O'),
              'hexmal': chem.MolFromSmiles('CCCCCC[C@@H](C(=O)O)C(=O)[S]')
              }
@@ -797,7 +801,7 @@ class PCP(Domain):
 
 class Standalone(models.Model):
     # a standalone PKS enzyme within a gene cluster
-    cluster = models.ForeignKey(Cluster)
+    cluster = models.ForeignKey(Cluster, on_delete=models.CASCADE)
     order = models.PositiveSmallIntegerField()
     name = models.CharField(max_length=2000) # name of enzyme
     start = models.PositiveIntegerField()
