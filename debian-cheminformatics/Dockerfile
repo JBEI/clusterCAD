@@ -9,7 +9,6 @@ ENV LANG C.UTF-8
 WORKDIR /root
 ADD ./requirements.txt /root/
 
-
 # include Debian packages required to build pip packages
 RUN apt-get update \
     && apt-get install -y \

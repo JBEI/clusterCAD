@@ -32,7 +32,7 @@ services:
         - web
     working_dir: /clusterCAD
 
-    command: [celery, -A, sequenceSearch, worker, -l, info, --loglevel=INFO]
+    command: [celery, -A, clusterCAD, worker, -l, info, --loglevel=INFO]
 
     
   db:

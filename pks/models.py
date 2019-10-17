@@ -1,5 +1,4 @@
 import sys
-from django.conf import settings
 from django.db import models
 from model_utils.managers import InheritanceManager
 from rdkit import Chem as chem

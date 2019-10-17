@@ -12,11 +12,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
-
-# CELERY_TASK_SERIALIZER = 'pickle'
-# CELERY_RESULT_SERIALIZER = 'pickle'
-# CELERY_ACCEPT_CONTENT = {'pickle'}
-CELERY_BROKER_URL= 'amqp://admin:mypass@rabbit:5672/clusterCAD' # "amqp://guest@localhost//"
+# Celery settings
+CELERY_BROKER_URL= 'amqp://admin:mypass@rabbit:5672/clusterCAD' 
 CELERY_RESULT_BACKEND="rpc://"
 CELERY_TASK_ACKS_LATE = True
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
@@ -24,7 +21,6 @@ CELERYD_CHDIR="/www/clusterCAD"
 CELERYD_TASK_TIME_LIMIT=1
 CELERYD_TASK_SOFT_TIME_LIMIT=1
 
-gettext = lambda s: s
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

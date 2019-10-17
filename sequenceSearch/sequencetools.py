@@ -34,23 +34,24 @@ def blast(
     # and modules has the following structure:
     # {'module': module, 'domains': list(domains)} 
 
-    # check inputs
+    # Check inputs
     assert isinstance(evalue, float)
     assert 0.0 <= evalue <= 10.0
     assert isinstance(max_target_seqs, int)
     assert 1 <= max_target_seqs <= 10000
     assert isinstance(query, str)
 
-    # convert query to fasta format 
+    # Convert query to fasta format 
     queryStringIO = StringIO()
     queryRecord = SeqRecord(Seq(query, IUPAC.protein), id='query')
     SeqIO.write(queryRecord, queryStringIO, "fasta")
     queryFasta = queryStringIO.getvalue()
     queryStringIO.close()
 
-    #query acc.ver, subject acc.ver, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+    # Column names returned by NcbiblastpCommandline:
+    # query acc.ver, subject acc.ver, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
 
-    # run blast
+    # Run blast
     start = time()
     blastp_cline = NcbiblastpCommandline(
                                          db=database,
@@ -60,38 +61,31 @@ def blast(
                                          )
     result, stderr = blastp_cline(stdin=queryFasta)
 
-    queries_found = True
-
+    # Get column names from blast output
     results = result.split("\n")
     columns = results[3].split(":")[-1].split(",")
     columns = [i.lstrip() for i in columns]
 
+    # If no hits found, return immediately
     if results[3] == "# 0 hits found":
         return None, None, False
 
-    # assert False, result
-    # parse blast output and delete files
+    # Parse blast output and delete files
+    # Remeber bitscore cant convert to int by rule 'safe'
+    # Load results into a pandas dataframe
     resultIO = StringIO(result)
-
-    #Remeber bitscore cant convert to int by rule 'safe'
-    # df = pd.read_csv(resultIO, sep="\s+", comment="#", names=columns, dtype={'bit score': 'int32'})
     df = pd.read_csv(resultIO, sep="\t", comment="#", names=columns)
-
     resultIO.close()
 
+    # If sort outputs, then sort according to bitscore
     if sortOutput:
         df = df.sort_values('bit score', ascending=False)
 
+    # Return only up to max_target_seq results from query
     if max_target_seqs < len(df):
         df = df[:max_target_seqs]
 
-    # #Get the mibigAccession and subunitID for each query
-    # df[['mibigAccession','subunitID']] = df["subject acc.ver"].str.split('_',expand=True)
-
-
     end = time()
-
-    #Raise exception or assert statement
 
     return df.to_json(), str(int(end-start)), True
 

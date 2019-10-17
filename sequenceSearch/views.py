@@ -68,7 +68,7 @@ def search(request):
 
             # use alignment cache if it exists
             alignments = cache.get((inputs, evalue, maxHits, showAllDomains, searchDatabase))
-            # assert False, 3
+
             # run Blast if there is no cached alignment
             if alignments is None:
                 if searchDatabase == "reviewed":
@@ -82,7 +82,7 @@ def search(request):
                             'pipeline', 'data', 'blast', 'clustercad_subunits_all',
                         )
                 results = blast.delay(query=inputs, 
-                    evalue=evalue, max_target_seqs=maxHits,sortOutput=True,database=db)
+                    evalue=evalue, max_target_seqs=maxHits, sortOutput=True, database=db)
                 results, timeTaken, queries_found = results.get()
 
                 #If no queries found, then no hits
