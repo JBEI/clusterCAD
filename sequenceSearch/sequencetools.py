@@ -6,11 +6,14 @@ from Bio.Alphabet import IUPAC
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.Seq import Seq
+from django.conf import settings
 from pks.models import Subunit, Domain
 from model_utils.managers import InheritanceManager
 from copy import deepcopy
 from time import time
-from django.conf import settings
+import json
+from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
+import pandas as pd
 
 def blast(
         query, 
@@ -31,62 +34,59 @@ def blast(
     # and modules has the following structure:
     # {'module': module, 'domains': list(domains)} 
 
-    # check inputs
+    # Check inputs
     assert isinstance(evalue, float)
     assert 0.0 <= evalue <= 10.0
     assert isinstance(max_target_seqs, int)
     assert 1 <= max_target_seqs <= 10000
     assert isinstance(query, str)
 
-    # convert query to fasta format 
+    # Convert query to fasta format 
     queryStringIO = StringIO()
     queryRecord = SeqRecord(Seq(query, IUPAC.protein), id='query')
     SeqIO.write(queryRecord, queryStringIO, "fasta")
     queryFasta = queryStringIO.getvalue()
     queryStringIO.close()
 
-    # run blast
+    # Column names returned by NcbiblastpCommandline:
+    # query acc.ver, subject acc.ver, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+
+    # Run blast
     start = time()
     blastp_cline = NcbiblastpCommandline(
                                          db=database,
                                          evalue=evalue,
-                                         outfmt=5,
+                                         outfmt=7,
                                          num_threads=2
                                          )
     result, stderr = blastp_cline(stdin=queryFasta)
 
-    # parse blast output and delete files
+    # Get column names from blast output
+    results = result.split("\n")
+    columns = results[3].split(":")[-1].split(",")
+    columns = [i.lstrip() for i in columns]
+
+    # If no hits found, return immediately
+    if results[3] == "# 0 hits found":
+        return None, None, False
+
+    # Parse blast output and delete files
+    # Remeber bitscore cant convert to int by rule 'safe'
+    # Load results into a pandas dataframe
     resultIO = StringIO(result)
-    blast_record = NCBIXML.read(resultIO)
+    df = pd.read_csv(resultIO, sep="\t", comment="#", names=columns)
     resultIO.close()
+
+    # If sort outputs, then sort according to bitscore
+    if sortOutput:
+        df = df.sort_values('bit score', ascending=False)
+
+    # Return only up to max_target_seq results from query
+    if max_target_seqs < len(df):
+        df = df[:max_target_seqs]
+
     end = time()
 
-    # iterate over record and generate output structure 
-    alignments = []
-    for alignment in blast_record.alignments:
-        alignmentHit = alignment.title.split()[0].split('_')
-        mibigAccession = alignmentHit[0]
-        subunitId = alignmentHit[1]
-        subunit = Subunit.objects.get(id=subunitId, cluster__mibigAccession=mibigAccession)
-        hsps = []
-        for hsp in alignment.hsps:
-            domains = Domain.objects.filter(module__subunit=subunit, 
-                                            stop__gte=hsp.sbjct_start,
-                                            start__lte=hsp.sbjct_end).select_subclasses().order_by('start') 
-            modules = list(set([domain.module for domain in domains]))
-            modules = sorted(modules, key=lambda module: module.order)
-            modules = [{'module': module, 'domains': list(domains.filter(module=module))} for module in modules]
-            hsps.append({'hsp': hsp, 'modules': modules})
-        alignments.append({'alignment': alignment, 'subunit': subunit, 'hsps': hsps})
+    return df.to_json(), str(int(end-start)), True
 
-    # if sortOutput=True, break apart HSPs and resort by bit order
-    if sortOutput:
-        individualHSPs = []
-        for alignment in alignments:
-            for hsp in alignment['hsps']:
-                alignmentCopy = deepcopy(alignment)
-                alignmentCopy['hsps'] = [hsp]
-                individualHSPs.append(alignmentCopy)
-        alignments = sorted(individualHSPs, key=lambda alignment: alignment['hsps'][0]['hsp'].bits, reverse=True)[0:max_target_seqs]
-
-    return alignments, str(int(end-start))
+    
