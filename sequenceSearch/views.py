@@ -116,6 +116,8 @@ def search(request):
 
                 #Keep useful columns only
                 df = df[['subunit','modules','q. start','q. end','s. start','s. end','evalue','bit score','domains']]
+                
+                df = df.sort_values('bit score', ascending=False)
                 alignments = df
 
                 #Set cache

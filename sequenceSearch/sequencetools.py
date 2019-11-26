@@ -77,9 +77,11 @@ def blast(
     df = pd.read_csv(resultIO, sep="\t", comment="#", names=columns)
     resultIO.close()
 
+
     # If sort outputs, then sort according to bitscore
     if sortOutput:
         df = df.sort_values('bit score', ascending=False)
+        
 
     # Return only up to max_target_seq results from query
     if max_target_seqs < len(df):
