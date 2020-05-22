@@ -22,10 +22,11 @@ def search(request):
     elif 'sdf' in request.POST:
         try:
             mol = chem.MolFromMolBlock(request.POST['sdf'], strictParsing=False)
-            chem.SanitizeMol(mol)
             # assert mol != None
             if not mol:
                 raise ValueError
+            chem.SanitizeMol(mol)
+
         except ValueError:
             messages.error(request, 'Error: Invalid structure!')
             return render(request, 'search.html')
