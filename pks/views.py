@@ -25,7 +25,7 @@ def index(request, show):
     except Cluster.DoesNotExist:
         raise Http404
 
-    clusterlist = [] 
+    clusterlist = []
     for cluster in clusters:
         clusterDict = {
             'clusterObject': cluster,
@@ -38,9 +38,9 @@ def index(request, show):
 
     return render(request, 'index.html', context)
 
-def details(request, mibigAccession):
+def details(request, primaryKey):
     try:
-        cluster=Cluster.objects.get(mibigAccession=mibigAccession)
+        cluster=Cluster.objects.get(pk=primaryKey)
     except Cluster.DoesNotExist:
         raise Http404
 

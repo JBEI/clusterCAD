@@ -38,7 +38,7 @@ class Cluster(models.Model):
         correctCluster: Corrects errors in cluster using JSON file.
                         Template JSON file should be generated using clusterJSON.
     '''
-    mibigAccession = models.CharField(max_length=100, primary_key=True)
+    mibigAccession = models.CharField(max_length=100)
     genbankAccession = models.CharField(max_length=100)
     description = models.TextField()
     sequence = models.TextField()
@@ -48,13 +48,20 @@ class Cluster(models.Model):
     reviewed = models.BooleanField(default=False)
 
     def subunits(self):
-        return Subunit.objects.filter(cluster=self).order_by('order')
+        if self.isOrdered():
+            return Subunit.objects.filter(cluster=self).order_by('order')
+        return Subunit.objects.filter(cluster=self)
 
     def architecture(self):
         # Returns the entire structure of the cluster
         return [[x, x.architecture()] for x in self.subunits()]
 
+    def isOrdered(self):
+        return all(Subunit.objects.filter(cluster=self).map(lambda subunit: subunit.isOrdered()))
+
     def computeProduct(self, computeMCS=True, recompute=False):
+        if (!self.isOrdered()):
+            raise Exception('Chemical Product prediction not available for pks with unknown subunit ordering.'))
         chain = []
         for subunit in self.subunits():
             for module in subunit.modules():
@@ -196,7 +203,7 @@ class Cluster(models.Model):
         '''Function that writes a JSON file containing the changeable parameters
             describing a PKS cluster.
         '''
-        with open(os.path.join(path, self.mibigAccession + '.json'), 'w') as f:
+        with open(os.path.join(path, self.id + '.json'), 'w') as f:
             f.write(json.dumps(self.clusterDict(), indent=4))
 
     def correctCluster(self, filepath):
@@ -247,7 +254,7 @@ class Subunit(models.Model):
 
     # Properties
         cluster: class<Cluster>. cluster containing subunit.
-        order: int. order of subunit within cluster starting with 0. Auto-set on self.save()
+        order: int. order of subunit within cluster starting with 0. Auto-set on self.save(). Set to -1 if not known.
         genbankAccession: str. GenBank accession number.
         name: str. name of subunit.
         start: int. start of subunit in cluster nucleotide sequence.
@@ -286,6 +293,9 @@ class Subunit(models.Model):
 
     def getAminoAcidSequence(self):
         return self.sequence
+
+    def isOrdered(self):
+        return self.order != -1
 
     def __str__(self):
         return "%s" % self.name
