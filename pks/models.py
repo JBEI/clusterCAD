@@ -4,6 +4,7 @@ from model_utils.managers import InheritanceManager
 from rdkit import Chem as chem
 from rdkit.Chem import AllChem, rdFMCS
 import os
+sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 import json
 from collections import OrderedDict
 from compounddb.models import Compound

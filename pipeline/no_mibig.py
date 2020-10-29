@@ -1,40 +1,67 @@
 #!/usr/bin/python3
 
 import glob
+import re
 import os, sys
 import json
 import pickle
 
-from Bio import SeqIO
-
-sys.path.insert(0, '/clusterCAD')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
+sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
+import django
+django.setup()
+import pks.models
+from Bio import SeqIO
 
 mibigpath = './data/mibig/raw' 
 antismashpath = './data/antismash/split'
+newantismashpath = './pipeline/antismash_db_sample'
+
+for file in glob.glob(os.path.join(newantismashpath, '*.gbk')):
+    record = SeqIO.read(file, "genbank")
 
 
-#for accession in ['BGC0001348']: # Debug with Borreledin, 31
-#    clusterfile = os.path.join(antismashpath, accession + '.embl')
-for file in glob.glob(os.path.join(antismashpath, '*.embl')):
-    record = SeqIO.read(file, "embl")
-    #print('\n'.join(dir(record)))
-    #print(record.annotations)
-    #print(record.features[-1])
-    #TODO look only at cds annotations. look at sec_met and look for the domains, eg PKS_AT, PKS_KS, etc.
-    #first identify all modules in pks and then pick the earliest
-    #extension modules always have ks, at, acp, loading modules might not... We can look for at least an ACP, and then one search for something with all 3(ks, at,acp). The ones with 3 are probably extension, but if 
-    #idea: if it has at least 1, then it's a pks module, if it has 3 it's a extension, so if it has <3 it's a loading...?
-
-
-    print('processing', file, "...\n\n\n")
+    print('processing', file, "...\n")
     for feature in record.features:
-        #print(feature.qualifiers.values())
-        if (feature.type == 'CDS' and 'sec_met' in feature.qualifiers):
-            print('hello')
-            #print((feature.qualifiers['sec_met']))
-        #print(list(filter(lambda value: print(value), feature.qualifiers.values())))
-        #print((feature.location))
-        pass
+        """
+        feature.qualifiers is a list with format as follows:
+        [
+            'Type: xxxxx',
+            'Domains detected: domainA (E-value:123, bitscore: 123, seeds: 123); domainB (E-value...'
+        ]
+        """
+        if (feature.type != 'CDS' or 'sec_met' not in feature.qualifiers):
+            continue
+        if ('gene' not in feature.qualifiers.keys() and 'product' not in feature.qualifiers.keys()):
+            continue
+        print(feature.qualifiers)
+        continue
+        if (not sec_met_type): 
+            # if no regex match, it probably looks something like this:
+            # NRPS/PKS subtype: PKS/NRPS-like protein 
+            print('skipped', feature.qualifiers['protein_id'])
+            continue
+        if sec_met_type[1] != 't1pks':
+            #check if the xxx in Type: xxx is 't1pks'.
+            #continue
+            pass
+        #at this stage, we now have a record feature that is labelled t1pks by antismash.
+        """sec_met_domains = ' '.join(feature.qualifiers['sec_met'][1:])
+        contains_ks = 'PKS_KS' in sec_met_domains # there is also a mod_KS but does that count?
+        contains_at = 'PKS_AT' in sec_met_domains
+        contains_acp = 'ACP' in sec_met_domains
+        #print(("protein_id" in feature.qualifiers) and feature.qualifiers['protein_id'], contains_ks, contains_at, contains_acp)"""
+
+        if 'gene' in feature.qualifiers.keys(): 
+            genename = feature.qualifiers['gene'][0]
+        elif 'product' in feature.qualifiers.keys():
+            genename = feature.qualifiers['product'][0]
+        subunit = pks.models.Subunit(cluster=TODO,
+                                     genbankAccession=feature.qualifiers['protein_id'][0],
+                                     name=genename,
+                                     start=feature.location.start.position + 1,
+                                     stop=feature.location.end.position
+                                     sequence=feature.qualifiers['translation'][0])
+        subunit.save()
 

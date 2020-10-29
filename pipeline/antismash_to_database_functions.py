@@ -210,7 +210,7 @@ def processClusterSeqRecord(record):
             # Amino acid sequence
             gene_data[-1].append(feature.qualifiers['translation'][0])
 
-    return gene_data
+    return print(gene_data)
 
 def checkModuleValidity(modulelist):
     '''Function that makes sure module specified in MIBiG JSON file is valid,
