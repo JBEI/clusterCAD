@@ -5,6 +5,8 @@ services:
     restart: always
     image: tbackman/debian-cheminformatics:debian10
     command: ["/usr/lib/postgresql/11/bin/postgres", "-D", "/var/lib/postgresql/11/main", "-c", "config_file=/etc/postgresql/11/main/postgresql.conf"]
+    volumes:
+      - app-db-data:/var/lib/postgresql/11/main
   redis:
     restart: always
     image: redis:3.2-alpine 
@@ -36,3 +38,6 @@ services:
       - web
     links:
       - web:web
+
+volumes:
+  app-db-data:
