@@ -38,6 +38,7 @@ class Cluster(models.Model):
         correctCluster: Corrects errors in cluster using JSON file.
                         Template JSON file should be generated using clusterJSON.
     '''
+    #id = models.autofield(primary_key=True)
     mibigAccession = models.CharField(max_length=100)
     genbankAccession = models.CharField(max_length=100)
     description = models.TextField()
@@ -60,8 +61,9 @@ class Cluster(models.Model):
         return all(Subunit.objects.filter(cluster=self).map(lambda subunit: subunit.isOrdered()))
 
     def computeProduct(self, computeMCS=True, recompute=False):
-        if (!self.isOrdered()):
-            raise Exception('Chemical Product prediction not available for pks with unknown subunit ordering.'))
+        if not self.isOrdered():
+            return []
+            #raise Exception('Chemical Product prediction not available for pks with unknown subunit ordering.'))
         chain = []
         for subunit in self.subunits():
             for module in subunit.modules():

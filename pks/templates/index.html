@@ -52,6 +52,9 @@ browse clusters
 <thead>
 <tr>
     <th>
+        ClusterCAD ID
+    </th>
+    <th>
         MIBiG accession
     </th>
     <th>
@@ -70,7 +73,10 @@ browse clusters
 </thead>
 <tbody>
 {% for cluster in clusters %}
-<tr class="clickable-row" data-href="/pks/{{ cluster.clusterObject.mibigAccession }}">
+<tr class="clickable-row" data-href="/pks/{{ cluster.clusterObject.id }}">
+    <td>
+    {{ cluster.clusterObject.id }}
+    </td>
     <td>
     {{ cluster.clusterObject.mibigAccession }}
     </td>
@@ -84,7 +90,7 @@ browse clusters
     {{ cluster.moduleCount }}
     </td>
     <td>
-    {% if cluster.clusterObject.reviewed %}
+        {% if cluster.clusterObject.reviewed %}
         Y
     {% else %}
         N

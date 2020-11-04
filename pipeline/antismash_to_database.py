@@ -14,7 +14,7 @@ django.setup()
 import pks.models
 
 ##########################################################
-# Identifying valid type I modular PKSs from MIBiG files #
+# Iden#tifying valid type I modular PKSs from MIBiG files #
 ##########################################################
 
 print('Analyzing contents of MIBiG database.')
@@ -33,6 +33,7 @@ print('\n')
 print('Resetting ClusterCAD database.')
 [cluster.delete() for cluster in pks.models.Cluster.objects.all()]
 print('ClusterCAD database reset.')
+exit(0)
 
 # Assumes that chemical structures have already been aggregated
 allknowncompounds = pickle.load(open('./data/compounds/all_known_products.p', 'rb'))
