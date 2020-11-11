@@ -33,7 +33,6 @@ print('\n')
 print('Resetting ClusterCAD database.')
 [cluster.delete() for cluster in pks.models.Cluster.objects.all()]
 print('ClusterCAD database reset.')
-exit(0)
 
 # Assumes that chemical structures have already been aggregated
 allknowncompounds = pickle.load(open('./data/compounds/all_known_products.p', 'rb'))
