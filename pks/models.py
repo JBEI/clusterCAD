@@ -38,7 +38,7 @@ class Cluster(models.Model):
         correctCluster: Corrects errors in cluster using JSON file.
                         Template JSON file should be generated using clusterJSON.
     '''
-    mibigAccession = models.CharField(max_length=100, primary_key=True)
+    mibigAccession = models.CharField(max_length=100)
     genbankAccession = models.CharField(max_length=100)
     description = models.TextField()
     sequence = models.TextField()
