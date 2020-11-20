@@ -7,5 +7,5 @@ urlpatterns = [
     url(r'^all/?$', views.index, {'show': 'all'}),
     url(r'^domainLookup/?$', views.domainLookup, name='domainLookup'),
     url(r'^subunitLookup/?$', views.subunitLookup, name='subunitLookup'),
-    url(r'^(?P<primaryKey>\S+)/$', views.details, name='details'),
+    url(r'^(?P<urlId>\S+)/$', views.details, name='details'),
 ]

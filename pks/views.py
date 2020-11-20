@@ -38,9 +38,15 @@ def index(request, show):
 
     return render(request, 'index.html', context)
 
-def details(request, primaryKey):
+def details(request, urlId):
+
     try:
-        cluster=Cluster.objects.get(pk=primaryKey)
+        if 'BGC' in urlId:
+            mibigAccession = urlId
+            cluster=Cluster.objects.get(mibigAccession=mibigAccession)
+        else:
+            primaryKey = urlId
+            cluster=Cluster.objects.get(pk=primaryKey)
     except Cluster.DoesNotExist:
         raise Http404
 
