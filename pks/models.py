@@ -58,7 +58,7 @@ class Cluster(models.Model):
         return [[x, x.architecture()] for x in self.subunits()]
 
     def isOrdered(self):
-        return all(Subunit.objects.filter(cluster=self).map(lambda subunit: subunit.isOrdered()))
+        return all(subunit.isOrdered() for subunit in Subunit.objects.filter(cluster=self))
 
     def computeProduct(self, computeMCS=True, recompute=False):
         if not self.isOrdered():
