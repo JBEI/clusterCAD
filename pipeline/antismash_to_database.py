@@ -65,7 +65,8 @@ for accession in mibigaccessions:
             description=description, \
             sequence=record.seq,
             knownProductSmiles=knownproductsmiles,
-            knownProductSource=knownproductsource
+            knownProductSource=knownproductsource,
+            hasKnownProduct=True
             )
         cluster.save()
         # Processes subunits and modules belonging to cluster

@@ -16,6 +16,9 @@
 <div class="row">
     <div class="col-md-3 col-sm-4">
         <dl>
+            <dt>ClusterCAD id</dt>
+            <dd>{{ cluster.id }}</dd>
+            <dd><a target="_blank" href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a></dd>
             <dt>MIBiG accession</dt>
             <dd><a target="_blank" href="http://mibig.secondarymetabolites.org/repository/{{ cluster.mibigAccession|stripTrailingVersion }}/index.html#cluster-1">{{ cluster.mibigAccession }}</a></dd>
 
@@ -62,12 +65,20 @@
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-6 text-center">
             <h6>
-            MCS: {{ knownProductPercent|floatformat }}% of atoms
+            {% if cluster.hasKnownProduct%}
+                MCS: {{ knownProductPercent|floatformat }}% of atoms
+            {% else %}
+                MCS: Final product not known.
+            {% endif %}
             </h6>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 text-center">
             <h6>
-            MCS: {{ predictedProductPercent|floatformat }}% of atoms
+            {% if cluster.isOrdered %}
+                MCS: {{ predictedProductPercent|floatformat }}% of atoms
+            {% else %}
+                MCS: Predicted product not known.
+            {% endif %}
             </h6>
             </div>
         </div>
@@ -77,7 +88,10 @@
 {% for subunit in architecture %}
 <ul id="{{ subunit.0.name }}" class="list-group">
  <a data-subunitid="{{ subunit.0.id }}" class="list-group-item list-group-item-info">
-        {{ subunit.0 }}
+        {{ subunit.0 }} 
+        {% if not subunit.0.isOrdered%}
+            (order not confirmed)
+        {%endif%}
  </a>
  <li class="list-group-item">
         <div class="row">

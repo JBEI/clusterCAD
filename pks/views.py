@@ -53,19 +53,23 @@ def details(request, urlId):
     if 'mark' in request.GET:
         mark = [int(m) for m in request.GET['mark'].split(',')]
     else:
-        mark = [] 
+        mark = []
 
     architecture = cluster.architecture()
 
     # compute MCS percentages
     knownProduct = chem.MolFromSmiles(cluster.knownProductSmiles)
-    mcs = chem.MolFromSmarts(cluster.knownProductMCS) 
-    knownProductPercent = 100.0 * float(mcs.GetNumAtoms()) / float(knownProduct.GetNumAtoms())
-    predictedProduct = architecture[-1][1][-1][0].product.mol()
-    predictedProductPercent = 100.0 * float(mcs.GetNumAtoms()) / float(predictedProduct.GetNumAtoms())
+    mcs = chem.MolFromSmarts(cluster.knownProductMCS)
+    knownProductPercent = None
+    if (cluster.hasKnownProduct):
+        knownProductPercent = 100.0 * float(mcs.GetNumAtoms()) / float(knownProduct.GetNumAtoms())
+    predictedProduct = predictedProductPercent = None
+    if cluster.isOrdered():
+        predictedProduct = architecture[-1][1][-1][0].product.mol()
+        predictedProductPercent = 100.0 * float(mcs.GetNumAtoms()) / float(predictedProduct.GetNumAtoms())
 
     context={
-            'cluster': cluster, 
+            'cluster': cluster,
             'architecture': architecture,
             'mark': mark,
             'notips': ('KS', 'ACP', 'PCP'),
