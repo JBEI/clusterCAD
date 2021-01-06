@@ -3,10 +3,17 @@
 import os,sys
 import glob
 import json
+import re
 from collections import OrderedDict
 
 from Bio import SeqIO
 
+allowed_domains = ['KS', 'AT', 'KR', 'DH', 'ER', 'ACP', 'Thioesterase', 
+                      'cMT', 'oMT', 'CAL', 'PCP', 
+                      'Heterocyclization', 'AMP-binding', 
+                      'Condensation_Starter',
+                      'Condensation_DCL', 'Condensation_LCL',
+                      'PKS_Docking_Nterm', 'PKS_Docking_Cterm']
 sys.path.insert(0, '/clusterCAD')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "clusterCAD.settings")
 import django
@@ -80,57 +87,42 @@ def processSubunitModules(sec_met):
         entrysplit = [item.strip() for item in entry.split(';') if item != '']
         # Split part of entry that is expected to describe catalytic domain
         domainsplit = entrysplit[0].split()
-        # Different ways of processing the name of the domain depending
-        # on how the name of the domain is formatted
-        if ' '.join(domainsplit[:2]) == 'NRPS/PKS Domain:' and len(domainsplit) > 2:
-            # Make sure that there is a leading 'PKS_' before we do our trimming
-            if domainsplit[2].split('_')[0] == 'PKS':
-                if domainsplit[2] in ['PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
-                    domaintype = domainsplit[2]
-                else:
-                    # Trim off the leading 'PKS_'
-                    # Assume 'DH2' and 'DHt' are the same as 'DH' 
-                    domaintype = domainsplit[2].split('_')[-1].replace( \
-                      'DHt', 'DH').replace('DH2', 'DH')
-            # 'CAL' domain is a special case
-            elif domainsplit[2] == 'CAL_domain':
-                domaintype = 'CAL'
-            else:
-                domaintype = domainsplit[2]
-        else:
+        if not (' '.join(domainsplit[:2]) == 'NRPS/PKS Domain:' and len(domainsplit) > 2):
+            # Should be a predicted PKS Domain
             continue
-        
+        special_cases = {
+            'PKS_Docking_Nterm': 'PKS_Docking_Nterm',
+            'PKS_Docking_Cterm': 'PKS_Docking_Cterm',
+            'CAL_domain': 'CAL',
+            # Assume 'DH2' and 'DHt' are the same as 'DH' 
+            'PKS_DH2': 'DH',
+            'PKS_DHt': 'DH'
+        }
+        domaintype = domainsplit[2]
+        if domaintype in special_cases:
+            domaintype = special_cases[domaintype]
+        elif domaintype[:4] == 'PKS_':
+            # If not a special case and there is a leading PKS, trim it
+            domaintype = domaintype[4:]
         # These are the catalytic domains that ClusterCAD wil recognize
-        if domaintype not in ['KS', 'AT', 'KR', 'DH', 'ER', 'ACP', 'Thioesterase', 
-                              'cMT', 'oMT', 'CAL', 'PCP', 
-                              'Heterocyclization', 'AMP-binding', 
-                              'Condensation_Starter',
-                              'Condensation_DCL', 'Condensation_LCL',
-                              'PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
+        if domaintype not in allowed_domains:
             print('\tIgnoring domain type: %s' %(domaintype))
             # Break out of for loop and stop looking for additional catalytic domains if 
             # we encounter a domain that we don't recognize
             # We end up excluding any subunit that has a non-recognized catalytic domain
             break    
         # Get the boundaries of the catalytic domain
-        boundaries = [int(bound) for bound in domainsplit[3].replace( \
-          '(', '').replace(')', '').replace('.', '').split('-')]
+        boundaries = [int(bound) for bound in re.sub(r'[().]', '', domainsplit[3]).split('-')]
 
         # AntiSMASH seems to count from 0 for start positions
         # but 1 for stop positions, as in BioPython
         # so we add 1 to the start start here
         boundaries[0] += 1
         
+        print(domaintype)
         # Here, we add each domain to a list, which will be converted to an OrderedDict
-        if domaintype in ['KS', 'DH', 'ER', 'ACP', 'cMT', 'oMT', 'PCP',
-                          'Heterocyclization', 'AMP-binding', 
-                          'Condensation_Starter',
-                          'Condensation_DCL', 'Condensation_LCL',
-                          'PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
-            module_domains.append((domaintype, 
-                                   [{'start': boundaries[0], 'stop': boundaries[1]}]))
         # Include substrate and stereospecificity annotations for CAL, AT, and KR domains respectively
-        elif domaintype in ['AT', 'KR', 'CAL']:
+        if domaintype in ['AT', 'KR', 'CAL']:
             notesdict = {}
             for note in entrysplit[1:]:
                 item = note.split(': ')
@@ -139,7 +131,7 @@ def processSubunitModules(sec_met):
                                    [{'start': boundaries[0], 'stop': boundaries[1]}, notesdict]))
  
         # End of the module has been reached of the domain is 'ACP' or 'PCP
-        if domaintype in ['ACP', 'PCP']:
+        elif domaintype in ['ACP', 'PCP']:
             domains_present = [d[0] for d in module_domains]
             # Make sure every module has an AT or CAL, or else it isn't valid and should be ignored
             # This means it will be excluded from the subunit, which makes sense since we can't 
@@ -153,13 +145,17 @@ def processSubunitModules(sec_met):
             module_domains = []
         # These domains may come after the ACP or PCP, so if they are encountered, we add
         # them to previous module and keep going forward
-        if domaintype in ['Thioesterase', 'PKS_Docking_Cterm', 'Condensation_LCL']:
+        elif domaintype in ['Thioesterase', 'PKS_Docking_Cterm', 'Condensation_LCL']:
             # Overwrite previous subunit, or else will have duplicate entries
             old_module_domains.append((domaintype, 
                                        [{'start': boundaries[0], 'stop': boundaries[1]}]))
             subunit[module_index - 1] = OrderedDict(old_module_domains)
             module_domains = []
-            
+        #for all other domains, assume the same
+        elif domaintype in allowed_domains:
+            module_domains.append((domaintype, 
+                                   [{'start': boundaries[0], 'stop': boundaries[1]}]))
+
     return subunit
 
 def processClusterSeqRecord(record):
@@ -412,6 +408,7 @@ def enterCluster(cluster, clusterrecord, mibigfile):
         
         # We lump in the loading didomain and TE on the first and last modules respectively
         modulekeys = list(moduledata.keys())
+        #index of the module
         imodule = 0
         while imodule < len(modulekeys):
             # Get info

@@ -250,6 +250,8 @@ class Cluster(models.Model):
         self.computeProduct(recompute=True)
 
     def __str__(self):
+        if len(self.description) == 0:
+            return 'unnamed gene cluster'#?
         return "%s gene cluster" % self.description
 
 class Subunit(models.Model):

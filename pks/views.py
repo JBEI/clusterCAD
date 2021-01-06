@@ -64,7 +64,8 @@ def details(request, urlId):
     if (cluster.hasKnownProduct):
         knownProductPercent = 100.0 * float(mcs.GetNumAtoms()) / float(knownProduct.GetNumAtoms())
     predictedProduct = predictedProductPercent = None
-    if cluster.isOrdered():
+    if cluster.isOrdered() and False:
+        print(architecture)
         predictedProduct = architecture[-1][1][-1][0].product.mol()
         predictedProductPercent = 100.0 * float(mcs.GetNumAtoms()) / float(predictedProduct.GetNumAtoms())
 
