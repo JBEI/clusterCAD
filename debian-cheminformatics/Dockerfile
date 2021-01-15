@@ -56,7 +56,6 @@ RUN apt-get update \
 RUN pip3 install -U pip setuptools
 RUN pip3 install -r requirements.txt
 
-
 # compile and install rdkit from source code
 ENV RDKIT_VERSION Release_2019_03_3
 ENV RDBASE /root/rdkit-$RDKIT_VERSION

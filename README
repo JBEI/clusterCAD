@@ -7,9 +7,6 @@ approvals from the U.S. Dept. of Energy).  All rights reserved.
 Starting service (connect to HTTP at http://127.0.0.1:8000/):
 docker-compose up -d
 
-Starting service with num_workers celery workers: 
-docker-compose up --scale celery=num_workers
-
 Loading PKS data into database:
 docker-compose exec web /bin/bash -c 'cd pipeline && make clean && make all'
 

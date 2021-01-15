@@ -3,7 +3,6 @@ from rdkit import Chem as chem
 from django.db import connection
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-from django.conf import settings
 
 class Compound(models.Model):
     # this class stores a small molecule structure
