@@ -1,10 +1,47 @@
 version: '2'
+
 services:
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3.7
+    environment:
+        - RABBITMQ_DEFAULT_USER=admin
+        - RABBITMQ_DEFAULT_PASS=mypass
+        - RABBITMQ_DEFAULT_VHOST=clusterCAD
+    ports:
+        - "5672"
+
+
+  celery:
+    restart: always
+    image: tbackman/debian-cheminformatics:debian10
+    volumes:
+      - .:/clusterCAD
+      - /www/static
+      - /www/media
+    links:
+        - rabbit
+
+    environment: &env      
+      - CELERY_BROKER_URL=amqp://admin:mypass@rabbit:5672/clusterCAD
+
+    depends_on:
+        - rabbit
+        - db
+        - redis
+        - web
+    working_dir: /clusterCAD
+
+    command: [celery, -A, clusterCAD, worker, -l, info, --loglevel=INFO]
+
+    
   db:
     user: postgres
     restart: always
     image: tbackman/debian-cheminformatics:debian10
     command: ["/usr/lib/postgresql/11/bin/postgres", "-D", "/var/lib/postgresql/11/main", "-c", "config_file=/etc/postgresql/11/main/postgresql.conf"]
+    volumes:
+      - app-db-data:/var/lib/postgresql/11/main
   redis:
     restart: always
     image: redis:3.2-alpine 
@@ -36,3 +73,6 @@ services:
       - web
     links:
       - web:web
+
+volumes:
+  app-db-data:
