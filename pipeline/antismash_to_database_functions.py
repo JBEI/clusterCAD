@@ -132,6 +132,8 @@ def processSubunitModules(sec_met):
  
         # End of the module has been reached of the domain is 'ACP' or 'PCP
         elif domaintype in ['ACP', 'PCP']:
+            module_domains.append((domaintype, 
+                                   [{'start': boundaries[0], 'stop': boundaries[1]}]))
             domains_present = [d[0] for d in module_domains]
             # Make sure every module has an AT or CAL, or else it isn't valid and should be ignored
             # This means it will be excluded from the subunit, which makes sense since we can't 
@@ -155,7 +157,6 @@ def processSubunitModules(sec_met):
         elif domaintype in allowed_domains:
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}]))
-
     return subunit
 
 def processClusterSeqRecord(record):
@@ -405,7 +406,6 @@ def enterCluster(cluster, clusterrecord, mibigfile):
             subunit.save()
         # These are the modules for the subunit
         moduledata = subunitdata[-2]
-        
         # We lump in the loading didomain and TE on the first and last modules respectively
         modulekeys = list(moduledata.keys())
         #index of the module
@@ -437,6 +437,8 @@ def enterCluster(cluster, clusterrecord, mibigfile):
                                                    loading=loading, terminal=terminal)
                         module.save()
                         module.buildDomains(moduledict, cyclic=cyclize)
+                        continue
+                print(f'invalid module with {domains_present} not saved')
             except AssertionError as e:
                 print(moduledict)
                 print(type(e).__name__, e.args, subunit + ' ' + subunitdata[1])
