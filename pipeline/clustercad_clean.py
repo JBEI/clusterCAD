@@ -19,13 +19,28 @@ for cluster in pks.models.Cluster.objects.all():
         nmodules += nsubmodules
     # Recompute product once invalid subunits have been deleted
     try:
+        for subunit in cluster.subunits():
+            print(subunit.modules())
+            for m in subunit.modules():
+                print(m.domains())
+
+
+
         cluster.computeProduct(recompute=True)
-    except:
+    except Exception as e:
+        print(e)
+        print('FAILED COMPUTE PRODUCT...', cluster)#, cluster.subunits()[0].modules()[0].domains())
+        for subunit in cluster.subunits():
+            print(subunit.modules())
+            for m in subunit.modules():
+                print(m.domains())
+
+
         cluster.delete()
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        print('Deleted %s: %s because no computed product' %(cluster.mibigAccession, cluster.description))
         continue
     if nmodules < 3:
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        print('deleted %s: %s becuase less than 3 modules' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
 
 # Delete clusters with no computable product
@@ -33,6 +48,6 @@ for cluster in pks.models.Cluster.objects.all():
     try:
         cluster.computeProduct()
     except:
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        print('Deleted %s: %s because no computed product... again.' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
 

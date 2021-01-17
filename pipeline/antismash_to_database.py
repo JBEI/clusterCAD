@@ -74,6 +74,7 @@ for accession in mibigaccessions:
         print('Processed cluster %s: %s.' %(record.id, record.description))
         cluster.computeProduct()
         print('Pregenerated cluster products.')
+
     except Exception as e:
         print(e)
         pass
