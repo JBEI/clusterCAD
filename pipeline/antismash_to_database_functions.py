@@ -119,7 +119,7 @@ def processSubunitModules(sec_met):
         # so we add 1 to the start start here
         boundaries[0] += 1
         
-        print(domaintype)
+        #print(domaintype)
         # Here, we add each domain to a list, which will be converted to an OrderedDict
         # Include substrate and stereospecificity annotations for CAL, AT, and KR domains respectively
         if domaintype in ['AT', 'KR', 'CAL']:
@@ -143,6 +143,13 @@ def processSubunitModules(sec_met):
                 old_module_domains = module_domains
                 module_index += 1
             else:
+                # UPDATE: keeping ACP/PCPs with no AT and CAL, in the case 
+                # of in trans loading modules.
+                print(f'added in trans loading module {",".join(module[0] for module in module_domains)}')
+                subunit[module_index] = OrderedDict(module_domains)
+                old_module_domains = module_domains
+                module_index += 1
+
                 old_module_domains = []
             module_domains = []
         # These domains may come after the ACP or PCP, so if they are encountered, we add
@@ -157,6 +164,11 @@ def processSubunitModules(sec_met):
         elif domaintype in allowed_domains:
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}]))
+    # Don't throw away any leftovers if they contain AT, KS, or CAL, for 
+    # in trans loading modules.
+    if module_domains and any(domain[0] in ['AT', 'KS', 'CAL'] for domain in module_domains):
+        subunit[module_index] = OrderedDict(module_domains)
+        print(f'added in trans loading module {",".join(module[0] for module in module_domains)}')
     return subunit
 
 def processClusterSeqRecord(record):

@@ -19,13 +19,6 @@ for cluster in pks.models.Cluster.objects.all():
         nmodules += nsubmodules
     # Recompute product once invalid subunits have been deleted
     try:
-        for subunit in cluster.subunits():
-            print(subunit.modules())
-            for m in subunit.modules():
-                print(m.domains())
-
-
-
         cluster.computeProduct(recompute=True)
     except Exception as e:
         print(e)
