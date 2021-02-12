@@ -822,3 +822,12 @@ class Standalone(models.Model):
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
+
+
+class TransModule(Module):
+    """
+    A module which is in trans. Generally used in situations where
+    the loading module has an in trans AT(or possible a CAL, or KS, domain)
+    along with the lone ACP.
+    """
+    pass
