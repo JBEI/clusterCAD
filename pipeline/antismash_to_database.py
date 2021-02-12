@@ -37,7 +37,7 @@ print('ClusterCAD database reset.')
 # Assumes that chemical structures have already been aggregated
 allknowncompounds = pickle.load(open('./data/compounds/all_known_products.p', 'rb'))
 
-#for accession in ['BGC0000031']: # Debug with Borreledin
+#for accession in ['BGC0000969']: # Debug
 for accession in mibigaccessions:
     # Use accession number to get paths to MIBiG and antiSMASH files
     mibigfile = os.path.join(mibigpath, accession + '.json')

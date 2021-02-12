@@ -9,6 +9,9 @@ import django
 django.setup()
 import pks.models
 
+# config for whether we want to delete the PKS on a failed computation
+delete_for_compute_failed = False
+
 # Delete clusters with less than three modules
 for cluster in pks.models.Cluster.objects.all():
     nmodules = 0
@@ -20,6 +23,7 @@ for cluster in pks.models.Cluster.objects.all():
     # Recompute product once invalid subunits have been deleted
     try:
         cluster.computeProduct(recompute=True)
+
     except Exception as e:
         print(e)
         print('FAILED COMPUTE PRODUCT...', cluster)#, cluster.subunits()[0].modules()[0].domains())
@@ -29,9 +33,10 @@ for cluster in pks.models.Cluster.objects.all():
                 print(m.domains())
 
 
-        cluster.delete()
-        print('Deleted %s: %s because no computed product' %(cluster.mibigAccession, cluster.description))
-        continue
+        if delete_for_compute_failed:
+            cluster.delete()
+            print('Deleted %s: %s because no computed product' %(cluster.mibigAccession, cluster.description))
+            continue
     if nmodules < 3:
         print('deleted %s: %s becuase less than 3 modules' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
@@ -41,6 +46,7 @@ for cluster in pks.models.Cluster.objects.all():
     try:
         cluster.computeProduct()
     except:
-        print('Deleted %s: %s because no computed product... again.' %(cluster.mibigAccession, cluster.description))
-        cluster.delete()
+        if delete_for_compute_failed:
+            print('Deleted %s: %s because no computed product... again.' %(cluster.mibigAccession, cluster.description))
+            cluster.delete()
 
