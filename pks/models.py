@@ -823,7 +823,6 @@ class Standalone(models.Model):
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
 
-
 class TransModule(Module):
     """
     A module which is in trans. Generally used in situations where
@@ -831,3 +830,17 @@ class TransModule(Module):
     along with the lone ACP.
     """
     pass
+
+@receiver(pre_save, sender=TransModule)
+def setTransModuleOrder(sender, instance, **kwargs):
+    # sets the module order based on current count
+    if not isinstance(instance.order, int):
+        moduleCount = sender.objects.filter(subunit__cluster=instance.subunit.cluster).count()
+        instance.order = moduleCount
+
+@receiver(pre_delete, sender=TransModule)
+def deleteTransModuleProduct(sender, instance, **kwargs):
+    instance.deleteProduct()
+
+
+

@@ -56,7 +56,7 @@ def filterModularTypeI(filepath, validset):
             pass
     return accessions
 
-def processSubunitModules(sec_met): 
+def processSubunitModules(sec_met, accept_in_trans_modules=False): 
     '''Takes as input annotated features for a PKS subunit following 
        antiSMASH analysis and returns a dict of OrderedDict objects 
        corresponding to the annotated modules contained by the subunit. The 
@@ -138,18 +138,16 @@ def processSubunitModules(sec_met):
             # Make sure every module has an AT or CAL, or else it isn't valid and should be ignored
             # This means it will be excluded from the subunit, which makes sense since we can't 
             # really perform a polyketide chain extension without an AT
-            if 'AT' in domains_present or 'CAL' in domains_present:            
+            if 'AT' in domains_present or 'CAL' in domains_present:
                 subunit[module_index] = OrderedDict(module_domains)
                 old_module_domains = module_domains
                 module_index += 1
-            else:
-                # UPDATE: keeping ACP/PCPs with no AT and CAL, in the case 
-                # of in trans loading modules.
+            elif accept_in_trans_modules:
                 print(f'added in trans loading module {",".join(module[0] for module in module_domains)}')
                 subunit[module_index] = OrderedDict(module_domains)
                 old_module_domains = module_domains
                 module_index += 1
-
+            else:
                 old_module_domains = []
             module_domains = []
         # These domains may come after the ACP or PCP, so if they are encountered, we add
@@ -164,9 +162,9 @@ def processSubunitModules(sec_met):
         elif domaintype in allowed_domains:
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}]))
-    # Don't throw away any leftovers if they contain AT, KS, or CAL, for 
-    # in trans loading modules.
-    if module_domains and any(domain[0] in ['AT', 'KS', 'CAL'] for domain in module_domains):
+    if accept_in_trans_modules and module_domains and any(domain[0] in ['AT', 'KS', 'CAL'] for domain in module_domains):
+        # Don't throw away any leftovers if they contain AT, KS, or CAL, for 
+        # in trans loading modules.
         subunit[module_index] = OrderedDict(module_domains)
         print(f'added in trans loading module {",".join(module[0] for module in module_domains)}')
     return subunit

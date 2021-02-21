@@ -29,7 +29,8 @@ print(sys.argv)
 #save_to_db if not a dry run
 save_to_db = not ('-x' in sys.argv or '--no-save' in sys.argv or '--dry-run' in sys.argv)
 clear_db = '-c' in sys.argv or '--clear' in sys.argv
-debug = '-d' in sys.argv or '--debug' in sys.argv 
+debug = '-d' in sys.argv or '--debug' in sys.argv
+accept_in_trans_modules = '--no-in-trans' not in sys.argv
 
 def read_subunit(record):
     """Attempts to read the subunit information from
@@ -87,7 +88,7 @@ def read_subunit(record):
         elif pks_subtype == 'NRPS/PKS subtype: Type I Iterative PKS': 
             # Also process iterative PKS, with a note in the description
             subunit_info['description'] = 'Iterative PKS: ' + subunit_info['description']
-            subunit_info['modules'] = antismash_funcs.processSubunitModules(feature.qualifiers['sec_met'])
+            subunit_info['modules'] = antismash_funcs.processSubunitModules(feature.qualifiers['sec_met'], accept_in_trans_modules=True)
         else:
             print(f'annotation type "{pks_subtype}" not recognized and skipped.')
             continue
@@ -107,6 +108,7 @@ def process_subunits(subunits, cluster):
     seen_genenames = set()
     counter = 1
     # first one uses this and then sets it false for later modules
+    # TODO we have no idea if this is actually the loading module...
     is_loading_module = True
     for subunit in subunits:
         if not subunit['modules']: 
@@ -156,10 +158,14 @@ def process_subunits(subunits, cluster):
             domains_present = module_domains.keys()
             has_acp = 'ACP' in domains_present or 'PCP' in domains_present
             has_at = 'AT' in domains_present or 'CAL' in domains_present
-            if not (has_at and has_acp):
+            if not accept_in_trans_modules and not (has_at and has_acp): #
                 print(f'\t\tModule with no {"AT" if has_acp else "ACP"} skipped: {",".join(domains_present)} \n')
                 continue
-            module = pks.models.Module(subunit=db_subunit_entry, loading=loading, terminal=terminal)
+            if not has_acp and accept_in_trans_modules:
+                # No acp means it's either invalid or trans. Assume in trans LM for now
+                module = pks.models.TransModule(subunit=db_subunit_entry, loading=loading, terminal=terminal)
+            else:
+                module = pks.models.Module(subunit=db_subunit_entry, loading=loading, terminal=terminal)
             if save_to_db:
                 module.save()
                 module.buildDomains(module_domains, cyclic=False) #no cycle information
@@ -176,7 +182,7 @@ if clear_db:
     print('database cleared')
 
 
-#filelist = [x for x in filelist if '607755' in x]
+#filelist = [x for x in filelist if 'CP020044' in x]
 for file in filelist:
     record = SeqIO.read(file, "genbank")
     #print(record)
