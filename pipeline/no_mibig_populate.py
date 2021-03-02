@@ -78,7 +78,7 @@ def read_subunit(record):
            'NRPS/PKS subtype: Hybrid PKS-NRPS',
              ]:
             #print(feature.qualifiers['sec_met'])
-            subunit_info['modules'] = antismash_funcs.processSubunitModules(feature.qualifiers['sec_met'])
+            subunit_info['modules'] = antismash_funcs.processSubunitModules(feature.qualifiers['sec_met'], accept_in_trans_modules=accept_in_trans_modules)
             if debug:
                 print('\t\t',feature.qualifiers['sec_met'])
                 for order, module in subunit_info['modules'].items():
@@ -88,7 +88,7 @@ def read_subunit(record):
         elif pks_subtype == 'NRPS/PKS subtype: Type I Iterative PKS': 
             # Also process iterative PKS, with a note in the description
             subunit_info['description'] = 'Iterative PKS: ' + subunit_info['description']
-            subunit_info['modules'] = antismash_funcs.processSubunitModules(feature.qualifiers['sec_met'], accept_in_trans_modules=True)
+            subunit_info['modules'] = antismash_funcs.processSubunitModules(feature.qualifiers['sec_met'], accept_in_trans_modules=accept_in_trans_modules)
         else:
             print(f'annotation type "{pks_subtype}" not recognized and skipped.')
             continue
@@ -158,8 +158,12 @@ def process_subunits(subunits, cluster):
             domains_present = module_domains.keys()
             has_acp = 'ACP' in domains_present or 'PCP' in domains_present
             has_at = 'AT' in domains_present or 'CAL' in domains_present
+            has_ks = 'KS' in domains_present
             if not accept_in_trans_modules and not (has_at and has_acp): #
                 print(f'\t\tModule with no {"AT" if has_acp else "ACP"} skipped: {",".join(domains_present)} \n')
+                continue
+            if not (has_ks or has_at or has_acp): # invalid even for in trans
+                print(f'\t\tModule with no KS, AT, or ACT skipped: {",".join(domains_present)} \n')
                 continue
             if not has_acp and accept_in_trans_modules:
                 # No acp means it's either invalid or trans. Assume in trans LM for now
@@ -171,7 +175,28 @@ def process_subunits(subunits, cluster):
                 module.buildDomains(module_domains, cyclic=False) #no cycle information
             print(f'\t\t{",".join(module_domains)}')
             #TODO the antismash_to_database_functions file checks for an assertion erro. No idea if this is necessary
+        if save_to_db and not len(db_subunit_entry.modules()):
+            print('\t\tdeleted empty subunit\n\n')
+            db_subunit_entry.delete()
 
+
+def filter_cluster(cluster):
+    """
+    Filters cluster if, throughout ALL of the mudoles in the subunit, we don't
+    have a _single_ KS, AT, or ACP.
+    """
+    domains_present = set()
+    for subunit in cluster.subunits():
+        for module in subunit.modules():
+            domains_present.update([repr(domain) for domain in module.domains()])
+        has_ks = 'KS' in domains_present
+        has_at = 'AT' in domains_present or 'CAL' in domains_present
+        has_acp = 'ACP' in domains_present or 'PCP' in domains_present
+        if has_ks and has_at and has_acp:
+            return
+    print(f'bad cluster deleted: {cluster.genbankAccession, cluster.description}')
+    print('contained', domains_present)
+    cluster.delete()
 
 
 
@@ -182,7 +207,7 @@ if clear_db:
     print('database cleared')
 
 
-#filelist = [x for x in filelist if 'CP020044' in x]
+#filelist = [x for x in filelist if 'NZ_CP013460' in x]
 for file in filelist:
     record = SeqIO.read(file, "genbank")
     #print(record)
@@ -220,3 +245,6 @@ for file in filelist:
     if save_to_db:
         cluster.save()
     process_subunits(subunits, cluster)
+    if save_to_db:
+        # Only clear data if we saved it to begin with
+        filter_cluster(cluster)

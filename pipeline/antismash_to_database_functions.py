@@ -110,7 +110,7 @@ def processSubunitModules(sec_met, accept_in_trans_modules=False):
             # Break out of for loop and stop looking for additional catalytic domains if 
             # we encounter a domain that we don't recognize
             # We end up excluding any subunit that has a non-recognized catalytic domain
-            break    
+            break
         # Get the boundaries of the catalytic domain
         boundaries = [int(bound) for bound in re.sub(r'[().]', '', domainsplit[3]).split('-')]
 
@@ -143,7 +143,7 @@ def processSubunitModules(sec_met, accept_in_trans_modules=False):
                 old_module_domains = module_domains
                 module_index += 1
             elif accept_in_trans_modules:
-                print(f'added in trans loading module {",".join(module[0] for module in module_domains)}')
+                print(f'added possible loading module (with in trans parts): {",".join(module[0] for module in module_domains)}')
                 subunit[module_index] = OrderedDict(module_domains)
                 old_module_domains = module_domains
                 module_index += 1
