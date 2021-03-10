@@ -288,7 +288,7 @@ class Subunit(models.Model):
     ssPlotFile = models.ImageField(upload_to='ssplots')
 
     def modules(self):
-        return Module.objects.filter(subunit=self).order_by('order')
+        return Module.objects.filter(subunit=self).select_subclasses().order_by('order')
 
     def architecture(self):
         return [[x, x.domains()] for x in self.modules()]
@@ -335,7 +335,10 @@ class Module(models.Model):
     terminal = models.BooleanField() # Whether or not module is a terminal module
     product = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True) # small molecule product structure
     iterations = models.PositiveIntegerField(default=1)
+    objects = InheritanceManager()
 
+    def inTrans(self):
+        return False
     def domains(self):
         return Domain.objects.filter(module=self).select_subclasses().order_by('start')
 
@@ -829,7 +832,8 @@ class TransModule(Module):
     the loading module has an in trans AT(or possible a CAL, or KS, domain)
     along with the lone ACP.
     """
-    pass
+    def inTrans(self):
+        return True
 
 @receiver(pre_save, sender=TransModule)
 def setTransModuleOrder(sender, instance, **kwargs):

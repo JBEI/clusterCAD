@@ -32,6 +32,11 @@ clear_db = '-c' in sys.argv or '--clear' in sys.argv
 debug = '-d' in sys.argv or '--debug' in sys.argv
 accept_in_trans_modules = '--no-in-trans' not in sys.argv
 
+
+def db_save(item):
+    if save_to_db:
+        item.save()
+
 def read_subunit(record):
     """Attempts to read the subunit information from
     a Cluster/gene record. Closely mimicks the processClusterSeqRecord
@@ -127,8 +132,7 @@ def process_subunits(subunits, cluster):
                                   order=-1
                                   #TODO maybe needs ordering = false
                                   )
-        if save_to_db:
-            db_subunit_entry.save()
+        db_save(db_subunit_entry)
         print(f'\tsaved subunit entry {subunit["genename"]}')
         modules = subunit['modules']
         """
@@ -179,6 +183,104 @@ def process_subunits(subunits, cluster):
             print('\t\tdeleted empty subunit\n\n')
             db_subunit_entry.delete()
 
+def reorder_subunits(cluster):
+    """
+    Attempts to predict the relative ordering of subunits inside
+    a cluster using information about loading modules and thioesterases.
+    Predictions of loading modules are dependent on in-trans or
+    non-KS-AT-ACP modules, while the ends are predicted by thioesterases.
+    """
+
+    #### HELPER FUNCTIONS ####
+    def must_be_first(subunit):
+        """
+        Given a subunit, looks at its first module to see if it is
+        necessarily the first subunit
+        """
+        if (len(subunit.modules()) == 0):
+            return False
+        first_module = subunit.modules()[0]
+        first_domain = first_module.domains()[0]
+        if isinstance(first_domain, pks.models.AT) or isinstance(first_domain, pks.models.ACP):
+            return True
+        return False
+
+
+    def must_be_last(subunit):
+        """
+        Given a subunit, looks at its last module to see if it is
+        necessarily the last subunit
+        """
+        if (len(subunit.modules()) == 0):
+            return False
+        subunit_modules = subunit.modules()
+        last_module = subunit_modules[len(subunit_modules) - 1]
+        last_module_domains = last_module.domains()
+        last_domain = last_module_domains[len(last_module_domains) - 1]
+        if isinstance(last_domain, pks.models.TE):
+            return True
+        return False
+
+    def panic(subunits):
+        """
+        Panic and set the order of everything to -1
+        because we're not sure.
+        """
+        for subunit in subunits:
+            subunit.order = -1
+            db_save(subunit)
+
+    def reorder_modules(cluster):
+        pass
+    #### END HELPER FUNCTIONS ####
+
+
+    subunits = cluster.subunits()
+    if len(subunits) not in [1, 2, 3]:
+        return
+    if len(subunits) == 1:
+        print(subunits)
+        subunits[0].order = 0
+        subunits[0].save()
+    if len(subunits) in [2, 3]:
+        uncertain_subunits = set(subunits)
+        first_subunit = None
+        last_subunit = None
+        for subunit in subunits:
+            if any(module.inTrans() for module in subunit.modules()):
+                # Ordering of in trans modules doesn't make any sense.
+                subunit.order = -1
+                db_save(subunit)
+                uncertain_subunits.remove(subunit)
+                continue
+            if must_be_first(subunit):
+                if first_subunit is not None:
+                    # Two possible "first" subunits? Something illegal.
+                    return panic(subunits)
+                first_subunit = subunit
+                uncertain_subunits.remove(subunit)
+            if must_be_last(subunit):
+                lm_is_end_module = (first_subunit is subunit) and len(subunit.modules()) < 2
+                if last_subunit is not None or lm_is_end_module:
+                    # can't be both LM and last subunit
+                    return panic(subunits)
+                last_subunit = subunit
+                if subunit in uncertain_subunits:
+                    uncertain_subunits.remove(subunit)
+        if len(uncertain_subunits) == 1:
+            remaining = uncertain_subunits.pop()
+            remaining.order = 0 if first_subunit is None else 1
+            db_save(remaining)
+        else:
+            # Don't know what the order of the rest of the subunits are.
+            panic(uncertain_subunits)
+        last_subunit.order = len(subunits) - 1
+        first_subunit.order = 0
+        db_save(first_subunit)
+        db_save(last_subunit)
+    print([(subunit.modules(), subunit.order) for subunit in subunits])
+
+
 
 def filter_cluster(cluster):
     """
@@ -207,7 +309,7 @@ if clear_db:
     print('database cleared')
 
 
-#filelist = [x for x in filelist if 'NZ_CP013460' in x]
+#filelist = [x for x in filelist if '011295' in x]
 for file in filelist:
     record = SeqIO.read(file, "genbank")
     #print(record)
@@ -242,9 +344,9 @@ for file in filelist:
         if debug:
             print('File skipped because all found subunits had no valid modules.')
         continue
-    if save_to_db:
-        cluster.save()
+    db_save(cluster)
     process_subunits(subunits, cluster)
+    # reorder_subunits(cluster)
     if save_to_db:
         # Only clear data if we saved it to begin with
         filter_cluster(cluster)
