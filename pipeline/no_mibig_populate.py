@@ -117,7 +117,7 @@ def process_subunits(subunits, cluster):
     is_loading_module = True
     for subunit in subunits:
         if not subunit['modules']: 
-            # No modules, could be standalong, but not supported for now.
+            # No modules, could be standalone, but not supported for now.
             continue
         # TAddress gene name duplicates by appendign a numebr at the end
         if subunit['genename'] in seen_genenames:
@@ -132,8 +132,9 @@ def process_subunits(subunits, cluster):
                                   order=-1
                                   #TODO maybe needs ordering = false
                                   )
-        db_save(db_subunit_entry)
-        print(f'\tsaved subunit entry {subunit["genename"]}')
+        # A list of bad modules that might be standalones.
+        db_potential_standalones = []
+        db_modules = []
         modules = subunit['modules']
         """
 
@@ -171,10 +172,35 @@ def process_subunits(subunits, cluster):
                 continue
             if not has_acp and accept_in_trans_modules:
                 # No acp means it's either invalid or trans. Assume in trans LM for now
-                module = pks.models.TransModule(subunit=db_subunit_entry, loading=loading, terminal=terminal)
+                subunit = db_subunit_entry
+                standalone = pks.models.DomainContainingStandalone(
+                    cluster=cluster,
+                    name=subunit.name,
+                    start=subunit.start,
+                    stop=subunit.stop,
+                    sequence=subunit.sequence,
+                    genbankAccession=subunit.genbankAccession,
+                )
+                db_potential_standalones.append(standalone)
             else:
                 module = pks.models.Module(subunit=db_subunit_entry, loading=loading, terminal=terminal)
-            if save_to_db:
+                db_modules.append(module)
+        if save_to_db:
+            if len(db_modules) != 0:
+                db_save(db_subunit_entry)
+                print(f'\tsaved subunit entry {subunit["genename"]}')
+                for module in db_modules:
+                    # save modules to db if there are any valid ones
+                    module.save()
+                    module.buildDomains(module_domains, cyclic=False) #no cyclization information
+            elif len(db_potential_standalones) != 0:
+                # save standalone to db
+                for standalone in db_potential_standalones:
+                    standalone.save()
+                pass
+            else:
+                print('no valid modules found')
+            elif save_to_db:
                 module.save()
                 module.buildDomains(module_domains, cyclic=False) #no cycle information
             print(f'\t\t{",".join(module_domains)}')
@@ -231,7 +257,21 @@ def reorder_subunits(cluster):
             db_save(subunit)
 
     def reorder_modules(cluster):
-        pass
+        if all(subunit.order != -1 for subunit in cluster.subunits()):
+            # order things
+            ordered_subunits = sorted(cluster.subunits(), key=lambda sub: sub.order)
+            cur_order = 0
+            for subunit in ordered_subunits:
+                for module in subunit.modules():
+                    print(cur_order)
+                    module.order = cur_order
+                    cur_order += 1
+                    db_save(module)
+
+        else:
+            # TODO possibly partial ordering? but not the goal right now
+            print('nothing going on here')
+            pass
     #### END HELPER FUNCTIONS ####
 
 
@@ -247,12 +287,6 @@ def reorder_subunits(cluster):
         first_subunit = None
         last_subunit = None
         for subunit in subunits:
-            if any(module.inTrans() for module in subunit.modules()):
-                # Ordering of in trans modules doesn't make any sense.
-                subunit.order = -1
-                db_save(subunit)
-                uncertain_subunits.remove(subunit)
-                continue
             if must_be_first(subunit):
                 if first_subunit is not None:
                     # Two possible "first" subunits? Something illegal.
@@ -274,11 +308,19 @@ def reorder_subunits(cluster):
         else:
             # Don't know what the order of the rest of the subunits are.
             panic(uncertain_subunits)
-        last_subunit.order = len(subunits) - 1
-        first_subunit.order = 0
-        db_save(first_subunit)
-        db_save(last_subunit)
-    print([(subunit.modules(), subunit.order) for subunit in subunits])
+        if last_subunit:
+            last_subunit.order = len(subunits) - 1
+            db_save(last_subunit)
+        if first_subunit:
+            first_subunit.order = 0
+            db_save(first_subunit)
+
+    if all(subunit.order != -1 for subunit in cluster.subunits()):
+        ordered_subunits = [sub.name for sub in sorted(cluster.subunits(), key=lambda sub: sub.order)]
+        # Handles module ordering and loading modules
+        cluster.reorderSubunits(ordered_subunits)
+        print([(subunit.modules(), subunit.order) for subunit in subunits])
+
 
 
 
@@ -346,7 +388,7 @@ for file in filelist:
         continue
     db_save(cluster)
     process_subunits(subunits, cluster)
-    # reorder_subunits(cluster)
     if save_to_db:
         # Only clear data if we saved it to begin with
         filter_cluster(cluster)
+    reorder_subunits(cluster)

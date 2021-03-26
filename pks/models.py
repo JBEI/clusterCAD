@@ -114,7 +114,7 @@ class Cluster(models.Model):
                 moduleCounter += 1
 
         # Reset loading bool of first module in newOrder
-        newLoading = self.subunits()[0].modules()[0]
+        newLoading = list(filter(lambda subunit: subunit.order == 0, self.subunits()))[0].modules()[0]
         newLoading.loading = True
         newLoading.setLoading()
         newLoading.save()
@@ -312,7 +312,48 @@ def setSubunitOrder(sender, instance, **kwargs):
         subunitCount = sender.objects.filter(cluster=instance.cluster).count()
         instance.order = subunitCount
 
-class Module(models.Model):
+
+class DomainContainer(models.Model):
+    """
+    Abstract base class for anything that contains a domain. Offers the domains()
+    method, which returns a list of domains.
+    """
+    def domains(self):
+        return Domain.objects.filter(container=self).select_subclasses().order_by('start')
+    class Meta:
+        abstract = True
+
+
+class Standalone(models.Model):
+    # a standalone PKS enzyme within a gene cluster
+    '''
+    A standalone PKS enzyme with specific domains.
+    # Properties
+        cluster: class<Cluster>. cluster containing subunit.
+        genbankAccession: str. GenBank accession number.
+        name: str. name of standaloen.
+        start: int. start of subunit in cluster nucleotide sequence.
+        stop: int. end of subunit in cluster nucleotide sequence.
+        sequence: str. amino acid sequence corresponding to subunit.
+    # Methods
+        architecture: Returns architecture of subunit.
+        getNucleotideSequence: Returns nucleotide sequence of subunit.
+        getAminoAcidSequence: Returns amino acid sequence of subunit.
+    '''
+    cluster = models.ForeignKey(Cluster, on_delete=models.CASCADE)
+    name = models.CharField(max_length=2000) # name of enzyme
+    start = models.PositiveIntegerField()
+    stop = models.PositiveIntegerField()
+    sequence = models.TextField()
+    genbankAccession = models.CharField(max_length=100)
+
+class DomainContainingStandalone(Standalone, DomainContainer):
+    """
+    A standalone PKS enzyme with specific domains.
+    """
+    pass
+
+class Module(DomainContainer):
     '''Class representing a PKS module.
 
     # Properties
@@ -336,11 +377,6 @@ class Module(models.Model):
     product = models.ForeignKey(Compound, on_delete=models.SET_NULL, default=None, blank=True, null=True) # small molecule product structure
     iterations = models.PositiveIntegerField(default=1)
     objects = InheritanceManager()
-
-    def inTrans(self):
-        return False
-    def domains(self):
-        return Domain.objects.filter(module=self).select_subclasses().order_by('start')
 
     def setLoading(self):
         domains = Domain.objects.filter(module=self).select_subclasses(KR, DH, ER, cMT, oMT)
@@ -455,7 +491,7 @@ class Domain(models.Model):
     ''' Abstract base class used to build PKS catalytic domains.
 
     # Properties
-        module: class<Module>. module containing domain.
+        container: class<DomainContainer>. module containing domain.
         start: int. start of domain in subunit amino acid sequence.
         stop: int. end of domain in subunit amino acid sequence.
 
@@ -463,7 +499,7 @@ class Domain(models.Model):
         getNucleotideSequence: Returns nucleotide sequence of domain.
         getAminoAcidSequence: Returns amino acid sequence of domain.
     '''
-    module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    container = models.ForeignKey(DomainContainer, on_delete=models.CASCADE, default=None, null=True)
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
 
@@ -474,6 +510,9 @@ class Domain(models.Model):
     def getAminoAcidSequence(self):
         sequence = self.module.subunit.getAminoAcidSequence()
         return sequence[(self.start - 1):self.stop]
+
+    class Meta:
+        abstract = True
 
 def activityString(domain):
     if domain.active:
@@ -819,32 +858,24 @@ class PCP(Domain):
 
 class Standalone(models.Model):
     # a standalone PKS enzyme within a gene cluster
+    '''
+    A standalone PKS enzyme with specific domains.
+    # Properties
+        cluster: class<Cluster>. cluster containing subunit.
+        genbankAccession: str. GenBank accession number.
+        name: str. name of standaloen.
+        start: int. start of subunit in cluster nucleotide sequence.
+        stop: int. end of subunit in cluster nucleotide sequence.
+        sequence: str. amino acid sequence corresponding to subunit.
+    # Methods
+        architecture: Returns architecture of subunit.
+        getNucleotideSequence: Returns nucleotide sequence of subunit.
+        getAminoAcidSequence: Returns amino acid sequence of subunit.
+    '''
     cluster = models.ForeignKey(Cluster, on_delete=models.CASCADE)
-    order = models.PositiveSmallIntegerField()
     name = models.CharField(max_length=2000) # name of enzyme
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
-
-class TransModule(Module):
-    """
-    A module which is in trans. Generally used in situations where
-    the loading module has an in trans AT(or possible a CAL, or KS, domain)
-    along with the lone ACP.
-    """
-    def inTrans(self):
-        return True
-
-@receiver(pre_save, sender=TransModule)
-def setTransModuleOrder(sender, instance, **kwargs):
-    # sets the module order based on current count
-    if not isinstance(instance.order, int):
-        moduleCount = sender.objects.filter(subunit__cluster=instance.subunit.cluster).count()
-        instance.order = moduleCount
-
-@receiver(pre_delete, sender=TransModule)
-def deleteTransModuleProduct(sender, instance, **kwargs):
-    instance.deleteProduct()
-
-
+    genbankAccession = models.CharField(max_length=100)
 
