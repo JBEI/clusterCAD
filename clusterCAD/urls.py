@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^pks/', include('pks.urls')),
+    url(r'^retrotide/', include('retrotide.urls')),
     url(r'^compounddb/', include('compounddb.urls')),
     url(r'^structureSearch/', include('structureSearch.urls')),
     url(r'^sequenceSearch/', include('sequenceSearch.urls')),
