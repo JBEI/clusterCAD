@@ -163,41 +163,33 @@ def process_subunits(subunits, cluster):
             domains_present = module_domains.keys()
             has_acp = 'ACP' in domains_present or 'PCP' in domains_present
             has_at = 'AT' in domains_present or 'CAL' in domains_present
-            has_ks = 'KS' in domains_present
             if not accept_in_trans_modules and not (has_at and has_acp): #
                 print(f'\t\tModule with no {"AT" if has_acp else "ACP"} skipped: {",".join(domains_present)} \n')
                 continue
             if not (has_ks or has_at or has_acp): # invalid even for in trans
-                print(f'\t\tModule with no KS, AT, or ACT skipped: {",".join(domains_present)} \n')
+                print(f'\t\tModule with no AT or ACT skipped: {",".join(domains_present)} \n')
                 continue
             if not has_acp and accept_in_trans_modules:
                 # No acp means it's either invalid or trans. Assume in trans LM for now
-                subunit = db_subunit_entry
                 standalone = pks.models.DomainContainingStandalone(
                     cluster=cluster,
-                    name=subunit.name,
-                    start=subunit.start,
-                    stop=subunit.stop,
-                    sequence=subunit.sequence,
-                    genbankAccession=subunit.genbankAccession,
+                    name=db_subunit_entry.name,
+                    start=db_subunit_entry.start,
+                    stop=db_subunit_entry.stop,
+                    sequence=db_subunit_entry.sequence,
+                    genbankAccession=db_subunit_entry.genbankAccession,
                 )
                 db_potential_standalones.append(standalone)
             else:
-                print(domains_present)
                 module = pks.models.Module(subunit=db_subunit_entry, loading=loading, terminal=terminal)
                 db_modules.append(module)
                 #print(f'\t\t{",".join(module_domains)}')
         if save_to_db:
             if len(db_modules) != 0:
                 db_save(db_subunit_entry)
-                db_subunit_entry.delete()
-                print(db_subunit_entry)
-                print(db_subunit_entry.pk)
-                print(f'\tsaved subunit entry {subunit["genename"]}')
+                #db_subunit_entry.delete()
                 for module in db_modules:
-                    print(module.subunit is db_subunit_entry, module.subunit.pk)
                     # save modules to db if there are any valid ones
-                    print(module.subunit.pk)
                     module.save()
                     module.buildDomains(module_domains, cyclic=False) #no cyclization information
             elif len(db_potential_standalones) != 0:
@@ -354,7 +346,7 @@ if clear_db:
     print('database cleared')
 
 
-#filelist = [x for x in filelist if '37085' in x]
+#filelist = [x for x in filelist if '01854385' in x]
 for file in filelist:
     record = SeqIO.read(file, "genbank")
     #print(record)
