@@ -6,7 +6,7 @@ from django.urls import path, re_path
 from django.shortcuts import render
 
 def render_react(request):
-    return render(request, "index.html")
+    return render(request, "retrotide_index.html")
   
 urlpatterns = [
     re_path(r"^$", render_react),
