@@ -318,10 +318,9 @@ class DomainContainer(models.Model):
     Abstract base class for anything that contains a domain. Offers the domains()
     method, which returns a list of domains.
     """
+    domainContainerId = models.AutoField(primary_key=True)
     def domains(self):
         return Domain.objects.filter(container=self).select_subclasses().order_by('start')
-    class Meta:
-        abstract = True
 
 
 class Standalone(models.Model):
@@ -499,7 +498,7 @@ class Domain(models.Model):
         getNucleotideSequence: Returns nucleotide sequence of domain.
         getAminoAcidSequence: Returns amino acid sequence of domain.
     '''
-    container = models.ForeignKey(DomainContainer, on_delete=models.CASCADE, default=None, null=True)
+    container = models.ForeignKey(DomainContainer, on_delete=models.CASCADE)
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
 
@@ -510,9 +509,6 @@ class Domain(models.Model):
     def getAminoAcidSequence(self):
         sequence = self.module.subunit.getAminoAcidSequence()
         return sequence[(self.start - 1):self.stop]
-
-    class Meta:
-        abstract = True
 
 def activityString(domain):
     if domain.active:
@@ -855,27 +851,4 @@ class PCP(Domain):
 
     def __repr__(self):
         return("PCP")
-
-class Standalone(models.Model):
-    # a standalone PKS enzyme within a gene cluster
-    '''
-    A standalone PKS enzyme with specific domains.
-    # Properties
-        cluster: class<Cluster>. cluster containing subunit.
-        genbankAccession: str. GenBank accession number.
-        name: str. name of standaloen.
-        start: int. start of subunit in cluster nucleotide sequence.
-        stop: int. end of subunit in cluster nucleotide sequence.
-        sequence: str. amino acid sequence corresponding to subunit.
-    # Methods
-        architecture: Returns architecture of subunit.
-        getNucleotideSequence: Returns nucleotide sequence of subunit.
-        getAminoAcidSequence: Returns amino acid sequence of subunit.
-    '''
-    cluster = models.ForeignKey(Cluster, on_delete=models.CASCADE)
-    name = models.CharField(max_length=2000) # name of enzyme
-    start = models.PositiveIntegerField()
-    stop = models.PositiveIntegerField()
-    sequence = models.TextField()
-    genbankAccession = models.CharField(max_length=100)
 

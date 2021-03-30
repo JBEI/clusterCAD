@@ -183,14 +183,21 @@ def process_subunits(subunits, cluster):
                 )
                 db_potential_standalones.append(standalone)
             else:
+                print(domains_present)
                 module = pks.models.Module(subunit=db_subunit_entry, loading=loading, terminal=terminal)
                 db_modules.append(module)
+                #print(f'\t\t{",".join(module_domains)}')
         if save_to_db:
             if len(db_modules) != 0:
                 db_save(db_subunit_entry)
+                db_subunit_entry.delete()
+                print(db_subunit_entry)
+                print(db_subunit_entry.pk)
                 print(f'\tsaved subunit entry {subunit["genename"]}')
                 for module in db_modules:
+                    print(module.subunit is db_subunit_entry, module.subunit.pk)
                     # save modules to db if there are any valid ones
+                    print(module.subunit.pk)
                     module.save()
                     module.buildDomains(module_domains, cyclic=False) #no cyclization information
             elif len(db_potential_standalones) != 0:
@@ -200,14 +207,10 @@ def process_subunits(subunits, cluster):
                 pass
             else:
                 print('no valid modules found')
-            elif save_to_db:
-                module.save()
-                module.buildDomains(module_domains, cyclic=False) #no cycle information
-            print(f'\t\t{",".join(module_domains)}')
             #TODO the antismash_to_database_functions file checks for an assertion erro. No idea if this is necessary
         if save_to_db and not len(db_subunit_entry.modules()):
             print('\t\tdeleted empty subunit\n\n')
-            db_subunit_entry.delete()
+            #db_subunit_entry.delete()
 
 def reorder_subunits(cluster):
     """
@@ -351,7 +354,7 @@ if clear_db:
     print('database cleared')
 
 
-#filelist = [x for x in filelist if '011295' in x]
+#filelist = [x for x in filelist if '37085' in x]
 for file in filelist:
     record = SeqIO.read(file, "genbank")
     #print(record)
