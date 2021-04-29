@@ -70,7 +70,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # Tell ClusterCAD where to find react files
-        'DIRS': [os.path.join(BASE_DIR, "build"), os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, "retrotideUI/build"), os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -145,8 +145,6 @@ MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    # Tell Django where to look for React's static files (css, js)
-    os.path.join(BASE_DIR, "build/static"),
 ]
 
 # Default settings
