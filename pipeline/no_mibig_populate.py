@@ -163,6 +163,7 @@ def process_subunits(subunits, cluster):
             domains_present = module_domains.keys()
             has_acp = 'ACP' in domains_present or 'PCP' in domains_present
             has_at = 'AT' in domains_present or 'CAL' in domains_present
+            has_ks = 'KS' in domains_present
             if not accept_in_trans_modules and not (has_at and has_acp): #
                 print(f'\t\tModule with no {"AT" if has_acp else "ACP"} skipped: {",".join(domains_present)} \n')
                 continue
