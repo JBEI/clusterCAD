@@ -114,6 +114,7 @@ class Cluster(models.Model):
                 moduleCounter += 1
 
         # Reset loading bool of first module in newOrder
+        print(list(filter(lambda subunit: subunit.order == 0, self.subunits()))[0].modules())
         newLoading = list(filter(lambda subunit: subunit.order == 0, self.subunits()))[0].modules()[0]
         newLoading.loading = True
         newLoading.setLoading()
@@ -378,7 +379,7 @@ class Module(DomainContainer):
     objects = InheritanceManager()
 
     def setLoading(self):
-        domains = Domain.objects.filter(module=self).select_subclasses(KR, DH, ER, cMT, oMT)
+        domains = Domain.objects.filter(container=self).select_subclasses(KR, DH, ER, cMT, oMT)
         if self.loading:
             for d in domains:
                 d.active = False
@@ -397,7 +398,7 @@ class Module(DomainContainer):
                 substrate = domainDict['CAL'][1]['Substrate specificity predictions'].split()[3]
             if substrate == 'N/A':
                 substrate = 'mal'
-            newDomain = CAL(module=self, start=start, stop=stop, substrate=substrate)
+            newDomain = CAL(container=self, start=start, stop=stop, substrate=substrate)
             newDomain.save()
 
         if 'AT' in domainDict.keys():
@@ -408,7 +409,7 @@ class Module(DomainContainer):
                 substrate = domainDict['AT'][1]['Substrate specificity predictions'].split()[3]
             if substrate == 'N/A':
                 substrate = 'mal'
-            newDomain = AT(module=self, start=start, stop=stop, substrate=substrate)
+            newDomain = AT(container=self, start=start, stop=stop, substrate=substrate)
             newDomain.save()
 
         if 'KR' in domainDict.keys():
@@ -422,7 +423,7 @@ class Module(DomainContainer):
                 active = True
             else:
                 active = False
-            newDomain = KR(module=self, start=start, stop=stop, active=active, type=type)
+            newDomain = KR(container=self, start=start, stop=stop, active=active, type=type)
             newDomain.save()
 
         for domainType in ['KS', 'DH', 'ER', 'cMT', 'oMT', 'ACP', 'PCP']:
@@ -430,15 +431,15 @@ class Module(DomainContainer):
                 start = domainDict[domainType][0]['start']
                 stop = domainDict[domainType][0]['stop']
                 if domainType in ['DH', 'ER', 'cMT', 'oMT']:
-                    newDomain = getattr(sys.modules[__name__], domainType)(module=self, start=start, stop=stop, active=True)
+                    newDomain = getattr(sys.modules[__name__], domainType)(container=self, start=start, stop=stop, active=True)
                 else:
-                    newDomain = getattr(sys.modules[__name__], domainType)(module=self, start=start, stop=stop)
+                    newDomain = getattr(sys.modules[__name__], domainType)(container=self, start=start, stop=stop)
                 newDomain.save()
 
         if 'Thioesterase' in domainDict.keys():
             start = domainDict['Thioesterase'][0]['start']
             stop = domainDict['Thioesterase'][0]['stop']
-            newDomain = TE(module=self, start=start, stop=stop, cyclic=cyclic, ring=0)
+            newDomain = TE(container=self, start=start, stop=stop, cyclic=cyclic, ring=0)
             newDomain.save()
 
         self.setLoading()
@@ -462,7 +463,7 @@ class Module(DomainContainer):
     def deleteProduct(self):
         # set self.product to none, and delete the compound itself
         # if this is the only module
-        if Module.objects.filter(product=self.product).exclude(id=self.id).count() == 0 and self.product != None:
+        if Module.objects.filter(product=self.product).exclude(domainContainerId=self.domainContainerId).count() == 0 and self.product != None:
             self.product.delete()
         self.product = None
 

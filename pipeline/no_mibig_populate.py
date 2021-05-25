@@ -12,6 +12,7 @@ import os, sys
 import json
 import pickle
 import glob
+import warnings
 
 from Bio import SeqIO
 import antismash_to_database_functions as antismash_funcs
@@ -132,6 +133,7 @@ def process_subunits(subunits, cluster):
                                   order=-1
                                   #TODO maybe needs ordering = false
                                   )
+        db_save(db_subunit_entry)
         # A list of bad modules that might be standalones.
         db_potential_standalones = []
         db_modules = []
@@ -140,10 +142,10 @@ def process_subunits(subunits, cluster):
 
         module is the return value of processSubunitModules:
         keys: module number
-        values: OrderedDict of domains in module. Within the OrderedDict, 
-                 the key is the domain name, while the value is a length one or 
-                 two list where the first element is a dictionary 
-                 {start: value, stop: value} and the optional second element is 
+        values: OrderedDict of domains in module. Within the OrderedDict,
+                 the key is the domain name, while the value is a length one or
+                 two list where the first element is a dictionary
+                 {start: value, stop: value} and the optional second element is
                  a specificity dict if applicable
         example:
         {
@@ -163,11 +165,12 @@ def process_subunits(subunits, cluster):
             domains_present = module_domains.keys()
             has_acp = 'ACP' in domains_present or 'PCP' in domains_present
             has_at = 'AT' in domains_present or 'CAL' in domains_present
-            has_ks = 'KS' in domains_present
-            if not accept_in_trans_modules and not (has_at and has_acp): #
+            if debug:
+                print('processing module {module_index}:', module_domains)
+            if not accept_in_trans_modules and not (has_at and has_acp):
                 print(f'\t\tModule with no {"AT" if has_acp else "ACP"} skipped: {",".join(domains_present)} \n')
                 continue
-            if not (has_ks or has_at or has_acp): # invalid even for in trans
+            if not (has_at or has_acp): # invalid even for in trans LM
                 print(f'\t\tModule with no AT or ACT skipped: {",".join(domains_present)} \n')
                 continue
             if not has_acp and accept_in_trans_modules:
@@ -180,30 +183,47 @@ def process_subunits(subunits, cluster):
                     sequence=db_subunit_entry.sequence,
                     genbankAccession=db_subunit_entry.genbankAccession,
                 )
+                """Note: A standalone is at the level of a gene/subunit even though the
+                domain containing aspect represents that of a module. Since we
+                don't know whether there will be valid modules unil we process every single
+                entry from "modules", then we will need to create these standalones in the
+                meantime so that, if there end up being no valid modules, we save the
+                standalones instead."""
                 db_potential_standalones.append(standalone)
+                # Save the created object as soon as it's made since it doesn't behave
+                # like a python object and will cause bugs later if not.
+                standalone.save()
             else:
                 module = pks.models.Module(subunit=db_subunit_entry, loading=loading, terminal=terminal)
+                # Save the created object as soon as it's made since it doesn't behave
+                # like a python object and will cause bugs later if not.
+                module.save()
                 db_modules.append(module)
                 #print(f'\t\t{",".join(module_domains)}')
         if save_to_db:
+            """
+            Save to the database our results. Since you can't have a standalone gene
+            and a PKS Module in the same gene, we can only accept one. PKS Modules take
+            precedence here and possible detected standalone genes will be saved otherwise.
+            """
+            # If valid modules exist, that takes precedence
             if len(db_modules) != 0:
-                db_save(db_subunit_entry)
-                #db_subunit_entry.delete()
-                for module in db_modules:
+                print('saving modules:', db_modules)
+                for standalone in db_potential_standalones:
                     # save modules to db if there are any valid ones
-                    module.save()
+                    standalone.delete()
+                for module in db_modules:
                     module.buildDomains(module_domains, cyclic=False) #no cyclization information
             elif len(db_potential_standalones) != 0:
-                # save standalone to db
-                for standalone in db_potential_standalones:
-                    standalone.save()
-                pass
+                print('saving standalones:', db_potential_standalones)
+                if len(db_potential_standalones) != 1:
+                    warnings.warn('Multiple standalones genes possible within the same gene.')
+                # Delete subunit, since our subunit info is now in the standalone.
+                db_subunit_entry.delete()
             else:
-                print('no valid modules found')
+                print('subunit no good. Bye.')
+                db_subunit_entry.delete()
             #TODO the antismash_to_database_functions file checks for an assertion erro. No idea if this is necessary
-        if save_to_db and not len(db_subunit_entry.modules()):
-            print('\t\tdeleted empty subunit\n\n')
-            #db_subunit_entry.delete()
 
 def reorder_subunits(cluster):
     """
@@ -275,7 +295,6 @@ def reorder_subunits(cluster):
     if len(subunits) not in [1, 2, 3]:
         return
     if len(subunits) == 1:
-        print(subunits)
         subunits[0].order = 0
         subunits[0].save()
     if len(subunits) in [2, 3]:

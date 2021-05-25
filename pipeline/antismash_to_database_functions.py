@@ -443,7 +443,7 @@ def enterCluster(cluster, clusterrecord, mibigfile):
                 domains_present = moduledict.keys()
                 if 'ACP' in domains_present or 'PCP' in domains_present:
                     if 'AT' in domains_present or 'CAL' in domains_present:
-                        module = pks.models.Module(subunit=subunit, 
+                        module = pks.models.Module(subunit=subunit,
                                                    loading=loading, terminal=terminal)
                         module.save()
                         module.buildDomains(moduledict, cyclic=cyclize)
