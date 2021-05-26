@@ -1,0 +1,54 @@
+.button {
+  text-decoration: none;
+  font-size: 14px;
+  color: indigo;
+  padding: 5px 10px;
+  background-color: #dde;
+  border-radius: 5px;
+  border: 1px solid #dde;
+  display: inline-block;
+  margin: 15px 0px;
+  &:disabled {
+    background-color: #eee;
+    color: #ddd;
+  }
+}
+
+.Navbutton {
+  cursor: pointer;
+  display: block;
+  flex: 3;
+  text-decoration: none;
+  color: #878;
+
+  &.activeTab {
+    cursor: not-allowed;
+    font-weight: bold;
+    background-color: #eef;
+  }
+}
+
+.smilesButton, .drawerButton {
+  border-radius: 0;
+  flex: 1;
+  margin: 15px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  margin-bottom: 0;
+  &.selected {
+    background-color: #aae;
+    border: 1px solid #dde;
+  }
+}
+
+.submit, .clear {
+  display: inline-block;
+  margin-left: 40px;
+}
+
+.logo {
+  font-size: 20px;
+  font-style: bold;
+  flex: 1;
+  color: crimson;
+}
