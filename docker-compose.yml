@@ -74,5 +74,20 @@ services:
     links:
       - web:web
 
+
+  react:
+    build: ./retrotide
+    volumes: 
+      - ./retrotide:/app
+      - ./retrotide/node_modules
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - db
+      - web
+    command: npm start
+
 volumes:
   app-db-data:
