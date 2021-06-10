@@ -372,7 +372,20 @@ class Module(models.Model):
             newDomain = KR(module=self, start=start, stop=stop, active=active, type=type)
             newDomain.save()
 
-        for domainType in ['KS', 'DH', 'ER', 'cMT', 'oMT', 'ACP', 'PCP']:
+        #A domain for NRPS
+        if 'A' in domainDict.keys():
+            start = domainDict['A'][0]['start']
+            stop = domainDict['A'][0]['stop']
+            substrate = domainDict['A'][1]['Substrate specificity predictions'].split()[0]
+            if substrate == 'N/A':
+                substrate = domainDict['A'][1]['Substrate specificity predictions'].split()[3]
+            if substrate == 'N/A':
+                substrate = ''
+            newDomain = A(module=self, start=start, stop=stop, substrate=substrate)
+            newDomain.save()
+
+        # PKS and NRPS domains
+        for domainType in ['KS', 'DH', 'ER', 'cMT', 'oMT', 'ACP', 'PCP', 'C']:
             if domainType in domainDict.keys():
                 start = domainDict[domainType][0]['start']
                 stop = domainDict[domainType][0]['stop']
@@ -791,13 +804,7 @@ class ACP(Domain):
     def __repr__(self):
         return("ACP")
 
-class PCP(Domain):
 
-    def __str__(self):
-        return "domain"
-
-    def __repr__(self):
-        return("PCP")
 
 class Standalone(models.Model):
     # a standalone PKS enzyme within a gene cluster
@@ -807,3 +814,146 @@ class Standalone(models.Model):
     start = models.PositiveIntegerField()
     stop = models.PositiveIntegerField()
     sequence = models.TextField()
+
+
+
+# Beginning of NRPS support
+
+aminoAcids = {
+    # L-amino acids - use format N[C@](C)(<R-group>)(C(=O)[S]) for L stereochemistry
+    'gly': chem.MolFromSmiles('NCC(=O)[S]'),
+    'ala': chem.MolFromSmiles('N[C@](C)(H)(C(=O)[S])'),
+    'cys': chem.MolFromSmiles('N[C@](CS)(H)(C(=O)[S])'),
+    'ser': chem.MolFromSmiles('N[C@](CO)(H)(C(=O)[S])'),
+    'thr': chem.MolFromSmiles('N[C@](C(O)C)(H)(C(=O)[S])'),
+
+    # amino acid derivatives
+    'pip': chem.MolFromSmiles('C1CC[N]C(C1)C(=O)[S]'),
+}
+
+class A(Domain):
+    # Adenylation domain: picks substrate and catalyzes its addition to PCP
+
+    SUBSTRATE_CHOICES = tuple(((k, k) for k in list(set(list(aminoAcids.keys())))))
+
+    substrate = ''
+    '''
+    substrate = models.CharField(
+        max_length=20,
+        choices=SUBSTRATE_CHOICES,
+        default='gly', # simplest amino acid
+        blank=False,
+    )
+    '''
+    def operation(self, chain):
+        if not chain:
+            return aminoAcids[self.substrate] # if there's no chain, then just pass on the substrate
+        else:
+            rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[S:1].' # incoming chain
+                                              '[N:6][C:7][C:8](=[O:9])[S:10]>>' # substrate
+                                              '[C:2](=[O:3])[N:6][C:7][C:8](=[O:9])[S:10]' # product
+                                              '.[S:1]')) # remaining thiol
+            
+            # make sure there is only one thiol ester substructure in the chain, then run the reaction
+            assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
+                       useChirality=True)) == 1, chem.MolToSmiles(chain)
+            prod = rxn.RunReactants((chain, aminoAcids[self.substrate]))[0][0]
+            chem.SanitizeMol(prod)
+            return prod
+
+    def __str__(self):
+        return 'substrate %s' % (self.substrate)
+
+    def __repr__(self):
+        return("A")
+
+
+class Cy(Domain):
+    # (hetero)Cyclization domain: picks substrate and cyclizes it, forming thiazoline or oxazoline
+
+    SUBSTRATE_CHOICES = tuple(((k, k) for k in list(set(list(aminoAcids.keys())))))
+
+    substrate = ''
+    '''
+    substrate = models.CharField(
+        max_length=20,
+        choices=SUBSTRATE_CHOICES,
+        default='gly', # simplest amino acid
+        blank=False,
+    )
+    '''
+    def operation(self, chain):
+        
+        # Unlike the C-A domain pair, if there's no chain, there's nothing to cyclize
+        # However, if it is somehow the case then it can act as normal C-A pair and just pass substrate
+        # Currently can only cyclize using cysteine and serine/threonine
+
+        if not chain:
+            return aminoAcids[self.substrate]
+        
+        else:
+            # first step - condensation
+            rxn1 = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[S:1]' # incoming chain
+                                              '.[N:6][C:7][C:8](=[O:9])[S:10]>>' # substrate
+                                              '[C:2](=[O:3])[N:6][C:7][C:8](=[O:9])[S:10]' # product
+                                              '.[S:1]')) # remaining thiol
+            
+            assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
+                       useChirality=True)) == 1, chem.MolToSmiles(chain)
+            rxn_intermediate = rxn1.RunReactants((chain, aminoAcids[self.substrate]))[0][0]
+
+            # Cysteine -> Thiazoline case | second step - intramolecular cyclization
+            if self.substrate == 'cys':
+                rxn2 = AllChem.ReactionFromSmarts(('[C:8](=[O:9])[N:7][C:6][C:4](=[O:5])[S:3]' # condensation product backbone
+                                                   '.[C:2](H)(H)[S:1]>>' # thiol nucleophile
+                                                   '[C1:8]=[N:7][C:6]([C:2][S1:1])[C:4](=[O:5])[S:3]' # thiazoline
+                                                   '.[O:9]')) # water from dehydration
+                
+                assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
+                       useChirality=True)) == 1, chem.MolToSmiles(chain)
+                prod = rxn2.RunReactants((rxn_intermediate,))[0][0] # intramolecular rxn
+                chem.SanitizeMol(prod)
+                return prod
+        
+            # Threonine/Serine -> Oxazoline case | second step - intramolecular cyclization
+            if (self.substrate == 'thr' or self.substrate == 'ser'):
+                rxn2 = AllChem.ReactionFromSmarts(('[C:8](=[O:9])[N:7][C:6][C:4](=[O:5])[S:3]' # condensation product backbone
+                                                   '.[C:2](H)[O:1]>>' # alcohol nucleophile
+                                                   '[C1:8]=[N:7][C:6]([C:2][O1:1])[C:4](=[O:5])[S:3]' # oxazoline
+                                                   '.[O:9]')) # water from dehydration
+                
+                assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
+                       useChirality=True)) == 1, chem.MolToSmiles(chain)
+                prod = rxn2.RunReactants((rxn_intermediate,))[0][0] # intramolecular rxn
+                chem.SanitizeMol(prod)
+                return prod
+            
+            # Everything else returns the substrate alone
+            else: 
+                return aminoAcids[self.substrate]
+
+    def __str__(self):
+        return 'substrate %s' % (self.substrate)
+
+    def __repr__(self):
+        return("A")
+
+
+class PCP(Domain):
+    # Peptidyl carrier protein: links to intermediates
+
+    def __str__(self):
+        return "domain"
+
+    def __repr__(self):
+        return("PCP")
+
+
+class C(Domain):
+    # Condensation domain: catalyzes "condensation" reaction under the A-domain
+
+    def __str__(self):
+        return "domain"
+
+    def __repr__(self):
+        return("C")
