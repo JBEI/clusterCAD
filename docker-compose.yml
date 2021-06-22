@@ -76,17 +76,19 @@ services:
 
 
   react:
-    build: ./retrotide
+    build:
+      context: retrotide
+      dockerfile: Dockerfile
+    # react-scripts bugfix, interactive mode is required
+    stdin_open: true
+    tty: true
     volumes: 
-      - ./retrotide:/app
-      - ./retrotide/node_modules
+      - .:/retrotide/app
+      - /retrotide/app/node_modules
     ports:
-      - "3000:80"
+      - "3000:3000"
     environment:
       - NODE_ENV=development
-    depends_on:
-      - db
-      - web
     command: npm start
 
 volumes:
