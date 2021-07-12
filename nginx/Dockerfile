@@ -1,2 +1,3 @@
 FROM nginx
-ADD sites-enabled/ /etc/nginx/sites-enabled
+RUN rm /etc/nginx/conf.d/default.conf
+COPY sites-enabled/django_project /etc/nginx/conf.d/django.conf

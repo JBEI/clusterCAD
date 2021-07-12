@@ -5,19 +5,27 @@ server {
 
     # defer to react-router for retrotide urls
     location /retrotide {
-        root   /retrotide;
-        index  index.html index.htm;
-        # forward everything to index.html where react will handle routing
-        # does this include errors?
-        try_files $uri $uri/ /index.html;
+        proxy_pass http://react:3000;
+        proxy_set_header Host $host;
+        proxy_read_timeout 120s;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /ChemDoodle {
+        proxy_pass http://react:3000/ChemDoodle;
+        proxy_set_header Host $host;
+        proxy_read_timeout 120s;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
     location /static {
-        alias /www/static;
-    }
-
-    location /media {
-        alias /www/media;
+        proxy_pass http://react:3000/static;
+        proxy_set_header Host $host;
+        proxy_read_timeout 120s;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
     location / {
