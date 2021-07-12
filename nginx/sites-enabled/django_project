@@ -3,12 +3,21 @@ server {
     listen 80;
     charset utf-8;
 
+    # defer to react-router for retrotide urls
+    location /retrotide {
+        root   /retrotide;
+        index  index.html index.htm;
+        # forward everything to index.html where react will handle routing
+        # does this include errors?
+        try_files $uri $uri/ /index.html;
+    }
+
     location /static {
         alias /www/static;
     }
 
     location /media {
-	alias /www/media;
+        alias /www/media;
     }
 
     location / {
@@ -24,9 +33,9 @@ server {
 }
 
 server {
-        listen 80;
-        server_name www.clustercad.jbei.org;
-        # $scheme will get the http protocol
-        # and 301 is best practice for tablet, phone, desktop and seo
-        return 301 $scheme://domain.com$request_uri;
+    listen 80;
+    server_name www.clustercad.jbei.org;
+    # $scheme will get the http protocol
+    # and 301 is best practice for tablet, phone, desktop and seo
+    return 301 $scheme://domain.com$request_uri;
 }
