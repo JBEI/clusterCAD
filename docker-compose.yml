@@ -84,8 +84,8 @@ services:
       context: retrotide
       dockerfile: Dockerfile
     # react-scripts bugfix, interactive mode is required
-    stdin_open: true
-    tty: true
+    # stdin_open: true
+    # tty: true
     volumes: 
       - .:/retrotide/app
       - /retrotide/app/node_modules
