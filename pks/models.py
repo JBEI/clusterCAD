@@ -118,7 +118,7 @@ class Cluster(models.Model):
         module.save()
 
     def setActive(self, sub, mod, dom, active):
-        assert dom in ['KR', 'DH', 'ER', 'oMT', 'cMT']
+        assert dom in ['KR', 'DH', 'ER', 'oMT', 'cMT', 'Ox', 'Red', 'E', 'nMT', 'F', 'MOX', 'R', 'X']
         assert isinstance(active, bool)
         module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
@@ -131,18 +131,38 @@ class Cluster(models.Model):
         assert update in list(set(list(starters.keys()) + list(extenders.keys()))), update
         module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
-        try:
+        domains = {type(domain): domain for domain in module.domains()}
+
+        # check that there is only one AT/A/CAL in the module
+        num_at_cal_a = 0
+        for domain in domains:
+            if domain == AT or domain == CAL or domain == A:
+                num_at_cal_a = num_at_cal_a + 1
+        assert (num_at_cal_a == 1, "Less/more than one of the following domains found: AT/CAL/A")
+
+        if AT in domains:
             domain = AT.objects.get(module=module)
-        except AT.DoesNotExist:
+        elif CAL in domains:
             domain = CAL.objects.get(module=module)
+        elif A in domains:
+            domain = A.objects.get(module=module)
         domain.substrate = update
         domain.save()
-
+        
     def setStereochemistry(self, sub, mod, update):
         assert update in [x[0] for x in KR.TYPE_CHOICES]
         module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
         domain = KR.objects.get(module=module)
+        domain.type = update
+        domain.save()
+    
+    # sets R domain's chain termination type
+    def setType(self, sub, mod, update):
+        assert update in [x[0] for x in R.TYPE_CHOICES]
+        module = Module.objects.filter(subunit__cluster=self,
+                                       subunit__name=sub).order_by('order')[mod]
+        domain = R.objects.get(module=module)
         domain.type = update
         domain.save()
 
@@ -172,6 +192,7 @@ class Cluster(models.Model):
                 for domain in module.domains():
                     dname = repr(domain)
                     ddict = OrderedDict()
+                    # PKS domains
                     if dname == 'AT':
                         ddict.update({'substrate': domain.substrate})
                     elif dname == 'CAL':
@@ -184,7 +205,16 @@ class Cluster(models.Model):
                     elif dname == 'TE':
                         ddict.update({'cyclic': domain.cyclic,
                                       'ring': domain.ring})
-                    if dname in ['AT', 'CAL', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE']:
+                    # NRPS domains
+                    elif dname == 'A':
+                        ddict.update({'substrate': domain.substrate})
+                    elif dname == 'R':
+                        ddict.update({'active': domain.active, 
+                                      'type': domain.type})
+                    elif dname in ['Ox', 'Red', 'E', 'nMT', 'F', 'MOX', 'X']:
+                        ddict.update({'active': domain.active})
+
+                    if dname in ['AT', 'CAL', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE', 'A', 'Cy', 'Ox', 'Red', 'E', 'nMT', 'F', 'MOX', 'R', 'X']:
                         mdict.update({dname: ddict})
                 sdict.update({imodule: {'domains': mdict,
                                         'iterations': module.iterations}})
@@ -207,6 +237,11 @@ class Cluster(models.Model):
         corr = json.loads(open(filepath).read(), object_pairs_hook=OrderedDict)
         assert corr['mibigAccession'] == self.mibigAccession
         assert corr['genbankAccession'] == self.genbankAccession
+        
+        # correct name if necessary
+        if self.description != corr['description']:
+            self.description = corr['description']
+
         # Delete subunits if necessary
         for s in Subunit.objects.filter(cluster=self):
             if s.name not in corr['architecture'].keys():
@@ -219,6 +254,7 @@ class Cluster(models.Model):
                 iters = mdict_iters['iterations']
                 self.setIterations(s, m, iters)
                 for d,ddict in mdict.items():
+                    # PKS domains
                     if d == 'AT':
                         self.setSubstrate(s, m, ddict['substrate'])
                     elif d == 'CAL':
@@ -227,6 +263,16 @@ class Cluster(models.Model):
                         self.setStereochemistry(s, m, ddict['type'])
                         self.setActive(s, m, d, ddict['active'])
                     elif d in ['DH', 'ER', 'cMT', 'oMT']:
+                        self.setActive(s, m, d, ddict['active'])
+                    # NRPS domains
+                    elif d == 'A':
+                        self.setSubstrate(s, m, ddict['substrate'])
+                    elif d == 'Cy':
+                        continue
+                    elif d == 'R':
+                        self.setType(s,m, ddict['type'])
+                        self.setActive(s, m, d, ddict['active'])
+                    elif d in ['Ox', 'Red', 'E', 'nMT', 'F', 'MOX', 'X']:
                         self.setActive(s, m, d, ddict['active'])
                     else:
                         assert d == 'TE'
@@ -377,25 +423,88 @@ class Module(models.Model):
             start = domainDict['A'][0]['start']
             stop = domainDict['A'][0]['stop']
             substrate = domainDict['A'][1]['Substrate specificity predictions'].split()[0]
+            if "," in substrate:
+                substrate = domainDict['A'][1]['Substrate specificity predictions'].split()[0].split(',')[0]
+
+            # if substrate is invalid or not implemented, check second substrate entry
+            if (substrate not in starters) or (substrate not in extenders):
+                print("Substrate not recognized, checking next one. ")
+                substrate = domainDict['A'][1]['Substrate specificity predictions'].split()[3]
+            
             if substrate == 'N/A':
                 substrate = domainDict['A'][1]['Substrate specificity predictions'].split()[3]
             if substrate == 'N/A':
                 substrate = 'gly'
+            print("A domain info: ")
+            print(domainDict['A'])
             newDomain = A(module=self, start=start, stop=stop, substrate=substrate)
             newDomain.save()
+        
+        # 4 different C domain subtypes
+        if 'Condensation' in domainDict.keys():
+            start = domainDict['Condensation'][0]['start']
+            stop = domainDict['Condensation'][0]['stop']
+            type = 'Unknown'
+            newDomain = C(module=self, start=start, stop=stop, type=type)
+            newDomain.save()
 
-        #add Cy and Ox here
+        if 'Condensation_Starter' in domainDict.keys():
+            start = domainDict['Condensation_Starter'][0]['start']
+            stop = domainDict['Condensation_Starter'][0]['stop']
+            type = 'Starter'
+            newDomain = C(module=self, start=start, stop=stop, type=type)
+            newDomain.save()
+
+        if 'Condensation_LCL' in domainDict.keys():
+            start = domainDict['Condensation_LCL'][0]['start']
+            stop = domainDict['Condensation_LCL'][0]['stop']
+            type = 'LCL'
+            newDomain = C(module=self, start=start, stop=stop, type=type)
+            newDomain.save()
+
+        if 'Condensation_DCL' in domainDict.keys():
+            start = domainDict['Condensation_DCL'][0]['start']
+            stop = domainDict['Condensation_DCL'][0]['stop']
+            type = 'DCL'
+            newDomain = C(module=self, start=start, stop=stop, type=type)
+            newDomain.save()
+        
+        if 'Cy' in domainDict.keys():
+            start = domainDict['Cy'][0]['start']
+            stop = domainDict['Cy'][0]['stop']
+            newDomain = Cy(module=self, start=start, stop=stop)
+            newDomain.save()
+
+        if 'E' in domainDict.keys():
+            start = domainDict['E'][0]['start']
+            stop = domainDict['E'][0]['stop']
+            newDomain = E(module=self, start=start, stop=stop)
+            newDomain.save()
 
         # PKS and NRPS domains
-        for domainType in ['KS', 'DH', 'ER', 'cMT', 'oMT', 'ACP', 'PCP', 'C']:
+        for domainType in ['KS', 'DH', 'ER', 'cMT', 'oMT', 'ACP', 'PCP', 'Ox', 'Red', 'nMT', 'F', 'X']: 
             if domainType in domainDict.keys():
                 start = domainDict[domainType][0]['start']
                 stop = domainDict[domainType][0]['stop']
-                if domainType in ['DH', 'ER', 'cMT', 'oMT']:
+                if domainType in ['DH', 'ER', 'cMT', 'oMT', 'Ox', 'Red', 'nMT', 'F', 'MOX', 'X']:
                     newDomain = getattr(sys.modules[__name__], domainType)(module=self, start=start, stop=stop, active=True)
                 else:
                     newDomain = getattr(sys.modules[__name__], domainType)(module=self, start=start, stop=stop)
                 newDomain.save()
+        
+        if 'MOX' in domainDict.keys():
+            start = domainDict['MOX'][0]['start']
+            stop = domainDict['MOX'][0]['stop']
+            newDomain = MOX(module=self, start=start, stop=stop)
+            newDomain.save()
+        
+        if 'R' in domainDict.keys():
+            start = domainDict['R'][0]['start']
+            stop = domainDict['R'][0]['stop']
+            type =  'alcohol'
+            active = True
+            newDomain = R(module=self, start=start, stop=stop, active=active, type=type)
+            newDomain.save()
 
         if 'Thioesterase' in domainDict.keys():
             start = domainDict['Thioesterase'][0]['start']
@@ -409,11 +518,18 @@ class Module(models.Model):
         if self.product:
             return self.product.mol()
         domains = {type(domain): domain for domain in self.domains()}
-        reactionOrder = [CAL, AT, KR, cMT, oMT, DH, ER, TE]
+        reactionOrder = [CAL, AT, A, F, Cy, Ox, Red, E, nMT, KR, cMT, oMT, DH, ER, X, MOX, R, TE]
         for iteration in range(self.iterations):
             for reaction in reactionOrder:
                 if reaction in domains.keys():
-                    chain = domains[reaction].operation(chain)
+
+                    # if R or MOX (alt chain release domains) is present in the same module as TE, skip TE
+                    # reaction order guarentees TE will be after MOX or R
+                    if ((reaction == TE) and (MOX in domains.keys())) or ((reaction == TE) and (R in domains.keys())):
+                        continue
+                    else:
+                        chain = domains[reaction].operation(chain)
+
         # Save this modules product in the database
         thisProduct = Compound(smiles = chem.MolToSmiles(chain, isomericSmiles=True))
         thisProduct.save()
@@ -478,8 +594,10 @@ def activityString(domain):
     else:
         return 'inactive'
 
-# dict of supported starter units
-starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
+# dict of supported starter and extender units
+# merged with NRPS substrates after the nrps_substrates dictionary
+
+pks_starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             'mmal': chem.MolFromSmiles('CCC(=O)[S]'),
             'butmal': chem.MolFromSmiles('CCCC(=O)[S]'),
             'mxmal': chem.MolFromSmiles('COCC(=O)[S]'),
@@ -513,10 +631,10 @@ starters = {'mal': chem.MolFromSmiles('CC(=O)[S]'),
             'shikimic_acid': chem.MolFromSmiles('C1[C@H]([C@@H]([C@@H](C=C1C(=O)[S])O)O)O'),
             'fatty_acid': chem.MolFromSmiles('CCCC(=O)[S]'),
             'NH2': chem.MolFromSmiles('NCC(=O)[S]'),
-            'N/A': None
+            'N/A': None,
            }
 
-extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
+pks_extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
              'mmal': chem.MolFromSmiles('C[C@@H](C(=O)O)C(=O)[S]'),
              'mxmal': chem.MolFromSmiles('CO[C@@H](C(=O)O)C(=O)[S]'),
              'mxmal_ACP': chem.MolFromSmiles('CO[C@@H](C(=O)O)C(=O)[S]'),
@@ -527,8 +645,55 @@ extenders = {'mal': chem.MolFromSmiles('O=C(O)CC(=O)[S]'),
              'isobutmal': chem.MolFromSmiles('CC(C)[C@@H](C([S])=O)C(O)=O'),
              'D-isobutmal': chem.MolFromSmiles('CC(C)[C@H](C([S])=O)C(O)=O'),
              'DCP': chem.MolFromSmiles('ClC1=C(Cl)NC=C1CCCCC(C(O)=O)C([S])=O'),
-             'hexmal': chem.MolFromSmiles('CCCCCC[C@@H](C(=O)O)C(=O)[S]')
+             'hexmal': chem.MolFromSmiles('CCCCCC[C@@H](C(=O)O)C(=O)[S]'),
              }
+
+nrps_substrates = {
+    # L-amino acids - use format <R_group>C[C@H](N)C(=O)[S] for L stereochemistry
+    
+    # special
+    'gly': chem.MolFromSmiles('NCC(=O)[S]'),
+    'cys': chem.MolFromSmiles('SC[C@H](N)C(=O)[S]'),
+    'pro': chem.MolFromSmiles('C1CC[C@H](N1)C(=O)[S]'),
+    
+    # polar uncharged
+    'ser': chem.MolFromSmiles('OC[C@H](N)C(=O)[S]'),
+    'thr': chem.MolFromSmiles('CC(O)[C@H](N)C(=O)[S]'),
+    'asn': chem.MolFromSmiles('NC(=O)C[C@H](N)C(=O)[S]'),
+    'gln': chem.MolFromSmiles('NC(=O)CC[C@H](N)C(=O)[S]'),
+    
+    # polar charged
+    'arg': chem.MolFromSmiles('N=C(N)NCCC[C@H](N)C(=O)[S]'),
+    'his': chem.MolFromSmiles('N1=CNC=C1C[C@H](N)C(=O)[S]'),
+    'lys': chem.MolFromSmiles('NCCCC[C@H](N)C(=O)[S]'),
+    'asp': chem.MolFromSmiles('OC(=O)C[C@H](N)C(=O)[S]'),
+    'glu': chem.MolFromSmiles('OC(=O)CC[C@H](N)C(=O)[S]'),
+    
+    # nonpolar
+    'ala': chem.MolFromSmiles('C[C@H](N)C(=O)[S]'),
+    'val': chem.MolFromSmiles('CC(C)[C@H](N)C(=O)[S]'),
+    'ile': chem.MolFromSmiles('CCC(C)[C@H](N)C(=O)[S]'),
+    'leu': chem.MolFromSmiles('CC(C)C[C@H](N)C(=O)[S]'),
+    'met': chem.MolFromSmiles('CSCC[C@H](N)C(=O)[S]'),
+    'phe': chem.MolFromSmiles('C1=CC=CC=C1C[C@H](N)C(=O)[S]'),
+    'tyr': chem.MolFromSmiles('C1=CC(O)=CC=C1C[C@H](N)C(=O)[S]'),
+    'trp': chem.MolFromSmiles('C2=CC=CC1=C2C(=CN1)C[C@H](N)C(=O)[S]'), 
+    
+    # amino acid derivatives
+    'pip': chem.MolFromSmiles('C1CC[N]C(C1)C(=O)[S]'),
+    'd-ala': chem.MolFromSmiles('C[C@@H](N)C(=O)[S]'),
+    'bmt': chem.MolFromSmiles('C/C=C/C[C@@H](C)[C@@H](O)C(N)C(=O)[S]'),
+    'aba': chem.MolFromSmiles('CC[C@H](N)C(=O)[S]'),
+    'orn': chem.MolFromSmiles('NCCC[C@H](N)C(=O)[S]'), # ornithine
+    'hty': chem.MolFromSmiles("C1=CC(=CC=C1CC[C@@H](C(=O)[S])N)O"), # homotyrosine
+    'mpro': chem.MolFromSmiles('C1C(C)C[C@H](N1)C(=O)[S]'),
+
+}
+
+# update starters and extenders list with NRPS substrates
+starters = {**pks_starters, **nrps_substrates}
+extenders = {**pks_extenders, **nrps_substrates}
+
 
 class CAL(Domain):
     SUBSTRATE_CHOICES = tuple(((k, k) for k in list(set(list(extenders.keys()) + list(starters.keys())))))
@@ -769,8 +934,8 @@ class TE(Domain):
 
         index = -1
         if self.cyclic:
-            rxn = AllChem.ReactionFromSmarts('([C:1](=[O:2])[S:3].[O:4][C:5][C:6])>>'
-                                                  '[C:1](=[O:2])[O:4][C:5][C:6].[S:3]')
+            rxn = AllChem.ReactionFromSmarts('([C:1](=[O:2])[S:3].[O:4][C,c:5][C,c:6])>>'
+                                                  '[C:1](=[O:2])[O:4][C,c:5][C,c:6].[S:3]')
             index -= self.ring
         else:
             rxn = AllChem.ReactionFromSmarts('[C:1](=[O:2])[S:3]>>[C:1](=[O:2])[O].[S:3]')
@@ -821,47 +986,34 @@ class Standalone(models.Model):
 
 # Beginning of NRPS support
 
-aminoAcids = {
-    # L-amino acids - use format N[C@@H](<R_group>)C(=O)[S] for L stereochemistry
-    # cleaned up smiles with https://pubchem.ncbi.nlm.nih.gov//edit3/index.html
-    'gly': chem.MolFromSmiles('NCC(=O)[S]'),
-    'ala': chem.MolFromSmiles('N[C@@H](C)C(=O)[S]'),
-    'cys': chem.MolFromSmiles('N[C@@H](CS)C(=O)[S]'),
-    'ser': chem.MolFromSmiles('N[C@@H](CO)C(=O)[S]'),
-    'thr': chem.MolFromSmiles('N[C@@H](C(O)C)C(=O)[S]'),
-
-    # amino acid derivatives
-    'pip': chem.MolFromSmiles('C1CC[N]C(C1)C(=O)[S]'),
-}
+# For the NRPS substrate list, go to nrps_substrates right before the PKS domain classes begin. 
 
 class A(Domain):
     # Adenylation domain: picks substrate and catalyzes its addition to PCP
 
-    SUBSTRATE_CHOICES = tuple(((k, k) for k in list(set(list(aminoAcids.keys())))))
+    SUBSTRATE_CHOICES = tuple(((k, k) for k in list(set(list(extenders.keys()) + list(starters.keys())))))
 
-    substrate = ''
-    '''
     substrate = models.CharField(
-        max_length=20,
+        max_length=25,
         choices=SUBSTRATE_CHOICES,
         default='gly', # simplest amino acid
         blank=False,
     )
-    '''
+    
     def operation(self, chain):
+        
         if not chain:
-            return aminoAcids[self.substrate] # if there's no chain, then just pass on the substrate
+            return nrps_substrates[self.substrate] # no chain = pass on the substrate
         else:
             rxn = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[S:1].' # incoming chain
                                               '[N:6][C:7][C:8](=[O:9])[S:10]>>' # substrate
                                               '[C:2](=[O:3])[N:6][C:7][C:8](=[O:9])[S:10]' # product
                                               '.[S:1]')) # remaining thiol
             
-            # make sure there is only one thiol ester (electrophilic reaction site) substructure in the chain
-            # then run the reaction
+            # ensure there is only one thiol ester (reaction site) in the chain
             assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
                        useChirality=True)) == 1, chem.MolToSmiles(chain)
-            prod = rxn.RunReactants((chain, aminoAcids[self.substrate]))[0][0]
+            prod = rxn.RunReactants((chain, nrps_substrates[self.substrate]))[0][0]
             chem.SanitizeMol(prod)
             return prod
 
@@ -869,106 +1021,277 @@ class A(Domain):
         return 'substrate %s' % (self.substrate)
 
     def __repr__(self):
-        return("A")
-
+        return ("A")
 
 class Cy(Domain):
-    # (hetero)Cyclization domain: picks substrate and cyclizes it, forming thiazoline or oxazoline
-
-    SUBSTRATE_CHOICES = tuple(((k, k) for k in list(set(list(aminoAcids.keys())))))
-
-    substrate = ''
-    '''
-    substrate = models.CharField(
-        max_length=20,
-        choices=SUBSTRATE_CHOICES,
-        default='gly', # simplest amino acid
-        blank=False,
-    )
-    '''
-    def operation(self, chain):
-        
-        # Unlike the C-A domain pair, if there's no chain, there's nothing to cyclize
-        # However, if it is somehow the case then it can act as normal C-A pair and just pass substrate
-        # Currently can only cyclize using cysteine and serine/threonine
-
-        if not chain:
-            return aminoAcids[self.substrate]
-        
-        else:
-            # first step - condensation
-            rxn1 = AllChem.ReactionFromSmarts(('[C:2](=[O:3])[S:1]' # incoming chain
-                                              '.[N:6][C:7][C:8](=[O:9])[S:10]>>' # substrate
-                                              '[C:2](=[O:3])[N:6][C:7][C:8](=[O:9])[S:10]' # product
-                                              '.[S:1]')) # remaining thiol
-            
-            # make sure there is only one thiol ester reaction site
-            assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
-                       useChirality=True)) == 1, chem.MolToSmiles(chain)
-            rxn_intermediate = rxn1.RunReactants((chain, aminoAcids[self.substrate]))[0][0]
-
-            # Cysteine -> Thiazoline case | second step - intramolecular cyclization
-            if self.substrate == 'cys':
-                rxn2 = AllChem.ReactionFromSmarts(('[C:8](=[O:9])[N:7][C:6][C:4](=[O:5])[S:3]' # condensation product backbone
-                                                   '.[C:2](H)(H)[S:1]>>' # thiol nucleophile
-                                                   '[C1:6]([C:2][S:1][C:8]=[N1:7])[C:4](=[O:5])[S:3]' # thiazoline
-                                                   '.[O:9]')) # water from dehydration
-                
-                # make sure there is only one thiol ester-linked cyclization backbone
-                assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C(=O)NCC(=O)S'),
-                       useChirality=True)) == 1, chem.MolToSmiles(chain)
-                prod = rxn2.RunReactants((rxn_intermediate,))[0][0] # intramolecular rxn
-                chem.SanitizeMol(prod)
-                return prod
-        
-            # Threonine/Serine -> Oxazoline case | second step - intramolecular cyclization
-            if (self.substrate == 'thr' or self.substrate == 'ser'):
-                rxn2 = AllChem.ReactionFromSmarts(('[C:8](=[O:9])[N:7][C:6][C:4](=[O:5])[S:3]' # condensation product backbone
-                                                   '.[C:2](H)[O:1]>>' # alcohol nucleophile
-                                                   '[C1:6]([C:2][O:1][C:8]=[N1:7])[C:4](=[O:5])[S:3]' # oxazoline
-                                                   '.[O:9]')) # water from dehydration
-                
-                # make sure there is only one thiol ester-linked cyclization backbone
-                assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C(=O)NCC(=O)S'),
-                       useChirality=True)) == 1, chem.MolToSmiles(chain)
-                prod = rxn2.RunReactants((rxn_intermediate,))[0][0] # intramolecular rxn
-                chem.SanitizeMol(prod)
-                return prod
-            
-            # Everything else returns the substrate alone
-            else: 
-                return aminoAcids[self.substrate]
-
-    def __str__(self):
-        return 'substrate %s' % (self.substrate)
-
-    def __repr__(self):
-        return("Cy")
-
-class Ox(Domain):
-    # Oxidation domain: Oxidizes thiazolines and oxazolines into thiazoles and oxazoles
-    # the operation function code assumes Ox is always active and immediately follows Cy domain
-
-    '''
-    # !!! not sure if Ox can be inactive, if so model status as DH
-    '''
+    # (Hetero)Cyclization domain: picks substrate and cyclizes it, forming thiazoline or oxazoline
+    # Does not pick substrate within clusterCAD, only cyclizes
+    # Cyclizes cysteine/serine/threonine and requires a chain
 
     def operation(self, chain):
-        # oxidizes based off of thia/oxazoline (S or O wildcarded) + thioester motif recognition
-        rxn = AllChem.ReactionFromSmarts(('[C1:6]([C:2][*:1][C:8]=[N1:7])[C:4](=[O:5])[S:3]>>'
-                                          '[C1:6](=[C:2][*:1][C:8]=[N1:7])[C:4](=[O:5])[S:3]'))
         
-        # make sure there is only one thia/oxazoline thiol ester reaction site
-        assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C1(C*C=N1)C(=O)S'), useChirality=True)) == 1
-        prod = rxn.RunReactants((chain,))[0][0]
+        # ensures that a chain preceeds cyclization domain
+        assert chain
+        
+        # Intramolecular cyclization
+        rxn = AllChem.ReactionFromSmarts(('[C,c:11]C(=[O:3])[N:6][C:7]([C:5][S,O:12])[C:8](=[O:9])[S:10]>>' # condensation product backbone
+                                           '[C,c:11]C1=[N:6][C:7]([C:5][S,O:12]1)[C:8](=[O:9])[S:10]' # zoline moiety
+                                           '.[O:3]')) # water from dehydration
+
+        # make sure there is only one thiol ester-linked cyclization backbone
+        assert len(chain.GetSubstructMatches(chem.MolFromSmarts('C(=O)NC(C[S,O])C(=O)S'),
+               useChirality=True)) == 1, chem.MolToSmiles(chain)
+        prod = rxn.RunReactants((chain,))[0][0] # intramolecular rxn
         chem.SanitizeMol(prod)
         return prod
 
     def __str__(self):
-        return 'ox domain' # this should probably be more specific or direct to an attribute
+        return 'heterocyclization: constitutively active'
 
     def __repr__(self):
-        return activityString
+        return ("Cy")
+
+class Ox(Domain):
+    # Oxidation domain: Oxidizes any "zoline" moiety (thiazolines and oxazolines into thiazoles and oxazoles)
+    # the operation function assumes Ox immediately follows Cy domain
+
+    active = models.BooleanField(default=True)
+    
+    def operation(self, chain):
+        
+        if self.active == True:
+            # make sure "zoline"-thioester moiety is present
+            assert len(chain.GetSubstructMatches(chem.MolFromSmarts('C1=NC(C*1)C(=O)S'), useChirality=True)) == 1
+            
+            # attempts to oxidize ANY zoline moiety based on SMARTS
+            rxn = AllChem.ReactionFromSmarts(('[C,c:11]C1=[N:6][CH1:7]([C:5][*:12]1)[C:8](=[O:9])[S:10]>>'
+                                                  '[C,c:11]C1=[N:6][CH0:7](=[C:5][*:12]1)[C:8](=[O:9])[S:10]'))
+            prod = rxn.RunReactants((chain,))[0][0]
+            chem.SanitizeMol(prod)
+            return prod
+        
+        else:
+            return chain
+    
+    def __str__(self):
+        return activityString(self)
+
+    def __repr__(self):
+        return ("Ox")
+
+class Red(Domain):
+    # Reduction domain: Reduces thiazolines and oxazolines into thiazolidines and oxazolidines
+    # the operation function assumes Red immediately follows Cy domain
+    # **NOT TO BE CONFUSED WITH R-domain (reductase to terminal aldehyde/alcohol)
+
+    active = models.BooleanField(default=True)
+    
+    def operation(self, chain):
+
+        if self.active == True:
+            # make sure "zoline"-thioester moiety is present
+            assert len(chain.GetSubstructMatches(chem.MolFromSmarts('C1=NC(C*1)C(=O)S'), useChirality=True)) == 1
+            
+            # checks if moiety to reduce is thiazoline - if so, reduces to thiazolidine
+            if len(chain.GetSubstructMatches(chem.MolFromSmiles('C1=NC(CS1)C(=O)S'), useChirality=True)) == 1:
+                rxn = AllChem.ReactionFromSmarts(('[C,c:11]C1=[N:6][CH1:7]([C:5]S1)[C:8](=[O:9])[S:10]>>'
+                                                  '[C,c:11]C1[N:6][CH0:7]([C:5]S1)[C:8](=[O:9])[S:10]'))
+
+            # checks if moiety to reduce is oxazoline - if so, oxidizes to oxazolidine
+            elif len(chain.GetSubstructMatches(chem.MolFromSmiles('C1=NC(CO1)C(=O)S'), useChirality=True)) == 1:
+                rxn = AllChem.ReactionFromSmarts(('[C,c:11]C1=[N:6][CH1:7]([C:5]O1)[C:8](=[O:9])[S:10]>>'
+                                                  '[C,c:11]C1[N:6][CH0:7]([C:5]O1)[C:8](=[O:9])[S:10]'))
+            else:
+                raise Exception("This is a 'zoline' moiety currently unsupported. ")
+            
+            prod = rxn.RunReactants((chain,))[0][0]
+            chem.SanitizeMol(prod)
+            return prod
+        
+        else:
+            return chain
+
+    def __str__(self):
+        return activityString(self)
+
+    def __repr__(self):
+        return ("Red")
+
+class E(Domain):
+    # Epimerization domain: Epimerizes L-amino acids to D-amino acids
+    
+    active = models.BooleanField(default=True)
+    
+    def operation(self, chain):
+        # Does not work on thiazoline/oxazol type cyclic amino acids -- don't know if we'll see those cases
+        
+        # ensures if moiety to epimerize is a non-cyclized L-amino acid - if so, epimerizes to D-amino acid
+        # Gly would throw error, smallest amino acid recognized is L-Ala
+        if self.active == True:
+            rxn = AllChem.ReactionFromSmarts(('[C:5][C@H:7]([N:6])[C:8](=[O:9])[S:10]>>'
+                                              '[C:5][C@@H:7]([N:6])[C:8](=[O:9])[S:10]'))
+            assert len(chain.GetSubstructMatches(chem.MolFromSmiles('C[C@H](N)C(=O)[S]'),
+                   useChirality=True)) == 1, chem.MolToSmiles(chain)
+            prod = rxn.RunReactants((chain,))[0][0]
+            chem.SanitizeMol(prod)
+            return prod
+        else:
+            return chain
+    
+    def __str__(self):
+        return activityString(self)
+
+    def __repr__(self):
+        return ("E")
+
+class nMT(Domain):
+    # N-methylation domain: methylates amine
+    
+    active = models.BooleanField(default=True)
+    
+    def operation(self, chain):
+
+        if self.active == True:
+            rxn = AllChem.ReactionFromSmarts(('[N:6][C:7][C:8](=[O:9])[S:10]>>'
+                                              '[N:6](C)[C:7][C:8](=[O:9])[S:10]'))
+            
+            # make sure there is only one nitrogen reaction site
+            assert len(chain.GetSubstructMatches(chem.MolFromSmiles('NCC(=O)S'),
+                       useChirality=True)) == 1, chem.MolToSmiles(chain)
+            prod = rxn.RunReactants((chain,))[0][0]
+            chem.SanitizeMol(prod)
+            return prod
+        else:
+            return chain
+    
+    def __str__(self):
+        return activityString(self)
+
+    def __repr__(self):
+        return ("nMT")
+
+class F(Domain):
+    # Formylation domain: formylates amine
+    
+    active = models.BooleanField(default=True)
+    
+    def operation(self, chain):
+
+        if self.active == True:
+            rxn = AllChem.ReactionFromSmarts(('[N:6][C:7][C:8](=[O:9])[S:10]>>'
+                                              '[N:6](C(=O))[C:7][C:8](=[O:9])[S:10]'))
+            
+            # make sure there is only one nitrogen reaction site
+            assert len(chain.GetSubstructMatches(chem.MolFromSmiles('NCC(=O)S'),
+                       useChirality=True)) == 1, chem.MolToSmiles(chain)
+            prod = rxn.RunReactants((chain,))[0][0]
+            chem.SanitizeMol(prod)
+            return prod
+        else:
+            return chain
+    
+    def __str__(self):
+        return activityString(self)
+
+    def __repr__(self):
+        return ("F")
+
+class MOX(Domain):
+    # Monooxygenase domain: alternative chain release forming amide (myxothiazol, melithiazol)
+    # actual mechanism: adds glycine, hydroxylates alpha-carbon, then tautomerizes
+    # TE releases subsequent glyoxylate from terminal PCP
+    # NOT TO BE CONFUSED WITH P450-series MONOOXYGENASES (recruited by X domain)
+    
+    active = models.BooleanField(default=True)
+    
+    def operation(self, chain):
+
+        if self.active == True:
+            # forms amide from thioester (ignores actual mechanism)
+            rxn = AllChem.ReactionFromSmarts(('[N:6][C:7][C:8](=[O:9])[S:10]>>'
+                                              '[N:6][C:7][C:8](=[O:9])N.[S:10]'))
+            
+            # make sure there is only one nitrogen reaction site
+            assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
+                       useChirality=True)) == 1, chem.MolToSmiles(chain)
+            prod = rxn.RunReactants((chain,))[0][0]
+            chem.SanitizeMol(prod)
+            return prod
+        else:
+            return chain
+    
+    def __str__(self):
+        return activityString(self)
+
+    def __repr__(self):
+        return ("MOX")
+    
+class R(Domain):
+    # Reductase domain: alternative chain release forming alcohol or aldehyde
+    
+    active = models.BooleanField(default=True)
+    
+    TYPE_CHOICES = (
+        ('alcohol','alcohol'),
+        ('aldehyde','aldehyde'),
+    )
+    type = models.CharField(
+        max_length=8,
+        choices=TYPE_CHOICES,
+        default='alcohol',
+        blank=False,
+    )
+    
+    def operation(self, chain):
+
+        if self.active == True:
+            # Transformation determined by type
+            if self.type == 'alcohol':
+                # forms alcohol from thioester
+                rxn = AllChem.ReactionFromSmarts(('[N:6][C:7][C:8](=[O:9])[S:10]>>'
+                                                  '[N:6][C:7][C:8][O:9].[S:10]'))
+                print("alcohol")
+                print(self.type)
+            elif self.type == 'aldehyde':
+                # forms aldehyde from thioester
+                rxn = AllChem.ReactionFromSmarts(('[N:6][C:7][C:8](=[O:9])[S:10]>>'
+                                                  '[N:6][C:7][C:8](=[O:9]).[S:10]'))
+                print("aldehyde")
+            
+            # this does not allow chemistry to work so cannot exit. default type set to alcohol
+            # undefined type forces you to go to corrections file and define it manually
+            #else:
+            #    raise Exception("Undefined R domain type: go to the corrections file and manually define it as COH (alcohol) or CHO (aldehyde). ")
+            
+            # make sure there is only one thioester reaction site
+            assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
+                       useChirality=True)) == 1, chem.MolToSmiles(chain)
+            prod = rxn.RunReactants((chain,))[0][0]
+            chem.SanitizeMol(prod)
+            return prod
+        else:
+            return chain
+    
+    def __str__(self):
+        return "type %s, %s" % (self.type, activityString(self))
+
+    def __repr__(self):
+        return ("R")
+
+class X(Domain):
+    # P450 recruiter with ungeneralizable catalytic activity
+    # activity depends on recruited P450
+    
+    active = models.BooleanField(default=True)
+    
+    def operation(self, chain):
+        return chain
+    
+    def __str__(self):
+        return activityString(self)
+
+    def __repr__(self):
+        return ("X")
 
 class PCP(Domain):
     # Peptidyl carrier protein: links to intermediates
@@ -983,8 +1306,22 @@ class PCP(Domain):
 class C(Domain):
     # Condensation domain: catalyzes "condensation" reaction under the A-domain
 
+    # for differentiating between different types of C domains recognized by antismash
+    TYPE_CHOICES = (
+        ('Unknown', 'Unknown'),
+        ('Starter', 'Starter'),
+        ('LCL', 'LCL'),
+        ('DCL', 'DCL'),
+    )
+    type = models.CharField(
+        max_length=8,
+        choices=TYPE_CHOICES,
+        default=None,
+        blank=False,
+    )
+
     def __str__(self):
-        return "c domain"
+        return "type %s" % (self.type)
 
     def __repr__(self):
         return("C")

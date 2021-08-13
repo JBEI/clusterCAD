@@ -28,7 +28,7 @@
         </dl>
           <div class="checkbox">
             <label>
-              <input type="checkbox" id="atcheck">Show AT annotations 
+              <input type="checkbox" id="atcheck">Show AT and A annotations 
             </label>
           </div>
           <div class="checkbox">
@@ -46,7 +46,7 @@
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
                 <dl>
-                    <dt>Predicted pks subset</dt>
+                    <dt>Predicted subset</dt>
                 </dl>
             </div>
         </div>
@@ -127,6 +127,10 @@ $(document).ready(function(){
       placement: 'bottom',
       trigger: 'manual'
     });
+    $('[data-domain="A"]').tooltip({
+      placement: 'bottom',
+      trigger: 'manual'
+    });
     $('[data-domain="KR"]').tooltip({
       placement: 'top',
       trigger: 'manual'
@@ -143,6 +147,33 @@ $(document).ready(function(){
     $('[data-domain="oMT"]').tooltip({
       placement: 'right'
     });
+    $('[data-domain="nMT"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="C"]').tooltip({
+      placement: 'top'
+    });
+    $('[data-domain="Ox"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="Red"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="E"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="F"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="MOX"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="X"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="R"]').tooltip({
+      placement: 'right'
+    });
     $('[data-domain="TE"]').tooltip({
       placement: 'right'
     });
@@ -151,8 +182,10 @@ $(document).ready(function(){
     $("#atcheck").on("click", function() {
         if($("#atcheck").is(':checked')){
             $('[data-domain="AT"]').tooltip('show');
+            $('[data-domain="A"]').tooltip('show');
         } else {
             $('[data-domain="AT"]').tooltip('hide');
+            $('[data-domain="A"]').tooltip('hide');
         }
     });
     $("#krcheck").on("click", function() {
@@ -165,6 +198,17 @@ $(document).ready(function(){
 
     // keep tooltip up after hover if checkbox is checked 
     $('[data-domain="AT"]').hover(
+      function() {
+        if(!($("#atcheck").is(':checked'))){
+            $( this ).tooltip('show');
+        }
+      }, function() {
+        if(!($("#atcheck").is(':checked'))){
+            $( this ).tooltip('hide');
+        }
+      }
+    );
+    $('[data-domain="A"]').hover(
       function() {
         if(!($("#atcheck").is(':checked'))){
             $( this ).tooltip('show');
@@ -191,6 +235,7 @@ $(document).ready(function(){
     $('[data-smiles]').click(function(){
         $('#atcheck').prop('checked', false);
         $('[data-domain="AT"]').tooltip('hide');
+        $('[data-domain="A"]').tooltip('hide');
         $('#krcheck').prop('checked', false);
         $('[data-domain="KR"]').tooltip('hide');
 
@@ -241,6 +286,7 @@ $(document).ready(function(){
     $('[data-domain]').click(function(){
         $('#atcheck').prop('checked', false);
         $('[data-domain="AT"]').tooltip('hide');
+        $('[data-domain="A"]').tooltip('hide');
         $('#krcheck').prop('checked', false);
         $('[data-domain="KR"]').tooltip('hide');
 
@@ -272,6 +318,7 @@ $(document).ready(function(){
     $('[data-subunitid]').click(function(){
         $('#atcheck').prop('checked', false);
         $('[data-domain="AT"]').tooltip('hide');
+        $('[data-domain="A"]').tooltip('hide');
         $('#krcheck').prop('checked', false);
         $('[data-domain="KR"]').tooltip('hide');
 

@@ -115,7 +115,24 @@ def plot_heatmap(values, labels, mapping=None):
     plt.savefig(outputSVG, format="svg")
     return outputSVG.getvalue()
 
-subunits = pks.models.Subunit.objects.filter(accPlotFile='', ssPlotFile='')
+plotless_subunits = pks.models.Subunit.objects.filter(accPlotFile='', ssPlotFile='')
+
+# don't try to make plots for subunits missing acc20 or ss8 data
+# also fill in missing acc20 or ss8 data as [DATA IS UNAVAILABLE]
+# also don't try to make plots for those with acc20 or ss8 stating [DATA IS UNAVAILABLE]
+subunits = []
+for subunit in plotless_subunits:
+    if subunit.acc20 == "" or subunit.ss8 == "":
+        subunit.acc20 = "[DATA UNAVAILABLE]"
+        subunit.acc = "[DATA UNAVAILABLE]" # for display on the interface
+        subunit.ss8 = "[DATA UNAVAILABLE]"
+        subunit.ss = "[DATA UNAVAILABLE]" # for display on the interface
+        subunit.save()
+        continue
+    elif subunit.acc20 == "[DATA UNAVAILABLE]" or subunit.ss8 == "[DATA UNAVAILABLE]":
+        continue
+    else:
+        subunits.append(subunit)
 
 # exit if everything has been plot already
 if len(subunits) == 0:
@@ -133,40 +150,53 @@ mapping = {'C':50,
 # generate plot 
 print("Loading plots for " + subunit.cluster.description + " subunit " + subunit.name)
 
-# generate solvent accessibility plot
-intList = [int(i) for i in subunit.acc20.split(',')]
-aaseq = list(subunit.getAminoAcidSequence())
-assert len(intList) == len(aaseq)
-hashstring = json.dumps(tuple(intList)) + json.dumps(tuple(aaseq))
-hashstring = hashlib.sha224(hashstring.encode()).hexdigest()
-filename = plotCache + hashstring + '.svg'
-if os.path.isfile(filename):
-    print('\tfound cached acc20 plot')
-    with open(filename, 'r') as svgFile: 
-        accPlot = svgFile.read()
-else:
-    print('\tno aac20 plot found, generating')
-    accPlot = plot_heatmap(intList, aaseq)
-    with open(filename, 'w') as svgFile:
-        svgFile.write(accPlot)
-accplotname = str(subunit.id) + '.svg'
-subunit.accPlotFile.save(name=accplotname, content=ContentFile(accPlot), save=True)
+# check if acc20/ss8 data exists, if so process it
+try:
+    # generate solvent accessibility plot
+    intList = [int(i) for i in subunit.acc20.split(',')]
+    aaseq = list(subunit.getAminoAcidSequence())
+    assert len(intList) == len(aaseq)
+    hashstring = json.dumps(tuple(intList)) + json.dumps(tuple(aaseq))
+    hashstring = hashlib.sha224(hashstring.encode()).hexdigest()
+    filename = plotCache + hashstring + '.svg'
+    if os.path.isfile(filename):
+        print('\tfound cached acc20 plot')
+        with open(filename, 'r') as svgFile: 
+            accPlot = svgFile.read()
+    else:
+        print('\tno aac20 plot found, generating')
+        accPlot = plot_heatmap(intList, aaseq)
+        with open(filename, 'w') as svgFile:
+            svgFile.write(accPlot)
+    accplotname = str(subunit.id) + '.svg'
+    subunit.accPlotFile.save(name=accplotname, content=ContentFile(accPlot), save=True)
 
-# generate secondary structure plot
-f = lambda x: mapping[x]
-ss_seq_nums = list(map(f, subunit.ss8))
-assert len(ss_seq_nums) == len(aaseq)
-hashstring = json.dumps(tuple(ss_seq_nums)) + json.dumps(tuple(aaseq))
-hashstring = hashlib.sha224(hashstring.encode()).hexdigest()
-filename = plotCache + hashstring + '.svg'
-if os.path.isfile(filename):
-    print('\tfound cached ss8 plot')
-    with open(filename, 'r') as svgFile: 
-        ssPlot = svgFile.read()
-else:
-    print('\tno ss8 plot found, generating')
-    ssPlot = plot_heatmap(ss_seq_nums, aaseq, mapping)
-    with open(filename, 'w') as svgFile:
-        svgFile.write(ssPlot)
-ssplotname = str(subunit.id) + '.svg'
-subunit.ssPlotFile.save(name=ssplotname, content=ContentFile(ssPlot), save=True)
+    # generate secondary structure plot
+    f = lambda x: mapping[x]
+    ss_seq_nums = list(map(f, subunit.ss8))
+
+    assert len(ss_seq_nums) == len(aaseq)
+    hashstring = json.dumps(tuple(ss_seq_nums)) + json.dumps(tuple(aaseq))
+    hashstring = hashlib.sha224(hashstring.encode()).hexdigest()
+    filename = plotCache + hashstring + '.svg'
+    if os.path.isfile(filename):
+        print('\tfound cached ss8 plot')
+        with open(filename, 'r') as svgFile: 
+            ssPlot = svgFile.read()
+    else:
+        print('\tno ss8 plot found, generating')
+        ssPlot = plot_heatmap(ss_seq_nums, aaseq, mapping)
+        with open(filename, 'w') as svgFile:
+            svgFile.write(ssPlot)
+    ssplotname = str(subunit.id) + '.svg'
+    subunit.ssPlotFile.save(name=ssplotname, content=ContentFile(ssPlot), save=True)
+
+# handle ValueError that arises when split is attempted but acc20 data does not exist
+except ValueError:
+    # for some NRPS subunits acc20 data is not available. then ignore both acc20/ss8 and continue to next subunit
+    print("\tacc20 (solvent accessibility) and/or ss8 (secondary structure) data not available. ")
+    subunit.acc = "[DATA UNAVAILABLE]"
+    subunit.ss = "[DATA UNAVAILABLE]"
+    subunit.acc20 = "[DATA UNAVAILABLE]"
+    subunit.ss8 = "[DATA UNAVAILABLE]"
+    subunit.save()

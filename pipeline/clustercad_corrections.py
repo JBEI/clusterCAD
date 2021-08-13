@@ -12,7 +12,13 @@ import pks.models
 correctionpath = './data/corrections/modified'
 correctionlist = glob.glob(os.path.join(correctionpath, '*.json'))
 
-for corrfile in correctionlist:
+for corrfile in ['./data/corrections/modified/BGC0001024.1.json',
+                 './data/corrections/modified/BGC0001394.1.json', 
+                 './data/corrections/modified/BGC0000416.1.json',
+                 './data/corrections/modified/BGC0001095.1.json',
+                 './data/corrections/modified/BGC0000430.1.json',]: # test with select clusters
+#for corrfile in correctionlist:
+    
     acc = os.path.basename(corrfile).strip('.json')
     print('Correcting cluster %s.'  % acc)
     cluster = pks.models.Cluster.objects.get(mibigAccession=acc)

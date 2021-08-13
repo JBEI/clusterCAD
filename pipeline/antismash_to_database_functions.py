@@ -14,7 +14,7 @@ django.setup()
 import pks.models
 
 def mibigSubtypes(filepath):
-    '''Takes as input a file path and outputs set of all PKS subtypes that 
+    '''Takes as input a file path and outputs set of all PKS subtypes and NRPS that 
        appear in all MIBiG JSON files that are found along that path. 
     '''
     filelist = glob.glob(os.path.join(filepath, '*.json'))
@@ -49,6 +49,27 @@ def filterModularTypeI(filepath, validset):
             pass
     return accessions
 
+# might append some NRPS/PKS clusters twice
+def getNRPS(filepath,t1pks_accessions):
+    '''Takes as input a file path and the list of valid type I modular PKSs. 
+       Outputs list of MIBiG accession numbers that are either type I modular PKSs
+       or NRPSs.  
+       '''
+    validset = set(['NRP'])
+    filelist = glob.glob(os.path.join(filepath, '*.json'))
+    accessions = t1pks_accessions
+    for filename in filelist:
+        with open(filename) as json_file:
+            json_data = json.load(json_file)
+        try:
+            if len(validset.intersection( \
+                set(json_data['general_params']['biosyn_class']))) > 0:
+                accession = os.path.basename(filename).strip('.json')
+                accessions.append(accession)
+        except KeyError:
+            pass
+    return accessions
+
 def processSubunitModules(sec_met): 
     '''Takes as input annotated features for a PKS subunit following 
        antiSMASH analysis and returns a dict of OrderedDict objects 
@@ -75,11 +96,15 @@ def processSubunitModules(sec_met):
     # This is how domains appear in sec_met:
     # ['PKS_AT', 'PKS_KS', 'PKS_KR', 'PKS_DH', 'PKS_ER', 'ACP', 'Thioesterase']
     # Iterate over the entries in sec_met, and add them to the module_domains list 
+    print(sec_met)
     for entry in sec_met:    
         # Split entry into a list
         entrysplit = [item.strip() for item in entry.split(';') if item != '']
+        #print(entrysplit)
         # Split part of entry that is expected to describe catalytic domain
         domainsplit = entrysplit[0].split()
+        #print(domainsplit)
+        #print("\n")
         # Different ways of processing the name of the domain depending
         # on how the name of the domain is formatted
         if ' '.join(domainsplit[:2]) == 'NRPS/PKS Domain:' and len(domainsplit) > 2:
@@ -95,6 +120,26 @@ def processSubunitModules(sec_met):
             # 'CAL' domain is a special case
             elif domainsplit[2] == 'CAL_domain':
                 domaintype = 'CAL'
+            # Process the name of NRPS domains into common abbreviations
+            elif domainsplit[2] == 'AMP-binding':
+                domaintype = 'A'
+            elif domainsplit[2] == 'Epimerization domain':
+                domaintype = 'E'
+            elif domainsplit[2] == 'Epimerization':
+                domaintype = 'E'
+            elif domainsplit[2] == 'Heterocyclization':
+                domaintype = 'Cy'
+            elif domainsplit[2] == 'TD':
+                domaintype = 'R'
+            elif domainsplit[2] == 'A-OX': # substrate is glycine but effectively chain terminating
+                domaintype = 'MOX'
+            elif domainsplit[2] in ['NRPS-COM_Nterm', 'NRPS-COM_Cterm']:
+                    domaintype = domainsplit[2]
+            
+            # exception for myxothiazol MtaC
+            # as of 7/23/21 before database has been updated, pp-binding domains have no AA coordinates
+            elif domainsplit[2] == 'PP-binding':
+                domaintype = 'PCP'
             else:
                 domaintype = domainsplit[2]
         else:
@@ -103,10 +148,12 @@ def processSubunitModules(sec_met):
         # These are the catalytic domains that ClusterCAD wil recognize
         if domaintype not in ['KS', 'AT', 'KR', 'DH', 'ER', 'ACP', 'Thioesterase', 
                               'cMT', 'oMT', 'CAL', 'PCP', 
-                              'Heterocyclization', 'AMP-binding', 
-                              'Condensation_Starter',
+                              'Cy', 'A', 
+                              'Condensation', 'Condensation_Starter',
                               'Condensation_DCL', 'Condensation_LCL',
-                              'PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
+                              'PKS_Docking_Nterm', 'PKS_Docking_Cterm',
+                              'MOX', 'E', 'F', 'nMT', 'R', 'X',
+                              'NRPS-COM_Nterm', 'NRPS-COM_Cterm']:
             print('\tIgnoring domain type: %s' %(domaintype))
             # Break out of for loop and stop looking for additional catalytic domains if 
             # we encounter a domain that we don't recognize
@@ -123,10 +170,12 @@ def processSubunitModules(sec_met):
         
         # Here, we add each domain to a list, which will be converted to an OrderedDict
         if domaintype in ['KS', 'DH', 'ER', 'ACP', 'cMT', 'oMT', 'PCP',
-                          'Heterocyclization', 'AMP-binding', 
-                          'Condensation_Starter',
+                          'Cy',  
+                          'Condensation', 'Condensation_Starter',
                           'Condensation_DCL', 'Condensation_LCL',
-                          'PKS_Docking_Nterm', 'PKS_Docking_Cterm']:
+                          'PKS_Docking_Nterm', 'PKS_Docking_Cterm',
+                          'MOX', 'E', 'F', 'nMT', 'X', 
+                          'NRPS-COM_Nterm', 'NRPS-COM_Cterm']:
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}]))
         # Include substrate and stereospecificity annotations for CAL, AT, and KR domains respectively
@@ -137,14 +186,23 @@ def processSubunitModules(sec_met):
                 notesdict[item[0]] = item[1]
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}, notesdict]))
+        # Include substrate annotations for A domain
+        elif domaintype in ['A']:
+            notesdict = {}
+            for note in entrysplit[2:]:
+                item = note.split(': ')
+                notesdict[item[0]] = item[1]
+            module_domains.append((domaintype, 
+                                   [{'start': boundaries[0], 'stop': boundaries[1]}, notesdict]))
  
-        # End of the module has been reached of the domain is 'ACP' or 'PCP
+        # End of the module has been reached of the domain is 'ACP' or 'PCP'
         if domaintype in ['ACP', 'PCP']:
             domains_present = [d[0] for d in module_domains]
             # Make sure every module has an AT or CAL, or else it isn't valid and should be ignored
             # This means it will be excluded from the subunit, which makes sense since we can't 
             # really perform a polyketide chain extension without an AT
-            if 'AT' in domains_present or 'CAL' in domains_present:            
+            # 7/10/2021: with NRPS support, modules with A are also valid. 
+            if 'AT' in domains_present or 'CAL' in domains_present or 'A' in domains_present:            
                 subunit[module_index] = OrderedDict(module_domains)
                 old_module_domains = module_domains
                 module_index += 1
@@ -153,13 +211,15 @@ def processSubunitModules(sec_met):
             module_domains = []
         # These domains may come after the ACP or PCP, so if they are encountered, we add
         # them to previous module and keep going forward
-        if domaintype in ['Thioesterase', 'PKS_Docking_Cterm', 'Condensation_LCL']:
+        if domaintype in ['Thioesterase', 'PKS_Docking_Cterm','R','E','NRPS-COM_Cterm']:
             # Overwrite previous subunit, or else will have duplicate entries
             old_module_domains.append((domaintype, 
                                        [{'start': boundaries[0], 'stop': boundaries[1]}]))
             subunit[module_index - 1] = OrderedDict(old_module_domains)
             module_domains = []
-            
+    
+    print("subunit")
+    print(subunit)
     return subunit
 
 def processClusterSeqRecord(record):
@@ -197,7 +257,9 @@ def processClusterSeqRecord(record):
                   ['NRPS/PKS subtype: Type I Modular PKS', 
                    'NRPS/PKS subtype: PKS-like protein',
                    'NRPS/PKS subtype: PKS/NRPS-like protein',
-                   'NRPS/PKS subtype: Hybrid PKS-NRPS']:
+                   'NRPS/PKS subtype: Hybrid PKS-NRPS',
+                   'NRPS/PKS subtype: NRPS']:
+                    print("features qualify")
                     subunit_modules = processSubunitModules(feature.qualifiers['sec_met'])
 
             # Append description and position of gene within nucleotide sequence
@@ -212,6 +274,7 @@ def processClusterSeqRecord(record):
 
     return gene_data
 
+# function may or may not work correctly; untested
 def checkModuleValidity(modulelist):
     '''Function that makes sure module specified in MIBiG JSON file is valid,
        that is to say, make sure that it contains KS, AT, and ACP or PCP.
@@ -219,10 +282,13 @@ def checkModuleValidity(modulelist):
        ['KS', 'AT', 'T']
        ['Ketosynthase', 'Acyltransferase', 'Thiolation (ACP/PCP)']
     '''
-    atcheck = len(set(['AT', 'CAL', 'Acyltransferase']).intersection(set(modulelist)))
-    acpcheck = len(set(['ACP', 'PCP', 'T', 'Thiolation (ACP/PCP)']).intersection( \
-      set(modulelist)))
-    if atcheck and acpcheck:
+    kscheck = len(set(['KS', 'Condensation', 'Condensation_Starter', 'Condensation_DCL', 'Condensation_LCL',]).intersection(set(modulelist)))
+    atcheck = len(set(['AT', 'CAL', 'Acyltransferase', 'A']).intersection(set(modulelist)))
+    acpcheck = len(set(['ACP', 'PCP', 'T', 'Thiolation (ACP/PCP)']).intersection(set(modulelist)))
+    calcheck = len(set(['AT', 'CAL', 'Acyltransferase', 'A']).intersection(set(modulelist)))
+    if kscheck and atcheck and acpcheck:
+        return True
+    elif calcheck:
         return True
     else:
         return False
@@ -318,6 +384,7 @@ def enterCluster(cluster, clusterrecord, mibigfile):
     # Note that all gene data has now been processed, want to reprocess to get right ordering 
     # We strip out subunits that have invalid modules
     try:
+        print("|||attempting to checkModuleValidity|||")
         ordered_subunits = []
         for subunit in mibig_data['general_params']['Polyketide']['mod_pks_genes']:
             subunit_name = re.sub(r'\s+', '', subunit['mod_pks_gene'])
@@ -326,12 +393,13 @@ def enterCluster(cluster, clusterrecord, mibigfile):
             valid_subunit = True
             # This checks if the module is valid
             for module in subunit_modules:
-                if not check_json_module_validity(module['pks_domains']):
+                if not checkModuleValidity(module['pks_domains']):
                     valid_subunit = False
             if valid_subunit:
                 ordered_subunits.extend(subunit_name.split(','))
             else:
                 # Loop is broken once first invalid subunit is encountered
+                print("**Invalid subunit encountered**")
                 break
         # If no valid subunits, then raise exception to use alphabetical ordering
         if len(ordered_subunits) == 0:
@@ -426,6 +494,10 @@ def enterCluster(cluster, clusterrecord, mibigfile):
             # Determine whether module is terminal or not
             if 'Thioesterase' in list(moduledata[modulekeys[imodule]].keys()):
                 terminal = True
+            elif 'R' in list(moduledata[modulekeys[imodule]].keys()):
+                terminal = True
+            elif 'MOX' in list(moduledata[modulekeys[imodule]].keys()):
+                terminal = True
             else:
                 terminal = False
             imodule += 1
@@ -435,12 +507,17 @@ def enterCluster(cluster, clusterrecord, mibigfile):
                 # The check for errors here is to compare against the known product
                 domains_present = moduledict.keys()
                 if 'ACP' in domains_present or 'PCP' in domains_present:
-                    if 'AT' in domains_present or 'CAL' in domains_present:
+                    if 'AT' in domains_present or 'CAL' in domains_present or 'A' in domains_present:
                         module = pks.models.Module(subunit=subunit, 
                                                    loading=loading, terminal=terminal)
                         module.save()
+                        print("Domains in this module: ")
+                        print(domains_present)
+                        print('-----------')
                         module.buildDomains(moduledict, cyclic=cyclize)
+
             except AssertionError as e:
+                print("There is a problem with this module. ")
                 print(moduledict)
                 print(type(e).__name__, e.args, subunit + ' ' + subunitdata[1])
                 raise Exception(type(e).__name__, e.args, subunit + ' ' + subunitdata[1])

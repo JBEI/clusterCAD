@@ -21,11 +21,12 @@ for cluster in pks.models.Cluster.objects.all():
     try:
         cluster.computeProduct(recompute=True)
     except:
+        print(cluster.architecture())
         cluster.delete()
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        print('could not recompute product, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
         continue
     if nmodules < 3:
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        print('less than 3 modules, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
 
 # Delete clusters with no computable product
@@ -33,6 +34,6 @@ for cluster in pks.models.Cluster.objects.all():
     try:
         cluster.computeProduct()
     except:
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        print('could not compute product, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
 
