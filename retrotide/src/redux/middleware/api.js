@@ -2,6 +2,8 @@
 // we need access to the client if any
 // redux-thunk is imported toplevel so we should be able to access it and dispatch from here but we'll see
 
+import 'axios' from axios;
+
 const clusterCADSeqSearch = (molecule, token) => {
   console.log('hit api seqsearch with ' + molecule);
   return async function beginMoleculeSearch(dispatch, getState) {
@@ -13,7 +15,7 @@ const clusterCADSeqSearch = (molecule, token) => {
       // maxCompounds: 10,
       integer: 0;
     };
-    const response = await clusterCAD.post('/api/structureSearch/', {requestObject}); // callback
+    const response = await axios.post('/api', {integer: 0}); // callback
     dispatch({ type: 'jobAdded', payload: {response} });
   }
 }
