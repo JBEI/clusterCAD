@@ -4,17 +4,18 @@
 
 const clusterCADSeqSearch = (molecule, token) => {
   console.log('hit api seqsearch with ' + molecule);
-  // return async function beginMoleculeSearch(dispatch, getState) {
-  //   const requestObject = { // object structure needed for clusterCAD request, probably shouldn't be here
-  //     csrfmiddlewaretoken: "",
-  //     sdf: molecule,
-  //     draw: 1,
-  //     cutoff: 0.0,
-  //     maxCompounds: 10,
-  //   };
-  //   const response = await clusterCAD.post('https://clustercad.jbei.org/structureSearch/', {request}); // callback
-  //   dispatch({ type: 'jobAdded', payload: response.job });
-  // }
+  return async function beginMoleculeSearch(dispatch, getState) {
+    const requestObject = { // object structure needed for clusterCAD request, probably shouldn't be here
+      // csrfmiddlewaretoken: "",
+      // sdf: molecule,
+      // draw: 1,
+      // cutoff: 0.0,
+      // maxCompounds: 10,
+      integer: 0;
+    };
+    const response = await clusterCAD.post('/api/structureSearch/', {requestObject}); // callback
+    dispatch({ type: 'jobAdded', payload: {response} });
+  }
 }
 
 // export function synchWrapper (someInput) {
