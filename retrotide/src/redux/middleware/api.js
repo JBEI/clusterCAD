@@ -2,22 +2,24 @@
 // we need access to the client if any
 // redux-thunk is imported toplevel so we should be able to access it and dispatch from here but we'll see
 
-import 'axios' from axios;
+import axios from 'axios'; // this is the frontend client
 
 const clusterCADSeqSearch = (molecule, token) => {
-  console.log('hit api seqsearch with ' + molecule);
-  return async function beginMoleculeSearch(dispatch, getState) {
-    const requestObject = { // object structure needed for clusterCAD request, probably shouldn't be here
+  console.log('hit api function search with ' + molecule);
+  // return async function beginMoleculeSearch(dispatch, getState) {
+    // const requestObject = { // object structure needed for clusterCAD request, probably shouldn't be here
       // csrfmiddlewaretoken: "",
       // sdf: molecule,
       // draw: 1,
       // cutoff: 0.0,
       // maxCompounds: 10,
-      integer: 0;
-    };
-    const response = await axios.post('/api', {integer: 0}); // callback
-    dispatch({ type: 'jobAdded', payload: {response} });
-  }
+    // };
+    // make this a try/catch
+    // const response = await client.post('/api', {integer: 0}); // callback
+    // dispatch({ type: 'jobAdded', payload: {response} });
+    axios.get('/api', {integer: 0})
+    .then((response) => console.log(response))
+    .catch((error) => console.log(error.config));
 }
 
 // export function synchWrapper (someInput) {
