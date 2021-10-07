@@ -18,8 +18,8 @@ const clusterCADSeqSearch = (molecule, token) => {
     // const response = await client.post('/api', {integer: 0}); // callback
     // dispatch({ type: 'jobAdded', payload: {response} });
     axios.get('/api', {integer: 0})
-    .then((response) => console.log(response))
-    .catch((error) => console.log(error.config));
+    .then((response) => {console.log(response)})
+    .catch((error) => {console.log(error.config)});
 }
 
 // export function synchWrapper (someInput) {
