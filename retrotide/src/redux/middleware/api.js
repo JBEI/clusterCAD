@@ -2,7 +2,7 @@
 // we need access to the client if any
 // redux-thunk is imported toplevel so we should be able to access it and dispatch from here but we'll see
 
-import axios from 'axios'; // this is the frontend client
+import {default as client} from 'axios'; // this is the frontend client
 
 const clusterCADSeqSearch = (molecule, token) => {
   console.log('hit api function search with ' + molecule);
@@ -17,7 +17,7 @@ const clusterCADSeqSearch = (molecule, token) => {
     // make this a try/catch
     // const response = await client.post('/api', {integer: 0}); // callback
     // dispatch({ type: 'jobAdded', payload: {response} });
-    axios.get('/api', {integer: 0})
+    client.get('/api/', {params: {integer: 0}})
     .then((response) => {console.log(response)})
     .catch((error) => {console.log(error.config)});
 }
