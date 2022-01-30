@@ -66,7 +66,8 @@ class Cluster(models.Model):
                     chain.append(module.computeProduct(chain[-1]))
 
         if computeMCS:
-                mcs = rdFMCS.FindMCS([chem.MolFromSmiles(self.knownProductSmiles), chain[-1]])
+                # MCS computation timeout adjusted 10 minutes to increase time for large clusters like gramicidin
+                mcs = rdFMCS.FindMCS([chem.MolFromSmiles(self.knownProductSmiles), chain[-1]], timeout=600)
                 self.knownProductMCS = mcs.smartsString
                 self.save()
         return chain
@@ -118,7 +119,7 @@ class Cluster(models.Model):
         module.save()
 
     def setActive(self, sub, mod, dom, active):
-        assert dom in ['KR', 'DH', 'ER', 'oMT', 'cMT', 'Ox', 'Red', 'E', 'nMT', 'F', 'MOX', 'R', 'X']
+        assert dom in ['KR', 'DH', 'ER', 'oMT', 'cMT', 'Ox', 'Red', 'E', 'nMT', 'F', 'AOX', 'R', 'X']
         assert isinstance(active, bool)
         module = Module.objects.filter(subunit__cluster=self,
                                        subunit__name=sub).order_by('order')[mod]
@@ -211,10 +212,10 @@ class Cluster(models.Model):
                     elif dname == 'R':
                         ddict.update({'active': domain.active, 
                                       'type': domain.type})
-                    elif dname in ['Ox', 'Red', 'E', 'nMT', 'F', 'MOX', 'X']:
+                    elif dname in ['Ox', 'Red', 'E', 'nMT', 'F', 'AOX', 'X']:
                         ddict.update({'active': domain.active})
 
-                    if dname in ['AT', 'CAL', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE', 'A', 'Cy', 'Ox', 'Red', 'E', 'nMT', 'F', 'MOX', 'R', 'X']:
+                    if dname in ['AT', 'CAL', 'KR', 'DH', 'ER', 'cMT', 'oMT', 'TE', 'A', 'Cy', 'Ox', 'Red', 'E', 'nMT', 'F', 'AOX', 'R', 'X']:
                         mdict.update({dname: ddict})
                 sdict.update({imodule: {'domains': mdict,
                                         'iterations': module.iterations}})
@@ -272,7 +273,7 @@ class Cluster(models.Model):
                     elif d == 'R':
                         self.setType(s,m, ddict['type'])
                         self.setActive(s, m, d, ddict['active'])
-                    elif d in ['Ox', 'Red', 'E', 'nMT', 'F', 'MOX', 'X']:
+                    elif d in ['Ox', 'Red', 'E', 'nMT', 'F', 'AOX', 'X']:
                         self.setActive(s, m, d, ddict['active'])
                     else:
                         assert d == 'TE'
@@ -320,6 +321,10 @@ class Subunit(models.Model):
     ss = models.TextField()
     ss8 = models.TextField()
     ssPlotFile = models.ImageField(upload_to='ssplots')
+
+    # determines if subunit is on complement strand (-)/is not (+)
+    # useful for subunit reordering within cluster
+    sense = models.CharField(max_length=3)
 
     def modules(self):
         return Module.objects.filter(subunit=self).order_by('order')
@@ -486,16 +491,16 @@ class Module(models.Model):
             if domainType in domainDict.keys():
                 start = domainDict[domainType][0]['start']
                 stop = domainDict[domainType][0]['stop']
-                if domainType in ['DH', 'ER', 'cMT', 'oMT', 'Ox', 'Red', 'nMT', 'F', 'MOX', 'X']:
+                if domainType in ['DH', 'ER', 'cMT', 'oMT', 'Ox', 'Red', 'nMT', 'F', 'AOX', 'X']:
                     newDomain = getattr(sys.modules[__name__], domainType)(module=self, start=start, stop=stop, active=True)
                 else:
                     newDomain = getattr(sys.modules[__name__], domainType)(module=self, start=start, stop=stop)
                 newDomain.save()
         
-        if 'MOX' in domainDict.keys():
-            start = domainDict['MOX'][0]['start']
-            stop = domainDict['MOX'][0]['stop']
-            newDomain = MOX(module=self, start=start, stop=stop)
+        if 'AOX' in domainDict.keys():
+            start = domainDict['AOX'][0]['start']
+            stop = domainDict['AOX'][0]['stop']
+            newDomain = AOX(module=self, start=start, stop=stop)
             newDomain.save()
         
         if 'R' in domainDict.keys():
@@ -518,14 +523,15 @@ class Module(models.Model):
         if self.product:
             return self.product.mol()
         domains = {type(domain): domain for domain in self.domains()}
-        reactionOrder = [CAL, AT, A, F, Cy, Ox, Red, E, nMT, KR, cMT, oMT, DH, ER, X, MOX, R, TE]
+        reactionOrder = [CAL, AT, A, F, Cy, Ox, Red, E, nMT, KR, cMT, oMT, DH, ER, X, AOX, R, TE]
         for iteration in range(self.iterations):
             for reaction in reactionOrder:
+                
                 if reaction in domains.keys():
 
-                    # if R or MOX (alt chain release domains) is present in the same module as TE, skip TE
-                    # reaction order guarentees TE will be after MOX or R
-                    if ((reaction == TE) and (MOX in domains.keys())) or ((reaction == TE) and (R in domains.keys())):
+                    # if R or AOX (alt chain release domains) is present in the same module as TE, skip TE
+                    # reaction order guarentees TE will be after AOX or R
+                    if ((reaction == TE) and (AOX in domains.keys())) or ((reaction == TE) and (R in domains.keys())):
                         continue
                     else:
                         chain = domains[reaction].operation(chain)
@@ -685,8 +691,10 @@ nrps_substrates = {
     'bmt': chem.MolFromSmiles('C/C=C/C[C@@H](C)[C@@H](O)C(N)C(=O)[S]'),
     'aba': chem.MolFromSmiles('CC[C@H](N)C(=O)[S]'),
     'orn': chem.MolFromSmiles('NCCC[C@H](N)C(=O)[S]'), # ornithine
-    'hty': chem.MolFromSmiles("C1=CC(=CC=C1CC[C@@H](C(=O)[S])N)O"), # homotyrosine
-    'mpro': chem.MolFromSmiles('C1C(C)C[C@H](N1)C(=O)[S]'),
+    'htyr': chem.MolFromSmiles("C1=CC(=CC=C1CC[C@@H](C(=O)[S])N)O"), # homotyrosine
+    'hpla' : chem.MolFromSmiles("C1=CC(=CC=C1C[C@H](C(=O)[S])O)O"), # 2R-hydroxyphenyl lactic acid
+    'mpro': chem.MolFromSmiles('C[C@H]1C[C@H](NC1)C(=O)[S]'),
+    '3cl-tyr': chem.MolFromSmiles('C1=C(Cl)C(O)=CC=C1C[C@H](N)C(=O)[S]'), #3-chlorotyrosine
 
 }
 
@@ -1196,8 +1204,8 @@ class F(Domain):
     def __repr__(self):
         return ("F")
 
-class MOX(Domain):
-    # Monooxygenase domain: alternative chain release forming amide (myxothiazol, melithiazol)
+class AOX(Domain):
+    # A domain interrupted by monooxygenase domain: alternative chain release forming amide (myxothiazol, melithiazol)
     # actual mechanism: adds glycine, hydroxylates alpha-carbon, then tautomerizes
     # TE releases subsequent glyoxylate from terminal PCP
     # NOT TO BE CONFUSED WITH P450-series MONOOXYGENASES (recruited by X domain)
@@ -1208,8 +1216,8 @@ class MOX(Domain):
 
         if self.active == True:
             # forms amide from thioester (ignores actual mechanism)
-            rxn = AllChem.ReactionFromSmarts(('[N:6][C:7][C:8](=[O:9])[S:10]>>'
-                                              '[N:6][C:7][C:8](=[O:9])N.[S:10]'))
+            rxn = AllChem.ReactionFromSmarts(('[C:7][C:8](=[O:9])[S:10]>>'
+                                              '[C:7][C:8](=[O:9])N.[S:10]'))
             
             # make sure there is only one nitrogen reaction site
             assert len(chain.GetSubstructMatches(chem.MolFromSmiles('CC(=O)S'),
@@ -1224,10 +1232,11 @@ class MOX(Domain):
         return activityString(self)
 
     def __repr__(self):
-        return ("MOX")
+        return ("AOX")
     
 class R(Domain):
     # Reductase domain: alternative chain release forming alcohol or aldehyde
+    # Can act on NRP or PKS chains (e.g. coelimycin, BGC0000038)
     
     active = models.BooleanField(default=True)
     
@@ -1248,14 +1257,13 @@ class R(Domain):
             # Transformation determined by type
             if self.type == 'alcohol':
                 # forms alcohol from thioester
-                rxn = AllChem.ReactionFromSmarts(('[N:6][C:7][C:8](=[O:9])[S:10]>>'
-                                                  '[N:6][C:7][C:8][O:9].[S:10]'))
+                rxn = AllChem.ReactionFromSmarts(('[C:7][C:8](=[O:9])[S:10]>>'
+                                                  '[C:7][C:8][O:9].[S:10]'))
                 print("alcohol")
-                print(self.type)
             elif self.type == 'aldehyde':
                 # forms aldehyde from thioester
-                rxn = AllChem.ReactionFromSmarts(('[N:6][C:7][C:8](=[O:9])[S:10]>>'
-                                                  '[N:6][C:7][C:8](=[O:9]).[S:10]'))
+                rxn = AllChem.ReactionFromSmarts(('[C:7][C:8](=[O:9])[S:10]>>'
+                                                  '[C:7][C:8](=[O:9]).[S:10]'))
                 print("aldehyde")
             
             # this does not allow chemistry to work so cannot exit. default type set to alcohol

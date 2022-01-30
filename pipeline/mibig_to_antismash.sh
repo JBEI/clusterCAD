@@ -33,8 +33,8 @@ done
 
 mkdir -p ./data/mibig/raw
 
-wget -O ./data/mibig/mibig_json_${VERSION}.tar.gz http://mibig.secondarymetabolites.org/mibig_json_${VERSION}.tar.gz
-wget -O ./data/mibig/mibig_gbk_${VERSION}.tar.gz http://mibig.secondarymetabolites.org/mibig_gbk_${VERSION}.tar.gz
+wget -O ./data/mibig/mibig_json_${VERSION}.tar.gz http://dl.secondarymetabolites.org/mibig/mibig_json_${VERSION}.tar.gz
+wget -O ./data/mibig/mibig_gbk_${VERSION}.tar.gz http://dl.secondarymetabolites.org/mibig/mibig_gbk_${VERSION}.tar.gz
 
 tar -xvf ./data/mibig/mibig_json_${VERSION}.tar.gz -C ./data/mibig/raw
 tar -xvf ./data/mibig/mibig_gbk_${VERSION}.tar.gz -C ./data/mibig/raw
@@ -48,5 +48,5 @@ mkdir -p ./data/antismash/raw
 
 mkdir -p ./data/antismash/split
 
-awk 'BEGIN{ RS="//\n"; ORS="//"; } {split($2, array, ";"); fname=array[1]; print > "./data/antismash/split/" fname ".embl" }' ./data/antismash/raw/BGC0000001.1.final.embl
+#awk 'BEGIN{ RS="//\n"; ORS="//"; } {split($2, array, ";"); fname=array[1]; print > "./data/antismash/split/" fname ".embl" }' ./data/antismash/raw/BGC0000001.1.final.embl
 

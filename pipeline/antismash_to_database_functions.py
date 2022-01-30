@@ -132,7 +132,7 @@ def processSubunitModules(sec_met):
             elif domainsplit[2] == 'TD':
                 domaintype = 'R'
             elif domainsplit[2] == 'A-OX': # substrate is glycine but effectively chain terminating
-                domaintype = 'MOX'
+                domaintype = 'AOX'
             elif domainsplit[2] in ['NRPS-COM_Nterm', 'NRPS-COM_Cterm']:
                     domaintype = domainsplit[2]
             
@@ -152,7 +152,7 @@ def processSubunitModules(sec_met):
                               'Condensation', 'Condensation_Starter',
                               'Condensation_DCL', 'Condensation_LCL',
                               'PKS_Docking_Nterm', 'PKS_Docking_Cterm',
-                              'MOX', 'E', 'F', 'nMT', 'R', 'X',
+                              'AOX', 'E', 'F', 'nMT', 'R', 'X',
                               'NRPS-COM_Nterm', 'NRPS-COM_Cterm']:
             print('\tIgnoring domain type: %s' %(domaintype))
             # Break out of for loop and stop looking for additional catalytic domains if 
@@ -174,7 +174,7 @@ def processSubunitModules(sec_met):
                           'Condensation', 'Condensation_Starter',
                           'Condensation_DCL', 'Condensation_LCL',
                           'PKS_Docking_Nterm', 'PKS_Docking_Cterm',
-                          'MOX', 'E', 'F', 'nMT', 'X', 
+                          'AOX', 'E', 'F', 'nMT', 'X', 
                           'NRPS-COM_Nterm', 'NRPS-COM_Cterm']:
             module_domains.append((domaintype, 
                                    [{'start': boundaries[0], 'stop': boundaries[1]}]))
@@ -252,15 +252,15 @@ def processClusterSeqRecord(record):
             # (this will be overwritten if it does have subunits)
             subunit_modules = None
             # Information if gene is PKS subunit
-            if 'sec_met' in feature.qualifiers.keys() and len(feature.qualifiers['sec_met']) > 3:
-                if feature.qualifiers['sec_met'][3] in \
+            if 'NRPS_PKS' in feature.qualifiers.keys() and len(feature.qualifiers['NRPS_PKS']) > 3: # previously 'sec_met'
+                if feature.qualifiers['NRPS_PKS'][3] in \
                   ['NRPS/PKS subtype: Type I Modular PKS', 
                    'NRPS/PKS subtype: PKS-like protein',
                    'NRPS/PKS subtype: PKS/NRPS-like protein',
                    'NRPS/PKS subtype: Hybrid PKS-NRPS',
                    'NRPS/PKS subtype: NRPS']:
                     print("features qualify")
-                    subunit_modules = processSubunitModules(feature.qualifiers['sec_met'])
+                    subunit_modules = processSubunitModules(feature.qualifiers['NRPS_PKS'])
 
             # Append description and position of gene within nucleotide sequence
             gene_data[-1].extend([description, [location.start.position + 1, location.end.position]])
@@ -496,7 +496,7 @@ def enterCluster(cluster, clusterrecord, mibigfile):
                 terminal = True
             elif 'R' in list(moduledata[modulekeys[imodule]].keys()):
                 terminal = True
-            elif 'MOX' in list(moduledata[modulekeys[imodule]].keys()):
+            elif 'AOX' in list(moduledata[modulekeys[imodule]].keys()):
                 terminal = True
             else:
                 terminal = False

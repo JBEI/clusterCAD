@@ -9,6 +9,9 @@ import django
 django.setup()
 import pks.models
 
+
+### new pipeline already deletes subunits without modules, clusters with less than 3 modules OK as unreviewed ###
+'''
 # Delete clusters with less than three modules
 for cluster in pks.models.Cluster.objects.all():
     nmodules = 0
@@ -25,10 +28,10 @@ for cluster in pks.models.Cluster.objects.all():
         cluster.delete()
         print('could not recompute product, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
         continue
-    if nmodules < 3:
-        print('less than 3 modules, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
-        cluster.delete()
-
+    #if nmodules < 3:
+    #    print('less than 3 modules, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
+    #    cluster.delete()
+'''
 # Delete clusters with no computable product
 for cluster in pks.models.Cluster.objects.all():
     try:

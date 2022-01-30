@@ -22,11 +22,20 @@ clean:
 	-rm data/generate_aa_plots_placeholder
 	-rm data/aa_sequence_analysis/plotCache.tgz
 
+# ***temporary*** to get rid of previous messes with extracting to wrong directories
+#	-rm -rf mibig_json_2.0
+#	-rm -rf data/mibig_json_2.0.tar.gz
+
 # download PKS data from online
 data/mibigdata_clustercad_production.tgz:
 	mkdir -p data
 	wget --user=$(username) --password=$(password) $(dataUrl)/mibigdata_clustercad_production.tgz -O $@ --no-check-certificate
 	tar xvfz data/mibigdata_clustercad_production.tgz
+
+# ***using mibig 2.0 data (new mibig data from 2019) --> see mibigDB2.0 branch for implementation***
+#	wget https://dl.secondarymetabolites.org/mibig/mibig_json_2.0.tar.gz
+#	mv mibig_json_2.0.tar.gz data/mibig_json_2.0.tar.gz
+#	tar xvfz data/mibig_json_2.0.tar.gz
 
 # download plot cache
 data/aa_sequence_analysis/plotCache.tgz:

@@ -18,8 +18,8 @@ import pks.models
 ##########################################################
 
 print('Analyzing contents of MIBiG database.')
-mibigpath = './data/mibig/raw' 
-antismashpath = './data/antismash/split'
+mibigpath = './data/mibig/raw/mibig_json_2.0' # testing new antismash data; formerly ./data/mibig/raw
+antismashpath = './data/antismash/raw' # testing new antismash data; formerly ./data/antismash/split
 print('Set of PKS subtypes found in MIBiG: %s' %(mibigSubtypes(mibigpath)))
 mibigsubtypes = set(['Modular type I', 'Modular Type I', 'Type I'])
 print('Set of PKS subtypes recognized for inclusion in ClusterCAD: %s' %(mibigsubtypes))
@@ -39,20 +39,27 @@ print('ClusterCAD database reset.')
 allknowncompounds = pickle.load(open('./data/compounds/all_known_products.p', 'rb'))
 
 #for accession in ['BGC0000031']: # Debug with Borreledin
-#for accession in ['BGC0001394','BGC0001024','BGC0000416', 'BGC0001095', 'BGC0000430', 'BGC0000367']: # Debug NRPS pipeline with Phenalamide and friends
-for accession in mibigaccessions:
+for accession in ['BGC0001394','BGC0001024','BGC0000416', 'BGC0001095', 'BGC0000430', 'BGC0000367']: # Debug NRPS pipeline with Phenalamide and friends
+#for accession in mibigaccessions:
     # Use accession number to get paths to MIBiG and antiSMASH files
     mibigfile = os.path.join(mibigpath, accession + '.json')
-    clusterfile = os.path.join(antismashpath, accession + '.embl')
+    clusterfile = os.path.join(antismashpath, accession, accession + '.gbk') # testing new antismash output, formerly accession + 'embl'
 
     # Read antiSMASH annotations for cluster
     try:
-        record = SeqIO.read(clusterfile, "embl")
-        description = record.description.replace(' biosynthetic gene cluster', '')
+        print(clusterfile)
+        record = SeqIO.read(clusterfile, "gb") # testing new antismash data, formerly clusterfile, "embl"
+        #description = record.description.replace(' biosynthetic gene cluster', '')
     # If file is missing, we skip the cluster
     except FileNotFoundError:
         print('Missing file: %s' %clusterfile)
         continue
+
+    with open(mibigfile) as f:
+        jsondata = json.loads(f.read())
+        # Get names
+        description = ', '.join([x['compound'] for x in jsondata['cluster']['compounds']])
+
 
     # Get compound information
     try:
@@ -75,6 +82,7 @@ for accession in mibigaccessions:
             knownProductSource=knownproductsource
             )
         print(record)
+        print("\n\n"+record.annotations['comment'].split()[-1].strip().strip('.'))
         cluster.save()
         # Processes subunits and modules belonging to cluster
         enterCluster(cluster, record, mibigfile)

@@ -54,6 +54,36 @@
                     }
                 }
             }
+        },
+        "antB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "Cy": {},
+                    "A": {
+                        "substrate": "cys"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "phe"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
         }
     }
 }

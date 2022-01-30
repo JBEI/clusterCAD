@@ -14,7 +14,8 @@ correctionpath = './data/corrections'
 #                     'BGC0000093.1', 'BGC0000097.1', 'BGC0000165.1', 
 #                     'BGC0001381.1']
 
-correctiontargets = [x.mibigAccession for x in pks.models.Cluster.objects.all()]
+correctiontargets = ['BGC0001296.1']
+#correctiontargets = [x.mibigAccession for x in pks.models.Cluster.objects.all()]
 
 for acc in correctiontargets:
     print('Getting template for cluster %s' %(acc))
