@@ -1,16 +1,17 @@
 import React from 'react';
 import Button from '../components/Button';
+import Draggable from 'react-draggable';
 
 class DomainSearch extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {modules: []}
-    console.log(this.state);
   }
 
   insertDomain = d => {
     this.setState({modules: [...this.state.modules, d]});
+    console.log(this.state.modules);
   }
 
   deleteDomain = d => {
@@ -30,9 +31,11 @@ class DomainSearch extends React.Component {
           </div>
           <div className="DomainSandbox">
             {this.state.modules.map(M => (
-              <div className={M.value}>
-              {M.value}
-              </div>
+              <Draggable>
+                <div className={"Domain handle " + M.value}>
+                A
+                </div>
+              </Draggable>
               ))
             }
           </div>
