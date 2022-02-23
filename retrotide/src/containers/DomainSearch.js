@@ -47,8 +47,7 @@ class DomainSearch extends React.Component {
       console.log("ERR that domain is already selected " + selectedDomain.domainName);
       return -1;
     } else {
-      console.log("selectedDomain " + this.state.DomainList[Domain].domainName);
-      console.log("current index " + this.state.insertIndex);
+      // we'll need some logic here to add multiple nodes depending on selected name
       let insertDomain = {
         domainName: Domain,
         present: true,
@@ -60,8 +59,6 @@ class DomainSearch extends React.Component {
       };
       this.setState({insertIndex: currentIndex++});
       this.setState({DomainList: updatedDomainList});
-      console.log({insertDomain});
-      // this.setState();
       return currentIndex++;
     }
   }
@@ -85,7 +82,7 @@ class DomainSearch extends React.Component {
           </div>
           <div className="DomainSandbox">
             {this.getPresentDomains().map(DomainDiv => (
-                <Draggable>
+                <Draggable bounds='parent' axis='x' grid='[36, 36]'>
                   <div className={"Domain handle " + DomainDiv.domainName}>
                     {DomainDiv.domainName}
                   </div>
