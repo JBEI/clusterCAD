@@ -51,7 +51,7 @@ class DomainSearch extends React.Component {
       let insertDomain = {
         domainName: Domain,
         present: true,
-        index: currentIndex++,
+        index: currentIndex+1,
       }
       let updatedDomainList = {
         ...this.state.DomainList,
@@ -59,12 +59,24 @@ class DomainSearch extends React.Component {
       };
       this.setState({insertIndex: currentIndex++});
       this.setState({DomainList: updatedDomainList});
-      return currentIndex++;
+      return currentIndex+1; // fix this
     }
   }
 
-  deleteDomain = d => {
-    console.log("attempted delete: " + d);
+  deleteDomain = Domain => {
+    let currentIndex = this.state.insertIndex;
+      let deleteDomain = {
+        domainName: Domain,
+        present: false,
+        index: -1,
+      }
+      let updatedDomainList = {
+        ...this.state.DomainList,
+        [Domain]: deleteDomain,
+      };
+      this.setState({insertIndex: currentIndex-1});
+      this.setState({DomainList: updatedDomainList});
+      return currentIndex-1; // fix this
   }
 
   render() {
@@ -74,7 +86,7 @@ class DomainSearch extends React.Component {
         <div className="DomainToolbox">
           <div className="DomainButtonList">
             {this.getAllDomains().map(DomainButton => (
-              <Button onClick={ () => {this.insertDomain(DomainButton.domainName)} }>
+              <Button className='addDomainButton' onClick={ () => {this.insertDomain(DomainButton.domainName)} }>
                 {DomainButton.domainName}
               </Button>
               ))
@@ -82,9 +94,11 @@ class DomainSearch extends React.Component {
           </div>
           <div className="DomainSandbox">
             {this.getPresentDomains().map(DomainDiv => (
-                <Draggable bounds='parent' axis='x' grid='[36, 36]'>
-                  <div className={"Domain handle " + DomainDiv.domainName}>
+                <Draggable handle='.handle' bounds='parent' axis='x' grid='[36px, 36px]'>
+                  <div className={"Domain " + DomainDiv.domainName}>
                     {DomainDiv.domainName}
+                    <div className="handle"> -> </div>
+                    <div className="deleteIcon" onClick={ () => {this.deleteDomain(DomainDiv.domainName)} }> D </div>
                   </div>
                 </Draggable>
               ))
