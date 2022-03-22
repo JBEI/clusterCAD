@@ -40,6 +40,22 @@ class DomainSearch extends React.Component {
 
   // getPresentDomainsInOrder
 
+  selectModuleType = e => {
+    let value = e.target.value;
+    if(value === 'loading') {
+      // set AT, ACP, KS buttons true
+      // preload ACP in sandbox
+    } else if(value === 'reducing') {
+      // set all but TE buttons true
+      // preload KS AT ACP in sandbox
+    } else if(value === 'terminating') {
+      // set all and TE buttons true
+      // preload KS ACP TE in sandbox
+    } else {
+      // what did you do
+    }
+  }
+
   insertDomain = Domain => {
     let selectedDomain = this.state.PKSDomainList[Domain];
 
@@ -78,6 +94,11 @@ class DomainSearch extends React.Component {
         <h3>Construct Module</h3> 
         <div className="DomainToolbox">
           <div className="DomainButtonList">
+            <select className="ModuleType" onChange={ (e) => {this.selectModuleType(e)} }>
+              <option selected value="loading">Loading</option>
+              <option value="reducing">Reducing</option>
+              <option value="terminating">Terminating</option>
+            </select>
             {this.getAllDomains().map((DomainButton, index) => (
               <Button className='addDomainButton' key={index} onClick={ () => {this.insertDomain(DomainButton.domainName)} }>
                 {DomainButton.domainName}
