@@ -1,37 +1,38 @@
 import React from 'react';
 import Button from '../components/Button';
-import Draggable from 'react-draggable';
 
 class DomainSearch extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      DomainList: {
-        ACP: {domainName: 'ACP', present: false, index: -1}, 
-        AT: {domainName: 'AT', present: false, index: -1},
-        DH: {domainName: 'DH', present: false, index: -1},
-        ER: {domainName: 'ER', present: false, index: -1},
-        KR: {domainName: 'KR', present: false, index: -1},
-        KS: {domainName: 'KS', present: false, index: -1},
+      PKSDomainList: {
+        CAL: {domainName: 'CAL', present: false},
+        KS:  {domainName: 'KS', present: false},
+        AT:  {domainName: 'AT', present: false},
+        DH:  {domainName: 'DH', present: false},
+        ER:  {domainName: 'ER', present: false},
+        KR:  {domainName: 'KR', present: false},
+        ACP: {domainName: 'ACP', present: false}, 
+        TE:  {domainName: 'TE', present: false},
       },
-      insertIndex: 0,
+      DomainList: 'PKS',
     }
   }
 
   getAllDomains = () => {
     let allDomains = [];
-    for (var DomainObject in this.state.DomainList) {
-      allDomains.push(this.state.DomainList[DomainObject]);
+    for (var DomainObject in this.state.PKSDomainList) {
+      allDomains.push(this.state.PKSDomainList[DomainObject]);
     }
     return allDomains;
   };
 
   getPresentDomains = () => {
     let presentDomains = [];
-    for (var DomainObject in this.state.DomainList) {
-      if (this.state.DomainList[DomainObject].present) {
-        presentDomains.push(this.state.DomainList[DomainObject]);
+    for (var DomainObject in this.state.PKSDomainList) {
+      if (this.state.PKSDomainList[DomainObject].present) {
+        presentDomains.push(this.state.PKSDomainList[DomainObject]);
       }
     }
     return presentDomains;
@@ -40,8 +41,7 @@ class DomainSearch extends React.Component {
   // getPresentDomainsInOrder
 
   insertDomain = Domain => {
-    let selectedDomain = this.state.DomainList[Domain];
-    let currentIndex = this.state.insertIndex;
+    let selectedDomain = this.state.PKSDomainList[Domain];
 
     if(selectedDomain.present) {
       console.log("ERR that domain is already selected " + selectedDomain.domainName);
@@ -51,56 +51,49 @@ class DomainSearch extends React.Component {
       let insertDomain = {
         domainName: Domain,
         present: true,
-        index: currentIndex+1,
       }
       let updatedDomainList = {
-        ...this.state.DomainList,
+        ...this.state.PKSDomainList,
         [Domain]: insertDomain,
       };
-      this.setState({insertIndex: currentIndex++});
-      this.setState({DomainList: updatedDomainList});
-      return currentIndex+1; // fix this
+      this.setState({PKSDomainList: updatedDomainList});      
     }
   }
 
   deleteDomain = Domain => {
-    let currentIndex = this.state.insertIndex;
-      let deleteDomain = {
-        domainName: Domain,
-        present: false,
-        index: -1,
-      }
-      let updatedDomainList = {
-        ...this.state.DomainList,
-        [Domain]: deleteDomain,
-      };
-      this.setState({insertIndex: currentIndex-1});
-      this.setState({DomainList: updatedDomainList});
-      return currentIndex-1; // fix this
+    let deleteDomain = {
+      domainName: Domain,
+      present: false,
+    }
+    let updatedDomainList = {
+      ...this.state.PKSDomainList,
+      [Domain]: deleteDomain,
+    };
+    this.setState({PKSDomainList: updatedDomainList});
   }
 
   render() {
     return (
       <div className='DomainSearch'>
-        <h3>Construct Module</h3>
+        <h3>Construct Module</h3> 
         <div className="DomainToolbox">
           <div className="DomainButtonList">
-            {this.getAllDomains().map(DomainButton => (
-              <Button className='addDomainButton' onClick={ () => {this.insertDomain(DomainButton.domainName)} }>
+            {this.getAllDomains().map((DomainButton, index) => (
+              <Button className='addDomainButton' key={index} onClick={ () => {this.insertDomain(DomainButton.domainName)} }>
                 {DomainButton.domainName}
               </Button>
               ))
             }
           </div>
           <div className="DomainSandbox">
-            {this.getPresentDomains().map(DomainDiv => (
-                <Draggable handle='.handle' bounds='parent' axis='x' grid='[36px, 36px]'>
+            {this.getPresentDomains().map((DomainDiv, index) => (
+                <div key={DomainDiv.domainName + index}>
                   <div className={"Domain " + DomainDiv.domainName}>
                     {DomainDiv.domainName}
                     <div className="handle"> -> </div>
-                    <div className="deleteIcon" onClick={ () => {this.deleteDomain(DomainDiv.domainName)} }> D </div>
+                    <div className="deleteIcon" onClick={ () => {this.deleteDomain(DomainDiv.domainName)} }> X </div>
                   </div>
-                </Draggable>
+                </div>
               ))
             }
           </div>
