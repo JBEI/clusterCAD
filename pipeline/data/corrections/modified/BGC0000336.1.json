@@ -1,0 +1,141 @@
+{
+    "description": "Daptomycin",
+    "genbankAccession": "AY787762.1",
+    "mibigAccession": "BGC0000336.1",
+    "architecture": {
+        "dptF": {
+            "0": {
+                "domains": {
+                    "ACP": {
+                        "substrate": "10C-FA"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "dptA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "trp"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "asn"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "asp"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            },
+            "4": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "dptBC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "orn"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "asp"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "asp"
+                    }
+                },
+                "iterations": 1
+            },
+            "4": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    }
+                },
+                "iterations": 1
+            },
+            "5": {
+                "domains": {
+                    "A": {
+                        "substrate": "ser"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "dptD": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "me-glu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "kyn"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 14
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1099/mic.0.27757-0"
+}

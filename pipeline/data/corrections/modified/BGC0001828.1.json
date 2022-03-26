@@ -1,0 +1,187 @@
+{
+    "description": "Griseochelin / Zincophorin",
+    "genbankAccession": "KT345957.1",
+    "mibigAccession": "BGC0001828.1",
+    "architecture": {
+        "zinA": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "zinB": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "KR": {
+                        "active": false,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A2"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "zinC": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "zinD": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B2"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A2"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "zinE": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A2"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "zinF": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "zinG": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B2"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+        
+    }, 
+    "notes": "Reference: https://doi.org/10.3205/id000026"
+}

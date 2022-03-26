@@ -1,0 +1,70 @@
+{
+    "description": "Gobichelin",
+    "genbankAccession": "KC215181.1",
+    "mibigAccession": "BGC0000366.1",
+    "architecture": {
+        "gobJ": {
+            "0": {
+                "domains": {
+                    "ACP": {
+                        "substrate": "o-hydroxybenz"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "Cy": {},
+                    "A": {
+                        "substrate": "ser"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "gobR": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "his"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "lys"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "gobS": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ser"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "N-OH-orn"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1039/c2md20232h"
+}

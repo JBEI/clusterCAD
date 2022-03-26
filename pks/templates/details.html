@@ -25,6 +25,38 @@
             <dd>{% if cluster.reviewed %}Reviewed{% else %}Unreviewed{% endif %}</dd>
             <dt>Submit corrections</dt>
             <dd><a href="mailto:jbei-help@lbl.gov?subject=ClusterCAD%20corrections%20for%20{{ cluster.mibigAccession|stripTrailingVersion }}">Send e-mail</a></dd>
+            
+            <!-- Placeholder code linking to modifications spreadsheet before modal implementation
+            <dt>Cluster Notes</dt>
+            <dd><a href="https://docs.google.com/spreadsheets/d/13feWUXVEShji6A8VdlG3Z0vFUGwOOPT6C0sCwZ9jv2g/edit?usp=sharing" style="color:#ff0000" target="_blank" rel="noopener noreferrer">View Curation Notes, Annotations, References, and/or Publications</a></dd>
+            -->
+            
+            <dt>Cluster Notes</dt>
+            <dd>{% if cluster.notes == "There are no notes available for this cluster. " %}None{% else %}<a data-toggle="modal" href=#notesModal style="color:#ff0000">View Curation Notes, Annotations, References, and/or Publications</a>{% endif %}</dd>
+
+            <!-- notesModal displays cluster notes-->
+            <div class="modal fade" id="notesModal" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- notesModal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{cluster.description}} Notes</h4>
+                  </div>
+                  <div class="modal-body">
+                    <!--<p>{{cluster.notes}}</p> -->
+                    <textarea id="notesField" class="form-control" rows="5">{{cluster.notes}}</textarea>
+                    <dd id="notes"><dd></dd>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+
         </dl>
           <div class="checkbox">
             <label>
@@ -304,6 +336,9 @@ $(document).ready(function(){
                         $('#domainAnnotations').text("None");
                     } else {
                         $('#domainAnnotations').text(data.annotations);
+                    }
+                    if(data.annotations == 'substrate None') {
+                        $('#domainAnnotations').text("None");
                     }
                     var searchUrl = "/sequenceSearch/?aainput="
                     $('#domainSearchButton').attr("href", searchUrl.concat(data.AAsequence));

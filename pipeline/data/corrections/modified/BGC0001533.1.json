@@ -1,0 +1,115 @@
+{
+    "description": "Borrelidin",
+    "genbankAccession": "KT362046.1",
+    "mibigAccession": "BGC0001533.1",
+    "architecture": {
+        "bor2A1": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "trans-1,2-CPDA"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "bor2A2": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "bor2A3": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "bor2A4": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "bor2A5": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 3
+            }
+        },
+        "bor2A6": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 1
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }
+}

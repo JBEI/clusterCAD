@@ -1,0 +1,135 @@
+{
+    "description": "Bogorol A",
+    "genbankAccession": "KY810814.1",
+    "mibigAccession": "BGC0001532.1",
+    "architecture": {
+        "BogA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "dhb"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "BogB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "orn"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "BogC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "lys"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "BogD": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "lys"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "BogE": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    },
+                    "R": {
+                        "active": true,
+                        "type": "alcohol"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1128/AEM.01981-20"
+}

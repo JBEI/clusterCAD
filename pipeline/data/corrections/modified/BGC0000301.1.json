@@ -1,0 +1,74 @@
+{
+    "description": "Anabaenopeptin 908",
+    "genbankAccession": "EF672686.1",
+    "mibigAccession": "BGC0000301.1",
+    "architecture": {
+        "apnA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "arg"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "lys"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "apnB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "apnC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "htyr"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "htyr"
+                    },
+                    "nMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "apnD": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 1
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1128/jb.00360-11"
+}

@@ -1,0 +1,101 @@
+{
+    "description": "Argimycins",
+    "genbankAccession": "LT615255.1",
+    "mibigAccession": "BGC0001433.1",
+    "architecture": {
+        "arpPI": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "arpPII": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "KR": {
+                        "active": false,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "arpPIII": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    },
+                    "R": {
+                        "active": true,
+                        "type": "aldehyde"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://dx.doi.org/10.3389/fmicb.2017.00194"
+}

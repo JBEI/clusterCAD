@@ -1,0 +1,79 @@
+{
+    "description": "Surfactin",
+    "genbankAccession": "AJ575642.1",
+    "mibigAccession": "BGC0000433.1",
+    "architecture": {
+        "srfAA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "glu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "srfAB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "asp"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "srfAC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "TE": {
+                        "cyclic": false,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }
+}
