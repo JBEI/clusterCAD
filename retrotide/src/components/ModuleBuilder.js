@@ -30,22 +30,6 @@ class ModuleBuilder extends React.Component {
     return presentDomains;
   };
 
-  selectModuleType = e => {
-    let value = e.target.value;
-    if(value === 'loading') {
-      // set AT, ACP, KS buttons true
-      // preload ACP in sandbox
-    } else if(value === 'reducing') {
-      // set all but TE buttons true
-      // preload KS AT ACP in sandbox
-    } else if(value === 'terminating') {
-      // set all and TE buttons true
-      // preload KS ACP TE in sandbox
-    } else {
-      // what did you do
-    }
-  }
-
   insertDomain = Domain => {
     let selectedDomain = this.state.DomainList[Domain];
 
@@ -83,9 +67,9 @@ class ModuleBuilder extends React.Component {
       <div className='ModuleBuilder'>
         <div className="DomainToolbox">
           <div className="DomainButtonList">
-            <select className="ModuleType" onChange={ (e) => {this.selectModuleType(e)} }>
+            <select className="ModuleType">
               <option value="loading">Loading</option>
-              <option value="reducing">Reducing</option>
+              <option value="extending">Extending</option>
               <option value="terminating">Terminating</option>
             </select>
             {this.getAllDomains().map((DomainButton, index) => (
