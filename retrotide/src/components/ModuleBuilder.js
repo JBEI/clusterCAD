@@ -8,7 +8,8 @@ class ModuleBuilder extends React.Component {
     super(props);
     this.state = {
       DomainList: props.domainList,
-      ModuleType: 'loading',
+      ModuleType: props.type,
+      index: props.index,
     }
   }
 
@@ -65,13 +66,12 @@ class ModuleBuilder extends React.Component {
   render() {
     return (
       <div className='ModuleBuilder'>
+        <div className="DomainHeader">
+          <div> Module {this.state.index} </div>
+          <div> {this.state.ModuleType} </div>
+        </div>
         <div className="DomainToolbox">
           <div className="DomainButtonList">
-            <select className="ModuleType">
-              <option value="loading">Loading</option>
-              <option value="extending">Extending</option>
-              <option value="terminating">Terminating</option>
-            </select>
             {this.getAllDomains().map((DomainButton, index) => (
               <Button className='addDomainButton' key={index} onClick={ () => {this.insertDomain(DomainButton.domainName)} }>
                 {DomainButton.domainName}
@@ -81,7 +81,7 @@ class ModuleBuilder extends React.Component {
           </div>
           <div className="DomainSandbox">
             {this.getPresentDomains().map((DomainDiv, index) => (
-                <div key={DomainDiv.domainName + index}>
+                <div key={DomainDiv.domainName + index} className="DomainWrapper" >
                   <div className={"Domain " + DomainDiv.domainName}>
                     {DomainDiv.domainName}
                     <div className="deleteIcon" onClick={ () => {this.deleteDomain(DomainDiv.domainName)} }> X </div>
