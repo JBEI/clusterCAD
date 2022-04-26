@@ -31,24 +31,37 @@ class ModuleBuilder extends React.Component {
     return presentDomains;
   };
 
-  insertDomain = Domain => {
+  insertDomains = NewDomains => {
+    for(var domain in NewDomains) {
+      this.insertDomain(domain);
+    }
+  }
+
+  toggleDomain = Domain => {
     let selectedDomain = this.state.DomainList[Domain];
+    let updatedDomainList;
 
     if(selectedDomain.present) {
-      console.log("ERR that domain is already selected " + selectedDomain.domainName);
-      return -1;
+      let deleteDomain = {
+        domainName: Domain,
+        present: false,
+      }
+      updatedDomainList = {
+        ...this.state.DomainList,
+        [Domain]: deleteDomain,
+      };
     } else {
       // we'll need some logic here to add multiple nodes depending on selected name
       let insertDomain = {
         domainName: Domain,
         present: true,
       }
-      let updatedDomainList = {
+      updatedDomainList = {
         ...this.state.DomainList,
         [Domain]: insertDomain,
-      };
-      this.setState({DomainList: updatedDomainList});      
+      };     
     }
+    this.setState({DomainList: updatedDomainList}); 
   }
 
   deleteDomain = Domain => {
@@ -73,7 +86,7 @@ class ModuleBuilder extends React.Component {
         <div className="DomainToolbox">
           <div className="DomainButtonList">
             {this.getAllDomains().map((DomainButton, index) => (
-              <Button className='addDomainButton' key={index} onClick={ () => {this.insertDomain(DomainButton.domainName)} }>
+              <Button className='addDomainButton' key={index} onClick={ () => {this.toggleDomain(DomainButton.domainName)} }>
                 {DomainButton.domainName}
               </Button>
               ))
@@ -84,7 +97,6 @@ class ModuleBuilder extends React.Component {
                 <div key={DomainDiv.domainName + index} className="DomainWrapper" >
                   <div className={"Domain " + DomainDiv.domainName}>
                     {DomainDiv.domainName}
-                    <div className="deleteIcon" onClick={ () => {this.deleteDomain(DomainDiv.domainName)} }> X </div>
                   </div>
                 </div>
               ))
