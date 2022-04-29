@@ -10,6 +10,7 @@ class ModuleBuilder extends React.Component {
       DomainList: props.domainList,
       ModuleType: props.type,
       index: props.index,
+      deleteFunction: props.deleteFunction,
     }
   }
 
@@ -65,13 +66,13 @@ class ModuleBuilder extends React.Component {
   }
 
   deleteDomain = Domain => {
-    let deleteDomain = {
+    let domainToDelete = {
       domainName: Domain,
       present: false,
     }
     let updatedDomainList = {
       ...this.state.DomainList,
-      [Domain]: deleteDomain,
+      [Domain]: domainToDelete,
     };
     this.setState({DomainList: updatedDomainList});
   }
@@ -83,6 +84,10 @@ class ModuleBuilder extends React.Component {
           <div> Module {this.state.index} </div>
           <div> {this.state.ModuleType} </div>
         </div>
+        {this.state.ModuleType === 'extending' ? 
+          <Button className='deleteModuleButton' onClick={() => {this.state.deleteFunction(this.state.index)}}> X </Button> 
+          : null
+        }        
         <div className="DomainToolbox">
           <div className="DomainButtonList">
             {this.getAllDomains().map((DomainButton, index) => (
