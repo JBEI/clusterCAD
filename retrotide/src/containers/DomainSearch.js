@@ -1,6 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { addModule, deleteModule } from '../redux/actions/actions';
 import Button from '../components/Button';
 import ModuleBuilder from '../components/ModuleBuilder'
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addModule: moduleList => dispatch(addModule(moduleList)),
+    deleteModule: moduleList => dispatch(deleteModule(moduleList)),
+    dispatch,
+  }
+};
 
 class DomainSearch extends React.Component {
 
@@ -29,7 +39,7 @@ class DomainSearch extends React.Component {
         ACP: {domainName: 'ACP', present: true}, 
         TE:  {domainName: 'TE', present: true},        
       },
-      ModuleArray: [],
+      ModuleArray: this.props.state.ModuleArray,
       DomainList: 'PKS',
     }
   }
@@ -80,4 +90,4 @@ class DomainSearch extends React.Component {
   }
 };
 
-export default DomainSearch;
+export default connect(null, mapDispatchToProps) (DomainSearch);
