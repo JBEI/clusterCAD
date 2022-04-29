@@ -85,7 +85,9 @@ class ModuleBuilder extends React.Component {
           <div> {this.state.ModuleType} </div>
         </div>
         {this.state.ModuleType === 'extending' ? 
-          <Button className='deleteModuleButton' onClick={() => {this.state.deleteFunction(this.state.index)}}> X </Button> 
+          <div className="DomainHeaderButton">
+            <Button className='deleteModuleButton' onClick={() => {this.state.deleteFunction(this.state.index)}}> X </Button> 
+          <div>
           : null
         }        
         <div className="DomainToolbox">
