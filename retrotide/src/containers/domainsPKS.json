@@ -1,0 +1,61 @@
+{
+  type: "PKS",
+  domainOrder: ["KS", "AT", "DH", "ER", "KR", "ACP", "TE"],
+  domains: {
+    ACP: {
+      name: "acyl carrier protein",
+      permanent: true,
+      located: ["loading", "extending", "terminating"],
+      options: {},
+    },
+    AT: {
+      name: "acyltransferase",
+      permanent: true,
+      located: ["loading", "extending", "terminating"],
+      options: {
+        substrate: ["mal", "methylmal", "trans"],
+      },
+    },
+    DH: {
+      name: "dehydratase",
+      permanent: false,
+      located: ["extending", "terminating"],
+      options: {},
+    },
+    ER: {
+      name: "enoylreductase",
+      permanent: false,
+      located: ["extending", "terminating"],
+      options: {},
+    },
+    KR: {
+      name: "ketoreductase",
+      permanent: false,
+      located: ["extending", "terminating"],
+      options: {
+        stereochemistry: ["A1", "A2", "B1", "B2", "C1", "C2", "any"],
+      },
+    },
+    KS: {
+      name: "ketosynthase",
+      permanent: true,
+      located: ["loading", "extending", "terminating"],
+      options: {},
+    },
+    TE: {
+      name: "thioesterase",
+      permanent: true,
+      located: ["terminating"],
+      options: {},
+    },
+  },
+  clusters: {
+    loading: [],
+    extending: [
+      ["KR"], ["DH", "KR"], ["DH", "ER", "KR"],
+    ],
+    terminating: [
+      ["KR"], ["DH", "KR"], ["DH", "ER", "KR"],
+    ],
+  },
+}

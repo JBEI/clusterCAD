@@ -10,6 +10,7 @@ class ModuleBuilder extends React.Component {
       DomainList: props.domainList,
       ModuleType: props.type,
       index: props.index,
+      key: props.key,
       deleteFunction: props.deleteFunction,
     }
   }
@@ -79,7 +80,7 @@ class ModuleBuilder extends React.Component {
 
   render() {
     return (
-      <div className='ModuleBuilder'>
+      <div className='ModuleBuilder' key={this.state.key} >
         <div className="DomainHeader">
           <div> Module {this.state.index} </div>
           <div> {this.state.ModuleType} </div>

@@ -16,36 +16,53 @@ class DomainSearch extends React.Component {
 
   constructor(props) {
     super(props);
+    
+    const PKSDomainList = {
+      KS:  {domainName: 'KS', present: false},
+      AT:  {domainName: 'AT', present: true},
+      DH:  {domainName: 'DH', present: false},
+      ER:  {domainName: 'ER', present: false},
+      KR:  {domainName: 'KR', present: false},
+      ACP: {domainName: 'ACP', present: true}, 
+    };
+
+    const LoadingPKSList = {
+      KS:  {domainName: 'KS', present: false},
+      AT:  {domainName: 'AT', present: true},
+      ACP: {domainName: 'ACP', present: true},       
+    };
+
+    const TerminatingPKSList = {
+      KS:  {domainName: 'KS', present: false},
+      AT:  {domainName: 'AT', present: true},
+      DH:  {domainName: 'DH', present: false},
+      ER:  {domainName: 'ER', present: false},
+      KR:  {domainName: 'KR', present: false},
+      ACP: {domainName: 'ACP', present: true}, 
+      TE:  {domainName: 'TE', present: true},        
+    };
+
     this.state = {
-      PKSDomainList: {
-        KS:  {domainName: 'KS', present: false},
-        AT:  {domainName: 'AT', present: true},
-        DH:  {domainName: 'DH', present: false},
-        ER:  {domainName: 'ER', present: false},
-        KR:  {domainName: 'KR', present: false},
-        ACP: {domainName: 'ACP', present: true}, 
+      LoadingModule: {
+        index: 0,
+        key: 'loading-0',
+        type: 'loading',
+        domainList: LoadingPKSList,
       },
-      LoadingPKSList: {
-        KS:  {domainName: 'KS', present: false},
-        AT:  {domainName: 'AT', present: true},
-        ACP: {domainName: 'ACP', present: true},       
+      // ModuleArray: this.props.ModuleArray,
+      TerminatingModule: {
+        index: 1,
+        key: 'terminating-n',
+        type: 'terminating',
+        domainList: TerminatingPKSList,
       },
-      TerminatingPKSList: {
-        KS:  {domainName: 'KS', present: false},
-        AT:  {domainName: 'AT', present: true},
-        DH:  {domainName: 'DH', present: false},
-        ER:  {domainName: 'ER', present: false},
-        KR:  {domainName: 'KR', present: false},
-        ACP: {domainName: 'ACP', present: true}, 
-        TE:  {domainName: 'TE', present: true},        
-      },
-      ModuleArray: this.props.state.ModuleArray,
       DomainList: 'PKS',
     }
   }
 
-  buildModules = (newLength) => {
+ buildModules = (newLength) => {
     let emptyArray = Array.from({ length: newLength }, ((_, i) =>i+1));
+    emptyArray.map();
     this.setState({ModuleArray: emptyArray});
     console.log("built modules and memoized");
   }
@@ -53,6 +70,18 @@ class DomainSearch extends React.Component {
   addModule = () => {
     let currentPlusOne = this.state.ModuleArray.length + 1;
     this.buildModules(currentPlusOne);
+  }
+
+  parseModuleObject = (module) => {
+    let {index, key, type, domainList} = module;
+    return (
+      <ModuleBuilder 
+        index={index} 
+        key={key} 
+        deleteFunction={this.deleteModule} 
+        domainList={domainList} 
+        type={type} />
+    );
   }
 
   deleteModule = (moduleIndex) => {
@@ -67,23 +96,15 @@ class DomainSearch extends React.Component {
     });
   }
 
-  // select PKS or NRBS
-  // delete module button
-  // submit button
-  // key as index is antipattern :(
-
   render() {
     return (
       <div className='DomainSearch'>
         <h3>Construct Modules</h3>
         <Button onClick={ () => { this.addModule() }}> Add Module + </Button>
         <div className="ModuleListWrapper">
-          <ModuleBuilder index='0' key='loading' domainList={this.state.LoadingPKSList} type="loading" />
-          { this.state.ModuleArray.map((index) => (
-              <ModuleBuilder index={index} key={index} deleteFunction={this.deleteModule} domainList={this.state.PKSDomainList} type="extending" />
-            ))
-          }
-          <ModuleBuilder index ={this.state.ModuleArray.length + 1} key='terminating' domainList={this.state.TerminatingPKSList} type="terminating" />
+          { this.parseModuleObject(this.state.LoadingModule) }
+
+          { this.parseModuleObject(this.state.TerminatingModule) }
         </div>
       </div>
     )
