@@ -84,19 +84,11 @@ class DomainSearch extends React.Component {
   deleteModule = (moduleIndex) => {
     console.log("module to delete has index " + moduleIndex);
     let currentModules = this.state.ModuleArray;
-    console.log("modules look like " + currentModules);
-    // note that splice() is a *mutator*
-    currentModules.splice(moduleIndex-1, 1);
-    console.log("modules look like " + currentModules);
+    currentModules.splice(moduleIndex, 1);
     this.setState({
       ModuleArray: currentModules,
     });
   }
-
-  // select PKS or NRBS
-  // delete module button
-  // submit button
-  // key as index is antipattern
 
   render() {
     const ExtendingArray = this.state.ModuleArray;
