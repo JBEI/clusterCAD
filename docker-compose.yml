@@ -83,15 +83,14 @@ services:
     build:
       context: retrotide
       dockerfile: Dockerfile
-    # react-scripts bugfix, interactive mode is required
-    # stdin_open: true
-    # tty: true
     volumes: 
       - .:/retrotide/app
       - /retrotide/app/node_modules
     ports:
       - "3000:3000"
     environment:
+      # attempting hot-reload fix
+      - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=development
     command: npm start
 
