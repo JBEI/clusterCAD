@@ -7,6 +7,7 @@ import {
 
 import Home from './containers/Home';
 import Design from './containers/Design';
+import DomainSearch from './containers/DomainSearch';
 import NavTab from './components/NavTab';
 import './stylesheets/main.scss';
 import jbeiLogo from './images/jbei-logo.png';
@@ -28,6 +29,9 @@ function App() {
           <NavTab path="/search">
             Architecture Search
           </NavTab> 
+          <NavTab path="/domainSearch">
+            Domain Level Search
+          </NavTab> 
           <NavTab path="/savedResults">   
             Saved Designs
           </NavTab>
@@ -39,6 +43,9 @@ function App() {
         <Switch>
           <Route path="/design">
             <Design />
+          </Route>
+          <Route path="/domainSearch">
+            <DomainSearch />
           </Route>
           <Route path="/">
             <Home />

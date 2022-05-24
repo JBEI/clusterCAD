@@ -1,0 +1,38 @@
+.ModuleListWrapper {
+  max-width: 1200px;
+  text-align: center;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ModuleBuilder {
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 12px;
+  max-width: 630px;
+}
+
+.DomainSandbox {
+  margin:  12px;
+  border: 1px solid #ddd;
+  padding:  12px;
+}
+
+.DomainWrapper {
+  display:  inline-block;
+  border:  1px solid #ccc;
+  padding: 12px;
+  border-radius:  6px;
+  width:  63px;
+}
+
+.DomainHeader {
+  text-align: left;
+  display: inline-block;
+  width: 85%;
+  :nth-child(1) {
+    font-weight: bold;
+  }
+}
