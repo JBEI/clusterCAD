@@ -84,7 +84,7 @@ class DomainSearch extends React.Component {
     let currentModules = this.state.ModuleArray;
     let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
     console.log("module to delete has index " + moduleIndex);
-    if(moduleIndex > 0) {
+    if(moduleIndex >= 0) {
       currentModules.splice(moduleIndex, 1);
     }
     this.setState({
