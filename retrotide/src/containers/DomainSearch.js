@@ -26,13 +26,11 @@ class DomainSearch extends React.Component {
     this.state = {
       ModuleArray: [],
       LoadingModule: {
-        index: 0,
         key: 'loading-0',
         type: 'loading',
         domainList: LoadingPKSList,
       },
       TerminatingModule: {
-        index: 1,
         key: 'terminating-n',
         type: 'terminating',
         domainList: TerminatingPKSList,
@@ -69,22 +67,26 @@ class DomainSearch extends React.Component {
     this.buildModules(currentPlusOne);
   }
 
-  parseModuleObject = (module) => {
-    let {index, key, type, domainList} = module;
+  parseModuleObject = (module, index) => {
+    let {key, type, domainList} = module;
     return (
       <ModuleBuilder 
         index={index} 
-        key={key} 
+        key={key}
+        id={key}
         deleteFunction={this.deleteModule} 
         domainList={domainList} 
         type={type} />
     );
   }
 
-  deleteModule = (moduleIndex) => {
-    console.log("module to delete has index " + moduleIndex);
+  deleteModule = (moduleKey) => {
     let currentModules = this.state.ModuleArray;
-    currentModules.splice(moduleIndex, 1);
+    let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
+    console.log("module to delete has index " + moduleIndex);
+    if(moduleIndex > 0) {
+      currentModules.splice(moduleIndex, 1);
+    }
     this.setState({
       ModuleArray: currentModules,
     });
@@ -97,15 +99,15 @@ class DomainSearch extends React.Component {
         <h3>Construct Modules</h3>
         <Button onClick={ () => { this.addModule() }}> Add Module + </Button>
         <div className="ModuleListWrapper">
-          { this.parseModuleObject(this.state.LoadingModule) }
+          { this.parseModuleObject(this.state.LoadingModule, -1) }
           { (ExtendingArray && ExtendingArray.length > 0) &&
-            ExtendingArray.map((exModule) => {
+            ExtendingArray.map((exModule, index) => {
               return (
-                this.parseModuleObject(exModule)
+                this.parseModuleObject(exModule, index)
               )
             }) 
           }
-          { this.parseModuleObject(this.state.TerminatingModule) }
+          { this.parseModuleObject(this.state.TerminatingModule, ExtendingArray.length) }
         </div>
       </div>
     )

@@ -9,7 +9,6 @@ class ModuleBuilder extends React.Component {
     this.state = {
       DomainList: props.domainList,
       ModuleType: props.type,
-      index: props.index,
       deleteFunction: props.deleteFunction,
     }
   }
@@ -81,12 +80,12 @@ class ModuleBuilder extends React.Component {
     return (
       <div className='ModuleBuilder'>
         <div className="DomainHeader">
-          <div> Module {this.state.index} </div>
+          <div> Module {this.props.index + 1} </div>
           <div> {this.state.ModuleType} </div>
         </div>
         {this.state.ModuleType === 'extending' ? 
           <div className="DomainHeaderButton">
-            <Button className='deleteModuleButton' onClick={() => {this.state.deleteFunction(this.state.index)}}> X </Button> 
+            <Button className='deleteModuleButton' onClick={() => {this.state.deleteFunction(this.props.id)}}> X </Button> 
           </div>
           : null
         }        
