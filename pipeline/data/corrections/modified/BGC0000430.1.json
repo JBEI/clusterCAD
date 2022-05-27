@@ -1,0 +1,55 @@
+{
+    "description": "Spumigin E",
+    "genbankAccession": "CP007203.2",
+    "mibigAccession": "BGC0000430.1",
+    "architecture": {
+        "Long-chain-fatty-acid--CoA ligase_1": {
+            "0": {
+                "domains": {
+                    "CAL": {
+                        "substrate": "hpla"
+                    },
+                    "KR": {
+                        "active": false,
+                        "type": "C1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "Long-chain-fatty-acid--CoA ligase": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "htyr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "mpro"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "arg"
+                    },
+                    "R": {
+                        "active": true,
+                        "type": "aldehyde"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }, 
+    "notes": "Reference(s): https://doi.org/10.1111/j.1365-2958.2009.06816.x"
+}

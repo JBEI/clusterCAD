@@ -1,0 +1,151 @@
+{
+    "description": "Cremimycin",
+    "genbankAccession": "AB818354.1",
+    "mibigAccession": "BGC0000042.1",
+    "architecture": {
+        "cmiP1": {
+            "0": {
+                "domains": {
+                    "ACP": {
+                        "substrate": "cremimycin1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "cmiP5": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "cmiP8": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": false,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "cmiP7": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "cmiP6": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Cluster composed of converging PKS pathways; only the second pathway was implemented due to a module spanning two subunits in the first pathway (unsupported cluster architecture). Reference(s): https://doi.org/10.1002/cbic.201300370"
+}

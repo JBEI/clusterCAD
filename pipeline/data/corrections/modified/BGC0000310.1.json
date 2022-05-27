@@ -1,0 +1,127 @@
+{
+    "description": "Bacitracin",
+    "genbankAccession": "AF007865.2",
+    "mibigAccession": "BGC0000310.1",
+    "architecture": {
+        "bacA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "Cy": {},
+                    "A": {
+                        "substrate": "cys"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "glu"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "4": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "bacB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "lys"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "orn"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "bacC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "phe"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "his"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "asp"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "4": {
+                "domains": {
+                    "A": {
+                        "substrate": "asn"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 12
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1016/s1074-5521(97)90301-x"
+}

@@ -12,7 +12,15 @@ import pks.models
 correctionpath = './data/corrections/modified'
 correctionlist = glob.glob(os.path.join(correctionpath, '*.json'))
 
+#for corrfile in ['./data/corrections/modified/BGC0000055.1.json',
+#                 './data/corrections/modified/BGC0000054.1.json',
+#                 './data/corrections/modified/BGC0000416.1.json',
+#                 './data/corrections/modified/BGC0000031.1.json',
+#                 './data/corrections/modified/BGC0000430.1.json',
+#                 ]:
+
 for corrfile in correctionlist:
+    
     acc = os.path.basename(corrfile).strip('.json')
     print('Correcting cluster %s.'  % acc)
     cluster = pks.models.Cluster.objects.get(mibigAccession=acc)
@@ -22,3 +30,5 @@ for corrfile in correctionlist:
     # 'reviewed' and set the boolean value accordingly
     cluster.reviewed = True
     cluster.save()
+
+print("\nAll cluster corrections applied. ")

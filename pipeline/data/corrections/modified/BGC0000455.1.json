@@ -1,0 +1,83 @@
+{
+    "description": "Vancomycin",
+    "genbankAccession": "HQ679900.1",
+    "mibigAccession": "BGC0000455.1",
+    "architecture": {
+        "vcm2": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "d-leu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "asn"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "vcm3": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "hpg"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "hpg"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "vcm4": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "dpg"
+                    },
+                    "TE": {
+                        "cyclic": false,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "References: https://doi.org/10.1039/C4OB00474D https://www.genome.jp/kegg-bin/show_pathway?ko01055"
+}

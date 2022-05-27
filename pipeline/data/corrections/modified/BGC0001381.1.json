@@ -3,69 +3,11 @@
     "genbankAccession": "KP161205.1",
     "mibigAccession": "BGC0001381.1",
     "architecture": {
-        "nbrI": {
-            "0": {
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                },
-                "iterations": 1
-            },
-            "1": {
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "DH": {
-                        "active": true
-                    },
-                    "ER": {
-                        "active": true
-                    },
-                    "KR": {
-                        "type": "U",
-                        "active": true
-                    }
-                },
-                "iterations": 1
-            }
-        },
-        "nbrJ": {
-            "0": {
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                },
-                "iterations": 1
-            },
-            "1": {
-                "domains": {
-                    "AT": {
-                        "substrate": "mal"
-                    },
-                    "KR": {
-                        "type": "B1",
-                        "active": true
-                    }
-                },
-                "iterations": 1
-            }
-        },
         "nbrK": {
             "0": {
                 "domains": {
                     "AT": {
-                        "substrate": "mmal"
+                        "substrate": "mal"
                     }
                 },
                 "iterations": 1
@@ -130,6 +72,64 @@
                     },
                     "KR": {
                         "type": "U",
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "nbrI": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "type": "U",
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "nbrJ": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "B1",
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "type": "B1",
                         "active": true
                     }
                 },
@@ -253,12 +253,13 @@
                         "active": true
                     },
                     "TE": {
-                        "ring": 0,
-                        "cyclic": false
+                        "ring": 6,
+                        "cyclic": true
                     }
                 },
                 "iterations": 1
             }
         }
-    }
+    },
+    "notes": "Reference: https://doi.org/10.1039/C5OB02292D"
 }
