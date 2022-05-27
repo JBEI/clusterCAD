@@ -1,5 +1,6 @@
 ################################################################################
 # (C) 2017 Tyler W. H. Backman
+# modified by Xavier Tao in 2022 for ClusterCAD 2.0
 # Makefile to load PKS data
 ################################################################################
 
@@ -11,7 +12,7 @@ password = pkscluster
 all: data/generate_aa_plots_placeholder 
 
 clean:
-	-rm -rf data/mibigdata_clustercad_production.tgz
+	-rm -rf data/clustercad2.0_production.tgz
 	-rm -rf data/antismash
 	-rm -rf data/blast
 	-rm -rf data/mibig
@@ -22,20 +23,11 @@ clean:
 	-rm data/generate_aa_plots_placeholder
 	-rm data/aa_sequence_analysis/plotCache.tgz
 
-# ***temporary*** to get rid of previous messes with extracting to wrong directories
-#	-rm -rf mibig_json_2.0
-#	-rm -rf data/mibig_json_2.0.tar.gz
-
-# download PKS data from online
-data/mibigdata_clustercad_production.tgz:
+# download BGC data from ClusterCAD server
+data/clustercad2.0_production.tgz:
 	mkdir -p data
-	wget --user=$(username) --password=$(password) $(dataUrl)/mibigdata_clustercad_production.tgz -O $@ --no-check-certificate
-	tar xvfz data/mibigdata_clustercad_production.tgz
-
-# ***using mibig 2.0 data (new mibig data from 2019) --> see mibigDB2.0 branch for implementation***
-#	wget https://dl.secondarymetabolites.org/mibig/mibig_json_2.0.tar.gz
-#	mv mibig_json_2.0.tar.gz data/mibig_json_2.0.tar.gz
-#	tar xvfz data/mibig_json_2.0.tar.gz
+	wget --user=$(username) --password=$(password) $(dataUrl)/clustercad2.0_production.tgz -O $@ --no-check-certificate
+	tar xvfz data/clustercad2.0_production.tgz
 
 # download plot cache
 data/aa_sequence_analysis/plotCache.tgz:
@@ -44,7 +36,7 @@ data/aa_sequence_analysis/plotCache.tgz:
 	cd data/aa_sequence_analysis/ && tar xvfz plotCache.tgz
 
 # aggregate chemical structures
-data/compounds/all_known_products.p: aggregate_final_structures.py data/mibigdata_clustercad_production.tgz
+data/compounds/all_known_products.p: aggregate_final_structures.py data/clustercad2.0_production.tgz
 	mkdir -p data/compounds
 	./$< 
 

@@ -200,3 +200,13 @@ except ValueError:
     subunit.acc20 = "[DATA UNAVAILABLE]"
     subunit.ss8 = "[DATA UNAVAILABLE]"
     subunit.save()
+
+# handle AssertionError that arises when sequence length is no longer equal to length of solvent accessibility values
+except AssertionError:
+    # may happen when mibig is updated with new sequences (rare). then ignore both acc20/ss8 and continue to next subunit
+    print("\tAA sequence length does not match acc20 (solvent accessibility) and/or ss8 (secondary structure) value length.")
+    subunit.acc = "[DATA UNAVAILABLE]"
+    subunit.ss = "[DATA UNAVAILABLE]"
+    subunit.acc20 = "[DATA UNAVAILABLE]"
+    subunit.ss8 = "[DATA UNAVAILABLE]"
+    subunit.save()
