@@ -57,9 +57,7 @@ class DomainSearch extends React.Component {
         type: 'extending',
       })
     );
-    console.log(defaultArray);
     this.setState({ ModuleArray: defaultArray });
-    console.log("built modules and memoized");
   }
 
   addModule = () => {
@@ -83,7 +81,6 @@ class DomainSearch extends React.Component {
   deleteModule = (moduleKey) => {
     let currentModules = this.state.ModuleArray;
     let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
-    console.log("module to delete has index " + moduleIndex);
     if(moduleIndex >= 0) {
       currentModules.splice(moduleIndex, 1);
     }
@@ -92,12 +89,24 @@ class DomainSearch extends React.Component {
     });
   }
 
+  submitSearch = () => {
+    let loading = this.state.LoadingModule;
+    let terminating = this.state.TerminatingModule;
+    let currentModules = this.state.ModuleArray;
+    // push and unshift are mutators
+    // this works fine even if ModuleArray has length 0
+    currentModules.unshift(loading);
+    currentModules.push(terminating);
+    console.log(currentModules);
+  }
+
   render() {
     const ExtendingArray = this.state.ModuleArray;
     return (
       <div className='DomainSearch'>
         <h3>Construct Modules</h3>
-        <Button onClick={ () => { this.addModule() }}> Add Module + </Button>
+        <Button onClick={() => { this.addModule() }}> Add Module + </Button>
+        <Button onClick={() => { this.submitSearch() }} className="submitButton"> Submit </Button>
         <div className="ModuleListWrapper">
           { this.parseModuleObject(this.state.LoadingModule, -1) }
           { (ExtendingArray && ExtendingArray.length > 0) &&
