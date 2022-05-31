@@ -1,6 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { beginDomainSearch } from '../redux/actions/actions';
 import Button from '../components/Button';
 import ModuleBuilder from '../components/ModuleBuilder'
+
+const mapDispatchToProps = dispatch => {
+  return {
+    beginDomainSearch: modules => dispatch(beginDomainSearch(modules)),
+    dispatch,
+  }
+};
 
 class DomainSearch extends React.Component {
 
@@ -97,7 +106,7 @@ class DomainSearch extends React.Component {
     // this works fine even if ModuleArray has length 0
     currentModules.unshift(loading);
     currentModules.push(terminating);
-    console.log(currentModules);
+    this.props.beginDomainSearch(currentModules);
   }
 
   render() {
@@ -106,7 +115,7 @@ class DomainSearch extends React.Component {
       <div className='DomainSearch'>
         <h3>Construct Modules</h3>
         <Button onClick={() => { this.addModule() }}> Add Module + </Button>
-        <Button onClick={() => { this.submitSearch() }} className="submitButton"> Submit </Button>
+        <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
         <div className="ModuleListWrapper">
           { this.parseModuleObject(this.state.LoadingModule, -1) }
           { (ExtendingArray && ExtendingArray.length > 0) &&
@@ -123,4 +132,4 @@ class DomainSearch extends React.Component {
   }
 };
 
-export default DomainSearch;
+export default connect(null, mapDispatchToProps)(DomainSearch);
