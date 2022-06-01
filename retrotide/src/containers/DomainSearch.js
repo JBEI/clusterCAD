@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { beginDomainSearch } from '../redux/actions/actions';
+import {clusterCADDomainSearch} from '../redux/middleware/api';
 import Button from '../components/Button';
 import ModuleBuilder from '../components/ModuleBuilder'
 
@@ -122,7 +123,10 @@ class DomainSearch extends React.Component {
     // this works fine even if ModuleArray has length 0
     currentModules.unshift(loading);
     currentModules.push(terminating);
+    // dispatch action
     this.props.beginDomainSearch(currentModules);
+    // call async function. is this where this goes?
+    clusterCADDomainSearch(currentModules);
   }
 
   render() {

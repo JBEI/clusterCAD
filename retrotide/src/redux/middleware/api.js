@@ -17,7 +17,14 @@ const clusterCADSeqSearch = (molecule, token) => {
     // make this a try/catch
     // const response = await client.post('/api', {integer: 0}); // callback
     // dispatch({ type: 'jobAdded', payload: {response} });
-    client.get('/api/', {params: {integer: 0}})
+  client.get('/api/', {params: {integer: 0}})
+    .then((response) => {console.log(response)})
+    .catch((error) => {console.log(error.config)});
+}
+
+const clusterCADDomainSearch = (payload, token) => {
+  console.log('hit api function domain search with ' + payload);
+  client.get('/api/', {params: {modules: payload}})
     .then((response) => {console.log(response)})
     .catch((error) => {console.log(error.config)});
 }
@@ -30,6 +37,6 @@ const clusterCADSeqSearch = (molecule, token) => {
 //   }
 // }
 
-export { clusterCADSeqSearch };
+export { clusterCADSeqSearch, clusterCADDomainSearch };
 // then import this function in the component, which has no idea it's async
 // remember to update reducers if dispatching an action
