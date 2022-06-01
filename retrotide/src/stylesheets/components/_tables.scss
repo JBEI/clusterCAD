@@ -1,33 +1,33 @@
 .Navbar {
   width: 100%;
-  background-color: #dde;
+  background-color: $indigo_mid;
   display: flex;
   line-height: 50px;
-  border-bottom: 12px solid #bbc;
+  border-bottom: 12px solid $indigo_med;
 }
 
 .welcomeTable {
   border-collapse: collapse;
-  border: 3px solid #edd;
+  border: 3px solid $blue_sky_mid;
   table-layout: fixed;
   margin: 0 45px;
   th, td {
     padding: 20px;
     text-align: center;
-    border: 1px solid #edd;
+    border: 1px solid $blue_sky_mid;
   }
 }
 
 canvas {
   display: block;
-  border: 1px solid #ddd;
+  border: 1px solid $white_gray;
 }
 
 .Footer {
   width: 100%;
-  background-color: #fff;
+  background-color: $white;
   line-height: 30px;
-  border-top: 1px solid #cac;
+  border-top: 1px solid $gray_neutral_medium;
   position: fixed;
   display: flex;
   bottom: 0;
@@ -37,7 +37,7 @@ canvas {
     opacity: .5;
   }
   .copyright {
-    color: #878;
+    color: $gray_link;
     font-size: 16px;
     flex: 3;
     text-align: right;

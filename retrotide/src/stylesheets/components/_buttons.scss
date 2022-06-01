@@ -1,16 +1,16 @@
 .button {
   text-decoration: none;
   font-size: 14px;
-  color: indigo;
+  color: $indigo;
   padding: 5px 10px;
-  background-color: #dde;
+  background-color: $blue_sky_mid;
   border-radius: 5px;
-  border: 1px solid #dde;
+  border: 1px solid $gray_neutral_medium;
   display: inline-block;
   margin: 15px 0px;
   &:disabled {
-    background-color: #eee;
-    color: #ddd;
+    background-color: $white_gray;
+    color: $gray_neutral;
   }
 }
 
@@ -19,16 +19,17 @@
   display: block;
   flex: 3;
   text-decoration: none;
-  color: #878;
+  color: $indigo;
 
   &.activeTab {
     cursor: not-allowed;
     font-weight: bold;
-    background-color: #eef;
+    background-color: $indigo_light;
   }
 }
 
 .smilesButton, .drawerButton {
+  background-color: $gray_neutral_medium;
   border-radius: 0;
   flex: 1;
   margin: 15px;
@@ -36,9 +37,15 @@
   border-top-left-radius: 5px;
   margin-bottom: 0;
   &.selected {
-    background-color: #aae;
-    border: 1px solid #dde;
+    background-color: $blue_sky;
+    color: $blue_sky_light;
+    border: 1px solid $gray_neutral_medium;
   }
+}
+
+.submit {
+  background-color: $blue_sky;
+  color: $blue_sky_light;
 }
 
 .submit, .clear {
@@ -48,7 +55,7 @@
 
 .logo {
   font-size: 20px;
-  font-style: bold;
+  font-weight: bold;
   flex: 1;
-  color: crimson;
+  color: $indigo;
 }
