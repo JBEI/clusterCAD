@@ -8,17 +8,19 @@ class ModuleBuilder extends React.Component {
     super(props);
     this.state = {
       DomainList: props.domainList,
+      ButtonList: props.buttonList,
       ModuleType: props.type,
       deleteFunction: props.deleteFunction,
     }
-  }
+    console.log(this.state.ButtonList);
+  };
 
-  getAllDomains = () => {
-    let allDomains = [];
-    for (var DomainObject in this.state.DomainList) {
-      allDomains.push(this.state.DomainList[DomainObject]);
+  getAllButtons = () => {
+    let allButtons = [];
+    for (var ButtonObject in this.state.ButtonList) {
+      allButtons.push(this.state.ButtonList[ButtonObject]);
     }
-    return allDomains;
+    return allButtons;
   };
 
   getPresentDomains = () => {
@@ -35,46 +37,40 @@ class ModuleBuilder extends React.Component {
     for(var domain in NewDomains) {
       this.insertDomain(domain);
     }
-  }
+  };
 
-  toggleDomain = Domain => {
-    let selectedDomain = this.state.DomainList[Domain];
-    let updatedDomainList;
+  toggleDomains = domainsToToggle => {
+    let updatedDomainList = this.state.DomainList;
 
-    if(selectedDomain.present) {
-      let deleteDomain = {
-        domainName: Domain,
-        present: false,
-      }
-      updatedDomainList = {
-        ...this.state.DomainList,
-        [Domain]: deleteDomain,
-      };
-    } else {
-      // we'll need some logic here to add multiple nodes depending on selected name
-      let insertDomain = {
-        domainName: Domain,
-        present: true,
-      }
-      updatedDomainList = {
-        ...this.state.DomainList,
-        [Domain]: insertDomain,
-      };     
+    if (domainsToToggle.length > 0) {
+      domainsToToggle.forEach((Domain) => {
+        let selectedDomain = this.state.DomainList[Domain];
+
+        if(selectedDomain.present) {
+          let deleteDomain = {
+            domainName: Domain,
+            present: false,
+          }
+          updatedDomainList = {
+            ...updatedDomainList,
+            [Domain]: deleteDomain,
+          }
+        } else {
+          let insertDomain = {
+            domainName: Domain,
+            present: true,
+          }
+          updatedDomainList = {
+            ...updatedDomainList,
+            [Domain]: insertDomain,
+          }   
+        }
+        console.log(updatedDomainList);
+      });
     }
+    console.log(updatedDomainList);
     this.setState({DomainList: updatedDomainList}); 
-  }
-
-  deleteDomain = Domain => {
-    let domainToDelete = {
-      domainName: Domain,
-      present: false,
-    }
-    let updatedDomainList = {
-      ...this.state.DomainList,
-      [Domain]: domainToDelete,
-    };
-    this.setState({DomainList: updatedDomainList});
-  }
+  };
 
   render() {
     return (
@@ -91,8 +87,8 @@ class ModuleBuilder extends React.Component {
         }        
         <div className="DomainToolbox">
           <div className="DomainButtonList">
-            {this.getAllDomains().map((DomainButton, index) => (
-              <Button className='addDomainButton' key={index} onClick={ () => {this.toggleDomain(DomainButton.domainName)} }>
+            {this.getAllButtons().map((DomainButton, index) => (
+              <Button className='addDomainButton' key={index} onClick={ () => {this.toggleDomains(DomainButton.domains)} }>
                 {DomainButton.domainName}
               </Button>
               ))

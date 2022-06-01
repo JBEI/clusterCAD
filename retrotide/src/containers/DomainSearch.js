@@ -57,12 +57,19 @@ class DomainSearch extends React.Component {
       KR:  {domainName: 'KR', present: false},
       ACP: {domainName: 'ACP', present: true}, 
     };
+    let ButtonList = {
+      KS: {domainName: 'KS', domains: ['KS']},
+      KR: {domainName: 'KR', domains: ['KR']},
+      DH_KR: {domainName: 'DH-KR', domains: ['DH', 'KR']},
+      DH_ER_KR: {domainName: 'DH-ER-KR', domains: ['DH', 'ER', 'KR']}
+    };
     let defaultArray = Array.from(
       { length: newLength },
       (x, index) => ({
         index: index,
         key: 'extending-' + index,
         domainList: PKSDomainList,
+        buttonList: ButtonList,
         type: 'extending',
       })
     );
@@ -75,14 +82,15 @@ class DomainSearch extends React.Component {
   }
 
   parseModuleObject = (module, index) => {
-    let {key, type, domainList} = module;
+    let {key, type, domainList, buttonList} = module;
     return (
       <ModuleBuilder 
         index={index} 
         key={key}
         id={key}
         deleteFunction={this.deleteModule} 
-        domainList={domainList} 
+        domainList={domainList}
+        buttonList={buttonList}
         type={type} />
     );
   }
