@@ -17,13 +17,13 @@ class DomainSearch extends React.Component {
     super(props);
 
     const LoadingPKSList = {
-      KS:  {domainName: 'KS', present: false},
+      KS:  {domainName: 'KS', present: true},
       AT:  {domainName: 'AT', present: true},
       ACP: {domainName: 'ACP', present: true},       
     };
 
     const TerminatingPKSList = {
-      KS:  {domainName: 'KS', present: false},
+      KS:  {domainName: 'KS', present: true},
       AT:  {domainName: 'AT', present: true},
       DH:  {domainName: 'DH', present: false},
       ER:  {domainName: 'ER', present: false},
@@ -31,6 +31,13 @@ class DomainSearch extends React.Component {
       ACP: {domainName: 'ACP', present: true}, 
       TE:  {domainName: 'TE', present: true},        
     };
+
+    const ButtonList = {
+      KS: {domainName: 'KS', domains: ['KS']},
+      KR: {domainName: 'KR', domains: ['KR']},
+      DH_KR: {domainName: 'DH-KR', domains: ['DH', 'KR']},
+      DH_ER_KR: {domainName: 'DH-ER-KR', domains: ['DH', 'ER', 'KR']},
+    }
 
     this.state = {
       ModuleArray: [],
@@ -43,6 +50,7 @@ class DomainSearch extends React.Component {
         key: 'terminating-n',
         type: 'terminating',
         domainList: TerminatingPKSList,
+        buttonList: ButtonList,
       },
       DomainList: 'PKS',
     }
@@ -50,7 +58,7 @@ class DomainSearch extends React.Component {
 
   buildModules = (newLength) => {
     let PKSDomainList = {
-      KS:  {domainName: 'KS', present: false},
+      KS:  {domainName: 'KS', present: true},
       AT:  {domainName: 'AT', present: true},
       DH:  {domainName: 'DH', present: false},
       ER:  {domainName: 'ER', present: false},

@@ -3,7 +3,6 @@ import Button from '../components/Button';
 
 class ModuleBuilder extends React.Component {
 
-  // domain list gets passed
   constructor(props) {
     super(props);
     this.state = {
