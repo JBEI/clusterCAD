@@ -1,0 +1,45 @@
+{
+    "description": "Aeruginoside",
+    "genbankAccession": "AM071396.2",
+    "mibigAccession": "BGC0000297.1",
+    "architecture": {
+        "aerA": {
+            "0": {
+                "domains": {
+                    "CAL": {
+                        "substrate": "alpha-OH-phe"
+                    },
+                    "KR": {
+                        "active": false,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "aerB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "aerG": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "choi"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1016/j.chembiol.2007.04.006"
+}

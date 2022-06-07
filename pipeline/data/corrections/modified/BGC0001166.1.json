@@ -1,0 +1,45 @@
+{
+    "description": "HC-toxin",
+    "genbankAccession": "KC862269.1",
+    "mibigAccession": "BGC0001166.1",
+    "architecture": {
+        "HTS1": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "pro"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "d-ala"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "8C-AA"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.3389/fmicb.2021.664276"
+}

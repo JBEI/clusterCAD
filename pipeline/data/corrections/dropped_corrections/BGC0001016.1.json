@@ -1,0 +1,119 @@
+{
+    "description": "Microcystin",
+    "genbankAccession": "AY212249.1",
+    "mibigAccession": "BGC0001016.1",
+    "architecture": {
+        "mcyG": {
+            "0": {
+                "domains": {
+                    "CAL": {
+                        "substrate": "methylbenz"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "cMT": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "C2"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "mcyD": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "mcyE": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "glu"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "mcyA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ser"
+                    },
+                    "nMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "mcyB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ser"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "mcyC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ser"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }
+}

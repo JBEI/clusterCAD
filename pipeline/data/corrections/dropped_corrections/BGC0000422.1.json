@@ -1,0 +1,49 @@
+{
+    "description": "Saframycin",
+    "genbankAccession": "DQ838002.1",
+    "mibigAccession": "BGC0000422.1",
+    "architecture": {
+        "sfmA": {
+            "0": {
+                "domains": {
+                    "CAL": {
+                        "substrate": "N/A"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "sfmB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "sfmC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    },
+                    "R": {
+                        "active": true,
+                        "type": "alcohol"
+                    }
+                },
+                "iterations": 2
+            }
+        }
+    }
+}

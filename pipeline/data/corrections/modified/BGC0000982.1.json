@@ -1,0 +1,101 @@
+{
+    "description": "Cystothiazole A",
+    "genbankAccession": "AY834753.1",
+    "mibigAccession": "BGC0000982.1",
+    "architecture": {
+        "ctaB": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "isobut"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ctaC": {
+            "0": {
+                "domains": {
+                    "Cy": {},
+                    "A": {
+                        "substrate": "cys",
+                        "type": "oxidation"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ctaD": {
+            "0": {
+                "domains": {
+                    "Cy": {},
+                    "A": {
+                        "substrate": "cys", 
+                        "type": "oxidation"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ctaE": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "oMT": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ctaF": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "oMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ctaG": {
+            "0": {
+                "domains": {
+                    "AOX": {
+                        "active": true
+                    },
+                    "TE": {
+                        "cyclic": false,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }, 
+    "notes": "Reference(s): https://doi.org/10.1271/bbb.69.1372"
+}

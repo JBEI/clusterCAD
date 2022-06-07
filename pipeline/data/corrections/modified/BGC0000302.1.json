@@ -1,0 +1,74 @@
+{
+    "description": "Anabaenopeptin",
+    "genbankAccession": "GU174493.1",
+    "mibigAccession": "BGC0000302.1",
+    "architecture": {
+        "aptA1": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "arg-AA"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "lys"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "aptB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "aptC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "htyr"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    },
+                    "nMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "aptD": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "phe"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 2
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "There are two alternate loading pathways using either aptA1 or aptA2; aptA1 was chosen for ClusterCAD. Reference: https://doi.org/10.1016/j.chembiol.2010.01.017"
+}

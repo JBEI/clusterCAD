@@ -1,0 +1,69 @@
+{
+    "description": "Dechlorocuracomycin",
+    "genbankAccession": "CP011533.1",
+    "mibigAccession": "BGC0001569.1",
+    "architecture": {
+        "non-ribosomal peptide synthase/amino acid adenylation enzyme": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "trp"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "peptide synthetase ScpsB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "orn"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "beta-OH-asn"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1002/ajoc.201700433"
+}

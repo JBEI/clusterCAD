@@ -13,7 +13,7 @@ allknownproducts = {}
 # Add structures from JSON files #
 ##################################
 
-mibigpath = './data/mibig/raw'
+mibigpath = './data/mibig/raw/mibig_json_2.0'
 mibigjson = glob.glob(os.path.join(mibigpath, '*.json'))
 
 # Some of the compounds in MIBiG are the predicted final product for multiple clusters
@@ -25,19 +25,22 @@ mibigcompounds = {}
 # This is a dictionary that associates all of the MIBiG accessio numbers to compound names
 mibignames = {}
 
+#print(mibigjson)
+
 for jsonfile in mibigjson:
     with open(jsonfile) as f:
         data = json.loads(f.read())
     try:
         # Get names
         accession = os.path.basename(jsonfile).split('.')[0]
-        names = [x['compound'] for x in data['general_params']['compounds']]
+        #names = [x['compound'] for x in data['general_params']['compounds']] #old json files
+        names = [x['compound'] for x in data['cluster']['compounds']]
         shortname = names[0].split()[0].lower()
         # Enter compound name into name dictionary
         # This must be done first, since structures may not be present resulting in KeyError
         mibignames[accession] = shortname
         # Get structures
-        structures = [x['chem_struct'] for x in data['general_params']['compounds']]
+        structures = [x['chem_struct'] for x in data['cluster']['compounds']]
         # Enter known product dictionary
         allknownproducts[accession] = (structures, 'mibig')
         # Enter known product into compound dictionary
@@ -104,3 +107,4 @@ with open(manualsmi) as f:
 #######################################
 
 pickle.dump(allknownproducts, open('./data/compounds/all_known_products.p', 'wb'))
+print("Product structures aggregated. ")

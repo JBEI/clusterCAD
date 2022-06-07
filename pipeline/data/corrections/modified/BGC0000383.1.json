@@ -1,0 +1,54 @@
+{
+    "description": "Luminmycin",
+    "genbankAccession": "BX470251.1",
+    "mibigAccession": "BGC0000383.1",
+    "architecture": {
+        "N/A_1": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "hypothetical protein": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "lys"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }
+}
