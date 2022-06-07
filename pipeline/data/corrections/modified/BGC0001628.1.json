@@ -1,0 +1,83 @@
+{
+    "description": "JBIR-78",
+    "genbankAccession": "LC217607.1",
+    "mibigAccession": "BGC0001628.1",
+    "architecture": {
+        "orf4": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "methylbenz-val"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "asp"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "orf5": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "orf6": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "phe"
+                    },
+                    "TE": {
+                        "cyclic": false,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1021/acschembio.7b00314"
+}

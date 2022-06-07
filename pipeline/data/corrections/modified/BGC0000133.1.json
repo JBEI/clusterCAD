@@ -1,0 +1,90 @@
+{
+    "description": "Quartromicin",
+    "genbankAccession": "JF970188.1",
+    "mibigAccession": "BGC0000133.1",
+    "architecture": {
+        "QmnA1": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "QmnA2": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "QmnA3": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1016/j.chembiol.2012.07.024"
+}

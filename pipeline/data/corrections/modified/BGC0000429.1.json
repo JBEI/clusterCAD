@@ -1,0 +1,126 @@
+{
+    "description": "Skyllamycin / RP-1776",
+    "genbankAccession": "JF430460.1",
+    "mibigAccession": "BGC0000429.1",
+    "architecture": {
+        "sky16": {
+            "0": {
+                "domains": {
+                    "ACP": {
+                        "substrate": "vinylcinnamoyl"
+                    }
+
+                },
+                "iterations": 1
+            }
+        },
+        "sky29": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "me-asp"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    },
+                    "E": {
+                        "active": false
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "sky30": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "phe"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "pro"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "me-tyr"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "trp"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "sky31": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 1
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }, 
+    "notes": "Two ACPs (sky16, sky23) were candidates for the N-terminal ACP, and sky16 was selected in this cluster due to a lack of additional information suggesting otherwise. Reference(s): https://doi.org/10.1021/ja108971p"
+}

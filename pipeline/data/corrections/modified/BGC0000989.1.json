@@ -1,0 +1,168 @@
+{
+    "description": "Epothilone B",
+    "genbankAccession": "EU414841.1",
+    "mibigAccession": "BGC0000989.1",
+    "architecture": {
+        "epoA": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "ER": {
+                        "active": false
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "epoP": {
+            "0": {
+                "domains": {
+                    "Cy": {},
+                    "A": {
+                        "substrate": "cys",
+                        "type": "oxidation"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "epoB": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "epoC": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "epoD": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "cMT": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "C1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "epoE": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }, 
+    "notes": "Reference(s): https://doi.org/10.1016/S1074-5521(00)00075-2"
+}

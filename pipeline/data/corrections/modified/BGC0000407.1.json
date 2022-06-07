@@ -1,0 +1,114 @@
+{
+    "description": "Fengycin A / Plipastatin",
+    "genbankAccession": "JQ073773.1",
+    "mibigAccession": "BGC0000407.1",
+    "architecture": {
+        "ppsA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "glu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "orn"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ppsB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ppsC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "glu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ppsD": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "pro"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "gln"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "ppsE": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 5
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1159/000338530"
+}

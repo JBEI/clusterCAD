@@ -1,0 +1,79 @@
+{
+    "description": "Micropeptin K139",
+    "genbankAccession": "AB481215.1",
+    "mibigAccession": "BGC0001018.1",
+    "architecture": {
+        "mcnA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "asp"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "mcnB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "mcnC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "arg"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "gln"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    },
+                    "nMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "mcnE": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 3
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }, 
+    "notes": "The mechanism for Ahp residue formation is not well understood, and proposed as a cyclization of glutamine. Reference(s): https://doi.org/10.1093/jb/mvq150 http://dx.doi.org/10.13140/2.1.1425.7602"
+}

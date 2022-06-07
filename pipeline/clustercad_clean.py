@@ -9,7 +9,8 @@ import django
 django.setup()
 import pks.models
 
-# Delete clusters with less than three modules
+
+# Empty subunits are deleted by the pipeline as they are generated but clean checks again
 for cluster in pks.models.Cluster.objects.all():
     nmodules = 0
     for subunit in cluster.subunits():
@@ -21,11 +22,13 @@ for cluster in pks.models.Cluster.objects.all():
     try:
         cluster.computeProduct(recompute=True)
     except:
+        print(cluster.architecture())
         cluster.delete()
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        print('Could not recompute product, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
         continue
-    if nmodules < 3:
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+    # Delete clusters with no modules
+    if nmodules == 0:
+        print('No modules detected, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
 
 # Delete clusters with no computable product
@@ -33,6 +36,7 @@ for cluster in pks.models.Cluster.objects.all():
     try:
         cluster.computeProduct()
     except:
-        print('%s: %s' %(cluster.mibigAccession, cluster.description))
+        print('Could not compute product, deleted %s: %s' %(cluster.mibigAccession, cluster.description))
         cluster.delete()
 
+print("\nDatabase cleanup completed. ")

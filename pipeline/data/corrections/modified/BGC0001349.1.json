@@ -1,0 +1,150 @@
+{
+    "description": "Heronamide",
+    "genbankAccession": "KP742963.1",
+    "mibigAccession": "BGC0001349.1",
+    "architecture": {
+        "HerB": {
+            "0": {
+                "domains": {
+                    "ACP": {
+                        "substrate": "heronamide-1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "HerD": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "HerE": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": false
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "HerF": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "HerG": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    },
+                    "TE": {
+                        "cyclic": false,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Cluster composed of converging PKS pathways; only the second pathway was implemented due to a module spanning two subunits in the first pathway (unsupported cluster architecture). TE is active but cyclization product varies depending on product. Reference(s): https://doi.org/10.1002/cbic.201500281"
+}

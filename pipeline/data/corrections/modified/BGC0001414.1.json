@@ -1,0 +1,113 @@
+{
+    "description": "Griselimycin",
+    "genbankAccession": "KP211414.1",
+    "mibigAccession": "BGC0001414.1",
+    "architecture": {
+        "griA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    },
+                    "nMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "me-pro"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    },
+                    "nMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    }
+                },
+                "iterations": 1
+            },
+            "4": {
+                "domains": {
+                    "A": {
+                        "substrate": "me-pro"
+                    }
+                },
+                "iterations": 1
+            },
+            "5": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "griB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "val"
+                    },
+                    "nMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "pro"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    },
+                    "nMT": {
+                        "active": true
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "griC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 6
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1126/science.aaa4690"
+}

@@ -1,0 +1,209 @@
+{
+    "description": "Concanamycin A",
+    "genbankAccession": "DQ149987.1",
+    "mibigAccession": "BGC0000040.1",
+    "architecture": {
+        "modular polyketide synthase": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "modular polyketide synthase_1": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "C1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "nodular polyketide synthase": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A2"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "modular polyketide synthase_2": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "modular polyketide synthase_3": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "emal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A2"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A2"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mmal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "modular polyketide synthase_4": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 6
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1099/mic.0.28194-0"
+}

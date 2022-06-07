@@ -1,0 +1,39 @@
+{
+    "description": "Sulfazecin",
+    "genbankAccession": "KX757706.1",
+    "mibigAccession": "BGC0001790.1",
+    "architecture": {
+        "sulI": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "d-glu-2"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "sulM": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "dap"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1016/j.chembiol.2016.11.010"
+}

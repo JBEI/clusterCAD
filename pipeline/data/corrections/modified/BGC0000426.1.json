@@ -1,0 +1,45 @@
+{
+    "description": "Sevadicin",
+    "genbankAccession": "KF318360.1",
+    "mibigAccession": "BGC0000426.1",
+    "architecture": {
+        "sevA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "phe"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "sevB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "trp"
+                    },
+                    "TE": {
+                        "cyclic": false,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }
+}

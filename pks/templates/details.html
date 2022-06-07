@@ -25,10 +25,42 @@
             <dd>{% if cluster.reviewed %}Reviewed{% else %}Unreviewed{% endif %}</dd>
             <dt>Submit corrections</dt>
             <dd><a href="mailto:jbei-help@lbl.gov?subject=ClusterCAD%20corrections%20for%20{{ cluster.mibigAccession|stripTrailingVersion }}">Send e-mail</a></dd>
+            
+            <!-- Placeholder code linking to modifications spreadsheet before modal implementation
+            <dt>Cluster Notes</dt>
+            <dd><a href="https://docs.google.com/spreadsheets/d/13feWUXVEShji6A8VdlG3Z0vFUGwOOPT6C0sCwZ9jv2g/edit?usp=sharing" style="color:#ff0000" target="_blank" rel="noopener noreferrer">View Curation Notes, Annotations, References, and/or Publications</a></dd>
+            -->
+            
+            <dt>Cluster Notes</dt>
+            <dd>{% if cluster.notes == "There are no notes available for this cluster. " %}None{% else %}<a data-toggle="modal" href=#notesModal style="color:#ff0000">View Curation Notes, Annotations, References, and/or Publications</a>{% endif %}</dd>
+
+            <!-- notesModal displays cluster notes-->
+            <div class="modal fade" id="notesModal" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- notesModal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{cluster.description}} Notes</h4>
+                  </div>
+                  <div class="modal-body">
+                    <!--<p>{{cluster.notes}}</p> -->
+                    <textarea id="notesField" class="form-control" rows="5">{{cluster.notes}}</textarea>
+                    <dd id="notes"><dd></dd>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+
         </dl>
           <div class="checkbox">
             <label>
-              <input type="checkbox" id="atcheck">Show AT annotations 
+              <input type="checkbox" id="atcheck">Show AT and A annotations 
             </label>
           </div>
           <div class="checkbox">
@@ -46,7 +78,7 @@
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
                 <dl>
-                    <dt>Predicted pks subset</dt>
+                    <dt>Predicted subset</dt>
                 </dl>
             </div>
         </div>
@@ -127,6 +159,10 @@ $(document).ready(function(){
       placement: 'bottom',
       trigger: 'manual'
     });
+    $('[data-domain="A"]').tooltip({
+      placement: 'bottom',
+      trigger: 'manual'
+    });
     $('[data-domain="KR"]').tooltip({
       placement: 'top',
       trigger: 'manual'
@@ -143,6 +179,33 @@ $(document).ready(function(){
     $('[data-domain="oMT"]').tooltip({
       placement: 'right'
     });
+    $('[data-domain="nMT"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="C"]').tooltip({
+      placement: 'top'
+    });
+    $('[data-domain="Ox"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="Red"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="E"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="F"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="MOX"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="X"]').tooltip({
+      placement: 'right'
+    });
+    $('[data-domain="R"]').tooltip({
+      placement: 'right'
+    });
     $('[data-domain="TE"]').tooltip({
       placement: 'right'
     });
@@ -151,8 +214,10 @@ $(document).ready(function(){
     $("#atcheck").on("click", function() {
         if($("#atcheck").is(':checked')){
             $('[data-domain="AT"]').tooltip('show');
+            $('[data-domain="A"]').tooltip('show');
         } else {
             $('[data-domain="AT"]').tooltip('hide');
+            $('[data-domain="A"]').tooltip('hide');
         }
     });
     $("#krcheck").on("click", function() {
@@ -165,6 +230,17 @@ $(document).ready(function(){
 
     // keep tooltip up after hover if checkbox is checked 
     $('[data-domain="AT"]').hover(
+      function() {
+        if(!($("#atcheck").is(':checked'))){
+            $( this ).tooltip('show');
+        }
+      }, function() {
+        if(!($("#atcheck").is(':checked'))){
+            $( this ).tooltip('hide');
+        }
+      }
+    );
+    $('[data-domain="A"]').hover(
       function() {
         if(!($("#atcheck").is(':checked'))){
             $( this ).tooltip('show');
@@ -191,6 +267,7 @@ $(document).ready(function(){
     $('[data-smiles]').click(function(){
         $('#atcheck').prop('checked', false);
         $('[data-domain="AT"]').tooltip('hide');
+        $('[data-domain="A"]').tooltip('hide');
         $('#krcheck').prop('checked', false);
         $('[data-domain="KR"]').tooltip('hide');
 
@@ -241,6 +318,7 @@ $(document).ready(function(){
     $('[data-domain]').click(function(){
         $('#atcheck').prop('checked', false);
         $('[data-domain="AT"]').tooltip('hide');
+        $('[data-domain="A"]').tooltip('hide');
         $('#krcheck').prop('checked', false);
         $('[data-domain="KR"]').tooltip('hide');
 
@@ -259,6 +337,9 @@ $(document).ready(function(){
                     } else {
                         $('#domainAnnotations').text(data.annotations);
                     }
+                    if(data.annotations == 'substrate None') {
+                        $('#domainAnnotations').text("None");
+                    }
                     var searchUrl = "/sequenceSearch/?aainput="
                     $('#domainSearchButton').attr("href", searchUrl.concat(data.AAsequence));
                     $('#domainView').modal('show');
@@ -272,6 +353,7 @@ $(document).ready(function(){
     $('[data-subunitid]').click(function(){
         $('#atcheck').prop('checked', false);
         $('[data-domain="AT"]').tooltip('hide');
+        $('[data-domain="A"]').tooltip('hide');
         $('#krcheck').prop('checked', false);
         $('[data-domain="KR"]').tooltip('hide');
 
