@@ -11,7 +11,6 @@ class ModuleBuilder extends React.Component {
       ModuleType: props.type,
       deleteFunction: props.deleteFunction,
     }
-    console.log(this.state.ButtonList);
   };
 
   getAllButtons = () => {
@@ -64,12 +63,29 @@ class ModuleBuilder extends React.Component {
             [Domain]: insertDomain,
           }   
         }
-        console.log(updatedDomainList);
       });
     }
-    console.log(updatedDomainList);
     this.setState({DomainList: updatedDomainList}); 
   };
+
+  // when a button is clicked, disable the other buttons
+  // to avoid logical overlap errors
+  toggleButtons = ClickedButtonName => {
+    let updatedButtonList = this.state.ButtonList;
+
+    // clicked button is active, ignore it
+    // other buttons are toggled from previous
+    // if we need some buttons to not toggle, we can add another
+    // flag to them in future and filter those out here
+
+    for (var ButtonKey in updatedButtonList) {
+      if (updatedButtonList[ButtonKey].domainName !== ClickedButtonName) {
+        updatedButtonList[ButtonKey].disabled = !updatedButtonList[ButtonKey].disabled;
+      }
+    }
+
+    this.setState({ButtonList: updatedButtonList});
+  }
 
   render() {
     return (
@@ -87,7 +103,15 @@ class ModuleBuilder extends React.Component {
         <div className="DomainToolbox">
           <div className="DomainButtonList">
             {this.getAllButtons().map((DomainButton, index) => (
-              <Button className='addDomainButton' key={index} onClick={ () => {this.toggleDomains(DomainButton.domains)} }>
+              <Button 
+                className='addDomainButton' 
+                disabled={DomainButton.disabled} 
+                key={index} 
+                onClick={ () => {
+                  this.toggleDomains(DomainButton.domains); 
+                  this.toggleButtons(DomainButton.domainName);
+                } }
+              >
                 {DomainButton.domainName}
               </Button>
               ))

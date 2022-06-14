@@ -34,10 +34,9 @@ class DomainSearch extends React.Component {
     };
 
     const ButtonList = {
-      KS: {domainName: 'KS', domains: ['KS']},
-      KR: {domainName: 'KR', domains: ['KR']},
-      DH_KR: {domainName: 'DH-KR', domains: ['DH', 'KR']},
-      DH_ER_KR: {domainName: 'DH-ER-KR', domains: ['DH', 'ER', 'KR']},
+      KR: {domainName: 'KR', domains: ['KR'], disabled: false},
+      DH_KR: {domainName: 'DH-KR', domains: ['DH', 'KR'], disabled: false},
+      DH_ER_KR: {domainName: 'DH-ER-KR', domains: ['DH', 'ER', 'KR'], disabled: false},
     }
 
     this.state = {
@@ -67,11 +66,10 @@ class DomainSearch extends React.Component {
       ACP: {domainName: 'ACP', present: true}, 
     };
     let ButtonList = {
-      KS: {domainName: 'KS', domains: ['KS']},
-      KR: {domainName: 'KR', domains: ['KR']},
-      DH_KR: {domainName: 'DH-KR', domains: ['DH', 'KR']},
-      DH_ER_KR: {domainName: 'DH-ER-KR', domains: ['DH', 'ER', 'KR']}
-    };
+      KR: {domainName: 'KR', domains: ['KR'], disabled: false},
+      DH_KR: {domainName: 'DH-KR', domains: ['DH', 'KR'], disabled: false},
+      DH_ER_KR: {domainName: 'DH-ER-KR', domains: ['DH', 'ER', 'KR'], disabled: false},
+    }
     let defaultArray = Array.from(
       { length: newLength },
       (x, index) => ({

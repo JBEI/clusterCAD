@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Link,
 } from "react-router-dom";
 
 import Home from './containers/Home';
@@ -17,7 +18,7 @@ function App() {
   const NOW = new Date();
 
   return (
-    <Router>
+    <Router basename="/retrotide">
       <div className="App">
         <div className="Navbar">
           <NavTab path="/" className="logo">
@@ -38,6 +39,7 @@ function App() {
           <NavTab path="/about">
             About
           </NavTab>
+          <Link to="/clustercad"> Back to ClusterCAD </Link>
         </div>
 
         <Switch>
@@ -47,6 +49,14 @@ function App() {
           <Route path="/domainSearch">
             <DomainSearch />
           </Route>
+          <Route 
+            path="/clustercad"
+            // this route sends you back up to clusterCAD
+            // via the nginx port routing
+            component={() => { 
+              window.location.href = '/'; 
+              return null;
+            }} />
           <Route path="/">
             <Home />
           </Route>
