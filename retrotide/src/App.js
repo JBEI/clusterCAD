@@ -3,11 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
 } from "react-router-dom";
 
-import Home from './containers/Home';
-import Design from './containers/Design';
 import DomainSearch from './containers/DomainSearch';
 import NavTab from './components/NavTab';
 import './stylesheets/main.scss';
@@ -39,13 +36,9 @@ function App() {
           <NavTab path="/about">
             About
           </NavTab>
-          <Link to="/clustercad"> Back to ClusterCAD </Link>
         </div>
 
         <Switch>
-          <Route path="/design">
-            <Design />
-          </Route>
           <Route path="/domainSearch">
             <DomainSearch />
           </Route>
@@ -57,9 +50,6 @@ function App() {
               window.location.href = '/'; 
               return null;
             }} />
-          <Route path="/">
-            <Home />
-          </Route>
         </Switch>
 
         <div className="Footer">
