@@ -1,0 +1,30 @@
+.navbar {
+  a {
+    text-decoration: none;
+  }
+  min-height: 50px;
+  position: relative;
+  margin-bottom: 20px;
+  line-height: 50px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e7e7e7;
+  .container {
+    display: flex;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+  .navbar-brand img {
+    vertical-align: middle;
+    padding: 0 15px;
+  }
+  .links-ul > div {
+    display: inline-block;
+    padding: 0 15px;
+    font-size: 14px;
+    color: #777;
+  }
+}
+
+footer.container {
+  height: 50px;
+}
