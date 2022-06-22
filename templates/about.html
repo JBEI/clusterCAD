@@ -4,7 +4,7 @@
 <div class="row-fluid">
 <h3>Introduction</h3>
 
-The goal of ClusterCAD is to facilitate the informed design of chimeric type I modular PKSs in order to achieve the microbial production of novel drug analogs and industrially relevant small molecules. The synthetic biology community has long maintained an interest in polyketide synthases, as their modular nature suggests that their biosynthetic power can be harnessed for combinatorial biosynthesis. Previous work has demonstrated that it is possible to construct functional chimeric PKSs by exchanging catalytic domains between heterologous PKS modules. However, limitations in the theoretical understanding of the complex protein-protein interactions that govern the fold and function of natural and engineered PKSs mean that identifying strategies to reliably design functional PKS chimeras remains an open research problem. In this work, we assume a specific paradigm for domain exchanges, and further provide a database with advanced search capabilities aimed at smoothing the process of testing PKS design strategies.
+The goal of ClusterCAD is to facilitate the informed design of chimeric type I modular PKSs and NRPSs in order to achieve the microbial production of novel drug analogs and industrially relevant small molecules. The synthetic biology community has long maintained an interest in polyketide synthases and related megasynthases, as their modular nature suggests that their biosynthetic power can be harnessed for combinatorial biosynthesis. For example, previous work has demonstrated that it is possible to construct functional chimeric PKSs by exchanging catalytic domains between heterologous PKS modules. However, limitations in the theoretical understanding of the complex protein-protein interactions that govern the fold and function of natural and engineered PKSs mean that identifying strategies to reliably design functional PKS chimeras remains an open research problem. In this work, we assume a specific paradigm for domain exchanges, and further provide a database with advanced search capabilities aimed at smoothing the process of testing PKS and NRPS design strategies.
 
 <h3>Index</h3>
 <ol>
@@ -21,45 +21,45 @@ The goal of ClusterCAD is to facilitate the informed design of chimeric type I m
 <a name="exchange"></a>
 <h3>Domain exchange paradigm</h3>
 
-<p>Type I modular polyketide synthases have a unique modular structure in which the product of each module, and therefore each megasynthase, is determined by the catalytic domains that comprise each module. This modular nature allows us to predict polyketide intermediates and final products using only the sequence of catalytic domains in the cognate PKS. This unusual property has fueled significant research efforts to use engineered PKSs combinatorial biosynthesis.</p>
+<p>Type I modular polyketide synthases and nonribosomal peptide synthetases have a unique modular structure in which the product of each module, and therefore each megasynthase, is determined by the catalytic domains that comprise each module. This modular nature allows us to predict polyketide intermediates and final products using only the sequence of catalytic domains in the cognate PKS. This unusual property has fueled significant research efforts to use engineered PKSs and NRPSs in combinatorial biosynthesis.</p>
 
-<p>Due to the complicated nature of protein-protein interactions, one heuristic that is commonly used in PKS engineering is to seek to design chimeric PKSs that are as close to a naturally occuring PKS as possible. Using this guiding principle, we propose the following paradigm for designing a chimeric PKS capable of producing a small molecule compound of interest:</p>
+<p>Due to the complicated nature of protein-protein interactions, one heuristic that is commonly used in PKS/NRPS engineering is to seek to design chimeric PKS/NRPSs that are as close to a naturally occuring PKS/NRPS as possible. Using this guiding principle, we propose the following paradigm for designing a chimeric PKS/NRPS capable of producing a small molecule compound of interest:</p>
 
 <ol>
-    <li>Identify truncated PKS as a starting point for engineering by searching for a module with a known intermediate that as structurally similar to the compound of interest as possible</li>
+    <li>Identify truncated PKS/NRPS as a starting point for engineering by searching for a module with a known intermediate that as structurally similar to the compound of interest as possible</li>
     <li>Determine what domain exchanges are required to obtain the product of interest</li>
     <li>Choose donor catalytic domains on basis of sequence similarity to the truncated PKS starting point</li>
 </ol>
 
-<p>If the target is a natural product analog, a starting point does not need to be identified, and ClusterCAD can be applied to simply select donor catalytic domains required to effect the desired structural changes in the final polyketide product. While the goal of ClusterCAD is to identify <i>potential</i> parent PKS starting points and donor catalytic domains, it will likely prove important to consider additional factors when designing a chimeric PKSs. For example, modules from well-characterized clusters, particularly modules that have previously been determined to be well-expressed in the host organism of choice, are particularly attractive choices for engineering. We therefore emphasize that ClusterCAD is intended to augment, rather than supercede, the expert domain knowledge of the experienced PKS researcher.</p>
+<p>If the target is a natural product analog, a starting point does not need to be identified, and ClusterCAD can be applied to simply select donor catalytic domains required to effect the desired structural changes in the final polyketide or nonribosomal peptide product. While the goal of ClusterCAD is to identify <i>potential</i> parent PKS/NRPS starting points and donor catalytic domains, it will likely prove important to consider additional factors when designing chimeric PKS/NRPSs. For example, modules from well-characterized clusters, particularly modules that have previously been determined to be well-expressed in the host organism of choice, are particularly attractive choices for engineering. We therefore emphasize that ClusterCAD is intended to augment, rather than supercede, the expert domain knowledge of the experienced PKS or NRPS researcher.</p>
 
 <a name="database"></a>
 <h3>Description of database</h3>
 
-<p>ClusterCAD is based on the <a href="http://mibig.secondarymetabolites.org/">Minimum Information about a Biosynthetic Gene cluster (MIBiG) database</a>. In order to construct the database entries for ClusterCAD, we first identified the MIBiG entries that were annotated as type I modular PKS clusters. Annotations for these clusters were generated using <a href=https://antismash.secondarymetabolites.org/>the antibiotics and Secondary Metabolite Analysis SHell (antiSMASH) software</a>. The resulting output was parsed using a whitelist of recognized catalytic domains in order to truncate analysis of each cluster at a subunit containing a non-ribosomal peptide synthethase (NRPS) or another unusual catalytic domain that is otherwise not supported by ClusterCAD. Domain annotations, which include predictions for acyltransferase (AT) domain substrate specificity and ketoreductase (KR) domain stereochemical outcome, were then used to generate predictions of the polyketide intermediates expected to be produced by each module in the PKS cluster.</p>
+<p>ClusterCAD is based on the <a href="http://mibig.secondarymetabolites.org/">Minimum Information about a Biosynthetic Gene cluster (MIBiG) database</a>. In order to construct the database entries for ClusterCAD, we first identified the MIBiG entries that were annotated as type I modular PKS or nonribosomal peptide clusters. Annotations for these clusters were generated using <a href=https://antismash.secondarymetabolites.org/>the antibiotics and Secondary Metabolite Analysis SHell (antiSMASH) software</a>. The resulting output was parsed using a whitelist of recognized catalytic domains in order to refine analysis of each cluster based on supported PKS/NRPS catalytic domains. Domain annotations, which include predictions for acyltransferase (AT) and adenylation (A) domain substrate specificity and ketoreductase (KR) domain stereochemical outcome, were then used to generate predictions of the polyketide or nonribosomal peptide intermediates expected to be produced by each module in the cluster.</p>
 
 <p>In order to validate the intermediate and final structure predictions, the predicted final structure was compared against the known final structure. SMILES structures for known file products were taken from the MIBiG database, or were identified using the ChemAxon Naming tool using the text description of the final structure from MIBiG. Finally, additional structures were obtained by a literature search and manually incorporated into ClusterCAD.</p>
 
-<p>A comparison between the predicted in known final structures was used to manually curate each ClusterCAD entry to perform the following corrections:</p>
+<p>A comparison between the predicted and known final structures was used to manually curate each ClusterCAD entry to perform the following corrections:</p>
 <ul>
     <li>Remove invalid subunits</li>
     <li>Correct subunit order</li>
-    <li>Correct mis-annotated AT specificity or KR stereochemical outcome</li>
-    <li>Correct annotations describing whether or not KR, DH, and ER domains are active</li>
+    <li>Correct mis-annotated AT or A specificity or KR stereochemical outcome</li>
+    <li>Correct annotations describing whether or not KR, DH, ER, E, etc. domains are active</li>
     <li>Account for iterating modules</li>
-    <li>Correct annotations describing whether TE domains generate cyclized or linear products</li>
+    <li>Correct annotations describing whether TE domains generate cyclized or linear products, or whether R domains generate terminal alcohols or aldehydes. </li>
 </ul>
 
 <a name="structure"></a>
 <h3>Database entries</h3>
 
-<p>The entry for each cluster contains links to the corresponding MiBiG database and NCBI Nucleotide database entries. Buttons to display annotations of AT substrate specificity and KR stereochemical outcome are also provided. Clicking on the final product or polyketide intermediate chemical structures will display SMILES representations of these structures. Further, clicking on the name of the module will provide links to the NCBI Protein database entry for that module, the nucleotide and amino acid sequences for the module, and precomputed secondary structure and relative solvent accessibility annotations.</p>
+<p>The entry for each cluster contains links to the corresponding MiBiG database and NCBI Nucleotide database entries, as well as an indication for whether a cluster has been manually reviewed for consistency with experimental evidence. Cluster entries may also provide Cluster Notes, where curation notes and/or relevant publications and references may be viewed. Buttons to display annotations of AT or A substrate specificity and KR stereochemical outcome are also provided. Clicking on the final product or polyketide/peptide intermediate chemical structures will display SMILES representations of these structures. Further, clicking on the name of the module will provide links to the NCBI Protein database entry for that module, the nucleotide and amino acid sequences for the module, and precomputed secondary structure and relative solvent accessibility annotations if available.</p>
 <p>Note that AT substrates with an "_ACP" suffix in the name represent ACP linked substrates, whereas those without a suffix represent CoA linked substrates.</p>
 
 <a name="structure"></a>
 <h3>Structure search</h3>
 
-<p>The structure search tool was designed to enable the identification of a truncated PKS to use as a starting point for PKS engineering, and takes as input a small molecule chemical structure in the form of a <a href="http://www.daylight.com/dayhtml/doc/theory/theory.smiles.html">SMILES string</a> or a structure that is drawn in an interactive GUI. Matches to the query structure are ranked using AP (atom pair) descriptors and the Tanimoto coefficient similarity metric.</p> 
+<p>The structure search tool was designed to enable the identification of a truncated PKS/NRPS to use as a starting point for PKS/NRPS engineering, and takes as input a small molecule chemical structure in the form of a <a href="http://www.daylight.com/dayhtml/doc/theory/theory.smiles.html">SMILES string</a> or a structure that is drawn in an interactive GUI. Matches to the query structure are ranked using AP (atom pair) descriptors and the Tanimoto coefficient similarity metric.</p> 
 
 <a name="sequence"></a>
 <h3>Sequence search</h3>

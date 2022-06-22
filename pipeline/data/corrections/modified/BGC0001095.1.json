@@ -1,0 +1,114 @@
+{
+    "description": "Fengycin",
+    "genbankAccession": "CP000560.1",
+    "mibigAccession": "BGC0001095.1",
+    "architecture": {
+        "fenA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "glu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "orn"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "fenB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "fenC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "glu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "fenD": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "pro"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "gln"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "fenE": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 5
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    }, 
+    "notes": "Reference(s): https://doi.org/10.1016/s1074-5521(99)80018-0"
+}

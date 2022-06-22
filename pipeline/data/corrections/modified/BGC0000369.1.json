@@ -1,0 +1,104 @@
+{
+    "description": "Hassallidin C",
+    "genbankAccession": "KJ502174.1",
+    "mibigAccession": "BGC0000369.1",
+    "architecture": {
+        "hasV": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "hasN": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "tyr"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "hasO": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "dhb"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "gln"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "hasY": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    },
+                    "nMT": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "gln"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 5
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1073/pnas.1320913111"
+}

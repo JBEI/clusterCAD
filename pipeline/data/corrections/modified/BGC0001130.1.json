@@ -1,0 +1,77 @@
+{
+    "description": "Fabclavine",
+    "genbankAccession": "NIBS01000014.1",
+    "mibigAccession": "BGC0001130.1",
+    "architecture": {
+        "pvdj": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "beta-amino-glu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "phe"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "asn"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "asn"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "pyoverdine synthetase D": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "pro"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "Phthiocerol synthesis polyketide synthase type I PpsE": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    }
+                },
+                "iterations": 2
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1002/cbic.201300802"
+}

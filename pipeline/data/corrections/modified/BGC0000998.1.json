@@ -1,0 +1,77 @@
+{
+    "description": "Guadinomine",
+    "genbankAccession": "JX545234.1",
+    "mibigAccession": "BGC0000998.1",
+    "architecture": {
+        "gdnE": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "ethylguanidine"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "gdnF": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "gdnG": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "gdnH": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Cluster is missing an unsupported C-terminal AMT domain. Reference(s): https://doi.org/10.1021/ja308622d"
+}

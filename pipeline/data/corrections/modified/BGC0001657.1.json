@@ -1,0 +1,130 @@
+{
+    "description": "Lysocin",
+    "genbankAccession": "LC128664.1",
+    "mibigAccession": "BGC0001657.1",
+    "architecture": {
+        "lesA": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "arg"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "ser"
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "gly"
+                    }
+                },
+                "iterations": 1
+            },
+            "4": {
+                "domains": {
+                    "A": {
+                        "substrate": "phe"
+                    },
+                    "nMT": {
+                        "active": true
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "5": {
+                "domains": {
+                    "A": {
+                        "substrate": "leu"
+                    }
+                },
+                "iterations": 1
+            },
+            "6": {
+                "domains": {
+                    "A": {
+                        "substrate": "arg"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "lesB": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "glu"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "gln"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "A": {
+                        "substrate": "trp"
+                    },
+                    "E": {
+                        "active": true
+                    }
+                },
+                "iterations": 1
+            },
+            "3": {
+                "domains": {
+                    "A": {
+                        "substrate": "ile"
+                    }
+                },
+                "iterations": 1
+            },
+            "4": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 3
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1038/ja.2016.102"
+}

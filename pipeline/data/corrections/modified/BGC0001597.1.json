@@ -1,0 +1,111 @@
+{
+    "description": "Fluvirucin",
+    "genbankAccession": "LC095592.1",
+    "mibigAccession": "BGC0001597.1",
+    "architecture": {
+        "flvP1": {
+            "0": {
+                "domains": {
+                    "ACP": {
+                    "substrate": "propylamine"
+                }
+            },
+            "iterations": 1
+
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "emal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "A1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "flvP2": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "emal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "flvP3": {
+            "0": {
+                "domains": {
+                    "AT": {
+                        "substrate": "emal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "ER": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "B1"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1080/09168451.2015.1132155"
+}

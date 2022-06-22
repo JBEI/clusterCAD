@@ -1,0 +1,55 @@
+{
+    "description": "Glidobactin",
+    "genbankAccession": "AM412319.1",
+    "mibigAccession": "BGC0000997.1",
+    "architecture": {
+        "glbF": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "thr"
+                    }
+                },
+                "iterations": 1
+            }
+        },
+        "glbC": {
+            "0": {
+                "domains": {
+                    "A": {
+                        "substrate": "gamma-OH-lys"
+                    }
+                },
+                "iterations": 1
+            },
+            "1": {
+                "domains": {
+                    "A": {
+                        "substrate": "ala"
+                    }
+                },
+                "iterations": 1
+            },
+            "2": {
+                "domains": {
+                    "AT": {
+                        "substrate": "mal"
+                    },
+                    "DH": {
+                        "active": true
+                    },
+                    "KR": {
+                        "active": true,
+                        "type": "U"
+                    },
+                    "TE": {
+                        "cyclic": true,
+                        "ring": 0
+                    }
+                },
+                "iterations": 1
+            }
+        }
+    },
+    "notes": "Reference: https://doi.org/10.1111/j.1462-2920.2007.01278.x"
+}
