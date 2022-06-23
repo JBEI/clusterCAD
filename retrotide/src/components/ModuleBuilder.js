@@ -87,6 +87,12 @@ class ModuleBuilder extends React.Component {
     this.setState({ButtonList: updatedButtonList});
   }
 
+  showOptionsModal = ClickedDomain => {
+    if (ClickedDomain.options) {
+      console.log(ClickedDomain.options);
+    }
+  }
+
   render() {
     return (
       <div className='ModuleBuilder'>
@@ -119,7 +125,7 @@ class ModuleBuilder extends React.Component {
           </div>
           <div className="DomainSandbox">
             {this.getPresentDomains().map((DomainDiv, index) => (
-                <div key={DomainDiv.domainName + index} className="DomainWrapper" >
+                <div key={DomainDiv.domainName + index} className="DomainWrapper" onClick={() => this.showOptionsModal(DomainDiv)}>
                   <div className={"Domain " + DomainDiv.domainName}>
                     {DomainDiv.domainName}
                   </div>

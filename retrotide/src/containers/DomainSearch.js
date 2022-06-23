@@ -19,16 +19,22 @@ class DomainSearch extends React.Component {
 
     const LoadingPKSList = {
       KS:  {domainName: 'KS', present: true},
-      AT:  {domainName: 'AT', present: true},
+      AT:  {domainName: 'AT', present: true, options: {
+        substrate: ['mal', 'methylmal', 'trans']
+      }},
       ACP: {domainName: 'ACP', present: true},       
     };
 
     const TerminatingPKSList = {
       KS:  {domainName: 'KS', present: true},
-      AT:  {domainName: 'AT', present: true},
+      AT:  {domainName: 'AT', present: true, options: {
+        substrate: ['mal', 'methylmal', 'trans']
+      }},
       DH:  {domainName: 'DH', present: false},
       ER:  {domainName: 'ER', present: false},
-      KR:  {domainName: 'KR', present: false},
+      KR:  {domainName: 'KR', present: false, options: {
+        stereochemistry: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'any']
+      }},
       ACP: {domainName: 'ACP', present: true}, 
       TE:  {domainName: 'TE', present: true},        
     };
@@ -59,10 +65,14 @@ class DomainSearch extends React.Component {
   buildModules = (newLength) => {
     let PKSDomainList = {
       KS:  {domainName: 'KS', present: true},
-      AT:  {domainName: 'AT', present: true},
+      AT:  {domainName: 'AT', present: true, options: {
+        substrate: ['mal', 'methylmal', 'trans']
+      }},
       DH:  {domainName: 'DH', present: false},
       ER:  {domainName: 'ER', present: false},
-      KR:  {domainName: 'KR', present: false},
+      KR:  {domainName: 'KR', present: false, options: {
+        stereochemistry: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'any']
+      }},
       ACP: {domainName: 'ACP', present: true}, 
     };
     let ButtonList = {
