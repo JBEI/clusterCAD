@@ -11,7 +11,7 @@ class ModuleBuilder extends React.Component {
       ModuleType: props.type,
       deleteFunction: props.deleteFunction,
       optionsModalOpen: false,
-      optionsModalContent: [],
+      optionsModalContent: {},
     }
   };
 
@@ -104,9 +104,24 @@ class ModuleBuilder extends React.Component {
           optionList = ClickedDomain.options[option];
         }
       }
-      this.setState({optionsModalContent: optionName});
+      this.setState({optionsModalContent: {domain: ClickedDomain.domainName, name: optionName, list: optionList, selected: selectedOption}});
       this.setState({optionsModalOpen: !this.state.optionsModalOpen});
     }
+  }
+
+  selectNewOption = (modalInfo, option) => {
+    // this isn't really a list, it's an object
+    let domains = this.state.DomainList;
+    let {domain, name, list} = modalInfo;
+    this.setState(
+      {DomainList: {
+        ...domains,
+        [domain]: {
+          ...domains[domain],
+          options: {
+            selected: option
+          }}}}
+    );
   }
 
   render() {
@@ -152,10 +167,18 @@ class ModuleBuilder extends React.Component {
         </div>
         {this.state.optionsModalOpen ? 
           <div className="optionsModal">
-            {this.state.optionsModalContent}
+            {this.state.optionsModalContent.name}
             :
-            {/* buttons with one selected and onclick to select */}
-            A B C D
+            {this.state.optionsModalContent.list.map((option, index) => (
+                <Button 
+                  className={(option === this.state.optionsModalContent.selected) ? 'optionButton selected' : 'optionButton'}
+                  key={'option'+index}
+                  onClick={() => this.selectNewOption(this.state.optionsModalContent, option)}
+                  >
+                  {option}
+                </Button>
+              ))
+            }
           </div>
         : null
         }        
