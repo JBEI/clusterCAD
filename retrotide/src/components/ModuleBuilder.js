@@ -10,6 +10,8 @@ class ModuleBuilder extends React.Component {
       ButtonList: props.buttonList,
       ModuleType: props.type,
       deleteFunction: props.deleteFunction,
+      optionsModalOpen: false,
+      optionsModalContent: [],
     }
   };
 
@@ -46,7 +48,7 @@ class ModuleBuilder extends React.Component {
 
         if(selectedDomain.present) {
           let deleteDomain = {
-            domainName: Domain,
+            ...selectedDomain,
             present: false,
           }
           updatedDomainList = {
@@ -55,7 +57,7 @@ class ModuleBuilder extends React.Component {
           }
         } else {
           let insertDomain = {
-            domainName: Domain,
+            ...selectedDomain,
             present: true,
           }
           updatedDomainList = {
@@ -87,9 +89,23 @@ class ModuleBuilder extends React.Component {
     this.setState({ButtonList: updatedButtonList});
   }
 
-  showOptionsModal = ClickedDomain => {
+  // some domains (AT and KR) have settable properties
+  // we have 2 tuples, the currently selected option, and the name and list of options
+  toggleOptionsModal = ClickedDomain => {
     if (ClickedDomain.options) {
-      console.log(ClickedDomain.options);
+      let optionName;
+      let optionList;
+      let selectedOption;
+      for (var option in ClickedDomain.options) {
+        if (option === 'selected') {
+          selectedOption = ClickedDomain.options[option];
+        } else {
+          optionName = option;
+          optionList = ClickedDomain.options[option];
+        }
+      }
+      this.setState({optionsModalContent: optionName});
+      this.setState({optionsModalOpen: !this.state.optionsModalOpen});
     }
   }
 
@@ -125,7 +141,7 @@ class ModuleBuilder extends React.Component {
           </div>
           <div className="DomainSandbox">
             {this.getPresentDomains().map((DomainDiv, index) => (
-                <div key={DomainDiv.domainName + index} className="DomainWrapper" onClick={() => this.showOptionsModal(DomainDiv)}>
+                <div key={DomainDiv.domainName + index} className="DomainWrapper" onClick={() => this.toggleOptionsModal(DomainDiv)}>
                   <div className={"Domain " + DomainDiv.domainName}>
                     {DomainDiv.domainName}
                   </div>
@@ -134,6 +150,15 @@ class ModuleBuilder extends React.Component {
             }
           </div>
         </div>
+        {this.state.optionsModalOpen ? 
+          <div className="optionsModal">
+            {this.state.optionsModalContent}
+            :
+            {/* buttons with one selected and onclick to select */}
+            A B C D
+          </div>
+        : null
+        }        
       </div>
     )
   }
