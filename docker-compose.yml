@@ -50,8 +50,8 @@ services:
     image: tbackman/debian-cheminformatics:debian10
     volumes:
       - .:/clusterCAD
-      - /www/static
-      - /www/media
+      - static:/www/static
+      - media:/www/media
     expose:
       - "8000"
     ports:
@@ -67,12 +67,12 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - /www/static
-      - /www/media
-    volumes_from:
-      - web
+      - static:/www/static
+      - media:/www/media
     links:
       - web:web
 
 volumes:
   app-db-data:
+  static:
+  media:
