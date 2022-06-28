@@ -110,7 +110,8 @@ class DomainSearch extends React.Component {
         index={index} 
         key={key}
         id={key}
-        deleteFunction={this.deleteModule} 
+        deleteFunction={this.deleteModule}
+        updateFunction={this.updateModule}
         domainList={domainList}
         buttonList={buttonList}
         type={type} />
@@ -125,6 +126,19 @@ class DomainSearch extends React.Component {
     }
     this.setState({
       ModuleArray: currentModules,
+    });
+  }
+
+  updateModule = (moduleKey, newModuleContent) => {
+    let currentModules = this.state.ModuleArray;
+    let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
+    console.log("update fun got");
+    console.log(currentModules);
+    console.log(newModuleContent);
+    let moduleToUpdate = currentModules[moduleIndex];
+    currentModules[moduleIndex] = {... moduleToUpdate, DomainList: newModuleContent};
+    this.setState({
+      ModuleArray: currentModules
     });
   }
 

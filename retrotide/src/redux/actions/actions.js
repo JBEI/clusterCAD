@@ -6,6 +6,7 @@
 // TYPES
 export const UPDATE_MOLECULE = 'UPDATE_MOLECULE';
 export const BEGIN_DOMAIN_SEARCH = 'BEGIN_DOMAIN_SEARCH';
+export const UPDATE_MODULE = 'UPDATE_MODULE';
 
 // CONSTANTS
 const NOW = new Date();
@@ -20,8 +21,18 @@ export function updateMolecule(molecule) {
   }
 }
 
+export function updateModuleDomains(module) {
+  console.log('action updateModuleDomains, payload');
+  console.log(module);
+  return {
+    type: UPDATE_MODULE,
+    payload: {module: module}
+  }
+}
+
 export function beginDomainSearch(moduleArray) {
-  console.log('action beginDomainSearch, payload ' + moduleArray);
+  console.log('action beginDomainSearch, payload ');
+  console.log(moduleArray);
   return {
     type: BEGIN_DOMAIN_SEARCH,
     payload: {

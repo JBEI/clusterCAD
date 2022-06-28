@@ -46,7 +46,7 @@ function App() {
           <img src={jbeiLogo} />
           <img src={doeLogo} />
         </div>
-        <div className="ccopyright">
+        <div className="copyright">
           <h4 className="text-right"><small>&copy; {NOW.getFullYear()} The Regents of the University of California</small></h4>
         </div>
       </footer>

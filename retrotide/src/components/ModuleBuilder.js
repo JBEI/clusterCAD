@@ -1,5 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { updateModuleDomains } from '../redux/actions/actions';
 import Button from '../components/Button';
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateModuleDomains: module => dispatch(updateModuleDomains(module)),
+    dispatch,
+  }
+};
 
 class ModuleBuilder extends React.Component {
 
@@ -10,6 +19,7 @@ class ModuleBuilder extends React.Component {
       ButtonList: props.buttonList,
       ModuleType: props.type,
       deleteFunction: props.deleteFunction,
+      updateFunction: props.updateFunction,
       optionsModalOpen: false,
       optionsModalContent: {},
     }
@@ -31,12 +41,6 @@ class ModuleBuilder extends React.Component {
       }
     }
     return presentDomains;
-  };
-
-  insertDomains = NewDomains => {
-    for(var domain in NewDomains) {
-      this.insertDomain(domain);
-    }
   };
 
   toggleDomains = domainsToToggle => {
@@ -67,7 +71,8 @@ class ModuleBuilder extends React.Component {
         }
       });
     }
-    this.setState({DomainList: updatedDomainList}); 
+    this.props.updateFunction(this.props.id, updatedDomainList);
+    this.setState({DomainList: updatedDomainList});
   };
 
   // when a button is clicked, disable the other buttons
@@ -113,15 +118,17 @@ class ModuleBuilder extends React.Component {
     // this isn't really a list, it's an object
     let domains = this.state.DomainList;
     let {domain, name, list} = modalInfo;
-    this.setState(
-      {DomainList: {
+    let updatedModule = {
+      DomainList: {
         ...domains,
         [domain]: {
           ...domains[domain],
           options: {
             selected: option
-          }}}}
-    );
+      }}}
+    }
+    this.state.updateFunction(this.props.id, updatedModule);
+    this.setState({DomainList: updatedModule});
   }
 
   render() {
@@ -188,4 +195,4 @@ class ModuleBuilder extends React.Component {
 
 }
 
-export default ModuleBuilder;
+export default connect(null, mapDispatchToProps)(ModuleBuilder);
