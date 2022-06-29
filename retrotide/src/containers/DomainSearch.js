@@ -53,13 +53,13 @@ class DomainSearch extends React.Component {
       LoadingModule: {
         key: 'loading-0',
         type: 'loading',
-        domainList: LoadingPKSList,
+        DomainList: LoadingPKSList,
       },
       TerminatingModule: {
         key: 'terminating-n',
         type: 'terminating',
-        domainList: TerminatingPKSList,
-        buttonList: ButtonList,
+        DomainList: TerminatingPKSList,
+        ButtonList: ButtonList,
       },
       DomainList: 'PKS',
     }
@@ -90,8 +90,8 @@ class DomainSearch extends React.Component {
       (x, index) => ({
         index: index,
         key: 'extending-' + index,
-        domainList: PKSDomainList,
-        buttonList: ButtonList,
+        DomainList: PKSDomainList,
+        ButtonList: ButtonList,
         type: 'extending',
       })
     );
@@ -104,8 +104,7 @@ class DomainSearch extends React.Component {
   }
 
   parseModuleObject = (module, index) => {
-    let {key, type, domainList, buttonList} = module;
-    console.log(index);
+    let {key, type, DomainList, ButtonList} = module;
     return (
       <ModuleBuilder 
         index={index} 
@@ -113,8 +112,8 @@ class DomainSearch extends React.Component {
         id={key}
         deleteFunction={this.deleteModule}
         updateFunction={this.updateModule}
-        domainList={domainList}
-        buttonList={buttonList}
+        DomainList={DomainList}
+        ButtonList={ButtonList}
         type={type} />
     );
   }

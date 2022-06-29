@@ -6,8 +6,8 @@ class ModuleBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      DomainList: props.domainList,
-      ButtonList: props.buttonList,
+      DomainList: props.DomainList,
+      ButtonList: props.ButtonList,
       ModuleType: props.type,
       deleteFunction: props.deleteFunction,
       updateFunction: props.updateFunction,
@@ -107,6 +107,7 @@ class ModuleBuilder extends React.Component {
 
   selectNewOption = (modalInfo, option) => {
     // this isn't really a list, it's an object
+    let currentOptions = this.state.optionsModalContent;
     let domains = this.state.DomainList;
     let {domain} = modalInfo;
     let updatedModule = {
@@ -119,6 +120,11 @@ class ModuleBuilder extends React.Component {
       }}}
     this.state.updateFunction(this.props.id, updatedModule);
     this.setState({DomainList: updatedModule});
+    // hacky doing this multiple times but it's not updating rn
+    this.setState({optionsModalContent: {
+      ...currentOptions,
+      selected: option,
+    }});
   }
 
   render() {
