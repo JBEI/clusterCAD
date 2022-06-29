@@ -10,7 +10,7 @@ import NavTab from './components/NavTab';
 import './stylesheets/main.scss';
 import jbeiLogo from './images/jbei-logo.png';
 import doeLogo from './images/doe-logo.png';
-import clusterCADLogo from './images/header/new-clustercad-logo.png';
+import clusterCADLogo from './images/header/clustercad-logo-vector-lrg-no-logo.svg';
 
 function App() {
   const NOW = new Date();
@@ -41,13 +41,13 @@ function App() {
         </Route>
       </Switch>
 
-      <footer className="container">
+      <footer className="footer">
         <div className="logos">
           <img src={jbeiLogo} />
           <img src={doeLogo} />
         </div>
         <div className="copyright">
-          <h4 className="text-right"><small>&copy; {NOW.getFullYear()} The Regents of the University of California</small></h4>
+          <div className="text-right"><small>&copy; {NOW.getFullYear()} The Regents of the University of California</small></div>
         </div>
       </footer>
     </Router>

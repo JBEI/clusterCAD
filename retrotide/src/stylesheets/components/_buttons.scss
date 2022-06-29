@@ -43,7 +43,7 @@
   }
 }
 
-.submit {
+.submit, .selected {
   background-color: $blue_sky;
   color: $blue_sky_light;
 }
@@ -53,7 +53,8 @@
   margin-left: 40px;
 }
 
-.logo {
+.navbar-brand img {
+  height: 20px;
   font-size: 20px;
   font-weight: bold;
   flex: 1;

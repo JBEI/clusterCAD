@@ -105,6 +105,7 @@ class DomainSearch extends React.Component {
 
   parseModuleObject = (module, index) => {
     let {key, type, domainList, buttonList} = module;
+    console.log(index);
     return (
       <ModuleBuilder 
         index={index} 
@@ -132,9 +133,6 @@ class DomainSearch extends React.Component {
   updateModule = (moduleKey, newModuleContent) => {
     let currentModules = this.state.ModuleArray;
     let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
-    console.log("update fun got");
-    console.log(currentModules);
-    console.log(newModuleContent);
     let moduleToUpdate = currentModules[moduleIndex];
     currentModules[moduleIndex] = {... moduleToUpdate, DomainList: newModuleContent};
     this.setState({
@@ -159,7 +157,7 @@ class DomainSearch extends React.Component {
   render() {
     const ExtendingArray = this.state.ModuleArray;
     return (
-      <div className='DomainSearch'>
+      <div className='DomainSearch form'>
         <h3>Construct Modules</h3>
         <Button onClick={() => { this.addModule() }}> Add Module + </Button>
         <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
@@ -172,7 +170,7 @@ class DomainSearch extends React.Component {
               )
             }) 
           }
-          { this.parseModuleObject(this.state.TerminatingModule, ExtendingArray.length) }
+          { this.parseModuleObject(this.state.TerminatingModule, ExtendingArray ? ExtendingArray.length : 1) }
         </div>
       </div>
     )

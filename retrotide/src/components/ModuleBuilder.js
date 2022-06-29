@@ -1,14 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { updateModuleDomains } from '../redux/actions/actions';
 import Button from '../components/Button';
-
-const mapDispatchToProps = dispatch => {
-  return {
-    updateModuleDomains: module => dispatch(updateModuleDomains(module)),
-    dispatch,
-  }
-};
 
 class ModuleBuilder extends React.Component {
 
@@ -117,16 +108,15 @@ class ModuleBuilder extends React.Component {
   selectNewOption = (modalInfo, option) => {
     // this isn't really a list, it's an object
     let domains = this.state.DomainList;
-    let {domain, name, list} = modalInfo;
+    let {domain} = modalInfo;
     let updatedModule = {
-      DomainList: {
-        ...domains,
-        [domain]: {
-          ...domains[domain],
-          options: {
-            selected: option
+      ...domains,
+      [domain]: {
+        ...domains[domain],
+        options: {
+          ...domains[domain].options,
+          selected: option
       }}}
-    }
     this.state.updateFunction(this.props.id, updatedModule);
     this.setState({DomainList: updatedModule});
   }
@@ -195,4 +185,4 @@ class ModuleBuilder extends React.Component {
 
 }
 
-export default connect(null, mapDispatchToProps)(ModuleBuilder);
+export default ModuleBuilder;
