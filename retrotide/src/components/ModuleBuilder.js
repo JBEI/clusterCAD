@@ -125,15 +125,17 @@ class ModuleBuilder extends React.Component {
     return (
       <div className='ModuleBuilder'>
         <div className="DomainHeader">
-          <div> Module {this.props.index + 1} </div>
-          <div> {this.state.ModuleType} </div>
-        </div>
-        {this.state.ModuleType === 'extending' ? 
-          <div className="DomainHeaderButton">
-            <Button className='deleteModuleButton' onClick={() => {this.state.deleteFunction(this.props.id)}}> X </Button> 
+          <div className="DomainTitle">
+            <div> Module {this.props.index + 1} </div>
+            <div> {this.state.ModuleType} </div>
           </div>
-          : null
-        }        
+          {this.state.ModuleType === 'extending' ? 
+            <div className="DomainHeaderButton">
+              <Button className='deleteModuleButton' onClick={() => {this.state.deleteFunction(this.props.id)}}> X </Button> 
+            </div>
+            : null
+          } 
+        </div> 
         <div className="DomainToolbox">
           <div className="DomainButtonList">
             {this.getAllButtons().map((DomainButton, index) => (

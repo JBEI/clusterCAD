@@ -30,9 +30,15 @@
 
 .DomainHeader {
   text-align: left;
-  display: inline-block;
-  width: 85%;
-  :nth-child(1) {
+  display: flex;
+  .DomainTitle :nth-child(1) {
     font-weight: bold;
+  }
+  .DomainHeaderButton {
+    flex: 3;
+    text-align: right;
+    button {
+      margin-top: 0px;
+    }
   }
 }
