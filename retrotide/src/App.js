@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Link,
 } from "react-router-dom";
 
 import DomainSearch from './containers/DomainSearch';
@@ -27,6 +28,7 @@ function App() {
           <div id="links" className="links">
             <div className="links-ul">
               <div><a href="/pks/">Browse clusters</a></div>
+              <div><Link to="/domainSearch/">Domain Search</Link></div>
               <div><a href="/structureSearch/">Structure search</a></div>
               <div><a href="/sequenceSearch/">Sequence search</a></div>
               <div><a href="/about/">About</a></div>
