@@ -32,7 +32,7 @@ it('renders a loading and terminating module', () => {
   expect(terminating).toBeInTheDocument;
 });
 
-it('adds new extending modules', () => {
+it('adds new extending modules and deletes them', () => {
   render(
     <Provider store={store}>
       <DomainSearch />
@@ -45,14 +45,20 @@ it('adds new extending modules', () => {
   userEvent.click(addButton);
   userEvent.click(addButton);
 
-  const modules = screen.getAllByText(/Module [\d]/i);
-  const extending = screen.getAllByText("extending");
+  var modules = screen.getAllByText(/Module [\d]/i);
+  var extending = screen.getAllByText("extending");
   expect(modules).toHaveLength(5);
   expect(extending).toHaveLength(3);
-});
 
-// hit the delete button on module 1
-// expect to see 4 modules
+  const deleteButton = screen.getAllByText(/X/)[0];
+
+  userEvent.click(deleteButton);
+
+  modules = screen.getAllByText(/Module [\d]/i);
+  extending = screen.getAllByText("extending");
+  expect(modules).toHaveLength(4);
+  expect(extending).toHaveLength(2);
+});
 
 // submit button - ??
 
