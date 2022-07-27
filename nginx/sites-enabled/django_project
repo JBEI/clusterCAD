@@ -11,15 +11,6 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
-    location /retrotide/goback  {
-        proxy_pass http://web:8000;
-        proxy_set_header Host $host;
-        proxy_read_timeout 120s;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-
-    # defer to react-router for retrotide urls
     location /retrotide {
         proxy_pass http://react:3000;
         proxy_set_header Host $host;
@@ -28,8 +19,8 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
-    location /ChemDoodle {
-        proxy_pass http://react:3000/ChemDoodle;
+    location /retrotide/static {
+        proxy_pass http://react:3000;
         proxy_set_header Host $host;
         proxy_read_timeout 120s;
         proxy_set_header X-Real-IP $remote_addr;
@@ -37,7 +28,19 @@ server {
     }
 
     location /static {
-        proxy_pass http://react:3000/static;
+        alias /www/static;
+    }
+
+    location /django-static {
+        alias /www/static;
+    }
+
+    location /media {
+        alias /www/media;
+    }
+
+    location /ChemDoodle {
+        proxy_pass http://react:3000/ChemDoodle;
         proxy_set_header Host $host;
         proxy_read_timeout 120s;
         proxy_set_header X-Real-IP $remote_addr;

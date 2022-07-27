@@ -14,6 +14,8 @@ import DomainSearch from './DomainSearch';
 // in a Provider with a store. Redux docs suggest using the actual 
 // store from the app
 
+// should probably figure out how to render only once
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
