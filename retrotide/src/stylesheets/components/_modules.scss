@@ -9,9 +9,22 @@
 .ModuleBuilder {
   border: 1px solid #333;
   border-radius: 6px;
+  overflow: hidden;
   padding: 12px;
   margin: 12px;
   max-width: 630px;
+  &.removing {
+    * {
+      display: none;
+    }
+    margin: 0;
+    padding: 0;
+    transition-delay: 0.25s;
+    transition-duration: 0.5s;
+    transform: scaleX(0);
+    background-color: $blue_sky;
+    width: 0;
+  }
 }
 
 .DomainSandbox {

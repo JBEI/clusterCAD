@@ -13,6 +13,7 @@ class ModuleBuilder extends React.Component {
       updateFunction: props.updateFunction,
       optionsModalOpen: false,
       optionsModalContent: {},
+      isRemoving: false,
     }
   };
 
@@ -127,9 +128,14 @@ class ModuleBuilder extends React.Component {
     }});
   }
 
+  deleteModule = () => {
+    this.setState({isRemoving: true});
+    // this.state.deleteFunction(this.props.id);
+  }
+
   render() {
     return (
-      <div className='ModuleBuilder'>
+      <div className={`ModuleBuilder ${this.state.isRemoving ? ' removing' : ''}`}>
         <div className="DomainHeader">
           <div className="DomainTitle">
             <div> Module {this.props.index + 1} </div>
@@ -137,7 +143,7 @@ class ModuleBuilder extends React.Component {
           </div>
           {this.state.ModuleType === 'extending' ? 
             <div className="DomainHeaderButton">
-              <Button className='deleteModuleButton' onClick={() => {this.state.deleteFunction(this.props.id)}}> X </Button> 
+              <Button className='deleteModuleButton' onClick={() => {this.deleteModule()}}> X </Button> 
             </div>
             : null
           } 
