@@ -130,7 +130,7 @@ class ModuleBuilder extends React.Component {
 
   deleteModule = () => {
     this.setState({isRemoving: true});
-    // this.state.deleteFunction(this.props.id);
+    setTimeout(() => this.state.deleteFunction(this.props.id), 1000);
   }
 
   render() {
