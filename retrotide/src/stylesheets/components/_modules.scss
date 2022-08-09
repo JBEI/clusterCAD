@@ -13,6 +13,19 @@
   padding: 12px;
   margin: 12px;
   max-width: 630px;
+  width: auto;
+  transition-delay: 0.25s;
+  transition-duration: 0.5s;
+  transform: scaleX(1);
+  &.inserting {
+    * {
+      display: none;
+    }
+    margin: 0;
+    padding: 0;
+    background-color: $blue_sky;
+    width: 0;
+  }
   &.removing {
     * {
       display: none;

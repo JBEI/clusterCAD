@@ -14,8 +14,16 @@ class ModuleBuilder extends React.Component {
       optionsModalOpen: false,
       optionsModalContent: {},
       isRemoving: false,
+      isInserting: (props.type == 'extending' ? true : false),
     }
   };
+
+  // this triggers the inserting module css animation
+  // and adds a one second delay to allow the animation to run
+  // not the iife is necessary to make setTimeout work
+  componentDidMount() {
+    setTimeout(() => this.setState({isInserting: false}), 1000);
+  }
 
   getAllButtons = () => {
     let allButtons = [];
@@ -128,6 +136,9 @@ class ModuleBuilder extends React.Component {
     }});
   }
 
+  // this function triggers the css animation by setting the removing flag
+  // then deleted the element after a short timeout
+  // note the iife is necessary to make the timeout work
   deleteModule = () => {
     this.setState({isRemoving: true});
     setTimeout(() => this.state.deleteFunction(this.props.id), 1000);
@@ -135,7 +146,7 @@ class ModuleBuilder extends React.Component {
 
   render() {
     return (
-      <div className={`ModuleBuilder ${this.state.isRemoving ? ' removing' : ''}`}>
+      <div className={`ModuleBuilder ${this.state.isInserting ? 'inserting' : ''}`}>
         <div className="DomainHeader">
           <div className="DomainTitle">
             <div> Module {this.props.index + 1} </div>
