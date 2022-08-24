@@ -7,7 +7,7 @@
 }
 
 .ModuleBuilder {
-  border: 1px solid #333;
+  border: 1px solid $black_warm;
   border-radius: 6px;
   overflow: hidden;
   padding: 12px;
@@ -40,18 +40,55 @@
   }
 }
 
+.DomainButtonList {
+  display: none;
+}
+
 .DomainSandbox {
   margin:  12px;
-  border: 1px solid #ddd;
-  padding:  12px;
+  margin-bottom: 0px;
+  // border: 1px solid #ddd;
+  // padding:  12px;
 }
 
 .DomainWrapper {
   display:  inline-block;
-  border:  1px solid #ccc;
+  border:  1px solid $gray_neutral;
   padding: 12px;
   border-radius:  6px;
   width:  63px;
+  .optionsIcon {
+    display: none;
+  }
+  &.MoreOptions {
+    background-color: $green_clean_light;
+    .optionsIcon {
+      display: inline-block;
+    }
+    &.selected {
+      background-color: $green_clean_mid;
+      color: $indigo;
+      border-bottom: 0;
+      height: 30px;
+      border-radius: 0;
+      border-top-right-radius: 6px;
+      border-top-left-radius: 6px;
+      .optionsIcon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.OptionsModal {
+  border: 1px solid $gray_neutral;
+  .OptionButton {
+    background-color: $green_clean_light;
+    &.selected {
+      background-color: $green_clean_mid;
+      color: $indigo;
+    }
+  }
 }
 
 .DomainHeader {

@@ -1,5 +1,7 @@
 import React from 'react';
 import Button from '../components/Button';
+import deleteIcon from '../images/delete-bin-7-fill.png';
+import editIcon from '../images/edit-line.png';
 
 class ModuleBuilder extends React.Component {
 
@@ -25,6 +27,8 @@ class ModuleBuilder extends React.Component {
     setTimeout(() => this.setState({isInserting: false}), 1000);
   }
 
+  // this populates the button list to add optional domains
+  // it should maybe live in componentDidMount
   getAllButtons = () => {
     let allButtons = [];
     for (var ButtonObject in this.state.ButtonList) {
@@ -33,6 +37,7 @@ class ModuleBuilder extends React.Component {
     return allButtons;
   };
 
+  // this populates the domain sandbox with currently selected domains
   getPresentDomains = () => {
     let presentDomains = [];
     for (var DomainObject in this.state.DomainList) {
@@ -43,6 +48,7 @@ class ModuleBuilder extends React.Component {
     return presentDomains;
   };
 
+  // clicking the optional domain buttons adds or removes groups of domains
   toggleDomains = domainsToToggle => {
     let updatedDomainList = this.state.DomainList;
 
@@ -109,11 +115,17 @@ class ModuleBuilder extends React.Component {
           optionList = ClickedDomain.options[option];
         }
       }
-      this.setState({optionsModalContent: {domain: ClickedDomain.domainName, name: optionName, list: optionList, selected: selectedOption}});
+      this.setState({optionsModalContent: {
+                      domain: ClickedDomain.domainName, 
+                      name: optionName, 
+                      list: optionList, 
+                      selected: selectedOption
+                    }});
       this.setState({optionsModalOpen: !this.state.optionsModalOpen});
     }
   }
 
+  // after opening the options modal, clicking an option button will update state
   selectNewOption = (modalInfo, option) => {
     // this isn't really a list, it's an object
     let currentOptions = this.state.optionsModalContent;
@@ -154,7 +166,9 @@ class ModuleBuilder extends React.Component {
           </div>
           {this.state.ModuleType === 'extending' ? 
             <div className="DomainHeaderButton">
-              <Button className='deleteModuleButton' onClick={() => {this.deleteModule()}}> X </Button> 
+              <div className='DeleteModuleButton' onClick={() => {this.deleteModule()}}>
+                <img src={deleteIcon} /> 
+              </div> 
             </div>
             : null
           } 
@@ -163,7 +177,7 @@ class ModuleBuilder extends React.Component {
           <div className="DomainButtonList">
             {this.getAllButtons().map((DomainButton, index) => (
               <Button 
-                className='addDomainButton' 
+                className='AddDomainButton' 
                 disabled={DomainButton.disabled} 
                 key={index} 
                 onClick={ () => {
@@ -178,22 +192,26 @@ class ModuleBuilder extends React.Component {
           </div>
           <div className="DomainSandbox">
             {this.getPresentDomains().map((DomainDiv, index) => (
-                <div key={DomainDiv.domainName + index} className="DomainWrapper" onClick={() => this.toggleOptionsModal(DomainDiv)}>
+                <div key={DomainDiv.domainName + index} className={`DomainWrapper ${DomainDiv.options ? 'MoreOptions' : ''}`} 
+                     onClick={() => this.toggleOptionsModal(DomainDiv)}>
                   <div className={"Domain " + DomainDiv.domainName}>
                     {DomainDiv.domainName}
                   </div>
+                  <span className="optionsIcon">
+                    <img src={editIcon} />
+                  </span>
                 </div>
               ))
             }
           </div>
         </div>
         {this.state.optionsModalOpen ? 
-          <div className="optionsModal">
+          <div className="OptionsModal">
             {this.state.optionsModalContent.name}
             :
             {this.state.optionsModalContent.list.map((option, index) => (
                 <Button 
-                  className={(option === this.state.optionsModalContent.selected) ? 'optionButton selected' : 'optionButton'}
+                  className={(option === this.state.optionsModalContent.selected) ? 'OptionButton selected' : 'OptionButton'}
                   key={'option'+index}
                   onClick={() => this.selectNewOption(this.state.optionsModalContent, option)}
                   >

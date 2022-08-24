@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { beginDomainSearch } from '../redux/actions/actions';
 import {clusterCADDomainSearch} from '../redux/middleware/api';
 import Button from '../components/Button';
-import ModuleBuilder from '../components/ModuleBuilder'
+import ModuleBuilder from '../components/ModuleBuilder';
+import addIcon from '../images/add-circle-fill.png';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -16,6 +17,13 @@ class DomainSearch extends React.Component {
 
   constructor(props) {
     super(props);
+
+    // all of these consts need to go into a json file or something
+    // they should come in via a reducer that will set them up in this
+    // format so we can use them. We need to be able to parse either PKS
+    // or potentially other formats
+
+    // right now these aren't even being stored in state properly
 
     const LoadingPKSList = {
       KS:  {domainName: 'KS', present: true},
@@ -65,6 +73,8 @@ class DomainSearch extends React.Component {
     }
   }
 
+  // same thing here, these lists need to be moved out and brought into local state properly
+
   buildModules = (newLength) => {
     let PKSDomainList = {
       KS:  {domainName: 'KS', present: true},
@@ -98,11 +108,13 @@ class DomainSearch extends React.Component {
     this.setState({ ModuleArray: defaultArray });
   }
 
+  // runs when you hit the add module button
   addModule = () => {
     let currentPlusOne = this.state.ModuleArray.length + 1;
     this.buildModules(currentPlusOne);
   }
 
+  // this takes modules from the list and returns the JSX we need to put them in the dom
   parseModuleObject = (module, index) => {
     let {key, type, DomainList, ButtonList} = module;
     return (
@@ -118,6 +130,7 @@ class DomainSearch extends React.Component {
     );
   }
 
+  // this function is passed down to the module class
   deleteModule = (moduleKey) => {
     let currentModules = this.state.ModuleArray;
     let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
@@ -129,16 +142,20 @@ class DomainSearch extends React.Component {
     });
   }
 
+  // this function is passed down to the module class
+  // the container needs to know when updates hapen because it holds the master list
+  // of modules to submit to the backend
   updateModule = (moduleKey, newModuleContent) => {
     let currentModules = this.state.ModuleArray;
     let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
     let moduleToUpdate = currentModules[moduleIndex];
     currentModules[moduleIndex] = {... moduleToUpdate, DomainList: newModuleContent};
     this.setState({
-      ModuleArray: currentModules
+      ModuleArray: currentModules,
     });
   }
 
+  // the async call to the backend. This is currently communicating with the backend
   submitSearch = () => {
     let loading = this.state.LoadingModule;
     let terminating = this.state.TerminatingModule;
@@ -153,12 +170,14 @@ class DomainSearch extends React.Component {
     clusterCADDomainSearch(currentModules);
   }
 
+  // we need to pass in the current array so we can use its length to set the indices of modules correctly
+  // maybe theres a nicer way of doing that?
   render() {
     const ExtendingArray = this.state.ModuleArray;
     return (
       <div className='DomainSearch form'>
         <h3>Construct Modules</h3>
-        <Button onClick={() => { this.addModule() }}> Add Module + </Button>
+        <Button onClick={() => { this.addModule() }}> Add Module <img src={addIcon} /> </Button>
         <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
         <div className="ModuleListWrapper">
           { this.parseModuleObject(this.state.LoadingModule, -1) }
