@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../components/Button';
 import deleteIcon from '../images/delete-bin-7-fill.png';
 import editIcon from '../images/edit-line.png';
+import addIcon from '../images/add-circle-fill.png';
 
 class ModuleBuilder extends React.Component {
 
@@ -15,6 +16,7 @@ class ModuleBuilder extends React.Component {
       updateFunction: props.updateFunction,
       optionsModalOpen: false,
       optionsModalContent: {},
+      buttonsModalOpen: false,
       isRemoving: false,
       isInserting: (props.type == 'extending' ? true : false),
     }
@@ -22,7 +24,7 @@ class ModuleBuilder extends React.Component {
 
   // this triggers the inserting module css animation
   // and adds a one second delay to allow the animation to run
-  // not the iife is necessary to make setTimeout work
+  // note the iife is necessary to make setTimeout work
   componentDidMount() {
     setTimeout(() => this.setState({isInserting: false}), 1000);
   }
@@ -43,6 +45,10 @@ class ModuleBuilder extends React.Component {
     for (var DomainObject in this.state.DomainList) {
       if (this.state.DomainList[DomainObject].present) {
         presentDomains.push(this.state.DomainList[DomainObject]);
+      } else {
+        // we push a placeholder button that opens the buttons list to
+        // insert optional modules
+        presentDomains.push({button: "add"});
       }
     }
     return presentDomains;
@@ -98,6 +104,13 @@ class ModuleBuilder extends React.Component {
     }
 
     this.setState({ButtonList: updatedButtonList});
+  }
+
+  // to insert domains, click the + in line and choose from the buttons in the modal
+  // right now we only support one modal per module, so no props are needed
+  // the buttons are already set up in another function so this is pretty basic
+  toggleButtonsModal = () => {
+    this.setState({buttonsModalOpen: !this.state.buttonsModalOpen});
   }
 
   // some domains (AT and KR) have settable properties
@@ -156,6 +169,34 @@ class ModuleBuilder extends React.Component {
     setTimeout(() => this.state.deleteFunction(this.props.id), 1000);
   }
 
+  // this takes the present domains and inserts either a domain (if required)
+  // or a button that allows you to add optional domains 
+  populateDomainSandbox = () => {
+    return this.getPresentDomains().map((DomainDiv, index) => {
+      if(DomainDiv.domainName) {
+        console.log("found name");
+        return (
+          <div key={DomainDiv.domainName + index} className={`DomainWrapper ${DomainDiv.options ? 'MoreOptions' : ''}`} 
+               onClick={() => this.toggleOptionsModal(DomainDiv)}>
+            <div className={"Domain " + DomainDiv.domainName}>
+              {DomainDiv.domainName}
+            </div>
+            <span className="optionsIcon">
+              <img src={editIcon} />
+            </span>
+          </div>
+        )
+      } else {
+        console.log("found button");
+        return (
+          <Button className="addDomains" onClick={() => {this.toggleButtonsModal()}}>
+            <img src={addIcon} />
+          </Button>
+        )
+      }
+    });
+  }
+
   render() {
     return (
       <div className={`ModuleBuilder ${this.state.isInserting ? 'inserting' : ''}`}>
@@ -174,7 +215,7 @@ class ModuleBuilder extends React.Component {
           } 
         </div> 
         <div className="DomainToolbox">
-          <div className="DomainButtonList">
+          <div className={`DomainButtonList ${this.state.buttonsModalOpen ? 'open' : ''}`}>
             {this.getAllButtons().map((DomainButton, index) => (
               <Button 
                 className='AddDomainButton' 
@@ -191,18 +232,7 @@ class ModuleBuilder extends React.Component {
             }
           </div>
           <div className="DomainSandbox">
-            {this.getPresentDomains().map((DomainDiv, index) => (
-                <div key={DomainDiv.domainName + index} className={`DomainWrapper ${DomainDiv.options ? 'MoreOptions' : ''}`} 
-                     onClick={() => this.toggleOptionsModal(DomainDiv)}>
-                  <div className={"Domain " + DomainDiv.domainName}>
-                    {DomainDiv.domainName}
-                  </div>
-                  <span className="optionsIcon">
-                    <img src={editIcon} />
-                  </span>
-                </div>
-              ))
-            }
+            { this.populateDomainSandbox() }
           </div>
         </div>
         {this.state.optionsModalOpen ? 

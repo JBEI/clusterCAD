@@ -6,6 +6,14 @@
   flex-wrap: wrap;
 }
 
+.AddDomain {
+  line-height: 30px;
+  vertical-align: middle;
+  img {
+    vertical-align: middle;
+  }
+}
+
 .ModuleBuilder {
   border: 1px solid $black_warm;
   border-radius: 6px;
@@ -42,6 +50,9 @@
 
 .DomainButtonList {
   display: none;
+  &.open {
+    display: block;
+  }
 }
 
 .DomainSandbox {
@@ -53,12 +64,18 @@
 
 .DomainWrapper {
   display:  inline-block;
+  line-height: 30px;
   border:  1px solid $gray_neutral;
   padding: 12px;
   border-radius:  6px;
   width:  63px;
+  .Domain {
+    display: inline-block;
+    vertical-align: middle;
+  }
   .optionsIcon {
     display: none;
+    vertical-align: middle;
   }
   &.MoreOptions {
     background-color: $green_clean_light;

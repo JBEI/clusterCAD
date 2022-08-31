@@ -177,7 +177,7 @@ class DomainSearch extends React.Component {
     return (
       <div className='DomainSearch form'>
         <h3>Construct Modules</h3>
-        <Button onClick={() => { this.addModule() }}> Add Module <img src={addIcon} /> </Button>
+        <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
         <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
         <div className="ModuleListWrapper">
           { this.parseModuleObject(this.state.LoadingModule, -1) }
