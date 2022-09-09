@@ -199,7 +199,10 @@ class ModuleBuilder extends React.Component {
 
   render() {
     return (
-      <div className={`ModuleBuilder ${this.state.isInserting ? 'inserting' : ''}`}>
+      <div className={`ModuleBuilder 
+        ${this.state.isInserting ? 'inserting' : ''} 
+        ${this.state.isRemoving ? 'removing' : ''}`}
+        >
         <div className="DomainHeader">
           <div className="DomainTitle">
             <div> Module {this.props.index + 1} </div>
