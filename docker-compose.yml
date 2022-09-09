@@ -58,8 +58,8 @@ services:
       - media:/www/media
     expose:
       - "8000"
-    # ports:
-    #   - "8888:8888"
+    ports:
+      - "8888:8888"
     depends_on:
       - db
       - redis
