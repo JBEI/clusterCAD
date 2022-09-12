@@ -6,11 +6,11 @@ class DomainChar(models.Model):
     # ClusterCAD, each represented by a unique text string
 
     id = models.BigAutoField(primary_key=True)
-    domainString = models.CharField(max_length=1000, db_index=True, blank=False)
+    domainString = models.CharField(max_length=1000, db_index=True, blank=False, unique=True)
 
     def char(self):
         # returns the unique unicode char for this domain
-        return chr(id)
+        return chr(self.id)
 
 class ClusterString(models.Model):
     # This class stores a string representing each PKS architecture
