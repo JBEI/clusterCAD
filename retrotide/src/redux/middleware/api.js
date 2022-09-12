@@ -24,7 +24,14 @@ const clusterCADSeqSearch = (molecule, token) => {
 
 const clusterCADDomainSearch = (payload, token) => {
   console.log('hit api function domain search with ' + payload);
-  client.post('/api/', {params: {modules: payload, csrftoken: token}})
+  client.post('/api/', 
+                {params: {
+                  modules: payload,
+                }}, 
+                {headers: {
+                  "X-CSRFTOKEN": token
+                }}
+              )
     .then((response) => {console.log(response)})
     .catch((error) => {console.log(error.config)});
 }
