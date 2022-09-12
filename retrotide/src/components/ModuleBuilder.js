@@ -174,7 +174,6 @@ class ModuleBuilder extends React.Component {
   populateDomainSandbox = () => {
     return this.getPresentDomains().map((DomainDiv, index) => {
       if(DomainDiv.domainName) {
-        console.log("found name");
         return (
           <div key={DomainDiv.domainName + index} className={`DomainWrapper ${DomainDiv.options ? 'MoreOptions' : ''}`} 
                onClick={() => this.toggleOptionsModal(DomainDiv)}>
@@ -187,7 +186,6 @@ class ModuleBuilder extends React.Component {
           </div>
         )
       } else {
-        console.log("found button");
         return (
           <Button className="addDomains" onClick={() => {this.toggleButtonsModal()}}>
             <img src={addIcon} />

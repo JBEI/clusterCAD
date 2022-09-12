@@ -13,6 +13,9 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
+const cookie = document.cookie;
+const csrftoken = cookie.match(/csrftoken=([a-zA-Z0-9]+);?/);
+
 class DomainSearch extends React.Component {
 
   constructor(props) {
@@ -160,6 +163,7 @@ class DomainSearch extends React.Component {
     let loading = this.state.LoadingModule;
     let terminating = this.state.TerminatingModule;
     let currentModules = this.state.ModuleArray;
+    let token = csrftoken[1];
     // push and unshift are mutators
     // this works fine even if ModuleArray has length 0
     currentModules.unshift(loading);
@@ -167,7 +171,7 @@ class DomainSearch extends React.Component {
     // dispatch action
     this.props.beginDomainSearch(currentModules);
     // call async function. is this where this goes?
-    clusterCADDomainSearch(currentModules);
+    clusterCADDomainSearch(currentModules, token);
   }
 
   // we need to pass in the current array so we can use its length to set the indices of modules correctly
