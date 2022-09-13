@@ -9,7 +9,7 @@ dataUrl = https://clustercad.jbei.org/static/data
 username = pkscluster
 password = pkscluster
 
-all: data/generate_aa_plots_placeholder 
+all: data/generate_aa_plots_placeholder data/domain_database_placeholder
 
 clean:
 	-rm -rf data/clustercad2.0_production.tgz
@@ -83,3 +83,8 @@ data/generate_aa_plots_placeholder: generate_aa_plots.py data/process_aa_analysi
 		./$<; \
 	done; \
 	touch $@ 
+
+# generate architecture database
+data/domain_database_placeholder: generate_domain_database.py data/clustercad_clean_placeholder
+	./$<
+	touch $@
