@@ -32,7 +32,9 @@ RUN apt-get update \
         python3-dev \
         sqlite3 \
         libsqlite3-dev \
-        libboost-dev \
+        libglpk-dev \ 
+        libopenblas-dev \
+        liblapack-dev \
         libboost-all-dev \
         libboost-system1.67-dev \
         libboost-thread1.67-dev \
