@@ -4,6 +4,7 @@ from django.http import Http404
 from json import loads, dumps
 import Levenshtein
 import domainLevelSearch.models
+from time import time
 
 def domainSearch(request):
 
@@ -70,13 +71,19 @@ def domainSearch(request):
 
         queryString += chr(charobject.id)
 
+    # run search and compute time to run
+    start = time()
     results = alignAll(queryString, tryTruncations=True)
+    end = time()
 
-    return HttpResponse(str(results), 'text/json')
+    # return HttpResponse(str(results), 'text/json')
 
-    # context = {}
+    context = {
+        'results': results,
+        'timeTaken': "{:.2f}".format(end-start),
+    }
     
-    # return render(request, 'domainsearchresults.html', context)
+    return render(request, 'domainsearchresults.html', context)
 
     # else:
     #     # raise Http404

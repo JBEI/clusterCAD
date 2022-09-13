@@ -52,102 +52,23 @@ sequence hits
 {% endblock %}
 
 {% block content %}
-<h2>Subunit amino acid sequence blastp hits</h2>
+<h2>Domain Architecture Search Results</h2>
 
 <div class="row-fluid">
 <div class="col-md-12">
 <dl class="dl-horizontal">
-<dt>Query residues</dt>
-<dd>
-{{ queryResidues }}
-</dd>
-<dt>Maximum E-value</dt>
-<dd>{{ evalue }} </dd>
-<dt>Number of top hits</dt>
-<dd>{{ maxHits }}</dd>
-<dt>Show domains</dt>
-<dd>{% if showAllDomains %}All domains in modules overlapping alignment{% else %}Only domains overlapping alignment{% endif %}</dd>
 <dt>Search time (sec)</dt>
 <dd>
 {{ timeTaken }}
 </dd>
-<dt>Database</dt>
-<dd>{{ searchDatabase }}</dd>
 
 <dt>Instructions</dt>
 <dd>
-You can click any column header to sort results. If domains are highlighted, the list will auto-sort based on the number of unique highlighted domain types in each hit. Clicking a row will take you to the view page for that cluster, with the overlapping modules highlighted.
+You can click any column header to sort results. Clicking a row will take you to the view page for that cluster.
 </dd>
 </dl>
 </div>
 </div><!--/row-->
-
-<script>
-$(document).ready(function(){
-    $('[data-domainselect]').change(function(){
-       var domain = $(this).attr("data-domainselect");
-       var types = $(this).selectpicker('val');
-       $('[data-domain="' + domain + '"]').attr("style", "padding: 0; background-color: transparent;"); 
-       if (types !== null){
-           $.each(types, function(index,value){
-                if (value){
-                    $('[data-domain="' + domain + '"][data-type="' + value + '"]').attr("style", "padding: 0; background-color: orange;"); 
-                }
-           });
-       }
-       // update table cache and re-sort each time highlights are changed
-       var sortlist = [[7,1], [0,0]]
-       $("#resultsTable").trigger("update").trigger("sorton", [sortlist]);
-    });
-});
-</script>
-
-<div class="row-fluid">
-<div class="btn-group" role="group">
-
-  {% if atsubstrates|length > 0 %}
-  <div class="btn-group" role="group">
-    <select data-domainselect="AT" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight AT substrates" data-selected-text-format="count">
-      {% for substrate in atsubstrates %}
-      <option value="{{ substrate }}">AT substrate {{ substrate }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  {% endif %}
-
-  {% if krtypes|length > 0 %}
-  <div class="btn-group" role="group">
-    <select data-domainselect="KR" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight KR types" data-selected-text-format="count">
-      {% for type in krtypes %}
-      <option value="{{ type }}">KR type {{ type }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  {% endif %}
-
-  {% for domaintype in boolDomains %}
-  <div class="btn-group" role="group">
-    <select data-domainselect="{{ domaintype.0 }}" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight {{ domaintype.0 }} types" data-selected-text-format="count">
-      {% for type in domaintype.1 %}
-      <option value="{{ type }}">{{ domaintype.0 }} type {{ type }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  {% endfor %}
-
-  {% if tetypes|length > 0 %}
-  <div class="btn-group" role="group">
-    <select data-domainselect="TE" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight TE types" data-selected-text-format="count">
-      {% for type in tetypes %}
-      <option value="{{ type }}">TE type {{ type }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  {% endif %}
-
-
-</div>
-</div>
 
 <div class="row-fluid">
 <div class="col-md-12">
@@ -161,63 +82,30 @@ $(document).ready(function(){
         Cluster
     </th>
     <th>
-        Subunit
+        Edit distance
     </th>
-    <th class="text-right">
-       E-value 
-    </th>
-    <th class="text-right">
-       Bit 
-    </th>
-    <th class="text-right">
-       Query 
-    </th>
-    <th class="text-right">
-       Subject 
-    </th>
-    <th class="text-right">
-        Modules (domains)
+    <th>
+        Terminal domains to truncate
     </th>
 </tr>
 </thead>
 <tbody>
 
-{% for alignment in alignments %}
-<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.0.cluster.mibigAccession }}/?mark={% for module in alignment.1 %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};#{{ alignment.0.name }}">
+{% for result in results %}
+<tr class="clickable-row" data-container="body" data-href="/pks/{{ result.0.mibigAccession }}">
         <td class="text-right">
             {{ forloop.counter }}
         </td>
         <td>
-            {{ alignment.0.cluster.mibigAccession }}
-            {{ alignment.0.cluster.description }}
+            {{ result.0.mibigAccession }}
+            {{ result.0.description }}
         </td>
         <td>
-            {{ alignment.0.name }}
+            {{ result.1 }}
         </td>
-        
-        <td class="text-right">
-          <!-- evalue -->
-            {{ alignment.6|sigfig }}
+        <td>
+            {{ result.2 }}
         </td>
-        <td class="text-right">
-          <!-- bitscore -->
-            {{ alignment.7 }}
-        </td>
-        <td class="text-right">
-          <!-- q_start - q_end -->
-            {{ alignment.2 }}..{{ alignment.3 }}
-        </td>
-        <td class="text-right">
-          <!-- s_start - s_start -->
-            {{ alignment.4 }}..{{ alignment.5 }}
-        </td>
-        <td class="text-right">
-        {% if alignment.1|length == 0 %}
-            N/A
-        {% endif %}
-        {% for module in alignment.1 %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" %}data-type="{{ domain.type }}"{% elif domain|classname == "AT" %}data-type="{{ domain.substrate }}"{% else %}data-type="{{ domain }}"{% endif %} style="padding:0; background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
-        </td>
-        
 </tr>
 {% endfor %}
 </tbody>
