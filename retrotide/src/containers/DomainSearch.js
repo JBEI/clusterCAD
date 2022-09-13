@@ -26,7 +26,7 @@ class DomainSearch extends React.Component {
     // format so we can use them. We need to be able to parse either PKS
     // or potentially other formats
 
-    // right now these aren't even being stored in state properly
+    // right now these aren't being stored in state properly
 
     const LoadingPKSList = {
       KS:  {domainName: 'KS', present: true},
@@ -152,13 +152,33 @@ class DomainSearch extends React.Component {
   // the container needs to know when updates hapen because it holds the master list
   // of modules to submit to the backend
   updateModule = (moduleKey, newModuleContent) => {
+    console.log(newModuleContent);
+    let loading = this.state.LoadingModule;
+    let terminating = this.state.TerminatingModule;
     let currentModules = this.state.ModuleArray;
-    let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
-    let moduleToUpdate = currentModules[moduleIndex];
-    currentModules[moduleIndex] = {... moduleToUpdate, DomainList: newModuleContent};
-    this.setState({
-      ModuleArray: currentModules,
-    });
+    // extending loading and terminating are stored separately so we check each one
+    if(moduleKey == 'loading-0') {
+      let newLoading = {... loading, DomainList: newModuleContent};
+      this.setState({
+        LoadingModule: newLoading,
+      });
+    } else if(moduleKey == 'terminating-n') {
+      let newTerminating = {... terminating, DomainList: newModuleContent};
+      this.setState({
+        TerminatingModule: newTerminating,
+      });
+    } else {
+      let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
+      if(moduleIndex > -1) {
+        let moduleToUpdate = currentModules[moduleIndex];
+        currentModules[moduleIndex] = {... moduleToUpdate, DomainList: newModuleContent};
+        this.setState({
+          ModuleArray: currentModules,
+        });
+      } else {
+        console.log("Module to update not found! " + moduleKey);
+      }
+    }
   }
 
   // the async call to the backend. This is currently communicating with the backend
