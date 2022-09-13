@@ -9,6 +9,9 @@ ENV LANG C.UTF-8
 WORKDIR /root
 ADD ./requirements.txt /root/
 
+# This command keeps APT from losing the http connection in Docker
+RUN echo "Acquire::http::Pipeline-Depth 0;\n" >> /etc/apt/apt.conf
+
 # include Debian packages required to build pip packages
 RUN apt-get update \
     && apt-get install -y \
@@ -29,7 +32,9 @@ RUN apt-get update \
         python3-dev \
         sqlite3 \
         libsqlite3-dev \
-        libboost-dev \
+        libglpk-dev \ 
+        libopenblas-dev \
+        liblapack-dev \
         libboost-all-dev \
         libboost-system1.67-dev \
         libboost-thread1.67-dev \
@@ -53,7 +58,7 @@ RUN apt-get update \
 
 # install pip packages from requirements.txt
 # note: requirements.txt can be updated with 'pip3 install pur; pur -r requirements.txt'
-RUN pip3 install -U pip setuptools
+RUN pip3 install -U pip setuptools==57.5.0
 RUN pip3 install -r requirements.txt
 
 
