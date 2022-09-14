@@ -1,5 +1,5 @@
 This folder builds tbackman/debian-cheminformatics with the following commands:
 
-docker build --platform=linux/amd64 -t tbackman/debian-cheminformatics:debian10 .
+docker build --platform=linux/amd64 -t tbackman/debian-cheminformatics:debian10-update2 .
 docker login
-docker push tbackman/debian-cheminformatics:debian10
+docker push tbackman/debian-cheminformatics:debian10-update2

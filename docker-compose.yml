@@ -14,7 +14,7 @@ services:
 
   celery:
     restart: always
-    image: tbackman/debian-cheminformatics:debian10
+    image: tbackman/debian-cheminformatics:debian10-update2
     volumes:
       - .:/clusterCAD
       - /www/static
@@ -39,7 +39,7 @@ services:
     user: postgres
     # postgres internal port is 5432
     restart: always
-    image: tbackman/debian-cheminformatics:debian10
+    image: tbackman/debian-cheminformatics:debian10-update2
     command: ["/usr/lib/postgresql/11/bin/postgres", "-D", "/var/lib/postgresql/11/main", "-c", "config_file=/etc/postgresql/11/main/postgresql.conf"]
     volumes:
       - app-db-data:/var/lib/postgresql/11/main
@@ -51,7 +51,7 @@ services:
   # this is ClusterCAD
   web:
     restart: always
-    image: tbackman/debian-cheminformatics:debian10
+    image: tbackman/debian-cheminformatics:debian10-update2
     volumes:
       - .:/clusterCAD
       - static:/www/static
