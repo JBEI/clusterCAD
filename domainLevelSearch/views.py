@@ -8,8 +8,10 @@ from time import time
 
 def domainSearch(request):
 
+    # parse JSON from POST data
     querydata = loads(request.body)
 
+    # define module order for parsing POST data
     domainOrder = ['KS', 'AT', 'DH', 'ER', 'KR', 'ACP']
     moduleNo = 0
     queryList = []
@@ -76,18 +78,12 @@ def domainSearch(request):
     results = alignAll(queryString, tryTruncations=True)
     end = time()
 
-    # return HttpResponse(str(results), 'text/json')
-
     context = {
         'results': results,
         'timeTaken': "{:.2f}".format(end-start),
     }
     
     return render(request, 'domainsearchresults.html', context)
-
-    # else:
-    #     # raise Http404
-    #     return HttpResponse('Error: not an AJAX request!', 'text/json')
 
 def alignAll(query, tryTruncations=False):
     # align query against all PKSs and return a sorted tuple of (mibig, editDistance)
