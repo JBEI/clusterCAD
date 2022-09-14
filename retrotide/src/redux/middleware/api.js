@@ -1,29 +1,28 @@
 // async actions and calls to the client / backend go here
-// we need access to the client if any
-// redux-thunk is imported toplevel so we should be able to access it and dispatch from here but we'll see
+// redux-thunk is imported toplevel so we can access it here
+
+// note that "async/await" notation has been deprecated
 
 import {default as client} from 'axios'; // this is the frontend client
+import {
+  domainSearchResponseHandler, 
+  domainSearchResponseErrorHandler,
+} from '../actions/actions';
 
+// stub dispatched from the Sequence Search container
+// currently only hitting the api for proof of life
 const clusterCADSeqSearch = (molecule, token) => {
   console.log('hit api function search with ' + molecule);
-  // return async function beginMoleculeSearch(dispatch, getState) {
-    // const requestObject = { // object structure needed for clusterCAD request, probably shouldn't be here
-      // csrfmiddlewaretoken: "",
-      // sdf: molecule,
-      // draw: 1,
-      // cutoff: 0.0,
-      // maxCompounds: 10,
-    // };
-    // make this a try/catch
-    // const response = await client.post('/api', {integer: 0}); // callback
-    // dispatch({ type: 'jobAdded', payload: {response} });
   client.get('/api/', {params: {integer: 0}})
     .then((response) => {console.log(response)})
     .catch((error) => {console.log(error.config)});
 }
 
+// Domain Search, called from the DomainSearch container
+// dispatches with a json object containing all the modules
+// gets back the Django response, which we need to dumpinto an iframe or
+// onto another page
 const clusterCADDomainSearch = (payload, token) => {
-  console.log('hit api function domain search with ' + payload);
   client.post('/api/', 
                 {params: {
                   modules: payload,
@@ -32,17 +31,15 @@ const clusterCADDomainSearch = (payload, token) => {
                   "X-CSRFTOKEN": token
                 }}
               )
-    .then((response) => {console.log(response)})
-    .catch((error) => {console.log(error.config)});
+    .then((response) => {
+      console.log("response ***");
+      dispatch(domainSearchResponseHandler(response));
+    })
+    .catch((error) => {
+      console.log("error ***");
+      dispatch(domainSearchResponseErrorHandler(error));
+    });
 }
-
-// export function synchWrapper (someInput) {
-//   return async function beginMoleculeSearch(dispatch, getState) {
-//     // example
-//     const response = await client.post('/fakeApi/todos', { todo: initialTodo });
-//     dispatch({ type: 'todos/todoAdded', payload: response.todo });
-//   }
-// }
 
 export { clusterCADSeqSearch, clusterCADDomainSearch };
 // then import this function in the component, which has no idea it's async
