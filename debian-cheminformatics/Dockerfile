@@ -1,4 +1,4 @@
-FROM debian:10
+FROM debian:10.13
 
 # Maintained by Tyler W. H. Backman
 LABEL maintainer="tbackman@lbl.gov"
