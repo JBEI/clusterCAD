@@ -26,12 +26,13 @@ class DomainSearch extends React.Component {
     // format so we can use them. We need to be able to parse either PKS
     // or potentially other formats
 
-    // right now these aren't even being stored in state properly
+    // right now these aren't being stored in state properly
 
     const LoadingPKSList = {
       KS:  {domainName: 'KS', present: true},
       AT:  {domainName: 'AT', present: true, options: {
-        substrate: ['mal', 'methylmal', 'trans'],
+        substrate: ['mal', 'mmal', 'mxmal', 'mxmal_ACP', 'emal', 'allylmal', 'butmal', 'hmal', 
+          'isobutmal', 'D-isobutmal', 'DCP', 'hexmal', '2-oxobutmal', '3-me-hexmal'],
         selected: 'mal',
       }},
       ACP: {domainName: 'ACP', present: true},       
@@ -40,14 +41,15 @@ class DomainSearch extends React.Component {
     const TerminatingPKSList = {
       KS:  {domainName: 'KS', present: true},
       AT:  {domainName: 'AT', present: true, options: {
-        substrate: ['mal', 'methylmal', 'trans'],
+        substrate: ['mal', 'mmal', 'mxmal', 'mxmal_ACP', 'emal', 'allylmal', 'butmal', 'hmal', 
+          'isobutmal', 'D-isobutmal', 'DCP', 'hexmal', '2-oxobutmal', '3-me-hexmal'],
         selected: 'mal',
       }},
       DH:  {domainName: 'DH', present: false},
       ER:  {domainName: 'ER', present: false},
       KR:  {domainName: 'KR', present: false, options: {
-        stereochemistry: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'any'],
-        selected: 'any',
+        stereochemistry: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
+        selected: 'B1',
       }},
       ACP: {domainName: 'ACP', present: true}, 
       TE:  {domainName: 'TE', present: true},        
@@ -82,14 +84,15 @@ class DomainSearch extends React.Component {
     let PKSDomainList = {
       KS:  {domainName: 'KS', present: true},
       AT:  {domainName: 'AT', present: true, options: {
-        substrate: ['mal', 'methylmal', 'trans'],
+        substrate: ['mal', 'mmal', 'mxmal', 'mxmal_ACP', 'emal', 'allylmal', 'butmal', 'hmal', 
+          'isobutmal', 'D-isobutmal', 'DCP', 'hexmal', '2-oxobutmal', '3-me-hexmal'],
         selected: 'mal',
       }},
       DH:  {domainName: 'DH', present: false},
       ER:  {domainName: 'ER', present: false},
       KR:  {domainName: 'KR', present: false, options: {
-        stereochemistry: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'any'],
-        selected: 'any',
+        stereochemistry: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
+        selected: 'B1',
       }},
       ACP: {domainName: 'ACP', present: true}, 
     };
@@ -149,13 +152,33 @@ class DomainSearch extends React.Component {
   // the container needs to know when updates hapen because it holds the master list
   // of modules to submit to the backend
   updateModule = (moduleKey, newModuleContent) => {
+    console.log(newModuleContent);
+    let loading = this.state.LoadingModule;
+    let terminating = this.state.TerminatingModule;
     let currentModules = this.state.ModuleArray;
-    let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
-    let moduleToUpdate = currentModules[moduleIndex];
-    currentModules[moduleIndex] = {... moduleToUpdate, DomainList: newModuleContent};
-    this.setState({
-      ModuleArray: currentModules,
-    });
+    // extending loading and terminating are stored separately so we check each one
+    if(moduleKey == 'loading-0') {
+      let newLoading = {... loading, DomainList: newModuleContent};
+      this.setState({
+        LoadingModule: newLoading,
+      });
+    } else if(moduleKey == 'terminating-n') {
+      let newTerminating = {... terminating, DomainList: newModuleContent};
+      this.setState({
+        TerminatingModule: newTerminating,
+      });
+    } else {
+      let moduleIndex = currentModules.findIndex((modObj) => modObj.key === moduleKey);
+      if(moduleIndex > -1) {
+        let moduleToUpdate = currentModules[moduleIndex];
+        currentModules[moduleIndex] = {... moduleToUpdate, DomainList: newModuleContent};
+        this.setState({
+          ModuleArray: currentModules,
+        });
+      } else {
+        console.log("Module to update not found! " + moduleKey);
+      }
+    }
   }
 
   // the async call to the backend. This is currently communicating with the backend
