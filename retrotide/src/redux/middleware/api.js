@@ -1,9 +1,8 @@
 // async actions and calls to the client / backend go here
 // redux-thunk is imported toplevel so we can access it here
 
-// note that "async/await" notation has been deprecated
-
 import {default as client} from 'axios'; // this is the frontend client
+// import { connect } from 'react-redux';
 import {
   domainSearchResponseHandler, 
   domainSearchResponseErrorHandler,
@@ -31,6 +30,8 @@ const clusterCADDomainSearch = (payload, token) => {
                   "X-CSRFTOKEN": token
                 }}
               )
+  // console.log("async??");
+  // dispatch(domainSearchResponseHandler(response));
     .then((response) => {
       console.log("response ***");
       dispatch(domainSearchResponseHandler(response));
@@ -38,9 +39,10 @@ const clusterCADDomainSearch = (payload, token) => {
     .catch((error) => {
       console.log("error ***");
       dispatch(domainSearchResponseErrorHandler(error));
-    });
+    }
+  );
 }
 
-export { clusterCADSeqSearch, clusterCADDomainSearch };
+export {clusterCADSeqSearch, clusterCADDomainSearch};
 // then import this function in the component, which has no idea it's async
 // remember to update reducers if dispatching an action
