@@ -14,9 +14,11 @@ class SearchResults extends React.Component {
 
   render() {
     return(
-      <iframe className="Results form" srcdoc={this.props.responseData}>
-        
-      </iframe>
+      <div className="SearchResults">
+        <iframe className="Results form" srcdoc={this.props.responseData}>
+          
+        </iframe>
+      </div>
     )
   }
 
