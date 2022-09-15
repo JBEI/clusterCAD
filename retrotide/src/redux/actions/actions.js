@@ -48,13 +48,13 @@ export function beginDomainSearch(moduleArray) {
 }
 
 // Got a response back from Domain Search
-export function domainSearchResponseHandler(response) {
+export function domainSearchResponseHandler(responseData) {
   console.log('action domainSearchResponse');
-  console.log(response.data);
+  console.log(responseData);
   return {
     type: HANDLE_DOMAIN_SEARCH_RESPONSE,
     payload: {
-      reponseObject: response.data,
+      responseObject: responseData,
       timestamp: NOW,
     },
   }
@@ -67,7 +67,7 @@ export function domainSearchResponseErrorHandler(error) {
   return {
     type: HANDLE_DOMAIN_SEARCH_RESPONSE,
     payload: {
-      reponseObject: "an error occurred",
+      responseObject: error,
       timestamp: NOW,
     },
   }

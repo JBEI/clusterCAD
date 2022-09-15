@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ClusterCAD {% block subtitle %}{% endblock %}</title>
+    {# Load the tag library #}
+    {% load bootstrap3 %}
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery=1 %}
+    {% block extra_headers %}{% endblock %}
+    <script src="/django-static/js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" href="/django-static/css/bootstrap-select.min.css">
+</head>
+
+<body>
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<div class="container">
+      {% block content %}{% endblock %}
+</div>
+
+{% block js_content %}{% endblock %}
+</body>
+</html>
+

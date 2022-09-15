@@ -33,12 +33,14 @@ const clusterCADDomainSearch = (payload, token) => {
                 )
       .then((response) => {
         console.log("response ***");
-        dispatch(domainSearchResponseHandler(response));
+        console.log(response);
+        dispatch(domainSearchResponseHandler(response.data));
 
       })
       .catch((error) => {
         console.log("error ***");
-        dispatch(domainSearchResponseErrorHandler(error));
+        console.log(error);
+        dispatch(domainSearchResponseHandler(error.message));
       }
     )
   };
