@@ -10,7 +10,7 @@
 <script>
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
+        window.top.location = $(this).data("href");
     });
     $("[data-toggle=popover]").popover({ trigger: 'hover' });
 });
