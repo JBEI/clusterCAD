@@ -50,11 +50,11 @@ export function beginDomainSearch(moduleArray) {
 // Got a response back from Domain Search
 export function domainSearchResponseHandler(response) {
   console.log('action domainSearchResponse');
-  console.log(response);
+  console.log(response.data);
   return {
     type: HANDLE_DOMAIN_SEARCH_RESPONSE,
     payload: {
-      reponseObject: response,
+      reponseObject: response.data,
       timestamp: NOW,
     },
   }

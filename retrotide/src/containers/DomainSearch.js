@@ -8,7 +8,7 @@ import addIcon from '../images/add-circle-fill.png';
 
 const mapDispatchToProps = dispatch => {
   return {
-    beginDomainSearch: modules => dispatch(beginDomainSearch(modules)),
+    clusterCADDomainSearch: modules => dispatch(clusterCADDomainSearch(modules, token)),
     dispatch,
   }
 };
@@ -75,6 +75,7 @@ class DomainSearch extends React.Component {
         ButtonList: ButtonList,
       },
       DomainList: 'PKS',
+      TriggerRedirect: true,
     }
   }
 
@@ -191,10 +192,10 @@ class DomainSearch extends React.Component {
     // this works fine even if ModuleArray has length 0
     currentModules.unshift(loading);
     currentModules.push(terminating);
-    // dispatch action
-    this.props.beginDomainSearch(currentModules);
+    // dispatch actions
+    beginDomainSearch(currentModules);
     // call async function. is this where this goes?
-    clusterCADDomainSearch(currentModules, token);
+    this.props.dispatch(clusterCADDomainSearch(currentModules, token));
   }
 
   // we need to pass in the current array so we can use its length to set the indices of modules correctly

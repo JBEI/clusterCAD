@@ -2,7 +2,7 @@
 // redux-thunk is imported toplevel so we can access it here
 
 import {default as client} from 'axios'; // this is the frontend client
-// import { connect } from 'react-redux';
+
 import {
   domainSearchResponseHandler, 
   domainSearchResponseErrorHandler,
@@ -18,29 +18,30 @@ const clusterCADSeqSearch = (molecule, token) => {
 }
 
 // Domain Search, called from the DomainSearch container
-// dispatches with a json object containing all the modules
+// dispatches request with a json object containing all the modules
 // gets back the Django response, which we need to dumpinto an iframe or
 // onto another page
 const clusterCADDomainSearch = (payload, token) => {
-  client.post('/api/', 
-                {params: {
-                  modules: payload,
-                }}, 
-                {headers: {
-                  "X-CSRFTOKEN": token
-                }}
-              )
-  // console.log("async??");
-  // dispatch(domainSearchResponseHandler(response));
-    .then((response) => {
-      console.log("response ***");
-      dispatch(domainSearchResponseHandler(response));
-    })
-    .catch((error) => {
-      console.log("error ***");
-      dispatch(domainSearchResponseErrorHandler(error));
-    }
-  );
+  return function (dispatch) { // now you're thinking with thunks
+    client.post('/api/', 
+                  {params: {
+                    modules: payload,
+                  }}, 
+                  {headers: {
+                    "X-CSRFTOKEN": token
+                  }}
+                )
+      .then((response) => {
+        console.log("response ***");
+        dispatch(domainSearchResponseHandler(response));
+
+      })
+      .catch((error) => {
+        console.log("error ***");
+        dispatch(domainSearchResponseErrorHandler(error));
+      }
+    )
+  };
 }
 
 export {clusterCADSeqSearch, clusterCADDomainSearch};
