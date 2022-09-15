@@ -1,0 +1,46 @@
+.Navbar {
+  width: 100%;
+  background-color: $indigo_mid;
+  display: flex;
+  line-height: 50px;
+  border-bottom: 12px solid $indigo_med;
+}
+
+.welcomeTable {
+  border-collapse: collapse;
+  border: 3px solid $blue_sky_mid;
+  table-layout: fixed;
+  margin: 0 45px;
+  th, td {
+    padding: 20px;
+    text-align: center;
+    border: 1px solid $blue_sky_mid;
+  }
+}
+
+canvas {
+  display: block;
+  border: 1px solid $white_gray;
+}
+
+.Footer {
+  width: 100%;
+  background-color: $white;
+  line-height: 30px;
+  border-top: 1px solid $gray_neutral_medium;
+  position: fixed;
+  display: flex;
+  bottom: 0;
+  img {
+    padding: 10px;
+    height: 50px;
+    opacity: .5;
+  }
+  .copyright {
+    color: $gray_link;
+    font-size: 16px;
+    flex: 3;
+    text-align: right;
+    padding: 0px 30px;
+  }
+}

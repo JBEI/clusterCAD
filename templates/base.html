@@ -10,8 +10,8 @@
     {% bootstrap_css %}
     {% bootstrap_javascript jquery=1 %}
     {% block extra_headers %}{% endblock %}
-    <script src="/static/js/bootstrap-select.min.js"></script>
-    <link rel="stylesheet" href="/static/css/bootstrap-select.min.css">
+    <script src="/django-static/js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" href="/django-static/css/bootstrap-select.min.css">
 </head>
 
 <body>
@@ -33,6 +33,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li><a href="/pks/">Browse clusters</a></li>
+        <li><a href="/retrotide/domainSearch">Domain Search</a></li>
         <li><a href="/structureSearch/">Structure search</a></li>
         <li><a href="/sequenceSearch/">Sequence search</a></li>
         <li><a href="/about/">About</a></li>
@@ -48,12 +49,10 @@
       {% block content %}{% endblock %}
 </div>
 
-<hr>
-
-<footer class="container">
+<footer class="container" style="border-top: 1px solid #777; width:  100%; padding-top: 15px; position: fixed; bottom: 0;">
     <div class="col-md-9">
-        <img src="/static/footer/jbei-logo.png">
-        <img src="/static/footer/doe-logo.png">
+        <img src="/django-static/footer/jbei-logo.png">
+        <img src="/django-static/footer/doe-logo.png">
     </div>
     <div class="col-md-3">
         <h4 class="text-right"><small>&copy; {% now "Y" %} The Regents of the University of California</small></h4>

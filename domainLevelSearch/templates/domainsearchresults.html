@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% load domainFilters %}
+
+{% block extra_headers %}
+<script type="text/javascript" src="/static/js/jquery.tablesorter.js"></script> 
+{% endblock %}
+
+{% block js_content %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+    $("[data-toggle=popover]").popover({ trigger: 'hover' });
+});
+</script>
+
+<script>
+$(document).ready(function() 
+    { 
+        $("#resultsTable").tablesorter({
+            debug: false,
+            sortAppend : [[0,0]],
+            textExtraction: function(node) { 
+                // sort Modules row by number of highlights but return other text unmodified
+                var marks = node.getElementsByTagName("mark");
+                if(marks.length === 0){
+                    return node.innerHTML;
+                }
+                var domains = [];
+                for(var i = 0; i < marks.length; i++){
+                    mark = marks[i];
+                    if(mark.getAttribute(["style"]) == "padding: 0; background-color: orange;"){
+                        // counter++;
+                        domains.push(mark.getAttribute(["data-domain"]));
+                    }
+                }
+                var uniqueDomains = domains.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+                return uniqueDomains.length;
+            } 
+        }); 
+
+    } 
+); 
+</script>
+
+{% endblock %}
+
+{% block subtitle %}
+sequence hits
+{% endblock %}
+
+{% block content %}
+<h2>Domain Architecture Search Results</h2>
+
+<div class="row-fluid">
+<div class="col-md-12">
+<dl class="dl-horizontal">
+<dt>Search time (sec)</dt>
+<dd>
+{{ timeTaken }}
+</dd>
+
+<dt>Instructions</dt>
+<dd>
+You can click any column header to sort results. Clicking a row will take you to the view page for that cluster.
+Edit distance refers to the number of domain level insert/delete/replace operations required to convert the hit PKS into the
+query PKS design (TEs ignored currently). Terminal domains to truncate refers to the number of domains that must be removed from the end of a hit PKS to match the query, e.g. the amount of truncation required.
+</dd>
+</dl>
+</div>
+</div><!--/row-->
+
+<div class="row-fluid">
+<div class="col-md-12">
+<table id="resultsTable" class="table table-hover table-condensed">
+<thead>
+<tr>
+    <th class="text-right">
+        Hit 
+    </th>
+    <th>
+        Cluster
+    </th>
+    <th>
+        Edit distance
+    </th>
+    <th>
+        Terminal domains to truncate
+    </th>
+</tr>
+</thead>
+<tbody>
+
+{% for result in results %}
+<tr class="clickable-row" data-container="body" data-href="/pks/{{ result.0.mibigAccession }}">
+        <td class="text-right">
+            {{ forloop.counter }}
+        </td>
+        <td>
+            {{ result.0.mibigAccession }}
+            {{ result.0.description }}
+        </td>
+        <td>
+            {{ result.1 }}
+        </td>
+        <td>
+            {{ result.2 }}
+        </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+{% endblock %}
