@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { beginDomainSearch } from '../redux/actions/actions';
 import {clusterCADDomainSearch} from '../redux/middleware/api';
+import { Redirect } from 'react-router-dom';
 import Button from '../components/Button';
 import ModuleBuilder from '../components/ModuleBuilder';
 import addIcon from '../images/add-circle-fill.png';
@@ -75,7 +76,7 @@ class DomainSearch extends React.Component {
         ButtonList: ButtonList,
       },
       DomainList: 'PKS',
-      TriggerRedirect: true,
+      redirectToResults: false,
     }
   }
 
@@ -196,6 +197,7 @@ class DomainSearch extends React.Component {
     beginDomainSearch(currentModules);
     // call async function. is this where this goes?
     this.props.dispatch(clusterCADDomainSearch(currentModules, token));
+    setTimeout(() => {this.setState({redirectToResults: true})}, 1000);
   }
 
   // we need to pass in the current array so we can use its length to set the indices of modules correctly
@@ -204,6 +206,7 @@ class DomainSearch extends React.Component {
     const ExtendingArray = this.state.ModuleArray;
     return (
       <div className='DomainSearch form'>
+        { this.state.redirectToResults ? <Redirect to='/searchResults' /> : null }
         <h3>Construct Modules</h3>
         <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
         <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>

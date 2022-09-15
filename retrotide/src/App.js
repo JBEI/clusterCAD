@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import DomainSearch from './containers/DomainSearch';
+import SearchResults from './containers/SearchResults';
 import NavTab from './components/NavTab';
 import './stylesheets/main.scss';
 import jbeiLogo from './images/jbei-logo.png';
@@ -40,6 +41,9 @@ function App() {
       <Switch>
         <Route path="/domainSearch">
           <DomainSearch />
+        </Route>
+        <Route path="/searchResults">
+          <SearchResults />
         </Route>
       </Switch>
 
