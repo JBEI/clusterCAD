@@ -54,7 +54,7 @@ export function domainSearchResponseHandler(responseData) {
   return {
     type: HANDLE_DOMAIN_SEARCH_RESPONSE,
     payload: {
-      reponseObject: responseData,
+      responseObject: responseData,
       timestamp: NOW,
     },
   }
@@ -67,7 +67,7 @@ export function domainSearchResponseErrorHandler(error) {
   return {
     type: HANDLE_DOMAIN_SEARCH_RESPONSE,
     payload: {
-      reponseObject: "an error occurred",
+      responseObject: error,
       timestamp: NOW,
     },
   }
