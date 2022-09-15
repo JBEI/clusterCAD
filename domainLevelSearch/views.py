@@ -5,6 +5,7 @@ from json import loads, dumps
 import Levenshtein
 import domainLevelSearch.models
 from time import time
+from django.core.exceptions import ObjectDoesNotExist
 
 def domainSearch(request):
 
@@ -67,9 +68,10 @@ def domainSearch(request):
         try:
             # see if it's in the database
             charobject = domainLevelSearch.models.DomainChar.objects.get(domainString=domainString)
-        except DoesNotExist:
+            queryString += chr(charobject.id)
+        except ObjectDoesNotExist:
             # if this domain isn't in the database, set to 0
-            charobject = chr(0)
+            queryString += chr(0)
 
         queryString += chr(charobject.id)
 
