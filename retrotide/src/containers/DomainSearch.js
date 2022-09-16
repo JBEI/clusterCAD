@@ -206,21 +206,24 @@ class DomainSearch extends React.Component {
     const ExtendingArray = this.state.ModuleArray;
     return (
       <div className='DomainSearch form'>
-        { this.state.redirectToResults ? <Redirect to='/searchResults' /> : null }
-        <h3>Construct Modules</h3>
-        <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
-        <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
-        <div className="ModuleListWrapper">
-          { this.parseModuleObject(this.state.LoadingModule, -1) }
-          { (ExtendingArray && ExtendingArray.length > 0) &&
-            ExtendingArray.map((exModule, index) => {
-              return (
-                this.parseModuleObject(exModule, index)
-              )
-            }) 
-          }
-          { this.parseModuleObject(this.state.TerminatingModule, ExtendingArray ? ExtendingArray.length : 1) }
-        </div>
+        { this.state.redirectToResults ? <Redirect to='/searchResults' /> :
+          < >
+            <h3>Construct Modules</h3>
+            <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
+            <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
+            <div className="ModuleListWrapper">
+              { this.parseModuleObject(this.state.LoadingModule, -1) }
+              { (ExtendingArray && ExtendingArray.length > 0) &&
+                ExtendingArray.map((exModule, index) => {
+                  return (
+                    this.parseModuleObject(exModule, index)
+                  )
+                }) 
+              }
+              { this.parseModuleObject(this.state.TerminatingModule, ExtendingArray ? ExtendingArray.length : 1) }
+            </div>
+          </ >
+        }
       </div>
     )
   }
