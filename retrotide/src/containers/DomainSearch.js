@@ -187,7 +187,7 @@ class DomainSearch extends React.Component {
     let loading = this.state.LoadingModule;
     let terminating = this.state.TerminatingModule;
     let currentModules = this.state.ModuleArray;
-    let token = csrftoken[1]; // the group with just the token string is at index 1
+    let token = csrftoken[1] || "token not found"; // the group with just the token string is at index 1
     // push and unshift are mutators
     // this works fine even if ModuleArray has length 0
     currentModules.unshift(loading);
