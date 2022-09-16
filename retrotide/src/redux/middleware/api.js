@@ -11,7 +11,6 @@ import {
 // stub dispatched from the Sequence Search container
 // currently only hitting the api for proof of life
 const clusterCADSeqSearch = (molecule, token) => {
-  console.log('hit api function search with ' + molecule);
   client.get('/api/', {params: {integer: 0}})
     .then((response) => {console.log(response)})
     .catch((error) => {console.log(error.config)});
@@ -32,14 +31,10 @@ const clusterCADDomainSearch = (payload, token) => {
                   }}
                 )
       .then((response) => {
-        console.log("response ***");
-        console.log(response);
         dispatch(domainSearchResponseHandler(response.data));
 
       })
       .catch((error) => {
-        console.log("error ***");
-        console.log(error);
         dispatch(domainSearchResponseHandler(error.message));
       }
     )

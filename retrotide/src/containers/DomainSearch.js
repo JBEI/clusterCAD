@@ -154,7 +154,6 @@ class DomainSearch extends React.Component {
   // the container needs to know when updates hapen because it holds the master list
   // of modules to submit to the backend
   updateModule = (moduleKey, newModuleContent) => {
-    console.log(newModuleContent);
     let loading = this.state.LoadingModule;
     let terminating = this.state.TerminatingModule;
     let currentModules = this.state.ModuleArray;
