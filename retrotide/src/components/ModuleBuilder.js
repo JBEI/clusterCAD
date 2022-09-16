@@ -187,7 +187,7 @@ class ModuleBuilder extends React.Component {
         )
       } else {
         return (
-          <Button className="addDomains" onClick={() => {this.toggleButtonsModal()}}>
+          <Button key={index + "Button"} className="addDomains" onClick={() => {this.toggleButtonsModal()}}>
             <img src={addIcon} />
           </Button>
         )

@@ -154,7 +154,6 @@ class DomainSearch extends React.Component {
   // the container needs to know when updates hapen because it holds the master list
   // of modules to submit to the backend
   updateModule = (moduleKey, newModuleContent) => {
-    console.log(newModuleContent);
     let loading = this.state.LoadingModule;
     let terminating = this.state.TerminatingModule;
     let currentModules = this.state.ModuleArray;
@@ -188,7 +187,7 @@ class DomainSearch extends React.Component {
     let loading = this.state.LoadingModule;
     let terminating = this.state.TerminatingModule;
     let currentModules = this.state.ModuleArray;
-    let token = csrftoken[1]; // the group with just the token string is at index 1
+    let token = csrftoken[1] || "token not found"; // the group with just the token string is at index 1
     // push and unshift are mutators
     // this works fine even if ModuleArray has length 0
     currentModules.unshift(loading);
@@ -206,21 +205,24 @@ class DomainSearch extends React.Component {
     const ExtendingArray = this.state.ModuleArray;
     return (
       <div className='DomainSearch form'>
-        { this.state.redirectToResults ? <Redirect to='/searchResults' /> : null }
-        <h3>Construct Modules</h3>
-        <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
-        <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
-        <div className="ModuleListWrapper">
-          { this.parseModuleObject(this.state.LoadingModule, -1) }
-          { (ExtendingArray && ExtendingArray.length > 0) &&
-            ExtendingArray.map((exModule, index) => {
-              return (
-                this.parseModuleObject(exModule, index)
-              )
-            }) 
-          }
-          { this.parseModuleObject(this.state.TerminatingModule, ExtendingArray ? ExtendingArray.length : 1) }
-        </div>
+        { this.state.redirectToResults ? <Redirect to='/searchResults' /> :
+          < >
+            <h3>Construct Modules</h3>
+            <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
+            <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
+            <div className="ModuleListWrapper">
+              { this.parseModuleObject(this.state.LoadingModule, -1) }
+              { (ExtendingArray && ExtendingArray.length > 0) &&
+                ExtendingArray.map((exModule, index) => {
+                  return (
+                    this.parseModuleObject(exModule, index)
+                  )
+                }) 
+              }
+              { this.parseModuleObject(this.state.TerminatingModule, ExtendingArray ? ExtendingArray.length : 1) }
+            </div>
+          </ >
+        }
       </div>
     )
   }

@@ -16,6 +16,16 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
+
+# define a new csrf view for static pages to set the csrf token
+# even on static pages
+class CsrfView(TemplateView):
+    
+    @method_decorator(ensure_csrf_cookie)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,6 +34,6 @@ urlpatterns = [
     url(r'^structureSearch/', include('structureSearch.urls')),
     url(r'^sequenceSearch/', include('sequenceSearch.urls')),
     url(r'^api/', include('domainLevelSearch.urls')),
-    url(r'^$', TemplateView.as_view(template_name='home.html')),
-    url(r'^about/$', TemplateView.as_view(template_name='about.html')),
+    url(r'^$', CsrfView.as_view(template_name='home.html')),
+    url(r'^about/$', CsrfView.as_view(template_name='about.html')),
 ] 

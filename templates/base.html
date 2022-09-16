@@ -45,11 +45,11 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-<div class="container">
+<div class="container" style="padding-bottom: 100px;">
       {% block content %}{% endblock %}
 </div>
 
-<footer class="container" style="border-top: 1px solid #777; width:  100%; padding-top: 15px; position: fixed; bottom: 0;">
+<footer class="container" style="background-color: #fff; border-top: 1px solid #777; width:  100%; padding-top: 15px; position: fixed; bottom: 0;">
     <div class="col-md-9">
         <img src="/django-static/footer/jbei-logo.png">
         <img src="/django-static/footer/doe-logo.png">
