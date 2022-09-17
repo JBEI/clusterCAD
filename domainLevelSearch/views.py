@@ -64,30 +64,34 @@ def domainSearch(request):
     # compile the list of domains into a query string
 
     queryString = ''
+    queryReportList = [] 
     for domainString in queryList:
         try:
             # see if it's in the database
             charobject = domainLevelSearch.models.DomainChar.objects.get(domainString=domainString)
             queryString += chr(charobject.id)
+            queryReportList.append(domainString)
         except ObjectDoesNotExist:
             # if this domain isn't in the database, set to 0
             queryString += chr(0)
-
-        queryString += chr(charobject.id)
+            queryReportList.append(domainString + ' (not found)')
 
     # run search and compute time to run
     start = time()
     results = alignAll(queryString, tryTruncations=True)
     end = time()
 
+    queryReport = '; '.join(queryReportList)
+
     context = {
         'results': results,
         'timeTaken': "{:.2f}".format(end-start),
+        'queryReport': queryReport,
     }
     
     return render(request, 'domainsearchresults.html', context)
 
-def alignAll(query, tryTruncations=False):
+def alignAll(query, tryTruncations=True):
     # align query against all PKSs and return a sorted tuple of (mibig, editDistance)
     results = []
     for clusterstring in domainLevelSearch.models.ClusterString.objects.all():
@@ -103,5 +107,5 @@ def alignAll(query, tryTruncations=False):
         
         results.append(bestResult)
         
-    return sorted(results, key=lambda x: x[1])
+    return sorted(results, key=lambda x: (x[1], x[2]))
 

@@ -207,7 +207,7 @@ class DomainSearch extends React.Component {
       <div className='DomainSearch form'>
         { this.state.redirectToResults ? <Redirect to='/searchResults' /> :
           < >
-            <h3>Construct Modules</h3>
+            <h3>Domain Architecture Search</h3>
             <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
             <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
             <div className="ModuleListWrapper">
