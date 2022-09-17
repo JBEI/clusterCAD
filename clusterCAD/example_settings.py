@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'compounddb',
     'structureSearch',
     'sequenceSearch',
+    'domainLevelSearch',
 ]
 
 MIDDLEWARE = [

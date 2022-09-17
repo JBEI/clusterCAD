@@ -6,7 +6,9 @@ from .models import Cluster, Module, Subunit, Domain
 from django.http import Http404
 from json import dumps
 from rdkit import Chem as chem
+from django.views.decorators.csrf import ensure_csrf_cookie
 
+@ensure_csrf_cookie
 def index(request, show):
 
     # determine if we will show all or only reviewed PKSs
@@ -38,6 +40,7 @@ def index(request, show):
 
     return render(request, 'index.html', context)
 
+@ensure_csrf_cookie
 def details(request, mibigAccession):
     try:
         cluster=Cluster.objects.get(mibigAccession=mibigAccession)

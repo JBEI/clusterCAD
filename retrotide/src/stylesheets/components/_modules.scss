@@ -1,0 +1,121 @@
+.ModuleListWrapper {
+  max-width: 1200px;
+  text-align: center;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.AddDomain {
+  line-height: 30px;
+  vertical-align: middle;
+  img {
+    vertical-align: middle;
+  }
+}
+
+.ModuleBuilder {
+  border: 1px solid $black_warm;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 12px;
+  margin: 12px;
+  max-width: 630px;
+  width: auto;
+  transition-delay: 0.10s;
+  transition-duration: 0.25s;
+  transform: scaleX(1);
+  &.inserting {
+    * {
+      display: none;
+    }
+    margin: 0;
+    padding: 0;
+    background-color: $blue_sky;
+    width: 0;
+  }
+  &.removing {
+    * {
+      display: none;
+    }
+    transition-delay: 0.10s;
+    transition-duration: 0.50s;
+    transform: scaleX(0);
+    background-color: $blue_sky;
+  }
+}
+
+.DomainButtonList {
+  display: none;
+  &.open {
+    display: block;
+  }
+}
+
+.DomainSandbox {
+  margin:  12px;
+  margin-bottom: 0px;
+  // border: 1px solid #ddd;
+  // padding:  12px;
+}
+
+.DomainWrapper {
+  display:  inline-block;
+  line-height: 30px;
+  border:  1px solid $gray_neutral;
+  padding: 12px;
+  border-radius:  6px;
+  width:  63px;
+  .Domain {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .optionsIcon {
+    display: none;
+    vertical-align: middle;
+  }
+  &.MoreOptions {
+    background-color: $green_clean_light;
+    .optionsIcon {
+      display: inline-block;
+    }
+    &.selected {
+      background-color: $green_clean_mid;
+      color: $indigo;
+      border-bottom: 0;
+      height: 30px;
+      border-radius: 0;
+      border-top-right-radius: 6px;
+      border-top-left-radius: 6px;
+      .optionsIcon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.OptionsModal {
+  border: 1px solid $gray_neutral;
+  .OptionButton {
+    background-color: $green_clean_light;
+    &.selected {
+      background-color: $green_clean_mid;
+      color: $indigo;
+    }
+  }
+}
+
+.DomainHeader {
+  text-align: left;
+  display: flex;
+  .DomainTitle :nth-child(1) {
+    font-weight: bold;
+  }
+  .DomainHeaderButton {
+    flex: 3;
+    text-align: right;
+    button {
+      margin-top: 0px;
+    }
+  }
+}
