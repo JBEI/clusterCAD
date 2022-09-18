@@ -13,13 +13,14 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 # Celery settings
-CELERY_BROKER_URL= 'amqp://admin:mypass@rabbit:5672/clusterCAD' 
-CELERY_RESULT_BACKEND="rpc://"
+CELERY_BROKER_URL= 'redis://redis:6379/1'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
 CELERY_TASK_ACKS_LATE = True
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 CELERYD_CHDIR="/www/clusterCAD"
 CELERYD_TASK_TIME_LIMIT=36000
 CELERYD_TASK_SOFT_TIME_LIMIT=36000
+CELERY_RESULT_PERSISTENT = True
 
 
 
