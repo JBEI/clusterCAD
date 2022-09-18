@@ -5,7 +5,6 @@ from django.contrib import messages
 from sequenceSearch.tasks import blast
 from django.http import Http404, JsonResponse
 from model_utils.managers import InheritanceManager
-from django.core.cache import cache
 from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
 import json
 from io import StringIO
@@ -13,7 +12,7 @@ import pandas as pd
 from itertools import chain
 import os
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
+import clusterCAD.celery as celery
 
 def search(request):
     timeTaken = 0
@@ -79,9 +78,17 @@ def search(request):
                     'pipeline', 'data', 'blast', 'clustercad_subunits_all',
                 )
 
+        context = {
+            'queryResidues': len(inputs),
+            'evalue': str(evalue),
+            'maxHits': str(maxHits),
+            'showAllDomains': showAllDomains,
+            'searchDatabase': str(searchDatabase),
+        }
+
         # launch search as a celery task
         resultTask = blast.delay(query=inputs, 
-            evalue=evalue, max_target_seqs=maxHits, sortOutput=True, database=db)
+            evalue=evalue, max_target_seqs=maxHits, sortOutput=True, database=db, context=context)
 
         # send the running task id back to the frontend
         return JsonResponse({"task_id": resultTask.id}, status=202)
@@ -89,12 +96,22 @@ def search(request):
     else:
         raise Http404
 
-@csrf_exempt
-def pollResults(request):
-    return JsonResponse('still running', status=200)
+def status(request, taskid):
+    result = blast.AsyncResult(taskid)
+    return JsonResponse({"task_status": result.state}, status=200)
 
-def resultsPage(request):
-    results, timeTaken, queries_found = results.get()
+def results(request, taskid):
+
+    result = blast.AsyncResult(taskid)
+
+    try:
+        results, timeTaken, queries_found, submitcontext = result.get(timeout=30)
+    except TimeoutError:
+        messages.error(request, 
+                'Job missing or timed out. Please try again. Reported status: ' + result.state)
+        return render(request, 'sequencesearch.html')
+
+    showAllDomains = submitcontext['showAllDomains']
 
     #If no queries found, then no hits
     if not queries_found:
@@ -132,8 +149,8 @@ def resultsPage(request):
     alignments = df
 
     #Set cache
-    cache.set((inputs, evalue, maxHits, showAllDomains, searchDatabase), alignments,
-        60 * 60 * 24 * 7) # cache for one week
+    # cache.set((inputs, evalue, maxHits, showAllDomains, searchDatabase), alignments,
+    #     60 * 60 * 24 * 7) # cache for one week
 
     # get domain options to display in UI
     get_all_domains = lambda x: [domain for module in x['modules'] for domain in module['domains']]
@@ -160,17 +177,15 @@ def resultsPage(request):
     # create context dict of all results to show the user
     context = {
         'alignments': alignments,
-        'queryResidues': len(inputs),
-        'evalue': str(evalue),
-        'maxHits': str(maxHits),
         'timeTaken': timeTaken,
-        'showAllDomains': showAllDomains,
         'atsubstrates': atsubstrates,
         'krtypes': krtypes,
         'boolDomains': boolDomains,
         'tetypes': tetypes,
-        'searchDatabase': str(searchDatabase),
     }
+
+    # merge in submit context entries
+    context.update(submitcontext)
     
     return render(request, 'sequenceresult.html', context)    
     

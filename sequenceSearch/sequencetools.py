@@ -17,6 +17,7 @@ import pandas as pd
 
 def blast(
         query, 
+        context,
         evalue=10.0, 
         max_target_seqs=10, 
         sortOutput=True,
@@ -89,6 +90,6 @@ def blast(
 
     end = time()
 
-    return df.to_json(), str(int(end-start)), True
+    return df.to_json(), str(int(end-start)), True, context
 
     

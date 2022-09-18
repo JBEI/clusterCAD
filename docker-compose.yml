@@ -34,6 +34,27 @@ services:
 
     command: [celery, -A, clusterCAD, worker, -l, info, --loglevel=INFO]
 
+  celery-beat:
+    restart: always
+    image: tbackman/debian-cheminformatics:debian10-update2
+    volumes:
+      - .:/clusterCAD
+      - /www/static
+      - /www/media
+    links:
+        - rabbit
+
+    environment:      
+      - CELERY_BROKER_URL=amqp://admin:mypass@rabbit:5672/clusterCAD
+
+    depends_on:
+        - rabbit
+        - db
+        - redis
+        - web
+    working_dir: /clusterCAD
+
+    command: [celery, -A, clusterCAD, beat, -l, info, --loglevel=INFO, --pidfile=]
     
   db:
     user: postgres
