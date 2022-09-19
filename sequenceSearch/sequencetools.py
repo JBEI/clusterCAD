@@ -69,9 +69,9 @@ def blast(
 
     # If no hits found, return immediately
     if results[3] == "# 0 hits found":
-        return None, None, False
+        return None, None, False, context
 
-    # Parse blast output and delete files
+    # Parse blast output
     # Remeber bitscore cant convert to int by rule 'safe'
     # Load results into a pandas dataframe
     resultIO = StringIO(result)

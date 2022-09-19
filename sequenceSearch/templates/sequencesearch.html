@@ -21,15 +21,20 @@ $('#queryform').submit(function(e) {
    e.preventDefault();
    $.ajax({
         type: 'POST',
-        url: '.',
+        url: '/sequenceSearch/',
         data: $(this).serialize(),
         success: function(response)
             {  
                // alert(response.task_id);
                $('#jobid').text(response.task_id);
-               $('#waiting').modal('show')
+               $('#waiting').modal('show');
                getStatus(response.task_id);
-            } 
+            },
+        error: function(jqXHR, exception)
+           {
+                var response = jQuery.parseJSON(jqXHR.responseText);
+                alert(response.errormessage);
+           }
    });
 
 // polling code based on https://testdriven.io/blog/django-and-celery/#workflow

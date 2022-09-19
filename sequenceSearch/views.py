@@ -5,7 +5,7 @@ from django.contrib import messages
 from sequenceSearch.tasks import blast
 from django.http import Http404, JsonResponse
 from model_utils.managers import InheritanceManager
-from pks.models import AT, KR, DH, ER, cMT, oMT, TE, Subunit, Domain
+from pks.models import *
 import json
 from io import StringIO
 import pandas as pd
@@ -53,18 +53,16 @@ def search(request):
         assert 0 <= showAllDomains <= 1
         inputs = inputs.strip()
         if len(re.findall('>.*?\n', inputs)) >= 2:
-            messages.error(request, 
-                'Error: Multiple queries detected, please remove until only one query is present')
-            return render(request, 'sequencesearch.html')
+            message = 'Error: Multiple queries detected, please remove until only one query is present'
+            return JsonResponse({"errormessage": message}, status=406)
         inputs = re.sub('^>.*?\n', '', inputs)
         inputs = re.sub('\s', '', inputs)
         if len(inputs) == 0:
-            messages.error(request, 'Error: Empty Query')
-            return render(request, 'sequencesearch.html')
+            message = 'Error: Empty Query'
+            return JsonResponse({"errormessage": message}, status=406)
         if len(inputs) > 50000:
-            messages.error(request, 'Error: max query size is 50,000 residues')
-            return render(request, 'sequencesearch.html')
-
+            message = 'Error: max query size is 50,000 residues'
+            return JsonResponse({"errormessage": message}, status=406)
 
         # run Blast 
         if searchDatabase == "reviewed":
@@ -90,8 +88,10 @@ def search(request):
         resultTask = blast.delay(query=inputs, 
             evalue=evalue, max_target_seqs=maxHits, sortOutput=True, database=db, context=context)
 
+        task_id = resultTask.id
+
         # send the running task id back to the frontend
-        return JsonResponse({"task_id": resultTask.id}, status=202)
+        return JsonResponse({"task_id": task_id}, status=202)
     
     else:
         raise Http404
@@ -164,14 +164,20 @@ def results(request, taskid):
     atsubstrates = list(set([at.substrate for at in ats]))
     krs = list(filter(lambda d: isinstance(d, KR), domains))
     krtypes = list(set([kr.type for kr in krs]))
+    cs = list(filter(lambda d: isinstance(d, C), domains))
+    ctypes = list(set([c.type for c in cs]))
+    rs = list(filter(lambda d: isinstance(d, R), domains))
+    rtypes = list(set([r.type for r in rs]))
     boolDomains = []
-    for domain in (DH, ER, cMT, oMT):
+    for domain in (DH, ER, cMT, oMT, E, Cy, nMT, F, AOX, X):
         thesedomains = list(filter(lambda d: isinstance(d, domain), domains))
         typelist = list(set([str(d) for d in thesedomains]))
         if len(typelist) > 0:
             boolDomains.append((domain.__name__, typelist))
     tes = list(filter(lambda d: isinstance(d, TE), domains))
     tetypes = list(set([str(te) for te in tes]))
+    adomains = list(filter(lambda d: isinstance(d, A), domains))
+    asubstrates = list(set([a.substrate for a in adomains]))
     alignments = alignments.values.tolist()
 
     # create context dict of all results to show the user
@@ -179,7 +185,10 @@ def results(request, taskid):
         'alignments': alignments,
         'timeTaken': timeTaken,
         'atsubstrates': atsubstrates,
+        'asubstrates': asubstrates,
         'krtypes': krtypes,
+        'ctypes': ctypes,
+        'rtypes': rtypes,
         'boolDomains': boolDomains,
         'tetypes': tetypes,
     }
