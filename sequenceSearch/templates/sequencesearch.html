@@ -16,6 +16,52 @@ do_example();
 return false;
 });
 });
+
+$('#queryform').submit(function(e) {
+   e.preventDefault();
+   $.ajax({
+        type: 'POST',
+        url: '/sequenceSearch/',
+        data: $(this).serialize(),
+        success: function(response)
+            {  
+               // alert(response.task_id);
+               $('#jobid').text(response.task_id);
+               $('#waiting').modal('show');
+               getStatus(response.task_id);
+            },
+        error: function(jqXHR, exception)
+           {
+                var response = jQuery.parseJSON(jqXHR.responseText);
+                alert(response.errormessage);
+           }
+   });
+
+// polling code based on https://testdriven.io/blog/django-and-celery/#workflow
+function getStatus(taskID) {
+  $.ajax({
+    url: `/sequenceSearch/status/${taskID}/`,
+    method: 'GET'
+  })
+  .done((res) => {
+    const taskStatus = res.task_status;
+    $('#jobstatus').text(res.task_status);
+
+    if (taskStatus === 'SUCCESS' || taskStatus === 'FAILURE') {
+            window.location.href = `/sequenceSearch/results/${taskID}/`;
+        } else {
+            setTimeout(function() {
+              getStatus(taskID);
+            }, 1000);
+        }
+  })
+  .fail((err) => {
+    console.log(err)
+  });
+}
+
+})
+
 </script>
 {% endblock %}
 
@@ -31,7 +77,7 @@ search for modules based on similarity to a query amino acid sequence</small>
 </div><!--/row-->
 
 <div class="row-fluid">
-<form action="." method="post" accept-charset="utf-8">
+<form id="queryform" method="post" accept-charset="utf-8">
 {% csrf_token %}
 
 <div class="row">
@@ -104,5 +150,24 @@ search for modules based on similarity to a query amino acid sequence</small>
 </form>
 This tool uses NCBI blastp (protein-protein BLAST) to align your query against all PKS subunits (polypeptides) in our database, while identifying overlapping domains and modules in each hit.
 Note that 'Show number of top hits' option above limits the number of top hits returned, but searches the full database and does not use the commonly misunderstood max_target_seqs option.
+</div>
+
+<!-- Small modal -->
+
+<div id="waiting" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Job submitted. Please wait.</h4>
+        </div> <!-- end modal-header -->
+        <dl class="dl-horizontal">
+        <dt>Job id</dt>
+        <dd><div id="jobid"></div></dd>
+        <br />
+        <dt>Search status</dt>
+        <dd><div id="jobstatus"></div><img src="/static/spinner.gif"/></dd>
+        </dl>
+    </div>
+  </div>
 </div>
 {% endblock %}

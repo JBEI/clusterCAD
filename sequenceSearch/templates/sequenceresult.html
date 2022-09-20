@@ -115,11 +115,31 @@ $(document).ready(function(){
   </div>
   {% endif %}
 
+  {% if asubstrates|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="A" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight A substrates" data-selected-text-format="count">
+      {% for substrate in asubstrates %}
+      <option value="{{ substrate }}">AT substrate {{ substrate }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
   {% if krtypes|length > 0 %}
   <div class="btn-group" role="group">
     <select data-domainselect="KR" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight KR types" data-selected-text-format="count">
       {% for type in krtypes %}
       <option value="{{ type }}">KR type {{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  {% if ctypes|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="C" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight C types" data-selected-text-format="count">
+      {% for type in ctypes %}
+      <option value="{{ type }}">C type {{ type }}</option>
       {% endfor %}
     </select>
   </div>
@@ -145,6 +165,15 @@ $(document).ready(function(){
   </div>
   {% endif %}
 
+  {% if rtypes|length > 0 %}
+  <div class="btn-group" role="group">
+    <select data-domainselect="R" class="selectpicker" data-style="btn btn-default" multiple data-actions-box="true" title="Highlight R types" data-selected-text-format="count">
+      {% for type in rtypes %}
+      <option value="{{ type }}">R type {{ type }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endif %}
 
 </div>
 </div>
@@ -183,7 +212,7 @@ $(document).ready(function(){
 <tbody>
 
 {% for alignment in alignments %}
-<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.0.cluster.mibigAccession }}/?mark={% for module in alignment.1 %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};#{{ alignment.0.name }}">
+<tr class="clickable-row" data-container="body" data-href="/pks/{{ alignment.0.cluster.mibigAccession }}/{% if alignment.1|length > 0 %}?mark={% for module in alignment.1 %}{% if forloop.counter != 1 %},{% endif %}{{ module.module.order }}{% endfor %};{% endif %}#{{ alignment.0.name }}">
         <td class="text-right">
             {{ forloop.counter }}
         </td>
@@ -215,7 +244,7 @@ $(document).ready(function(){
         {% if alignment.1|length == 0 %}
             N/A
         {% endif %}
-        {% for module in alignment.1 %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" %}data-type="{{ domain.type }}"{% elif domain|classname == "AT" %}data-type="{{ domain.substrate }}"{% else %}data-type="{{ domain }}"{% endif %} style="padding:0; background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
+        {% for module in alignment.1 %}{% if forloop.counter != 1 %}<br/>{% endif %}{{ module.module.order }} ({% for domain in module.domains %}{% if forloop.counter != 1 %}, {% endif %}<mark data-domain="{{ domain|classname }}" {% if domain|classname == "KR" or domain|classname == "C" or domain|classname == "R" %}data-type="{{ domain.type }}"{% elif domain|classname == "AT" or domain|classname == "A" %}data-type="{{ domain.substrate }}"{% else %}data-type="{{ domain }}"{% endif %} style="padding:0; background-color: transparent;">{{ domain|classname }}</mark>{% endfor %}){% endfor %}
         </td>
         
 </tr>

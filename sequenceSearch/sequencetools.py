@@ -17,6 +17,7 @@ import pandas as pd
 
 def blast(
         query, 
+        context,
         evalue=10.0, 
         max_target_seqs=10, 
         sortOutput=True,
@@ -68,9 +69,9 @@ def blast(
 
     # If no hits found, return immediately
     if results[3] == "# 0 hits found":
-        return None, None, False
+        return None, None, False, context
 
-    # Parse blast output and delete files
+    # Parse blast output
     # Remeber bitscore cant convert to int by rule 'safe'
     # Load results into a pandas dataframe
     resultIO = StringIO(result)
@@ -89,6 +90,6 @@ def blast(
 
     end = time()
 
-    return df.to_json(), str(int(end-start)), True
+    return df.to_json(), str(int(end-start)), True, context
 
     
