@@ -31,10 +31,6 @@ server {
         alias /www/static;
     }
 
-    location /django-static {
-        alias /www/static;
-    }
-
     location /media {
         alias /www/media;
     }
