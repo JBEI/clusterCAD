@@ -208,6 +208,11 @@ class DomainSearch extends React.Component {
         { this.state.redirectToResults ? <Redirect to='/searchResults' /> :
           < >
             <h3>Domain Architecture Search</h3>
+            <div>This tool lets you design a custom megasynthase enzyme by specifying your desired domain architecture (sequence of modules and domains), and search
+            ClusterCAD for the natural gene cluster which is the closest match, and requires the fewest modifications to match your design.
+            This is done by calculating the "Levenshtein Distance" which identifies the number of domain level deletions, insertions, or replacements to convert
+            each hit into your query design.</div>
+
             <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
             <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
             <div className="ModuleListWrapper">
