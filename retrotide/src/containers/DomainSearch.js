@@ -221,13 +221,37 @@ class DomainSearch extends React.Component {
             ClusterCAD for the natural gene cluster which is the closest match, and requires the fewest modifications to match your design.
             This is done by calculating the "Levenshtein Distance" which identifies the number of domain level deletions, insertions, or replacements to convert
             each hit into your query design.</div>
-            <Button className="howToButton" onClick={() => {this.toggleHowToModal() }}>
-              <img src={questionIcon} />
-            </Button>
+            <div className="howToButton">  
+              <Button className="howToButton" onClick={() => {this.toggleHowToModal() }}>
+                <img src={questionIcon} />
+              </Button>
+              More Information
+            </div>
             { this.state.howToOpen ? 
               <div className="howToModal">
-                <p> Info about how to use this tool goes here, and should maybe be moved to a variable to clean up the render
-                </p>
+                <h3> How To Use This Tool </h3>
+                The Domain Search tool is used to define a megasynthase domain architecture module by module. Note that currently reloading this
+                page or using the back button will clear your changes.
+                <h4> Adding and Removing Extending Domains </h4>
+                The loading and terminating modules have been provided for you - at this time these cannot be removed from the design. To add 
+                extending modules, click the 'Add Module' button.
+                To remove any extending module, click the 'delete' icon in its upper-right corner. There is no maximum number of allowed extending modules.
+                <h4> Editing Domains </h4>
+                Required domains are added to the module for you - this prevents the user from submitting any nonvalid search queries. To insert 
+                additional optional domains, click the 'add' button in the domain list.
+                This will display a list of possible domain combinations. Select your option by clicking it to see the domains inserted.
+                To remove your selection and add different domains, click the highlighted domain button again. You will need to remove your 
+                selection before inserting a new one, to prevent invalid combinations.
+                <h4> Editing Domain Properties </h4>
+                Some domains have properties such as stereochemistry or substrate that can be adjusted. These domains are indicated by the presence
+                of the 'edit' icon. Click these domains to display a list of options.
+                The currently selected option will be highlighted. Select a new option to change your selection, then click the domain again to
+                close this tab.
+                <h4> Submitting Your Design </h4>
+                To begin a search and view your results, click the submit button. Your results should display in a few moments. Note that reloading the 
+                page or navigating away will clear your search.
+                <h4> Report Bugs or Problems </h4>
+                To report bugs or issues with this tool, please send a detailed email to salafrance@lbl.gov with screenshots of any error messages.
               </div>
             : null}
 
