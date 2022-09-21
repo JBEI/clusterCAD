@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import Button from '../components/Button';
 import ModuleBuilder from '../components/ModuleBuilder';
 import addIcon from '../images/add-circle-fill.png';
+import questionIcon from '../images/question-line.png';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -77,6 +78,7 @@ class DomainSearch extends React.Component {
       },
       DomainList: 'PKS',
       redirectToResults: false,
+      howToOpen: false,
     }
   }
 
@@ -182,6 +184,13 @@ class DomainSearch extends React.Component {
     }
   }
 
+  toggleHowToModal = () => {
+    let current = this.state.howToOpen;
+    this.setState({
+      howToOpen: !current
+    });
+  }
+
   // the async call to the backend. This is currently communicating with the backend
   submitSearch = () => {
     let loading = this.state.LoadingModule;
@@ -212,6 +221,15 @@ class DomainSearch extends React.Component {
             ClusterCAD for the natural gene cluster which is the closest match, and requires the fewest modifications to match your design.
             This is done by calculating the "Levenshtein Distance" which identifies the number of domain level deletions, insertions, or replacements to convert
             each hit into your query design.</div>
+            <Button className="howToButton" onClick={() => {this.toggleHowToModal() }}>
+              <img src={questionIcon} />
+            </Button>
+            { this.state.howToOpen ? 
+              <div className="howToModal">
+                <p> Info about how to use this tool goes here, and should maybe be moved to a variable to clean up the render
+                </p>
+              </div>
+            : null}
 
             <Button onClick={() => { this.addModule() }} className="AddDomain"> Add Module <img src={addIcon} /> </Button>
             <Button onClick={() => { this.submitSearch() }} className="submit"> Submit </Button>
