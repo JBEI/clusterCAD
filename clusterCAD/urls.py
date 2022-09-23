@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^structureSearch/', include('structureSearch.urls')),
     url(r'^sequenceSearch/', include('sequenceSearch.urls')),
     url(r'^api/', include('domainLevelSearch.urls')),
+    url(r'^domainSearch/', include('domainLevelSearch.urls')),
     url(r'^$', CsrfView.as_view(template_name='home.html')),
     url(r'^about/$', CsrfView.as_view(template_name='about.html')),
 ] 
