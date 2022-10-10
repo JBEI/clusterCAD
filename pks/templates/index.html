@@ -1,15 +1,22 @@
 {% extends "base.html" %}
+{% load domainFilters %}
 
 {% block extra_headers %}
 <script type="text/javascript" src="/static/js/jquery.tablesorter.js"></script>
 {% endblock %}
 
 {% block js_content %}
+<style type="text/css">
+    .popover{
+        max-width:1000px;
+    }
+</style>
 <script>
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
         window.location = $(this).data("href");
     });
+    $("[data-toggle=popover]").popover({ trigger: 'hover' });
 });
 </script>
 
@@ -72,7 +79,7 @@ The table can be sorted by clicking the header on any column</small></h2>
 </thead>
 <tbody>
 {% for cluster in clusters %}
-<tr class="clickable-row" data-href="/pks/{{ cluster.clusterObject.mibigAccession }}">
+<tr class="clickable-row" data-href="/pks/{{ cluster.clusterObject.mibigAccession }}" data-toggle="popover" data-content="<img height='300' width='300' src='/compounddb/renderer/{{ cluster.clusterObject.knownProductSmiles|urlq }}/300?align=False' />" data-placement="top" data-html="true">
     <td>
     {{ cluster.clusterObject.mibigAccession }}
     </td>
