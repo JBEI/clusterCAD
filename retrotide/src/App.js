@@ -19,7 +19,7 @@ function App() {
 
   return (
     <Router basename="/retrotide">
-      <nav className="navbar">
+      { /*<nav className="navbar">
         <div className="container">
           <div className="navbar-header">
             <a className="navbar-brand" href="/">     
@@ -36,7 +36,7 @@ function App() {
             </div>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
       <Switch>
         <Route path="/domainSearch">
@@ -47,7 +47,7 @@ function App() {
         </Route>
       </Switch>
 
-      <footer className="footer">
+      { /* <footer className="footer">
         <div className="logos">
           <img src={jbeiLogo} />
           <img src={doeLogo} />
@@ -55,7 +55,7 @@ function App() {
         <div className="copyright">
           <div className="text-right"><small>&copy; {NOW.getFullYear()} The Regents of the University of California</small></div>
         </div>
-      </footer>
+      </footer> */}
     </Router>
   );
 }
