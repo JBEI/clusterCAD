@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import Button from '../components/Button';
 import ModuleBuilder from '../components/ModuleBuilder';
 import addIcon from '../images/add-circle-fill.png';
+import domainInfo from '../testData/pksDomains';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -22,94 +23,42 @@ class DomainSearch extends React.Component {
   constructor(props) {
     super(props);
 
-    // all of these consts need to go into a json file or something
-    // they should come in via a reducer that will set them up in this
-    // format so we can use them. We need to be able to parse either PKS
-    // or potentially other formats
+    // right now we're just grabbing the PKS info but in future we'll
+    // need both NRPS and PKS and then pick which list to send to each ModuleBuilder
+    const LoadingModuleDomains = domainInfo.loadingPKSList;
 
-    // right now these aren't being stored in state properly
+    const TerminatingModuleDomains = domainInfo.TerminatingPKSList;
 
-    const LoadingPKSList = {
-      KS:  {domainName: 'KS', present: true},
-      AT:  {domainName: 'AT', present: true, options: {
-        substrate: ['mal', 'mmal', 'mxmal', 'mxmal_ACP', 'emal', 'allylmal', 'butmal', 'hmal', 
-          'isobutmal', 'D-isobutmal', 'DCP', 'hexmal', '2-oxobutmal', '3-me-hexmal'],
-        selected: 'mal',
-      }},
-      ACP: {domainName: 'ACP', present: true},       
-    };
+    const ExtendingModuleDomains = domainInfo.PKSList;
 
-    const TerminatingPKSList = {
-      KS:  {domainName: 'KS', present: true},
-      AT:  {domainName: 'AT', present: true, options: {
-        substrate: ['mal', 'mmal', 'mxmal', 'mxmal_ACP', 'emal', 'allylmal', 'butmal', 'hmal', 
-          'isobutmal', 'D-isobutmal', 'DCP', 'hexmal', '2-oxobutmal', '3-me-hexmal'],
-        selected: 'mal',
-      }},
-      DH:  {domainName: 'DH', present: false},
-      ER:  {domainName: 'ER', present: false},
-      KR:  {domainName: 'KR', present: false, options: {
-        stereochemistry: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
-        selected: 'B1',
-      }},
-      ACP: {domainName: 'ACP', present: true}, 
-      TE:  {domainName: 'TE', present: true},        
-    };
-
-    const ButtonList = {
-      KR: {domainName: 'KR', domains: ['KR'], disabled: false},
-      DH_KR: {domainName: 'DH-KR', domains: ['DH', 'KR'], disabled: false},
-      DH_ER_KR: {domainName: 'DH-ER-KR', domains: ['DH', 'ER', 'KR'], disabled: false},
-    }
+    const DomainButtons = domainInfo.buttonList;
 
     this.state = {
       ModuleArray: [],
       LoadingModule: {
         key: 'loading-0',
         type: 'loading',
-        DomainList: LoadingPKSList,
+        DomainList: LoadingModuleDomains,
       },
       TerminatingModule: {
         key: 'terminating-n',
         type: 'terminating',
-        DomainList: TerminatingPKSList,
-        ButtonList: ButtonList,
+        DomainList: TerminatingModuleDomains,
+        ButtonList: DomainButtons,
       },
-      DomainList: 'PKS',
       redirectToResults: false,
     }
   }
 
-  // same thing here, these lists need to be moved out and brought into local state properly
-
   buildModules = (newLength) => {
-    let PKSDomainList = {
-      KS:  {domainName: 'KS', present: true},
-      AT:  {domainName: 'AT', present: true, options: {
-        substrate: ['mal', 'mmal', 'mxmal', 'mxmal_ACP', 'emal', 'allylmal', 'butmal', 'hmal', 
-          'isobutmal', 'D-isobutmal', 'DCP', 'hexmal', '2-oxobutmal', '3-me-hexmal'],
-        selected: 'mal',
-      }},
-      DH:  {domainName: 'DH', present: false},
-      ER:  {domainName: 'ER', present: false},
-      KR:  {domainName: 'KR', present: false, options: {
-        stereochemistry: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
-        selected: 'B1',
-      }},
-      ACP: {domainName: 'ACP', present: true}, 
-    };
-    let ButtonList = {
-      KR: {domainName: 'KR', domains: ['KR'], disabled: false},
-      DH_KR: {domainName: 'DH-KR', domains: ['DH', 'KR'], disabled: false},
-      DH_ER_KR: {domainName: 'DH-ER-KR', domains: ['DH', 'ER', 'KR'], disabled: false},
-    }
+
     let defaultArray = Array.from(
       { length: newLength },
       (x, index) => ({
         index: index,
         key: 'extending-' + index,
-        DomainList: PKSDomainList,
-        ButtonList: ButtonList,
+        DomainList: ExtendingModuleDomains,
+        ButtonList: DomainButtons,
         type: 'extending',
       })
     );
