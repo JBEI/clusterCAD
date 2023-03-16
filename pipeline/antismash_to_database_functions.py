@@ -338,15 +338,15 @@ def buildCluster(cluster, record):
             else:
                 domain_subtype = "N/A"
             
-            start = feature.qualifiers["protein_start"][0]
-            stop = feature.qualifiers["protein_end"][0]
+            domain_start = str(int(feature.qualifiers["protein_start"][0]) + 1)   #to account for 1-index of sequences
+            domain_stop = feature.qualifiers["protein_end"][0]
             
             if "specificity" in feature.qualifiers:
                 specificity = feature.qualifiers["specificity"] # specificity is a list
             else:
                 specificity = "N/A"
             
-            domains_dict[domain_id] = (default_type, domain_subtype, start, stop, specificity)
+            domains_dict[domain_id] = (default_type, domain_subtype, domain_start, domain_stop, specificity)
         
     #################### STAGE 2: CONSTRUCT SUBUNITS, MODULES, AND DOMAINS ######################
     
