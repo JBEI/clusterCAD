@@ -11,6 +11,7 @@ The goal of ClusterCAD is to facilitate the informed design of chimeric type I m
 <li class="roman"><a href="#exchange">Domain exchange paradigm</a></li>
 <li class="roman"><a href="#database">Description of database</a></li>
 <li class="roman"><a href="#browse">Browsing clusters</a></li>
+<li class="roman"><a href="#domain">Domain architecture search (Domain search)</a></li>
 <li class="roman"><a href="#structure">Structure search</a></li>
 <li class="roman"><a href="#sequence">Sequence search</a></li>
 <li class="roman"><a href="#citation">Citing ClusterCAD</a></li>
@@ -50,11 +51,16 @@ The goal of ClusterCAD is to facilitate the informed design of chimeric type I m
     <li>Correct annotations describing whether TE domains generate cyclized or linear products, or whether R domains generate terminal alcohols or aldehydes. </li>
 </ul>
 
-<a name="structure"></a>
+<a name="browse"></a>
 <h3>Database entries</h3>
 
 <p>The entry for each cluster contains links to the corresponding MiBiG database and NCBI Nucleotide database entries, as well as an indication for whether a cluster has been manually reviewed for consistency with experimental evidence. Cluster entries may also provide Cluster Notes, where curation notes and/or relevant publications and references may be viewed. Buttons to display annotations of AT or A substrate specificity and KR stereochemical outcome are also provided. Clicking on the final product or polyketide/peptide intermediate chemical structures will display SMILES representations of these structures. Further, clicking on the name of the module will provide links to the NCBI Protein database entry for that module, the nucleotide and amino acid sequences for the module, and precomputed secondary structure and relative solvent accessibility annotations if available.</p>
 <p>Note that AT substrates with an "_ACP" suffix in the name represent ACP linked substrates, whereas those without a suffix represent CoA linked substrates.</p>
+
+<a name="domain"></a>
+<h3>Domain architecture search (Domain search)</h3>
+
+<p>The domain architecture search enables the design of a custom megasynthase enzyme by taking a desired domain architecture (sequence of modules and domains) as input, and searches ClusterCAD for the natural gene cluster which is the closest match and requires the fewest modifications to the design query. This is done by calculating the "Levenshtein Distance" which identifies the number of domain level deletions, insertions, or replacements to convert each hit into the query design. Note that only PKS domains are currently supported; we intend to release NRPS support shortly.</p> 
 
 <a name="structure"></a>
 <h3>Structure search</h3>
