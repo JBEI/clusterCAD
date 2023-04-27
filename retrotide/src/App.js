@@ -19,6 +19,9 @@ function App() {
 
   return (
     <Router basename="/retrotide">
+      // removing redundant header and footer
+      // this page is being absorbed into the main app
+      {/*
       <nav className="navbar">
         <div className="container">
           <div className="navbar-header">
@@ -37,6 +40,7 @@ function App() {
           </div>
         </div>
       </nav>
+      */}
 
       <Switch>
         <Route path="/domainSearch">
@@ -47,6 +51,7 @@ function App() {
         </Route>
       </Switch>
 
+      {/*
       <footer className="footer">
         <div className="logos">
           <img src={jbeiLogo} />
@@ -56,6 +61,7 @@ function App() {
           <div className="text-right"><small>&copy; {NOW.getFullYear()} The Regents of the University of California</small></div>
         </div>
       </footer>
+      */}
     </Router>
   );
 }
