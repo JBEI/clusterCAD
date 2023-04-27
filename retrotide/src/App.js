@@ -19,8 +19,9 @@ function App() {
 
   return (
     <Router basename="/retrotide">
-      // removing redundant header and footer
-      // this page is being absorbed into the main app
+      {/*removing redundant header and footer
+         this page is being absorbed into the main app
+      */}
       {/*
       <nav className="navbar">
         <div className="container">
